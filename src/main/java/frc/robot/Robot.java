@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.robot.Constants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,8 +26,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private XboxController xboxController = new XboxController(0);
-  private TankDrive tankDrive = new TankDrive(null, null);
+  private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
+  private TankDrive tankDrive;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -36,6 +38,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    tankDrive = new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
   }
 
   /**
@@ -87,6 +91,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // TODO: put the driving loop here
+    // TODO: check if buttons are pressed
+
+    // get input from xbox controller
+    double leftAnalogX = xboxController.getLeftX();
+    double leftAnalogY = xboxController.getLeftY();
+    double rightAnalogX = xboxController.getRightX();
+    double rightAnalogY = xboxController.getRightY();
+    // process input (determine wheelspeeds)
+    tankDrive.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
   }
 
   /** This function is called once when the robot is disabled. */
