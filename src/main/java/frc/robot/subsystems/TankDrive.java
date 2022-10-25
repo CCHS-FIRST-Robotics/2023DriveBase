@@ -9,6 +9,9 @@ import frc.robot.Constants;
  */
 public class TankDrive extends DifferentialDrive {
 	
+	// between 0 and 1 - 1 would be full max speed, 0.5 would be half speed, etc
+	double maxSpeed = 0.5;
+
 	public TankDrive(PWMTalonSRX leftMotor, PWMTalonSRX rightMotor) {
 		super(leftMotor, rightMotor);
 		//TODO Auto-generated constructor stub
@@ -28,6 +31,14 @@ public class TankDrive extends DifferentialDrive {
 		double leftVel = preScaledLeftVel * scaleFactor;
 		double rightVel = preScaledRightVel * scaleFactor;
 		
-		tankDrive(leftVel, rightVel);
+		tankDrive(leftVel * maxSpeed, rightVel * maxSpeed);
+	}
+
+	public void incSpeedBracket() {
+		maxSpeed = Math.min(0.8, maxSpeed + 0.1);
+	}
+
+	public void decSpeedBracket() {
+		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
 	}
 }

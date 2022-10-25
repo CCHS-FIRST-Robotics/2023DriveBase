@@ -92,6 +92,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // TODO: put the driving loop here
     // TODO: check if buttons are pressed
+    if (xboxController.getRightBumperPressed()) tankDrive.incSpeedBracket();
+    if (xboxController.getLeftBumperPressed()) tankDrive.decSpeedBracket();
 
     // get input from xbox controller
     double leftAnalogX = xboxController.getLeftX();
