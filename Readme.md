@@ -1,10 +1,13 @@
 # 2023 Drive Base
 
 ## Driving experience:
-Joysticks (work in terms of X and Y coordinates)
-Speed (
-Rotation (difference between in velocity between both sides) 
-Buttons to change the speed bracket? (bumper)
+Joysticks:
+- Mecanum drivebase:
+	- left stick controls translational movement
+	- right stick controls rotational movement (right is clockwise, left is counterclockwise)
+- Speed (
+- Rotation (difference between in velocity between both sides)
+- Buttons to change the speed bracket? (bumper)
 
 Input:
 
