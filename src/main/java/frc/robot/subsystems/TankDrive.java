@@ -54,7 +54,6 @@ public class TankDrive extends DifferentialDrive {
 		tankDrive(leftVel * maxSpeed, rightVel * maxSpeed);
 	}
 
-
 	/**
 	 * The speed bracket controls the multiplier for all the speeds 
 	 * So when you change it, lets say, to 1/2 speed, all directions will be
@@ -63,6 +62,7 @@ public class TankDrive extends DifferentialDrive {
 	public void increaseSpeedBracket() {
 		maxSpeed = Math.min(0.8, maxSpeed + 0.1);
 	}
+  
 	public void decreaseSpeedBracket() {
 		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
 	}

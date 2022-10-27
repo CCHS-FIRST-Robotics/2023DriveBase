@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private TankDrive tankDrive;
+  private MecaDrive driveBase;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,8 +39,13 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-	// setup to manage the tank drive mechanism for the robot
-    tankDrive = new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
+    // tank drive initialization
+    //driveBase = createTankDrive();    
+    // mecanum drive initialization
+    driveBase = createMecanumDrive();
+    
+    // set the dead zone for the controller analog sticks
+    driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
   }
 
   /**
@@ -93,9 +98,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // TODO: put the driving loop here
     // TODO: check if buttons are pressed and comment controller mapping
-	
-    if (xboxController.getRightBumperPressed()) tankDrive.increaseSpeedBracket();
-    if (xboxController.getLeftBumperPressed()) tankDrive.decreaseSpeedBracket();
+    if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
+    if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
     // get input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
@@ -104,7 +108,7 @@ public class Robot extends TimedRobot {
     double rightAnalogY = xboxController.getRightY();
 
     // process input (determine wheelspeeds)
-    tankDrive.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
   }
 
   /** This function is called once when the robot is disabled. */
@@ -122,4 +126,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  private TankDrive createTankDrive() {
+    return new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
+  }
+
+  private MecaDrive createMecanumDrive() {
+    return new MecaDrive(new PWMTalonSRX(Constants.FL_TALON_PORT), new PWMTalonSRX(Constants.RL_TALON_PORT),
+                         new PWMTalonSRX(Constants.FR_TALON_PORT), new PWMTalonSRX(Constants.RR_TALON_PORT));
+  }
 }
