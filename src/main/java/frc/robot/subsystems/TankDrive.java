@@ -6,6 +6,7 @@ import frc.robot.Constants;
 
 /**
  * Manages the tank drive base
+ * 
  */
 public class TankDrive extends DifferentialDrive {
 	
@@ -17,28 +18,52 @@ public class TankDrive extends DifferentialDrive {
 		//TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Drive the robot tank base from controller input 
+	 * 
+	 * These are doubles on the interval [-1,1], and come from the controller's 
+	 * 	analog sticks (circle spinny things)
+	 * @param leftAnalogX 
+	 * @param leftAnalogY 
+	 * @param rightAnalogX 
+	 * @param rightAnalogY 
+	 */
 	public void drive(double leftAnalogX, double leftAnalogY,
 					  double rightAnalogX, double rightAnalogY) {
-		// we only care about left Y and right X
-		// left Y is average velocity, right X is velocity difference between wheels
-		double x = rightAnalogX; // TODO: later test with multiplying by 2
+
+		/**
+		 * we only care about left Y and right X
+		 * left Y is average velocity
+		 * right X is velocity difference between wheels
+		*/
+
+		// TODO: test multiplying by 2 (to have a larger difference between wheel speeds)
+		double x = rightAnalogX; 
+		
 		double y = leftAnalogY;
 
+		// make sure that both velocities are in [-1, 1]
 		double preScaledLeftVel = y + x / 2;
 		double preScaledRightVel = y - x / 2;
-		// we need to make sure that both velocities are in [-1, 1]
 		double scaleFactor = 1 / Math.max(Math.max(Math.abs(preScaledLeftVel), Math.abs(preScaledRightVel)), 1);
+		
+		// scale to what the controller asks
 		double leftVel = preScaledLeftVel * scaleFactor;
 		double rightVel = preScaledRightVel * scaleFactor;
 		
 		tankDrive(leftVel * maxSpeed, rightVel * maxSpeed);
 	}
 
-	public void incSpeedBracket() {
+
+	/**
+	 * The speed bracket controls the multiplier for all the speeds 
+	 * So when you change it, lets say, to 1/2 speed, all directions will be
+	 * 	at 1/2 speed
+	 */
+	public void increaseSpeedBracket() {
 		maxSpeed = Math.min(0.8, maxSpeed + 0.1);
 	}
-
-	public void decSpeedBracket() {
+	public void decreaseSpeedBracket() {
 		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
 	}
 }

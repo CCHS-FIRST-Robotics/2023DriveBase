@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+	// setup to manage the tank drive mechanism for the robot
     tankDrive = new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
   }
 
@@ -91,15 +92,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // TODO: put the driving loop here
-    // TODO: check if buttons are pressed
-    if (xboxController.getRightBumperPressed()) tankDrive.incSpeedBracket();
-    if (xboxController.getLeftBumperPressed()) tankDrive.decSpeedBracket();
+    // TODO: check if buttons are pressed and comment controller mapping
+	
+    if (xboxController.getRightBumperPressed()) tankDrive.increaseSpeedBracket();
+    if (xboxController.getLeftBumperPressed()) tankDrive.decreaseSpeedBracket();
 
     // get input from xbox controller
-    double leftAnalogX = xboxController.getLeftX();
-    double leftAnalogY = xboxController.getLeftY();
+    double leftAnalogX 	= xboxController.getLeftX();
+    double leftAnalogY 	= xboxController.getLeftY();
     double rightAnalogX = xboxController.getRightX();
     double rightAnalogY = xboxController.getRightY();
+
     // process input (determine wheelspeeds)
     tankDrive.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
   }
