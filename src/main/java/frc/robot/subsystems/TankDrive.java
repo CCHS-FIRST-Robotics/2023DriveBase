@@ -34,11 +34,11 @@ public class TankDrive extends DifferentialDrive {
 		tankDrive(leftVel * maxSpeed, rightVel * maxSpeed);
 	}
 
-	public void incSpeedBracket() {
+	public void increaseSpeedBracket() {
 		maxSpeed = Math.min(0.8, maxSpeed + 0.1);
 	}
 
-	public void decSpeedBracket() {
+	public void decreaseSpeedBracket() {
 		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
 	}
 }
