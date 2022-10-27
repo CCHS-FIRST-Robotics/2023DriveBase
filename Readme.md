@@ -19,3 +19,10 @@ Architecture:
 
 Robot:
 	subsystems
+
+## Terminology and readability
+
+### Quick terms
+
+- F(L/R) : Front left & right
+- R(L/R) : Rear left & right

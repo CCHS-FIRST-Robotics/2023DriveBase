@@ -97,15 +97,16 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // TODO: put the driving loop here
-    // TODO: check if buttons are pressed
+    // TODO: check if buttons are pressed and comment controller mapping
     if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
     if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
     // get input from xbox controller
-    double leftAnalogX = xboxController.getLeftX();
-    double leftAnalogY = xboxController.getLeftY();
+    double leftAnalogX 	= xboxController.getLeftX();
+    double leftAnalogY 	= xboxController.getLeftY();
     double rightAnalogX = xboxController.getRightX();
     double rightAnalogY = xboxController.getRightY();
+
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
   }
