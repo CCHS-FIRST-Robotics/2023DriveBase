@@ -22,10 +22,10 @@ public class Constants {
 	public static final int RIGHT_TALON_PORT = Integer.MIN_VALUE;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_PORT = 0;
-	public static final int FL_TALON_PORT = 1;
-	public static final int RR_TALON_PORT = 2;
-	public static final int RL_TALON_PORT = 3;
+	public static final int FR_TALON_PORT = 12;
+	public static final int FL_TALON_PORT = 13;
+	public static final int RR_TALON_PORT = 1;
+	public static final int RL_TALON_PORT = 2;
 	
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
