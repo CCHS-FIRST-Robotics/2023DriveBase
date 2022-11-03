@@ -44,8 +44,8 @@ public class Robot extends TimedRobot {
     // mecanum drive initialization
     driveBase = createMecanumDrive();
     
-    // set the dead zone for the controller analog sticks
-    driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
+    // // set the dead zone for the controller analog sticks
+    // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
   }
 
   /**
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
   }
 
   private MecaDrive createMecanumDrive() {
-    return new MecaDrive(new PWMTalonSRX(Constants.FL_TALON_PORT), new PWMTalonSRX(Constants.RL_TALON_PORT),
-                         new PWMTalonSRX(Constants.FR_TALON_PORT), new PWMTalonSRX(Constants.RR_TALON_PORT));
+    return new MecaDrive(Constants.FL_TALON_PORT, Constants.RL_TALON_PORT,
+                         Constants.FR_TALON_PORT, Constants.RR_TALON_PORT);
   }
 }
