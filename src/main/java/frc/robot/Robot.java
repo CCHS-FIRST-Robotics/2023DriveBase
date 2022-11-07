@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private TankDrive createTankDrive() {
-    return new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
+    return new TankDrive(Constants.LEFT_TALON_PORT, Constants.LEFT_TALON_PORT);
   }
 
   private MecaDrive createMecanumDrive() {

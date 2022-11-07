@@ -43,13 +43,19 @@ public class MecaDrive {
         double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
                                    leftAnalogY, leftAnalogY};
         
-        double[] horizontalSpeeds = {leftAnalogX, -1 * leftAnalogX,
-                                     -1 * leftAnalogX, leftAnalogX};
+        // negatives due to wheels going in opposite directions during left or right translation
+        double[] horizontalSpeeds = {-1 * leftAnalogX, leftAnalogX,
+                                     leftAnalogX, -1 * leftAnalogX};
+
+        // left and right wheels should go different directions to rotate the robot
+        double[] rotationSpeeds = {rightAnalogX, -1 * rightAnalogX,
+                                   rightAnalogX, -1 * rightAnalogX};
         
         // so these could exceed 1 (not good; we cannot run the motors at over 100%)
         // we will use the maximum speed to scale all the other speeds to something below 1
-        double[] combinedSpeeds = {verticalSpeeds[0] + horizontalSpeeds[0], verticalSpeeds[1] + horizontalSpeeds[1],
-                                   verticalSpeeds[2] + horizontalSpeeds[2], verticalSpeeds[3] + horizontalSpeeds[3]};
+        double[] combinedSpeeds = new double[4];
+        for (int i = 0; i < 4; i ++)
+            combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
 
         // find the max of the above speeds so we can check if it is above 1
         double maxSpeed = Integer.MIN_VALUE;
@@ -67,9 +73,9 @@ public class MecaDrive {
         }
 
         // set the motor speeds
-        frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
+        frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
         frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-        rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
+        rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
         rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
     }
 

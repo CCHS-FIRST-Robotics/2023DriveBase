@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
@@ -8,14 +10,16 @@ import frc.robot.Constants;
  * Manages the tank drive base
  * 
  */
-public class TankDrive extends DifferentialDrive {
+public class TankDrive {
 	
 	// between 0 and 1 - 1 would be full max speed, 0.5 would be half speed, etc
 	double maxSpeed = 0.5;
 
-	public TankDrive(PWMTalonSRX leftMotor, PWMTalonSRX rightMotor) {
-		super(leftMotor, rightMotor);
-		//TODO Auto-generated constructor stub
+	TalonSRX leftMotor, rightMotor;
+
+	public TankDrive(int leftMotorPort, int rightMotorPort) {
+		leftMotor = new TalonSRX(leftMotorPort);
+		rightMotor = new TalonSRX(rightMotorPort);
 	}
 	
 	/**
@@ -51,7 +55,8 @@ public class TankDrive extends DifferentialDrive {
 		double leftVel = preScaledLeftVel * scaleFactor;
 		double rightVel = preScaledRightVel * scaleFactor;
 		
-		tankDrive(leftVel * maxSpeed, rightVel * maxSpeed);
+		leftMotor.set(ControlMode.PercentOutput, leftVel);
+		rightMotor.set(ControlMode.PercentOutput, rightVel);
 	}
 
 	/**
