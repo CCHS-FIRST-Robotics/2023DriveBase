@@ -5,13 +5,22 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class MecaDrive {
 
-	// between 0 and 1 - 1 would be full max speed, 0.5 would be half speed, etc
+	// between 0 and 1
+    // 1 would be full max speed, 0.5 would be half speed, etc
 	double speedMultiplier = 0.5;
 
     TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
-    public MecaDrive(int frontLeftMotorPort, int rearLeftMotorPort,
-                    int frontRightMotorPort, int rearRightMotorPort) {
+    /**
+     * Constructor for MecaDrive Class
+     * 
+     * @param frontLeftMotorPort
+     * @param rearLeftMotorPort
+     * @param frontRightMotorPort
+     * @param rearRightMotorPort
+     */
+    public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
+                     int rearLeftMotorPort, int rearRightMotorPort) {
         frontLeftMotor = new TalonSRX(frontLeftMotorPort);
         frontRightMotor = new TalonSRX(frontRightMotorPort);
         rearLeftMotor = new TalonSRX(rearLeftMotorPort);

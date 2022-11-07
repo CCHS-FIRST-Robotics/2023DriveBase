@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
 
 /**
@@ -17,6 +15,12 @@ public class TankDrive {
 
 	TalonSRX leftMotor, rightMotor;
 
+	/**
+	 * Constructor for TankDrive Class
+	 * 
+	 * @param leftMotorPort
+	 * @param rightMotorPort
+	 */
 	public TankDrive(int leftMotorPort, int rightMotorPort) {
 		leftMotor = new TalonSRX(leftMotorPort);
 		rightMotor = new TalonSRX(rightMotorPort);

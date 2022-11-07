@@ -6,11 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
-import frc.robot.Constants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -128,11 +126,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private TankDrive createTankDrive() {
-    return new TankDrive(Constants.LEFT_TALON_PORT, Constants.LEFT_TALON_PORT);
+    return new TankDrive(Constants.LEFT_TALON_PORT, Constants.RIGHT_TALON_PORT);
   }
 
   private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_PORT, Constants.RL_TALON_PORT,
-                         Constants.FR_TALON_PORT, Constants.RR_TALON_PORT);
+    return new MecaDrive(Constants.FL_TALON_PORT, Constants.FR_TALON_PORT,
+                         Constants.RL_TALON_PORT, Constants.RR_TALON_PORT);
   }
 }
