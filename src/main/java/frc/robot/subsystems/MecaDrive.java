@@ -3,13 +3,24 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+
 public class MecaDrive {
 
 	// between 0 and 1
     // 1 would be full max speed, 0.5 would be half speed, etc
-	double speedMultiplier = 0.5;
+	double speedMultiplier = 0.6;
+
+    // scaling down vertical speed because its faster than other speeds
+    final double verticalSpeedMultiplier = 0.8;
+
+    // scaling up horinzontal speed because its slower than the other speeds
+    final double horizontalSPeedMultiplier = 2.5;
 
     TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
+
+    boolean debugMode = false;
+    int debugEnabledWheel = 0;
+
 
     /**
      * Constructor for MecaDrive Class
@@ -25,6 +36,7 @@ public class MecaDrive {
         frontRightMotor = new TalonSRX(frontRightMotorPort);
         rearLeftMotor = new TalonSRX(rearLeftMotorPort);
         rearRightMotor = new TalonSRX(rearRightMotorPort);
+        System.out.println("Hello World");
     } 
 
     /**
@@ -47,6 +59,9 @@ public class MecaDrive {
         // left analog stick controls translation
         // right analog stick controls rotation
 
+        leftAnalogY *= verticalSpeedMultiplier;
+        leftAnalogX *= horizontalSPeedMultiplier;
+
         // arrays for wheel speeds (percents)
         // 1st is front left, 2nd is front right, 3rd is back left, 4th is back right
         double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
@@ -57,8 +72,8 @@ public class MecaDrive {
                                      leftAnalogX, -1 * leftAnalogX};
 
         // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {rightAnalogX, -1 * rightAnalogX,
-                                   rightAnalogX, -1 * rightAnalogX};
+        double[] rotationSpeeds = {-1 * rightAnalogX, rightAnalogX,
+                                   -1 * rightAnalogX, rightAnalogX};
         
         // so these could exceed 1 (not good; we cannot run the motors at over 100%)
         // we will use the maximum speed to scale all the other speeds to something below 1
@@ -69,7 +84,7 @@ public class MecaDrive {
         // find the max of the above speeds so we can check if it is above 1
         double maxSpeed = Integer.MIN_VALUE;
         for (int i = 0; i < 4; i++)
-            if (combinedSpeeds[i] > maxSpeed) maxSpeed = combinedSpeeds[i];
+            if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
         
         maxSpeed = Math.max(1, maxSpeed); // if it is under 1, we can basically ignore it    
 
@@ -82,17 +97,48 @@ public class MecaDrive {
         }
 
         // set the motor speeds
-        frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
-        frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-        rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
-        rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
+        if(!debugMode) {
+            frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+            frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+            rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+            rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
+        } else {
+            switch (debugEnabledWheel){
+                case 0:
+                    frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+                    break;
+                case 1:
+                    frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+                    break;
+                case 2:
+                    rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+                    break;
+                case 3:
+                    rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
+                    break;
+            }
+        }
+        
     }
 
 	public void increaseSpeedBracket() {
-		speedMultiplier = Math.min(0.8, speedMultiplier + 0.1);
+		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
 	}
 
 	public void decreaseSpeedBracket() {
 		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
 	}
+
+    public void toggleDebugMode() {
+        debugMode = !debugMode;
+        System.out.println("Debug Mode: " + debugMode);
+    }
+
+    public void cycleWheelDebugMode() {
+        debugEnabledWheel++;
+        debugEnabledWheel %= 4;
+        System.out.println("Current Wheel: " + debugEnabledWheel);
+    }
+
+    
 }

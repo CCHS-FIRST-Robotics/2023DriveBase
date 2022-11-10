@@ -99,6 +99,9 @@ public class Robot extends TimedRobot {
     if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
     if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
+    if (xboxController.getLeftStickButtonPressed())  driveBase.toggleDebugMode();
+    if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
+
     // get input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
     double leftAnalogY 	= xboxController.getLeftY();

@@ -24,8 +24,8 @@ public class Constants {
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
 	public static final int FR_TALON_PORT = 2;
 	public static final int FL_TALON_PORT = 8;
-	public static final int RR_TALON_PORT = 4;
-	public static final int RL_TALON_PORT = 10;
+	public static final int RR_TALON_PORT = 10;
+	public static final int RL_TALON_PORT = 4;
 	
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
