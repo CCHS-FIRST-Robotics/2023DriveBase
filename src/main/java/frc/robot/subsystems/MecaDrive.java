@@ -39,6 +39,7 @@ public class MecaDrive extends DriveBase {
         frontRightMotor = new TalonSRX(frontRightMotorPort);
         rearLeftMotor = new TalonSRX(rearLeftMotorPort);
         rearRightMotor = new TalonSRX(rearRightMotorPort);
+        System.out.println("Hello World");
     } 
 
     /**
