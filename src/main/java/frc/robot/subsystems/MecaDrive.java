@@ -18,7 +18,10 @@ public class MecaDrive {
 
     TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
+    // debug mode stops all wheels except one
     boolean debugMode = false;
+
+    // the wheel to be activited during debug mode
     int debugEnabledWheel = 0;
 
 
@@ -146,6 +149,8 @@ public class MecaDrive {
         debugMode = !debugMode;
         System.out.println("Debug Mode: " + debugMode);
     }
+
+    // cycles through the activated wheels during debug mode
     public void cycleWheelDebugMode() {
         debugEnabledWheel++;
         debugEnabledWheel %= 4;
