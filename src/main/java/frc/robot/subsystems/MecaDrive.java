@@ -18,7 +18,10 @@ public class MecaDrive {
 
     TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
+    // debug mode stops all wheels except one
     boolean debugMode = false;
+
+    // the wheel to be activited during debug mode
     int debugEnabledWheel = 0;
 
 
@@ -51,7 +54,15 @@ public class MecaDrive {
      * @param leftAnalogY the y position of the left analog stick; range: [-1, 1]
      * @param rightAnalogX the x position of the right analog stick; range: [-1, 1]
      * @param rightAnalogY the y position of the right analog stick; range: [-1, 1]
-
+	 * 
+	 * Debug mode:
+	 * 
+	 * 	When you press the left stick down (left stick button) the robot enters
+	 * debug mode (bool debugMode), and the robot will only move power one wheel
+	 * at a time. Toggle through these wheels by pressing the left stick button 
+	 * more (FL -> FR -> BL -> BR) then, after BR, it will leave debug mode and 
+	 * go back into all wheel drive
+	 * 
      */
     public void drive(double leftAnalogX, double leftAnalogY,
 					  double rightAnalogX, double rightAnalogY) {
@@ -96,13 +107,16 @@ public class MecaDrive {
             combinedSpeeds[i] = combinedSpeeds[i] * speedMultiplier;
         }
 
-        // set the motor speeds
+        // set the motor speeds (normal)
         if(!debugMode) {
             frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
             frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
             rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
             rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
-        } else {
+        } 
+		
+		// Debug mode (toggle wheels with left stick button)
+		else {
             switch (debugEnabledWheel){
                 case 0:
                     frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
@@ -118,22 +132,25 @@ public class MecaDrive {
                     break;
             }
         }
-        
     }
 
+	/* 
+	the speed bracket is the range of speeds that the tank can move and turn in
+	 */
 	public void increaseSpeedBracket() {
 		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
 	}
-
 	public void decreaseSpeedBracket() {
 		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
 	}
 
+	// for enabling debug and testing different wheels
     public void toggleDebugMode() {
         debugMode = !debugMode;
         System.out.println("Debug Mode: " + debugMode);
     }
 
+    // cycles through the activated wheels during debug mode
     public void cycleWheelDebugMode() {
         debugEnabledWheel++;
         debugEnabledWheel %= 4;
