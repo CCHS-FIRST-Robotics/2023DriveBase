@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private MecaDrive driveBase;
+  private TankDrive driveBase;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,9 +38,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     // tank drive initialization
-    //driveBase = createTankDrive();    
+    driveBase = createTankDrive();    
     // mecanum drive initialization
-    driveBase = createMecanumDrive();
+    // driveBase = createMecanumDrive();
     
     // // set the dead zone for the controller analog sticks
     // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
@@ -115,7 +115,6 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
-
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
@@ -129,7 +128,8 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private TankDrive createTankDrive() {
-    return new TankDrive(Constants.LEFT_TALON_PORT, Constants.RIGHT_TALON_PORT);
+    return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
+                         Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
   }
 
   private MecaDrive createMecanumDrive() {

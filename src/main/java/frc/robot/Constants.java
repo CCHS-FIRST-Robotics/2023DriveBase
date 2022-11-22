@@ -18,8 +18,10 @@ public class Constants {
 	public static double maxVelocity;
 
 	// for tank drive
-	public static final int LEFT_TALON_PORT  = Integer.MAX_VALUE;
-	public static final int RIGHT_TALON_PORT = Integer.MIN_VALUE;
+	public static final int LEFT_VICTOR_ID = 7;
+	public static final int RIGHT_VICTOR_ID = 4;
+	public static final int TALON_ID = 9;
+	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
 	public static final int FR_TALON_PORT = 2;
