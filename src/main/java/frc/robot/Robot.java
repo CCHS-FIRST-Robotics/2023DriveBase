@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     // tank drive initialization
     // driveBase = createTankDrive();    
     // mecanum drive initialization
-    driveBase = createMecanumDrive();
+    // driveBase = createMecanumDrive();
     
     // // set the dead zone for the controller analog sticks
     // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
