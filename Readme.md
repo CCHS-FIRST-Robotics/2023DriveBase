@@ -25,6 +25,11 @@ Robot:
 
 ## Terminology and readability
 
+### Documentation
+
+https://github.wpilib.org/allwpilib/docs/release/java/index.html
+https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/package-summary.html
+
 ### Quick terms
 
 - F(L/R) : Front left & right
