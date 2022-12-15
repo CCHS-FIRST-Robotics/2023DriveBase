@@ -30,11 +30,15 @@ Robot:
 Motors & Robot control:
 https://github.wpilib.org/allwpilib/docs/release/java/index.html
 
+SparkMax: 
+https://codedocs.revrobotics.com/java/index.html
+
 Motors:
 https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/package-summary.html
 
 Gyro:
 https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/AHRS.html
+
 
 ### Quick terms
 
