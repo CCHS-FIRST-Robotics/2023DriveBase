@@ -80,6 +80,14 @@ public class TankDrive extends DriveBase{
 
 	double maxAngularVel = 53; // determined experimentally
 
+	DifferentialDriveOdometry odometer;
+	AHRS navx;
+
+	// int kP = 0;
+	// int kI = 0;
+	// int kD = 0;
+	// PIDController pid = new PIDController(kP, kI, kD);
+
 	/**
 	 * Constructor for TankDrive Class
 	 * 
