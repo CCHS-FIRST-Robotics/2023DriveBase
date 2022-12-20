@@ -13,9 +13,15 @@ public class Constants {
 	public static final int XBOX_CONTROLLER_PORT 			= 0; 
 
 	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
-	public static final double DRIVE_WHEEL_RADIUS 			= 0.1; // meters
+	
+	public static final double TANK_WHEEL_RADIUS 			= 0.075; // meters
 
 	public static double maxVelocity;
+
+	public static final int ENCODER_CPR = 4096;
+
+	// the amount of time (in seconds) between calls of the periodic function
+	public static final double dt = 0.02;
 
 	// for tank drive
 	public static final int LEFT_VICTOR_ID = 7;
@@ -31,9 +37,9 @@ public class Constants {
 	
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
+	public static final double ROBOT_WIDTH = 0.40;
 
 	Constants() {
-		maxVelocity = DRIVE_MAX_ANGULAR_VELOCITY * DRIVE_WHEEL_RADIUS;
 		
 	}
 }

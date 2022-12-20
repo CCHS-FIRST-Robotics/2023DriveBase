@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
 
 /**
@@ -36,6 +37,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
+
 
     // tank drive initialization
     driveBase = createTankDrive();    
@@ -101,6 +105,9 @@ public class Robot extends TimedRobot {
 
     if (xboxController.getLeftStickButtonPressed())  driveBase.toggleDebugMode();
     if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
+
+    if (xboxController.getAButtonPressed()) driveBase.printPosition();
+    if (xboxController.getBButtonPressed()) driveBase.resetPosition();
 
     // get input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();

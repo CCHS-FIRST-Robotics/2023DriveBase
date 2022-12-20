@@ -6,6 +6,13 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.geometry.Rotation2d;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * Manages the tank drive base
@@ -23,9 +30,18 @@ public class TankDrive {
 	TalonSRX leftTalon, rightTalon;
 	VictorSPX leftVictor, rightVictor;
 	CANSparkMax leftSparkMax;
+	RelativeEncoder sparkMaxEncoder;
 
 	boolean debugMode = false;
     int debugEnabledWheel = 0;
+
+	DifferentialDriveOdometry odometer;
+	AHRS navx;
+
+	// int kP = 0;
+	// int kI = 0;
+	// int kD = 0;
+	// PIDController pid = new PIDController(kP, kI, kD);
 
 	/**
 	 * Constructor for TankDrive Class
@@ -44,6 +60,11 @@ public class TankDrive {
 		leftSparkMax = new CANSparkMax(leftTalonPort, CANSparkMaxLowLevel.MotorType.kBrushed);
 		rightTalon = new TalonSRX(rightTalonPort);
 		rightVictor = new VictorSPX(rightVictorPort);
+		sparkMaxEncoder = leftSparkMax.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, Constants.ENCODER_CPR);
+
+		navx = new AHRS(SPI.Port.kMXP);
+		odometer = new DifferentialDriveOdometry(new Rotation2d());
+		resetPosition();
 	}
 	
 	/**
@@ -91,9 +112,25 @@ public class TankDrive {
 			rightTalon.set(ControlMode.PercentOutput, rightVel);
 			rightVictor.set(ControlMode.PercentOutput, rightVel);
 
-			// System.out.println("leftvel: " + leftVel);
-			// System.out.println("rightvel: " + rightVel);
-			// System.out.println(" ");
+
+
+			// PID stuff
+			// get the linear position of the left wheel and convert to meters
+			// double leftWheelPos = -1 * sparkMaxEncoder.getPosition() * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+
+			// // get the linear position of the right wheel and convert to meters
+			// double rightWheelPos = rightTalon.getSelectedSensorPosition / Constants.ENCODER_CPR * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+
+			// double leftSetpoint = leftVel * 1;
+			// double rightSetpoint = rightVel * 1;
+
+			// leftVictor.set(pid.calculate(leftWheelPos, leftSetpoint));
+			// leftSparkMax.set(pid.calculate(leftWheelPos, leftSetpoint));
+
+			// rightTalon.set(pid.calculate(rightWheelPos, rightSetpoint));
+			// rightVictor.set(pid.calculate(rightWheelPos, rightSetpoint));
+
+
         } else {
             switch (debugEnabledWheel){
                 case 0:
@@ -110,6 +147,13 @@ public class TankDrive {
                     break;
             }
         }
+		updatePosition();
+		// System.out.println(rightTalon.getSelectedSensorVelocity()); // clicks per 100ms
+		// System.out.println(rightTalon.getSelectedSensorVelocity() * 10 * 60 / 4096);
+		// System.out.println(sparkMaxEncoder.getVelocity()); // actual rpm
+		// System.out.println("");
+
+
 	}
 
 	/**
@@ -135,4 +179,66 @@ public class TankDrive {
         debugEnabledWheel %= 4;
         System.out.println("Current Wheel: " + debugEnabledWheel);
     }
+
+	public void updateRobotVelocity() {
+		// get rotational speeds from the motors on each side
+		// divide by 60 to get rotations per second
+		// double leftRPS = -1 * sparkMaxEncoder.getVelocity() / 60;
+		// // multiply by 10 because this is per 100ms - we want rps
+		// double rightRPS = rightTalon.getSelectedSensorVelocity() * 10 / Constants.ENCODER_CPR;
+
+		// // find linear velocities in m/s
+		// double leftVel = (leftRPS * 2 * Math.PI) * Constants.TANK_WHEEL_RADIUS;
+		// double rightVel = (rightRPS * 2 * Math.PI) * Constants.TANK_WHEEL_RADIUS;
+
+		// currentSpeeds.leftMetersPerSecond = leftVel;
+		// currentSpeeds.rightMetersPerSecond = rightVel;
+	}
+
+	public void getPosition()
+	{
+
+	}
+
+	public void updatePosition()
+	{
+		// get the linear position of the left wheel and convert to meters
+		double leftWheelPos = -1 * sparkMaxEncoder.getPosition() * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+
+		// get the linear position of the right wheel and convert to meters
+		double rightWheelPos = rightTalon.getSelectedSensorPosition() / Constants.ENCODER_CPR * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+
+		// get the angle of the robot
+		double theta = navx.getAngle() / 180 * Math.PI;
+		Rotation2d rot = new Rotation2d(theta);
+		odometer.update(rot, leftWheelPos, rightWheelPos);
+	}
+
+	public void resetPosition()
+	{
+		// reset the sensors to zero the position
+		navx.reset();
+		navx.resetDisplacement();
+		sparkMaxEncoder.setPosition(0);
+		rightTalon.setSelectedSensorPosition(0);
+		odometer.resetPosition(new Pose2d(), new Rotation2d());
+	}
+
+	public void printPosition()
+	{
+		Pose2d posFromWheelDisplacement = odometer.getPoseMeters();
+		System.out.println("Position from odometer and wheel: ");
+		System.out.println("X: " + posFromWheelDisplacement.getX() + " Y: " + posFromWheelDisplacement.getY() + " rotation: " + posFromWheelDisplacement.getRotation());
+
+		System.out.println("\nPosition info from navx: ");
+		System.out.println("X: " + navx.getDisplacementX() + " Y: " + navx.getDisplacementY() + " rotation: " + navx.getAngle());
+		System.out.println();
+
+		// get the linear position of the left wheel and convert to meters
+		double leftWheelPos = -1 * sparkMaxEncoder.getPosition() * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+
+		// get the linear position of the right wheel and convert to meters
+		double rightWheelPos = rightTalon.getSelectedSensorPosition() / Constants.ENCODER_CPR * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+		System.out.println("Right Pos: " + rightWheelPos + " left pos: " + leftWheelPos);
+	}
 }
