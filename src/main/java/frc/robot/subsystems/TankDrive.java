@@ -83,10 +83,12 @@ public class TankDrive extends DriveBase{
 	DifferentialDriveOdometry odometer;
 	AHRS navx;
 
-	// int kP = 0;
-	// int kI = 0;
-	// int kD = 0;
-	// PIDController pid = new PIDController(kP, kI, kD);
+	double kP = 0.0001;
+	double kI = 0.0;
+	double kD = 0.0;
+	PIDController pid = new PIDController(kP, kI, kD);
+
+	double maxAngularVel = 28; // 24.0983606557377
 
 	/**
 	 * Constructor for TankDrive Class
@@ -170,6 +172,7 @@ public class TankDrive extends DriveBase{
 			double normalLeftAngVel = leftAngVel / maxAngularVel;
 			double normalRightAngVel = rightAngVel / maxAngularVel;
 
+			
 
 			// set the motors according to the PID
 			double leftPIDValue = leftPID.calculate(normalLeftAngVel, leftVel);
