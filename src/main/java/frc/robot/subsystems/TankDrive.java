@@ -38,10 +38,12 @@ public class TankDrive {
 	DifferentialDriveOdometry odometer;
 	AHRS navx;
 
-	// int kP = 0;
-	// int kI = 0;
-	// int kD = 0;
-	// PIDController pid = new PIDController(kP, kI, kD);
+	double kP = 0.0001;
+	double kI = 0.0;
+	double kD = 0.0;
+	PIDController pid = new PIDController(kP, kI, kD);
+
+	double maxAngularVel = 28; // 24.0983606557377
 
 	/**
 	 * Constructor for TankDrive Class
@@ -115,21 +117,23 @@ public class TankDrive {
 
 
 			// PID stuff
-			// get the linear position of the left wheel and convert to meters
-			// double leftWheelPos = -1 * sparkMaxEncoder.getPosition() * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
 
-			// // get the linear position of the right wheel and convert to meters
-			// double rightWheelPos = rightTalon.getSelectedSensorPosition / Constants.ENCODER_CPR * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
+			// actual angular velocities
+			double leftAngVel = sparkMaxEncoder.getVelocity();
+			double rightAngVel = rightTalon.getSelectedSensorVelocity();
 
-			// double leftSetpoint = leftVel * 1;
-			// double rightSetpoint = rightVel * 1;
+			// normalized (actual) angular velocities
+			double normalLeftAngVel = leftAngVel / maxAngularVel;
+			double normalRightAngVel = rightAngVel / maxAngularVel;
 
-			// leftVictor.set(pid.calculate(leftWheelPos, leftSetpoint));
-			// leftSparkMax.set(pid.calculate(leftWheelPos, leftSetpoint));
+			// set the motors according to the PID
+			leftVictor.set(pid.calculate(normalLeftAngVel, leftVel));
+			leftSparkMax.set(pid.calculate(normalLeftAngVel, leftVel));
 
-			// rightTalon.set(pid.calculate(rightWheelPos, rightSetpoint));
-			// rightVictor.set(pid.calculate(rightWheelPos, rightSetpoint));
+			rightTalon.set(pid.calculate(normalRightAngVel, rightVel));
+			rightVictor.set(pid.calculate(normalRightAngVel, rightVel));
 
+			
 
         } else {
             switch (debugEnabledWheel){
@@ -153,6 +157,21 @@ public class TankDrive {
 		// System.out.println(sparkMaxEncoder.getVelocity()); // actual rpm
 		// System.out.println("");
 
+
+
+
+		// // Print angular velocity and motor use level
+		// // get rotational speeds from the motors on each side
+		// // divide by 60 to get rotations per second
+		// double leftRPS = -1 * sparkMaxEncoder.getVelocity() / 60;
+
+		// if (Math.abs(leftRPS) > 0.1){
+		// 	// // multiply by 10 because this is per 100ms - we want rps
+		// 	double rightRPS = rightTalon.getSelectedSensorVelocity() * 10 / Constants.ENCODER_CPR;
+		// 	System.out.println("Right Rps: " + rightRPS + "\nLeft RPS: " + leftRPS);
+		// 	System.out.println("Right velocity from controller: " + rightVel + "\nLeft Velocity from controller: " + leftVel);
+		// }
+		 
 
 	}
 
@@ -181,6 +200,7 @@ public class TankDrive {
     }
 
 	public void updateRobotVelocity() {
+		
 		// get rotational speeds from the motors on each side
 		// divide by 60 to get rotations per second
 		// double leftRPS = -1 * sparkMaxEncoder.getVelocity() / 60;
@@ -240,5 +260,16 @@ public class TankDrive {
 		// get the linear position of the right wheel and convert to meters
 		double rightWheelPos = rightTalon.getSelectedSensorPosition() / Constants.ENCODER_CPR * 2 * Math.PI * Constants.TANK_WHEEL_RADIUS;
 		System.out.println("Right Pos: " + rightWheelPos + " left pos: " + leftWheelPos);
+
+
+		// Print angular velocity and motor use level
+		// get rotational speeds from the motors on each side
+		// divide by 60 to get rotations per second
+		double leftRPS = -1 * sparkMaxEncoder.getVelocity() / 60;
+		// // multiply by 10 because this is per 100ms - we want rps
+		double rightRPS = rightTalon.getSelectedSensorVelocity() * 10 / Constants.ENCODER_CPR;
+		System.out.println("Right Rps: " + rightRPS + "\nLeft RPS: " + leftRPS);
+
 	}
+	
 }
