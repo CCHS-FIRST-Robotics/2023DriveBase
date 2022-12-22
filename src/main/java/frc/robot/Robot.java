@@ -103,11 +103,30 @@ public class Robot extends TimedRobot {
     if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
     if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
-    if (xboxController.getLeftStickButtonPressed())  driveBase.toggleDebugMode();
+    // switch between modes (for DPad, 0 is up, and angles go clockwise, so 90 is right)
+    // up
+    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
+    // right
+    if (xboxController.getPOV() == 90) driveBase.turnOnDebugMode();
+    // down
+    if (xboxController.getPOV() == 180) driveBase.turnONPIDTurningMode();
+
+    // Debug controls
     if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
 
-    if (xboxController.getAButtonPressed()) driveBase.printPosition();
-    if (xboxController.getBButtonPressed()) driveBase.resetPosition();
+    // actions of the four button presses
+    if (xboxController.getAButtonPressed()) {
+      driveBase.AButtonPressed();
+    }
+    if (xboxController.getBButtonPressed()) {
+      driveBase.BButtonPressed();
+    }
+    if (xboxController.getXButtonPressed()) {
+      driveBase.XButtonPressed();
+    }
+    if (xboxController.getYButtonPressed()) {
+      driveBase.YButtonPressed();
+    }
 
     // get input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
@@ -133,6 +152,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
 
   private TankDrive createTankDrive() {
     return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,

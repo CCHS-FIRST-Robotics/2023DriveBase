@@ -11,6 +11,8 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -26,22 +28,38 @@ public class TankDrive {
 	// scales the rotational speed of the robot, controlled by the right analog
 	double rotationalSpeedMultiplier = 0.75;
 
-	// TalonSRX leftMotor1, leftMotor2, rightMotor1, rightMotor2;
+	// define objects
 	TalonSRX leftTalon, rightTalon;
 	VictorSPX leftVictor, rightVictor;
 	CANSparkMax leftSparkMax;
 	RelativeEncoder sparkMaxEncoder;
 
-	boolean debugMode = false;
-    int debugEnabledWheel = 0;
-
 	DifferentialDriveOdometry odometer;
 	AHRS navx;
 
-	double kP = 0.0001;
-	double kI = 0.0;
-	double kD = 0.0;
-	PIDController pid = new PIDController(kP, kI, kD);
+	// different modes
+	String currentMode;
+	final String DEFAULT_MODE = "DEFAULT";
+	final String DEBUG_MODE = "DEBUG";
+	final String PID_TUNING_MODE = "PIDTUNING";
+
+	// debug mode variables
+    int debugEnabledWheel = 0;
+
+	// PID variables
+
+	// amount to increment constant during PID Tuning Mode
+	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
+
+	// PID constants
+	double[] PIDConstants = {0, 0, 0}; // kP, kI, kD
+	PIDController pid;
+	
+	// current constant to be tuned
+	int currentPIDTuningConstant = 0; // 0 = kP, 1 = kI, 2 = kD
+
+	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
+	boolean increasingPIDConstant = true;
 
 	double maxAngularVel = 28; // 24.0983606557377
 
@@ -53,16 +71,15 @@ public class TankDrive {
 	 */
 	public TankDrive(int leftTalonPort, int leftVictorPort,
 					 int rightTalonPort, int rightVictorPort) {
-		// leftMotor1 = new TalonSRX(leftMotorPort1);
-		// leftMotor2 = new TalonSRX(leftMotorPort2);
-		// rightMotor1 = new TalonSRX(rightMotorPort1);
-		// rightMotor2 = new TalonSRX(rightMotorPort2);
-		// leftTalon = new TalonSRX(leftTalonPort);
 		leftVictor = new VictorSPX(leftVictorPort);
 		leftSparkMax = new CANSparkMax(leftTalonPort, CANSparkMaxLowLevel.MotorType.kBrushed);
 		rightTalon = new TalonSRX(rightTalonPort);
 		rightVictor = new VictorSPX(rightVictorPort);
 		sparkMaxEncoder = leftSparkMax.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, Constants.ENCODER_CPR);
+
+		currentMode = DEFAULT_MODE;
+
+		pid = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
 
 		navx = new AHRS(SPI.Port.kMXP);
 		odometer = new DifferentialDriveOdometry(new Rotation2d());
@@ -108,7 +125,7 @@ public class TankDrive {
 		// rightTalon.set(ControlMode.PercentOutput, rightVel);
 		// rightVictor.set(ControlMode.PercentOutput, rightVel);
 		// set the motor speeds
-        if(!debugMode) {
+        if(currentMode.equals(DEFAULT_MODE)) {
 			leftVictor.set(ControlMode.PercentOutput, -1 *leftVel);
 			leftSparkMax.set(leftVel);
 			rightTalon.set(ControlMode.PercentOutput, rightVel);
@@ -127,11 +144,11 @@ public class TankDrive {
 			double normalRightAngVel = rightAngVel / maxAngularVel;
 
 			// set the motors according to the PID
-			leftVictor.set(pid.calculate(normalLeftAngVel, leftVel));
+			leftVictor.set(ControlMode.PercentOutput, pid.calculate(normalLeftAngVel, leftVel));
 			leftSparkMax.set(pid.calculate(normalLeftAngVel, leftVel));
 
-			rightTalon.set(pid.calculate(normalRightAngVel, rightVel));
-			rightVictor.set(pid.calculate(normalRightAngVel, rightVel));
+			rightTalon.set(ControlMode.PercentOutput, pid.calculate(normalRightAngVel, rightVel));
+			rightVictor.set(ControlMode.PercentOutput, pid.calculate(normalRightAngVel, rightVel));
 
 			
 
@@ -188,10 +205,20 @@ public class TankDrive {
 		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
 	}
 
-	public void toggleDebugMode() {
-        debugMode = !debugMode;
-        System.out.println("Debug Mode: " + debugMode);
+	public void turnOnDefaultMode() {
+		currentMode = DEFAULT_MODE;
+		System.out.println("DEFAULT MODE");
+	}
+
+	public void turnOnDebugMode() {
+        currentMode = DEBUG_MODE;
+        System.out.println("DEBUG MODE");
     }
+
+	public void turnONPIDTurningMode() {
+		currentMode = PID_TUNING_MODE;
+		System.out.println("PID TUNING MODE");
+	}
 
     public void cycleWheelDebugMode() {
         debugEnabledWheel++;
@@ -232,6 +259,67 @@ public class TankDrive {
 		double theta = navx.getAngle() / 180 * Math.PI;
 		Rotation2d rot = new Rotation2d(theta);
 		odometer.update(rot, leftWheelPos, rightWheelPos);
+	}
+
+	public void AButtonPressed() {
+		switch(currentMode) {
+			case DEFAULT_MODE:
+				printPosition();
+				break;
+			case DEBUG_MODE:
+				printPosition();	
+				break;
+			case PID_TUNING_MODE:
+				if(increasingPIDConstant) {
+					PIDConstants[currentPIDTuningConstant] += PIDIncrements[currentPIDTuningConstant];
+				} else {
+					PIDConstants[currentPIDTuningConstant] -= PIDIncrements[currentPIDTuningConstant];
+				}
+				System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
+				break;
+		}
+	}
+
+	public void BButtonPressed() {
+		switch(currentMode) {
+			case DEFAULT_MODE:
+				resetPosition();
+				break;
+			case DEBUG_MODE:
+				resetPosition();	
+				break;
+			case PID_TUNING_MODE:
+				currentPIDTuningConstant++;
+				currentPIDTuningConstant %= 3;
+				if(currentPIDTuningConstant == 0) {
+					System.out.println("kP Selected");
+				}
+				else if(currentPIDTuningConstant == 1) {
+					System.out.println("kI Selected");
+				}
+				else {
+					System.out.println("kD Selected");
+				}
+				break;
+		}
+	}
+
+	public void XButtonPressed() {
+		switch(currentMode) {
+			case PID_TUNING_MODE:
+				if(increasingPIDConstant) {
+					increasingPIDConstant = false;
+					System.out.println("Decreasing PID Constants");
+				} else {
+					increasingPIDConstant = true;
+					System.out.println("Increasing PID Constants");
+				}
+				break;
+		}
+	}
+
+	public void YButtonPressed() {
+		
 	}
 
 	public void resetPosition()
