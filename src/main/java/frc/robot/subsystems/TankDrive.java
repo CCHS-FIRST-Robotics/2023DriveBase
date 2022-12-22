@@ -83,10 +83,29 @@ public class TankDrive extends DriveBase{
 	DifferentialDriveOdometry odometer;
 	AHRS navx;
 
-	double kP = 0.0001;
-	double kI = 0.0;
-	double kD = 0.0;
-	PIDController pid = new PIDController(kP, kI, kD);
+	// different modes
+	String currentMode;
+	final String DEFAULT_MODE = "DEFAULT";
+	final String DEBUG_MODE = "DEBUG";
+	final String PID_TUNING_MODE = "PIDTUNING";
+
+	// debug mode variables
+    int debugEnabledWheel = 0;
+
+	// PID variables
+
+	// amount to increment constant during PID Tuning Mode
+	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
+
+	// PID constants
+	double[] PIDConstants = {0, 0, 0}; // kP, kI, kD
+	PIDController pid;
+	
+	// current constant to be tuned
+	int currentPIDTuningConstant = 0; // 0 = kP, 1 = kI, 2 = kD
+
+	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
+	boolean increasingPIDConstant = true;
 
 	double maxAngularVel = 28; // 24.0983606557377
 
