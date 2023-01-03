@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
       driveBase.YButtonPressed();
     }
 
-    // get input from xbox controller
+    // get analog input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
     double leftAnalogY 	= xboxController.getLeftY();
     double rightAnalogX = xboxController.getRightX();
