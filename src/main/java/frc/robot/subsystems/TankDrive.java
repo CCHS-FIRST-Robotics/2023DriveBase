@@ -53,10 +53,14 @@ public class TankDrive {
 
 	// PID constants
 	double[] PIDConstants = {0, 0, 0}; // kP, kI, kD
+
+	// Upper bound for PID constants
+	double[] PIDMaximums = {1, 1, 1};
+	
 	PIDController pid;
 	
 	// current constant to be tuned
-	int currentPIDTuningConstant = 0; // 0 = kP, 1 = kI, 2 = kD
+	int currentPIDConstant = 0; // 0 = kP, 1 = kI, 2 = kD
 
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
@@ -125,7 +129,7 @@ public class TankDrive {
 		// rightTalon.set(ControlMode.PercentOutput, rightVel);
 		// rightVictor.set(ControlMode.PercentOutput, rightVel);
 		// set the motor speeds
-        if(currentMode.equals(DEFAULT_MODE)) {
+        if(currentMode.equals(DEFAULT_MODE) || currentMode.equals(PID_TUNING_MODE)) {
 			leftVictor.set(ControlMode.PercentOutput, -1 *leftVel);
 			leftSparkMax.set(leftVel);
 			rightTalon.set(ControlMode.PercentOutput, rightVel);
@@ -152,7 +156,7 @@ public class TankDrive {
 
 			
 
-        } else {
+        } else if (currentMode.equals(DEBUG_MODE)) {
             switch (debugEnabledWheel){
                 case 0:
                     leftVictor.set(ControlMode.PercentOutput, -1 * leftVel);
@@ -273,17 +277,7 @@ public class TankDrive {
 				printPosition();	
 				break;
 			case PID_TUNING_MODE:
-				// increment the selected PID Constant
-				if(increasingPIDConstant) {
-					PIDConstants[currentPIDTuningConstant] += PIDIncrements[currentPIDTuningConstant];
-					// make sure constant is <= 1
-					PIDConstants[currentPIDTuningConstant] = Math.min(PIDConstants[currentPIDTuningConstant], 1);
-				} else {
-					PIDConstants[currentPIDTuningConstant] -= PIDIncrements[currentPIDTuningConstant];
-					// make sure constant is >= 0
-					PIDConstants[currentPIDTuningConstant] = Math.max(PIDConstants[currentPIDTuningConstant], 0);
-				}
-				System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
+				incrementPIDConstant();
 				break;
 		}
 	}
@@ -297,17 +291,7 @@ public class TankDrive {
 				resetPosition();	
 				break;
 			case PID_TUNING_MODE:
-				currentPIDTuningConstant++;
-				currentPIDTuningConstant %= 3;
-				if(currentPIDTuningConstant == 0) {
-					System.out.println("kP Selected");
-				}
-				else if(currentPIDTuningConstant == 1) {
-					System.out.println("kI Selected");
-				}
-				else {
-					System.out.println("kD Selected");
-				}
+				cyclePIDConstant();
 				break;
 		}
 	}
@@ -315,19 +299,58 @@ public class TankDrive {
 	public void XButtonPressed() {
 		switch(currentMode) {
 			case PID_TUNING_MODE:
-				if(increasingPIDConstant) {
-					increasingPIDConstant = false;
-					System.out.println("Decreasing PID Constants");
-				} else {
-					increasingPIDConstant = true;
-					System.out.println("Increasing PID Constants");
-				}
+				toggleDecreasingPIDIncrement();
 				break;
 		}
 	}
 
 	public void YButtonPressed() {
 		
+	}
+
+	/**
+	 * PID Tuning Mode: Increments the selected PID constant
+	 */
+	public void incrementPIDConstant() {
+		if(increasingPIDConstant) {
+			PIDConstants[currentPIDConstant] += PIDIncrements[currentPIDConstant];
+		} else {
+			PIDConstants[currentPIDConstant] -= PIDIncrements[currentPIDConstant];
+		}
+		// make sure constants are in [0, constantMax]
+		PIDConstants[currentPIDConstant] = Math.min(PIDConstants[currentPIDConstant], PIDMaximums[currentPIDConstant]);
+		PIDConstants[currentPIDConstant] = Math.max(PIDConstants[currentPIDConstant], 0);
+		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
+	}
+
+	/**
+	 * PID Tuning Mode: Cycles between the PID constants
+	 */
+	public void cyclePIDConstant() {
+		currentPIDConstant++;
+		currentPIDConstant %= 3;
+		if(currentPIDConstant == 0) {
+			System.out.println("kP Selected");
+		}
+		else if(currentPIDConstant == 1) {
+			System.out.println("kI Selected");
+		}
+		else if(currentPIDConstant == 2) {
+			System.out.println("kD Selected");
+		}
+	}
+
+	/*
+	 * PID Tuning Mode: Toggles between increasing and decreasing the PID constants on each increment
+	 */
+	public void toggleDecreasingPIDIncrement() {
+		if(increasingPIDConstant) {
+			increasingPIDConstant = false;
+			System.out.println("Decreasing PID Constants");
+		} else {
+			increasingPIDConstant = true;
+			System.out.println("Increasing PID Constants");
+		}
 	}
 
 	public void resetPosition()
