@@ -206,16 +206,19 @@ public class TankDrive {
 	}
 
 	public void turnOnDefaultMode() {
+		if(currentMode.equals(DEFAULT_MODE)) return;
 		currentMode = DEFAULT_MODE;
 		System.out.println("DEFAULT MODE");
 	}
 
 	public void turnOnDebugMode() {
+		if(currentMode.equals(DEBUG_MODE)) return;
         currentMode = DEBUG_MODE;
         System.out.println("DEBUG MODE");
     }
 
 	public void turnONPIDTurningMode() {
+		if(currentMode.equals(PID_TUNING_MODE)) return;
 		currentMode = PID_TUNING_MODE;
 		System.out.println("PID TUNING MODE");
 	}
@@ -270,10 +273,15 @@ public class TankDrive {
 				printPosition();	
 				break;
 			case PID_TUNING_MODE:
+				// increment the selected PID Constant
 				if(increasingPIDConstant) {
 					PIDConstants[currentPIDTuningConstant] += PIDIncrements[currentPIDTuningConstant];
+					// make sure constant is <= 1
+					PIDConstants[currentPIDTuningConstant] = Math.min(PIDConstants[currentPIDTuningConstant], 1);
 				} else {
 					PIDConstants[currentPIDTuningConstant] -= PIDIncrements[currentPIDTuningConstant];
+					// make sure constant is >= 0
+					PIDConstants[currentPIDTuningConstant] = Math.max(PIDConstants[currentPIDTuningConstant], 0);
 				}
 				System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
 				break;
