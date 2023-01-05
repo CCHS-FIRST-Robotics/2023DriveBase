@@ -98,12 +98,13 @@ public class TankDrive extends DriveBase{
 	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
 	// PID constants
-	double[] PIDConstants = {0, 0, 0}; // kP, kI, kD
+	double[] PIDConstants = {0.05, 0, 0}; // kP, kI, kD
 
 	// Upper bound for PID constants
-	double[] PIDMaximums = {1, 1, 1};
+	double[] PIDMaximums = {2, 1, 1};
 	
-	PIDController pid;
+	PIDController leftPID;
+	PIDController rightPID;
 	
 	// current constant to be tuned
 	int currentPIDConstant = 0; // 0 = kP, 1 = kI, 2 = kD
@@ -111,7 +112,7 @@ public class TankDrive extends DriveBase{
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double maxAngularVel = 28; // 24.0983606557377
+	double maxAngularVel = 4500; // measured ~4100
 
 	/**
 	 * Constructor for TankDrive Class
@@ -466,7 +467,21 @@ public class TankDrive extends DriveBase{
 		// make sure constants are in [0, constantMax]
 		PIDConstants[currentPIDConstant] = Math.min(PIDConstants[currentPIDConstant], PIDMaximums[currentPIDConstant]);
 		PIDConstants[currentPIDConstant] = Math.max(PIDConstants[currentPIDConstant], 0);
+
+		// print PID constants
 		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
+
+		// set PID constant in the PID controllers
+		if(currentPIDConstant == 0) {
+			leftPID.setP(PIDConstants[0]);
+			rightPID.setP(PIDConstants[0]);
+		} else if (currentPIDConstant == 1) {
+			leftPID.setP(PIDConstants[1]);
+			rightPID.setP(PIDConstants[1]);
+		} else if (currentPIDConstant == 2) {
+			leftPID.setP(PIDConstants[2]);
+			rightPID.setP(PIDConstants[2]);
+		}
 	}
 
 	/**
@@ -497,6 +512,10 @@ public class TankDrive extends DriveBase{
 			increasingPIDConstant = true;
 			System.out.println("Increasing PID Constants");
 		}
+	}
+
+	public void printPIDConstants() {
+		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
 	}
 
 	public void resetPosition()
