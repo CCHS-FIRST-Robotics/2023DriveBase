@@ -15,6 +15,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.MathUtil;
 
 /**
  * Manages the tank drive base
@@ -52,12 +53,13 @@ public class TankDrive {
 	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
 	// PID constants
-	double[] PIDConstants = {0, 0, 0}; // kP, kI, kD
+	double[] PIDConstants = {0.05, 0, 0}; // kP, kI, kD
 
 	// Upper bound for PID constants
-	double[] PIDMaximums = {1, 1, 1};
+	double[] PIDMaximums = {2, 1, 1};
 	
-	PIDController pid;
+	PIDController leftPID;
+	PIDController rightPID;
 	
 	// current constant to be tuned
 	int currentPIDConstant = 0; // 0 = kP, 1 = kI, 2 = kD
@@ -65,7 +67,7 @@ public class TankDrive {
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double maxAngularVel = 28; // 24.0983606557377
+	double maxAngularVel = 4500; // measured ~4100
 
 	/**
 	 * Constructor for TankDrive Class
@@ -83,7 +85,8 @@ public class TankDrive {
 
 		currentMode = DEFAULT_MODE;
 
-		pid = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
+		leftPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
+		rightPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
 
 		navx = new AHRS(SPI.Port.kMXP);
 		odometer = new DifferentialDriveOdometry(new Rotation2d());
@@ -147,12 +150,20 @@ public class TankDrive {
 			double normalLeftAngVel = leftAngVel / maxAngularVel;
 			double normalRightAngVel = rightAngVel / maxAngularVel;
 
-			// set the motors according to the PID
-			leftVictor.set(ControlMode.PercentOutput, pid.calculate(normalLeftAngVel, leftVel));
-			leftSparkMax.set(pid.calculate(normalLeftAngVel, leftVel));
 
-			rightTalon.set(ControlMode.PercentOutput, pid.calculate(normalRightAngVel, rightVel));
-			rightVictor.set(ControlMode.PercentOutput, pid.calculate(normalRightAngVel, rightVel));
+			// set the motors according to the PID
+			double leftPIDValue = leftPID.calculate(normalLeftAngVel, leftVel);
+			double rightPIDValue = rightPID.calculate(normalRightAngVel, rightVel);
+
+
+			// leftVictor.set(ControlMode.PercentOutput, -1 * leftPIDValue);
+			// leftSparkMax.set(leftPIDValue);
+			
+			// System.out.println("Analog: " + leftAnalogY + ", Input: " + rightVel + ", Measured: " + rightAngVel + ", Normalized: " + normalRightAngVel + ", PID: " + rightPIDValue);
+
+
+			rightTalon.set(ControlMode.PercentOutput, rightPIDValue);
+			rightVictor.set(ControlMode.PercentOutput, rightPIDValue);
 
 			
 
@@ -305,7 +316,11 @@ public class TankDrive {
 	}
 
 	public void YButtonPressed() {
-		
+		switch(currentMode) {
+			case PID_TUNING_MODE:
+				printPIDConstants();
+				break;
+		}
 	}
 
 	/**
@@ -320,7 +335,21 @@ public class TankDrive {
 		// make sure constants are in [0, constantMax]
 		PIDConstants[currentPIDConstant] = Math.min(PIDConstants[currentPIDConstant], PIDMaximums[currentPIDConstant]);
 		PIDConstants[currentPIDConstant] = Math.max(PIDConstants[currentPIDConstant], 0);
+
+		// print PID constants
 		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
+
+		// set PID constant in the PID controllers
+		if(currentPIDConstant == 0) {
+			leftPID.setP(PIDConstants[0]);
+			rightPID.setP(PIDConstants[0]);
+		} else if (currentPIDConstant == 1) {
+			leftPID.setP(PIDConstants[1]);
+			rightPID.setP(PIDConstants[1]);
+		} else if (currentPIDConstant == 2) {
+			leftPID.setP(PIDConstants[2]);
+			rightPID.setP(PIDConstants[2]);
+		}
 	}
 
 	/**
@@ -351,6 +380,10 @@ public class TankDrive {
 			increasingPIDConstant = true;
 			System.out.println("Increasing PID Constants");
 		}
+	}
+
+	public void printPIDConstants() {
+		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
 	}
 
 	public void resetPosition()
