@@ -107,9 +107,12 @@ public class Robot extends TimedRobot {
     // up
     if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
     // right
-    if (xboxController.getPOV() == 90) driveBase.turnOnDebugMode();
+    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
+	// left
+	if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
     // down
     if (xboxController.getPOV() == 180) driveBase.turnONPIDTurningMode();
+
 
     // Debug controls
     if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
