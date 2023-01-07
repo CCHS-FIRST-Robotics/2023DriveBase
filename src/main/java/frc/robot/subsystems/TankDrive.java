@@ -53,7 +53,7 @@ public class TankDrive {
 	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
 	// PID constants
-	double[] PIDConstants = {0.05, 0, 0}; // kP, kI, kD
+	double[] PIDConstants = {1, 0, 0}; // kP, kI, kD
 
 	// Upper bound for PID constants
 	double[] PIDMaximums = {2, 1, 1};
@@ -67,7 +67,8 @@ public class TankDrive {
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double maxAngularVel = 4500; // measured ~4100
+	double leftMaxAngularVel = 500;  // measured ~450
+	double rightMaxAngularVel = 3440; // measured ~4100
 
 	/**
 	 * Constructor for TankDrive Class
@@ -147,8 +148,8 @@ public class TankDrive {
 			double rightAngVel = rightTalon.getSelectedSensorVelocity();
 
 			// normalized (actual) angular velocities
-			double normalLeftAngVel = leftAngVel / maxAngularVel;
-			double normalRightAngVel = rightAngVel / maxAngularVel;
+			double normalLeftAngVel = leftAngVel / leftMaxAngularVel;
+			double normalRightAngVel = rightAngVel / rightMaxAngularVel;
 
 
 			// set the motors according to the PID
@@ -156,10 +157,11 @@ public class TankDrive {
 			double rightPIDValue = rightPID.calculate(normalRightAngVel, rightVel);
 
 
-			// leftVictor.set(ControlMode.PercentOutput, -1 * leftPIDValue);
-			// leftSparkMax.set(leftPIDValue);
+			leftVictor.set(ControlMode.PercentOutput, -1 * leftPIDValue);
+			leftSparkMax.set(leftPIDValue);
 			
 			// System.out.println("Analog: " + leftAnalogY + ", Input: " + rightVel + ", Measured: " + rightAngVel + ", Normalized: " + normalRightAngVel + ", PID: " + rightPIDValue);
+			System.out.println("Right: " + normalRightAngVel + ", Left: " + normalLeftAngVel);
 
 
 			rightTalon.set(ControlMode.PercentOutput, rightPIDValue);
@@ -344,11 +346,11 @@ public class TankDrive {
 			leftPID.setP(PIDConstants[0]);
 			rightPID.setP(PIDConstants[0]);
 		} else if (currentPIDConstant == 1) {
-			leftPID.setP(PIDConstants[1]);
-			rightPID.setP(PIDConstants[1]);
+			leftPID.setI(PIDConstants[1]);
+			rightPID.setI(PIDConstants[1]);
 		} else if (currentPIDConstant == 2) {
-			leftPID.setP(PIDConstants[2]);
-			rightPID.setP(PIDConstants[2]);
+			leftPID.setD(PIDConstants[2]);
+			rightPID.setD(PIDConstants[2]);
 		}
 	}
 
