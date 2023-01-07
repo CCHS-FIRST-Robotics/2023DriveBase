@@ -98,7 +98,7 @@ public class TankDrive extends DriveBase{
 	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
 	// PID constants
-	double[] PIDConstants = {0.05, 0, 0}; // kP, kI, kD
+	double[] PIDConstants = {1, 0, 0}; // kP, kI, kD
 
 	// Upper bound for PID constants
 	double[] PIDMaximums = {2, 1, 1};
@@ -112,7 +112,8 @@ public class TankDrive extends DriveBase{
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double maxAngularVel = 4500; // measured ~4100
+	double leftMaxAngularVel = 500;  // measured ~450
+	double rightMaxAngularVel = 3440; // measured ~4100
 
 	/**
 	 * Constructor for TankDrive Class
@@ -193,8 +194,8 @@ public class TankDrive extends DriveBase{
 			double rightAngVel = rightTalon.getSelectedSensorVelocity() * Constants.TALON_CONVERSION_FACTOR;
 
 			// normalized (actual) angular velocities
-			double normalLeftAngVel = leftAngVel / maxAngularVel;
-			double normalRightAngVel = rightAngVel / maxAngularVel;
+			double normalLeftAngVel = leftAngVel / leftMaxAngularVel;
+			double normalRightAngVel = rightAngVel / rightMaxAngularVel;
 
 			
 
@@ -479,8 +480,8 @@ public class TankDrive extends DriveBase{
 			leftPID.setP(PIDConstants[1]);
 			rightPID.setP(PIDConstants[1]);
 		} else if (currentPIDConstant == 2) {
-			leftPID.setP(PIDConstants[2]);
-			rightPID.setP(PIDConstants[2]);
+			leftPID.setD(PIDConstants[2]);
+			rightPID.setD(PIDConstants[2]);
 		}
 	}
 
