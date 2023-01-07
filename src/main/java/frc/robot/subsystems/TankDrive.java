@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.print.DocFlavor.STRING;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -43,6 +45,7 @@ public class TankDrive {
 	final String DEFAULT_MODE = "DEFAULT";
 	final String DEBUG_MODE = "DEBUG";
 	final String PID_TUNING_MODE = "PIDTUNING";
+	final String STOP_MODE = "STOP";
 
 	// debug mode variables
     int debugEnabledWheel = 0;
@@ -184,7 +187,13 @@ public class TankDrive {
                     leftSparkMax.set(leftVel);
                     break;
             }
-        }
+        } else if (currentMode.equals(STOP_MODE)){
+			// STOP!!!!! set motors to 0
+			leftVictor.set(ControlMode.PercentOutput, 0);
+			leftSparkMax.set(0);
+			rightTalon.set(ControlMode.PercentOutput, 0);
+			rightVictor.set(ControlMode.PercentOutput, 0);
+		}
 		updatePosition();
 		// System.out.println(rightTalon.getSelectedSensorVelocity()); // clicks per 100ms
 		// System.out.println(rightTalon.getSelectedSensorVelocity() * 10 * 60 / 4096);
@@ -233,6 +242,12 @@ public class TankDrive {
         currentMode = DEBUG_MODE;
         System.out.println("DEBUG MODE");
     }
+
+	public void turnOnStopMode() {
+		if(currentMode.equals(STOP_MODE)) return;
+		currentMode = STOP_MODE;
+		System.out.println("STOP MODE");
+	}
 
 	public void turnONPIDTurningMode() {
 		if(currentMode.equals(PID_TUNING_MODE)) return;
@@ -289,6 +304,9 @@ public class TankDrive {
 			case DEBUG_MODE:
 				printPosition();	
 				break;
+			case STOP_MODE:
+				printPosition();	
+				break;
 			case PID_TUNING_MODE:
 				incrementPIDConstant();
 				break;
@@ -302,6 +320,9 @@ public class TankDrive {
 				break;
 			case DEBUG_MODE:
 				resetPosition();	
+				break;
+			case STOP_MODE:
+				resetPosition();
 				break;
 			case PID_TUNING_MODE:
 				cyclePIDConstant();
