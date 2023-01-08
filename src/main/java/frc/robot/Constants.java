@@ -34,6 +34,10 @@ public class Constants {
 	public static final int FL_TALON_PORT = 8;
 	public static final int RR_TALON_PORT = 10;
 	public static final int RL_TALON_PORT = 4;
+
+	// for converting motor encoder readings to standard units (rad/s)
+	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
+	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
 	
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
