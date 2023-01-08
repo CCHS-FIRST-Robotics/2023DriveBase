@@ -112,8 +112,7 @@ public class TankDrive extends DriveBase{
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double leftMaxAngularVel = 500;  // measured ~450
-	double rightMaxAngularVel = 3440; // measured ~4100
+	double maxAngularVel = 53; // determined experimentally
 
 	/**
 	 * Constructor for TankDrive Class
@@ -194,8 +193,8 @@ public class TankDrive extends DriveBase{
 			double rightAngVel = rightTalon.getSelectedSensorVelocity() * Constants.TALON_CONVERSION_FACTOR;
 
 			// normalized (actual) angular velocities
-			double normalLeftAngVel = leftAngVel / leftMaxAngularVel;
-			double normalRightAngVel = rightAngVel / rightMaxAngularVel;
+			double normalLeftAngVel = leftAngVel / maxAngularVel;
+			double normalRightAngVel = rightAngVel / maxAngularVel;
 
 			
 
