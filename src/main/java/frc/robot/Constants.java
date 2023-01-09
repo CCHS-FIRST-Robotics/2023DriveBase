@@ -42,6 +42,10 @@ public class Constants {
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
 	public static final double ROBOT_WIDTH = 0.40;
+	// for slowing down (stop mode)
+	public static final double SLOW_DOWN_CUTOFF = 0.05;
+	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
+	//previous speed is divided by this factor (higher = slow down faster)
 
 	Constants() {
 		

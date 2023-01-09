@@ -50,6 +50,17 @@ public class TankDrive {
 	// debug mode variables
     int debugEnabledWheel = 0;
 
+	// Stop mode variables
+
+	// to save the last velocities so the robot can slow down
+	double slowingLeftVel;
+	double slowingRightVel;
+
+	// this makes the left and right vel scope include the function that sets
+	// the slowing values so the function can use them
+	double leftVel;
+	double rightVel;
+
 	// PID variables
 
 	// amount to increment constant during PID Tuning Mode
@@ -126,8 +137,8 @@ public class TankDrive {
 		double scaleFactor = 1 / Math.max(Math.max(Math.abs(preScaledLeftVel), Math.abs(preScaledRightVel)), 1);
 		
 		// scale to what the controller asks
-		double leftVel = preScaledLeftVel * scaleFactor * maxSpeed;
-		double rightVel = preScaledRightVel * scaleFactor * maxSpeed;
+		leftVel = preScaledLeftVel * scaleFactor * maxSpeed;
+		rightVel = preScaledRightVel * scaleFactor * maxSpeed;
 		
 		// // leftTalon.set(ControlMode.PercentOutput, leftVel);
 		// leftVictor.set(ControlMode.PercentOutput, leftVel);
@@ -188,10 +199,15 @@ public class TankDrive {
             }
         } else if (currentMode.equals(STOP_MODE)){
 			// STOP!!!!! set motors to 0
-			leftVictor.set(ControlMode.PercentOutput, 0);
-			leftSparkMax.set(0);
-			rightTalon.set(ControlMode.PercentOutput, 0);
-			rightVictor.set(ControlMode.PercentOutput, 0);
+			// slower stop
+			double slowingLeftVel = slowDown(slowingLeftVel);
+			double slowingRightVel = slowDown(slowingRightVel);
+
+			leftVictor.set(ControlMode.PercentOutput, -1 *slowingLeftVel);
+			leftSparkMax.set(slowingLeftVel);
+			rightTalon.set(ControlMode.PercentOutput, slowingRightVel);
+			rightVictor.set(ControlMode.PercentOutput, slowingRightVel);
+
 		}
 		updatePosition();
 		// System.out.println(rightTalon.getSelectedSensorVelocity()); // clicks per 100ms
@@ -216,6 +232,27 @@ public class TankDrive {
 		 
 
 	}
+
+	/**
+	 * This will return a value lower than the input, and it is used to slow 
+	 * down the motors during stop mode
+	 * 
+	 * @param inputVelocity between -1 and 1 (double)
+	 * @return the new value (lower)
+	 */
+	public double slowDown(double inputVelocity){
+		// input is between -1 and 1
+		double newVelocity;
+		if (Math.abs(inputVelocity) > Constants.SLOW_DOWN_CUTOFF){
+			// velocity still needs to be reduced (magnatude is above cutoff)
+			newVelocity = inputVelocity / Constants.SLOW_DOWN_FACTOR;
+		} else {
+			// input has reached cutoff, now returning 0 speed
+			return 0;
+		}
+		return newVelocity;
+	}
+
 
 	/**
 	 * The speed bracket controls the multiplier for all the speeds 
@@ -245,6 +282,10 @@ public class TankDrive {
 	public void turnOnStopMode() {
 		if(currentMode.equals(STOP_MODE)) return;
 		currentMode = STOP_MODE;
+		// Stop mode activated, so now the robot needs to slow down
+		// start by saving the last left and right velocities 
+		slowingLeftVel = leftVel;
+		slowingRightVel = rightVel;
 		System.out.println("STOP MODE");
 	}
 
