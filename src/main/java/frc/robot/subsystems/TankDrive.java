@@ -95,8 +95,8 @@ public class TankDrive extends DriveBase{
 	// Stop mode variables
 
 	// to save the last velocities so the robot can slow down
-	double slowingLeftVel;
-	double slowingRightVel;
+	double slowingLeftVel = 0;
+	double slowingRightVel = 0;
 
 	// this makes the left and right vel scope include the function that sets
 	// the slowing values so the function can use them
