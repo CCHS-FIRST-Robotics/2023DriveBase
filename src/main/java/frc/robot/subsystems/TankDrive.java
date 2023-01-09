@@ -53,8 +53,8 @@ public class TankDrive {
 	// Stop mode variables
 
 	// to save the last velocities so the robot can slow down
-	double slowingLeftVel;
-	double slowingRightVel;
+	double slowingLeftVel = 0;
+	double slowingRightVel = 0;
 
 	// this makes the left and right vel scope include the function that sets
 	// the slowing values so the function can use them
@@ -200,8 +200,8 @@ public class TankDrive {
         } else if (currentMode.equals(STOP_MODE)){
 			// STOP!!!!! set motors to 0
 			// slower stop
-			double slowingLeftVel = slowDown(slowingLeftVel);
-			double slowingRightVel = slowDown(slowingRightVel);
+			slowingLeftVel = slowDown(slowingLeftVel);
+			slowingRightVel = slowDown(slowingRightVel);
 
 			leftVictor.set(ControlMode.PercentOutput, -1 *slowingLeftVel);
 			leftSparkMax.set(slowingLeftVel);
