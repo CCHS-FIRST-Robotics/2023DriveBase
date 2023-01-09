@@ -92,6 +92,17 @@ public class TankDrive extends DriveBase{
 	// debug mode variables
     int debugEnabledWheel = 0;
 
+	// Stop mode variables
+
+	// to save the last velocities so the robot can slow down
+	double slowingLeftVel;
+	double slowingRightVel;
+
+	// this makes the left and right vel scope include the function that sets
+	// the slowing values so the function can use them
+	double leftVel;
+	double rightVel;
+
 	// PID variables
 
 	// amount to increment constant during PID Tuning Mode
