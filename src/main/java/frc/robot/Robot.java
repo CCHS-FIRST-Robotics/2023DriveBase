@@ -6,11 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
-import frc.robot.Constants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,7 +26,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private MecaDrive driveBase;
+  private TankDrive driveBase;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,14 +37,17 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
+
 
     // tank drive initialization
-    //driveBase = createTankDrive();    
+    driveBase = createTankDrive();    
     // mecanum drive initialization
-    driveBase = createMecanumDrive();
+    // driveBase = createMecanumDrive();
     
-    // set the dead zone for the controller analog sticks
-    driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
+    // // set the dead zone for the controller analog sticks
+    // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
   }
 
   /**
@@ -101,7 +103,35 @@ public class Robot extends TimedRobot {
     if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
     if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
-    // get input from xbox controller
+    // switch between modes (for DPad, 0 is up, and angles go clockwise, so 90 is right)
+    // up
+    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
+    // right
+    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
+	// left
+	if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
+    // down
+    if (xboxController.getPOV() == 180) driveBase.turnONPIDTurningMode();
+
+
+    // Debug controls
+    if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
+
+    // actions of the four button presses
+    if (xboxController.getAButtonPressed()) {
+      driveBase.AButtonPressed();
+    }
+    if (xboxController.getBButtonPressed()) {
+      driveBase.BButtonPressed();
+    }
+    if (xboxController.getXButtonPressed()) {
+      driveBase.XButtonPressed();
+    }
+    if (xboxController.getYButtonPressed()) {
+      driveBase.YButtonPressed();
+    }
+
+    // get analog input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
     double leftAnalogY 	= xboxController.getLeftY();
     double rightAnalogX = xboxController.getRightX();
@@ -114,7 +144,6 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
-
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
@@ -127,12 +156,14 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
+
   private TankDrive createTankDrive() {
-    return new TankDrive(new PWMTalonSRX(Constants.LEFT_TALON_PORT), new PWMTalonSRX(Constants.LEFT_TALON_PORT));
+    return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
+                         Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
   }
 
   private MecaDrive createMecanumDrive() {
-    return new MecaDrive(new PWMTalonSRX(Constants.FL_TALON_PORT), new PWMTalonSRX(Constants.RL_TALON_PORT),
-                         new PWMTalonSRX(Constants.FR_TALON_PORT), new PWMTalonSRX(Constants.RR_TALON_PORT));
+    return new MecaDrive(Constants.FL_TALON_PORT, Constants.FR_TALON_PORT,
+                         Constants.RL_TALON_PORT, Constants.RR_TALON_PORT);
   }
 }

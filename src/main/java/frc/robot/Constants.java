@@ -13,25 +13,41 @@ public class Constants {
 	public static final int XBOX_CONTROLLER_PORT 			= 0; 
 
 	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
-	public static final double DRIVE_WHEEL_RADIUS 			= 0.1; // meters
+	
+	public static final double TANK_WHEEL_RADIUS 			= 0.075; // meters
 
 	public static double maxVelocity;
 
+	public static final int ENCODER_CPR = 4096;
+
+	// the amount of time (in seconds) between calls of the periodic function
+	public static final double dt = 0.02;
+
 	// for tank drive
-	public static final int LEFT_TALON_PORT  = Integer.MAX_VALUE;
-	public static final int RIGHT_TALON_PORT = Integer.MIN_VALUE;
+	public static final int LEFT_VICTOR_ID = 7;
+	public static final int RIGHT_VICTOR_ID = 4;
+	public static final int TALON_ID = 9;
+	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_PORT = 12;
-	public static final int FL_TALON_PORT = 13;
-	public static final int RR_TALON_PORT = 1;
-	public static final int RL_TALON_PORT = 2;
+	public static final int FR_TALON_PORT = 2;
+	public static final int FL_TALON_PORT = 8;
+	public static final int RR_TALON_PORT = 10;
+	public static final int RL_TALON_PORT = 4;
+
+	// for converting motor encoder readings to standard units (rad/s)
+	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
+	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
 	
 	public static final double ANALOG_DEAD_ZONE = 0.05;
 
+	public static final double ROBOT_WIDTH = 0.40;
+	// for slowing down (stop mode)
+	public static final double SLOW_DOWN_CUTOFF = 0.05;
+	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
+	//previous speed is divided by this factor (higher = slow down faster)
 
 	Constants() {
-		maxVelocity = DRIVE_MAX_ANGULAR_VELOCITY * DRIVE_WHEEL_RADIUS;
 		
 	}
 }
