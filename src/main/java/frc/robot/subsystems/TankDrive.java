@@ -131,6 +131,8 @@ public class TankDrive {
 		
 		double y = leftAnalogY;
 
+		if(Math.abs(x) < 0.1 && Math.abs(y) < 0.1) return; // deadzone
+
 		// make sure that both velocities are in [-1, 1]
 		double preScaledLeftVel = y - x * rotationalSpeedMultiplier;
 		double preScaledRightVel = y + x * rotationalSpeedMultiplier;
