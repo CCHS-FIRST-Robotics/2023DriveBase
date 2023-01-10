@@ -10,8 +10,8 @@ PROJECT_NAME           = "2023 Drive base"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          =
 PROJECT_LOGO           =
-OUTPUT_DIRECTORY       = /Users/ipelenur23/project/robotics/2023DriveBase-1/docs
-CREATE_SUBDIRS         = NO
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = YES
 CREATE_SUBDIRS_LEVEL   = 8
 ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
@@ -31,7 +31,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        =
+STRIP_FROM_PATH        = ../..
 STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
@@ -124,10 +124,10 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = /Users/ipelenur23/project/robotics/2023DriveBase-1/src \
-                         /Users/ipelenur23/project/robotics/2023DriveBase-1/vendordeps \
-                         /Users/ipelenur23/project/robotics/2023DriveBase-1/Readme.md \
-                         /Users/ipelenur23/project/robotics/2023DriveBase-1/WPILib-License.md
+INPUT                  = src \
+                         vendordeps \
+                         Readme.md \
+                         WPILib-License.md
 INPUT_ENCODING         = UTF-8
 INPUT_FILE_ENCODING    =
 FILE_PATTERNS          = *.c \

@@ -25,15 +25,18 @@
 var NAVTREE =
 [
   [ "2023 Drive base", "index.html", [
-    [ "2023 Drive Base", "md__readme.html", [
-      [ "Driving experience:", "md__readme.html#autotoc_md1", null ],
-      [ "Things to consider:", "md__readme.html#autotoc_md2", null ],
-      [ "Terminology and readability", "md__readme.html#autotoc_md3", [
-        [ "Documentation", "md__readme.html#autotoc_md4", null ],
-        [ "Quick terms", "md__readme.html#autotoc_md5", null ]
+    [ "2023 Drive Base", "d0/de9/md_robotics_2023_drive_base_1__readme.html", [
+      [ "Contributing", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md1", [
+        [ "The enviroment", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md2", null ],
+        [ "How to add your amazing changes!", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md3", null ]
+      ] ],
+      [ "Documentation", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md4", [
+        [ "Adding documentation", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md5", null ],
+        [ "How the drive base works", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md6", null ],
+        [ "Motors and components", "d0/de9/md_robotics_2023_drive_base_1__readme.html#autotoc_md7", null ]
       ] ]
     ] ],
-    [ "WPILib-License", "md__w_p_i_lib__license.html", null ],
+    [ "WPILib-License", "dc/d63/md_robotics_2023_drive_base_1__w_p_i_lib__license.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Package List", "namespaces.html", null ]
     ] ],
@@ -54,7 +57,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_constants_8java.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
