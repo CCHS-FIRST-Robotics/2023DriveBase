@@ -38,6 +38,8 @@ The "heart" of the robot is the roborio, which uses wpilib for instructions. The
 
 If you want to understand wpilib, start [here](https://docs.wpilib.org/en/stable/docs/zero-to-robot/introduction.html). After that, you will need the [Java library documentation](https://github.wpilib.org/allwpilib/docs/release/java/). 
 
+Then, learn about our [drivebase code](https://cchs-first-robotics.github.io/2023DriveBase/html/index.html). 
+
 ### Motors and components
 
 Motors/motor controllers and other components of the robot will need other java libraries, and have other docs aswell.
