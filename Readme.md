@@ -15,7 +15,6 @@ FIRST robotics projects are made in [Visual Studio Code](https://code.visualstud
 `git add .`
 4. Commit the changes: `git commit -m "*changes*"` (replace "\*changes\*" with what changes you made)
 5. Push the commit to the repository: `git push` 
-Done!
 
 
 [New to github?](https://docs.github.com/en/get-started/quickstart/set-up-git)
