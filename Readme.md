@@ -7,6 +7,8 @@
 ### The enviroment
 
 FIRST robotics projects are made in [Visual Studio Code](https://code.visualstudio.com), with the wpilib extension. Look up "wpilib" in the extensions tab of vs-code once it is installed. Use [wpilib commands to build and deploy the code](https://docs.wpilib.org/en/stable/docs/software/vscode-overview/vscode-basics.html). 
+
+Download the repository with `git clone https://github.com/CCHS-FIRST-Robotics/2023DriveBase.git`
  
 ### How to add your amazing changes!
 
