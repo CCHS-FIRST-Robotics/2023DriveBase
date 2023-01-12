@@ -67,7 +67,11 @@ public class TankDrive {
 	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
 	// PID constants
-	double[] PIDConstants = {1, 0, 0}; // kP, kI, kD
+
+	double Ku = 0.5;
+	double Tu = 0.845 / 2;
+	double[] PIDConstants = {0.6 * Ku, 1.2 * Ku / Tu, 3 * Ku * Tu / 40}; // kP, kI, kD
+	// double[] PIDConstants = {1, 0, 0};
 
 	// Upper bound for PID constants
 	double[] PIDMaximums = {2, 1, 1};
@@ -126,12 +130,27 @@ public class TankDrive {
 		 * right X is velocity difference between wheels
 		*/
 
-		// TODO: test multiplying by 2 (to have a larger difference between wheel speeds)
-		double x = rightAnalogX; 
-		
-		double y = leftAnalogY;
+		if(Math.abs(rightAnalogX) < 0.08 && Math.abs(leftAnalogY) < 0.08) 
+		{
+			leftVictor.set(ControlMode.PercentOutput, 0);
+			leftSparkMax.set(0);
+			rightTalon.set(ControlMode.PercentOutput, 0);
+			rightVictor.set(ControlMode.PercentOutput, 0);
+			return; // deadzone
+		}
 
-		if(Math.abs(x) < 0.1 && Math.abs(y) < 0.1) return; // deadzone
+
+		// leftVictor.set(ControlMode.PercentOutput, -1 * 0.2);
+		// leftSparkMax.set(0.2);
+		// rightTalon.set(ControlMode.PercentOutput, 0.2);
+		// rightVictor.set(ControlMode.PercentOutput, 0.2);
+		/**
+		 to make controller movement more precise, the controller speed will be based
+		 on an exponential s curve rather than a linear curve (for visual, graph y=x and then y=x^3) 
+		 */
+		double x = Math.pow(rightAnalogX, 3); 
+		
+		double y = Math.pow(leftAnalogY, 3);
 
 		// make sure that both velocities are in [-1, 1]
 		double preScaledLeftVel = y - x * rotationalSpeedMultiplier;
@@ -149,40 +168,36 @@ public class TankDrive {
 		// rightVictor.set(ControlMode.PercentOutput, rightVel);
 		// set the motor speeds
         if(currentMode.equals(DEFAULT_MODE) || currentMode.equals(PID_TUNING_MODE)) {
-			leftVictor.set(ControlMode.PercentOutput, -1 *leftVel);
-			leftSparkMax.set(leftVel);
-			rightTalon.set(ControlMode.PercentOutput, rightVel);
-			rightVictor.set(ControlMode.PercentOutput, rightVel);
+			// leftVictor.set(ControlMode.PercentOutput, -1 *leftVel);
+			// leftSparkMax.set(leftVel);
+			// rightTalon.set(ControlMode.PercentOutput, rightVel);
+			// rightVictor.set(ControlMode.PercentOutput, rightVel);
 
 
 
 			// PID stuff
 
 			// actual angular velocities converted to radians per second
-			double leftAngVel = sparkMaxEncoder.getVelocity() * Constants.SPARK_MAX_CONVERSION_FACTOR;
+			double leftAngVel = -1 * sparkMaxEncoder.getVelocity() * Constants.SPARK_MAX_CONVERSION_FACTOR;
 			double rightAngVel = rightTalon.getSelectedSensorVelocity() * Constants.TALON_CONVERSION_FACTOR;
 
 			// normalized (actual) angular velocities
-			double normalLeftAngVel = leftAngVel / maxAngularVel;
-			double normalRightAngVel = rightAngVel / maxAngularVel;
+			double normalLeftAngVel = -1 * leftAngVel / maxAngularVel;
+			double normalRightAngVel = -1 * rightAngVel / maxAngularVel;
 
 
 			// set the motors according to the PID
 			double leftPIDValue = leftPID.calculate(normalLeftAngVel, leftVel);
 			double rightPIDValue = rightPID.calculate(normalRightAngVel, rightVel);
 
-
 			leftVictor.set(ControlMode.PercentOutput, -1 * leftPIDValue);
 			leftSparkMax.set(leftPIDValue);
 			
 			// System.out.println("Analog: " + leftAnalogY + ", Input: " + rightVel + ", Measured: " + rightAngVel + ", Normalized: " + normalRightAngVel + ", PID: " + rightPIDValue);
-			System.out.println("Right: " + normalRightAngVel + ", Left: " + normalLeftAngVel);
-
+			System.out.println("Right: " + normalRightAngVel + ", Left: " + normalLeftAngVel + ", Right Desired: " + rightVel + ", Left Desired: " + leftVel);
 
 			rightTalon.set(ControlMode.PercentOutput, rightPIDValue);
 			rightVictor.set(ControlMode.PercentOutput, rightPIDValue);
-
-			
 
         } else if (currentMode.equals(DEBUG_MODE)) {
             switch (debugEnabledWheel){
