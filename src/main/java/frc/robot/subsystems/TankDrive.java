@@ -126,12 +126,11 @@ public class TankDrive {
 		 * right X is velocity difference between wheels
 		*/
 
-		// TODO: test multiplying by 2 (to have a larger difference between wheel speeds)
 		double x = rightAnalogX; 
 		
 		double y = leftAnalogY;
 
-		if(Math.abs(x) < 0.1 && Math.abs(y) < 0.1) return; // deadzone
+		if(Math.abs(x) < Constants.ANALOG_DEAD_ZONE && Math.abs(y) < Constants.ANALOG_DEAD_ZONE) return; // deadzone
 
 		// make sure that both velocities are in [-1, 1]
 		double preScaledLeftVel = y - x * rotationalSpeedMultiplier;
@@ -242,7 +241,7 @@ public class TankDrive {
 	 * @param inputVelocity between -1 and 1 (double)
 	 * @return the new value (lower)
 	 */
-	public double slowDown(double inputVelocity){
+	private double slowDown(double inputVelocity){
 		// input is between -1 and 1
 		double newVelocity;
 		if (Math.abs(inputVelocity) > Constants.SLOW_DOWN_CUTOFF){
