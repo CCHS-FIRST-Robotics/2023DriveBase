@@ -130,369 +130,368 @@
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00126}00126\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ right\ X\ is\ velocity\ difference\ between\ wheels}}
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00127}00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00128}00128\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00129}00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ test\ multiplying\ by\ 2\ (to\ have\ a\ larger\ difference\ between\ wheel\ speeds)}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00130}00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ x\ =\ rightAnalogX;\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00131}00131\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ y\ =\ leftAnalogY;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00133}00133\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Math.abs(x)\ <\ 0.1\ \&\&\ Math.abs(y)\ <\ 0.1)\ \textcolor{keywordflow}{return};\ \textcolor{comment}{//\ deadzone}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00135}00135\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00136}00136\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ make\ sure\ that\ both\ velocities\ are\ in\ [-\/1,\ 1]}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ preScaledLeftVel\ =\ y\ -\/\ x\ *\ rotationalSpeedMultiplier;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ preScaledRightVel\ =\ y\ +\ x\ *\ rotationalSpeedMultiplier;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ scaleFactor\ =\ 1\ /\ Math.max(Math.max(Math.abs(preScaledLeftVel),\ Math.abs(preScaledRightVel)),\ 1);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00140}00140\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ scale\ to\ what\ the\ controller\ asks}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00142}00142\ \ \ \ \ \ \ \ \ leftVel\ =\ preScaledLeftVel\ *\ scaleFactor\ *\ maxSpeed;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00143}00143\ \ \ \ \ \ \ \ \ rightVel\ =\ preScaledRightVel\ *\ scaleFactor\ *\ maxSpeed;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00144}00144\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00145}00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ leftTalon.set(ControlMode.PercentOutput,\ leftVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ leftVictor.set(ControlMode.PercentOutput,\ leftVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ leftSparkMax.set(leftVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor\ speeds}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00151}00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE)\ ||\ currentMode.equals(PID\_TUNING\_MODE))\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *leftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00129}00129\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ x\ =\ rightAnalogX;\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00130}00130\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ y\ =\ leftAnalogY;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00133}00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(Math.abs(x)\ <\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a92624792178f55bda8e50ef9ee938777}{ANALOG\_DEAD\_ZONE}}\ \&\&\ Math.abs(y)\ <\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a92624792178f55bda8e50ef9ee938777}{ANALOG\_DEAD\_ZONE}})\ \textcolor{keywordflow}{return};\ \textcolor{comment}{//\ deadzone}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00135}00135\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ make\ sure\ that\ both\ velocities\ are\ in\ [-\/1,\ 1]}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00136}00136\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ preScaledLeftVel\ =\ y\ -\/\ x\ *\ rotationalSpeedMultiplier;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ preScaledRightVel\ =\ y\ +\ x\ *\ rotationalSpeedMultiplier;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ scaleFactor\ =\ 1\ /\ Math.max(Math.max(Math.abs(preScaledLeftVel),\ Math.abs(preScaledRightVel)),\ 1);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00139}00139\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ scale\ to\ what\ the\ controller\ asks}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00141}00141\ \ \ \ \ \ \ \ \ leftVel\ =\ preScaledLeftVel\ *\ scaleFactor\ *\ maxSpeed;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00142}00142\ \ \ \ \ \ \ \ \ rightVel\ =\ preScaledRightVel\ *\ scaleFactor\ *\ maxSpeed;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00143}00143\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ leftTalon.set(ControlMode.PercentOutput,\ leftVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00145}00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ leftVictor.set(ControlMode.PercentOutput,\ leftVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ leftSparkMax.set(leftVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor\ speeds}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE)\ ||\ currentMode.equals(PID\_TUNING\_MODE))\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *leftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00155}00155\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00156}00156\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00158}00158\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ PID\ stuff}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00160}00160\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ actual\ angular\ velocities\ converted\ to\ radians\ per\ second}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftAngVel\ =\ sparkMaxEncoder.getVelocity()\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a9dfdf53bad54804a9b393b0a2bc41227}{SPARK\_MAX\_CONVERSION\_FACTOR}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightAngVel\ =\ rightTalon.getSelectedSensorVelocity()\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a0cb16b98df4832961bff6d677e67947b}{TALON\_CONVERSION\_FACTOR}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00164}00164\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ normalized\ (actual)\ angular\ velocities}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ normalLeftAngVel\ =\ leftAngVel\ /\ maxAngularVel;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ normalRightAngVel\ =\ rightAngVel\ /\ maxAngularVel;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ PID\ stuff}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ actual\ angular\ velocities\ converted\ to\ radians\ per\ second}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftAngVel\ =\ sparkMaxEncoder.getVelocity()\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a9dfdf53bad54804a9b393b0a2bc41227}{SPARK\_MAX\_CONVERSION\_FACTOR}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightAngVel\ =\ rightTalon.getSelectedSensorVelocity()\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a0cb16b98df4832961bff6d677e67947b}{TALON\_CONVERSION\_FACTOR}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ normalized\ (actual)\ angular\ velocities}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ normalLeftAngVel\ =\ leftAngVel\ /\ maxAngularVel;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ normalRightAngVel\ =\ rightAngVel\ /\ maxAngularVel;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00167}00167\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00168}00168\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00169}00169\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motors\ according\ to\ the\ PID}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftPIDValue\ =\ leftPID.calculate(normalLeftAngVel,\ leftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightPIDValue\ =\ rightPID.calculate(normalRightAngVel,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motors\ according\ to\ the\ PID}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftPIDValue\ =\ leftPID.calculate(normalLeftAngVel,\ leftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightPIDValue\ =\ rightPID.calculate(normalRightAngVel,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00172}00172\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00173}00173\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00174}00174\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *\ leftPIDValue);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftPIDValue);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println("{}Analog:\ "{}\ +\ leftAnalogY\ +\ "{},\ Input:\ "{}\ +\ rightVel\ +\ "{},\ Measured:\ "{}\ +\ rightAngVel\ +\ "{},\ Normalized:\ "{}\ +\ normalRightAngVel\ +\ "{},\ PID:\ "{}\ +\ rightPIDValue);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right:\ "{}}\ +\ normalRightAngVel\ +\ \textcolor{stringliteral}{"{},\ Left:\ "{}}\ +\ normalLeftAngVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *\ leftPIDValue);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftPIDValue);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println("{}Analog:\ "{}\ +\ leftAnalogY\ +\ "{},\ Input:\ "{}\ +\ rightVel\ +\ "{},\ Measured:\ "{}\ +\ rightAngVel\ +\ "{},\ Normalized:\ "{}\ +\ normalRightAngVel\ +\ "{},\ PID:\ "{}\ +\ rightPIDValue);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right:\ "{}}\ +\ normalRightAngVel\ +\ \textcolor{stringliteral}{"{},\ Left:\ "{}}\ +\ normalLeftAngVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00179}00179\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00180}00180\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00181}00181\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightPIDValue);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightPIDValue);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00184}00184\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00186}00186\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00187}00187\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentMode.equals(DEBUG\_MODE))\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (debugEnabledWheel)\{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *\ leftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00202}00202\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentMode.equals(STOP\_MODE))\{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ STOP!!!!!\ set\ motors\ to\ 0}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ slower\ stop}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ slowingLeftVel\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(slowingLeftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ slowingRightVel\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(slowingRightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00207}00207\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *slowingLeftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(slowingLeftVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ slowingRightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ slowingRightVel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00212}00212\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00213}00213\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00214}00214\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{updatePosition}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00215}00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(rightTalon.getSelectedSensorVelocity());\ //\ clicks\ per\ 100ms}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00216}00216\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(rightTalon.getSelectedSensorVelocity()\ *\ 10\ *\ 60\ /\ 4096);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(sparkMaxEncoder.getVelocity());\ //\ actual\ rpm}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println("{}"{});}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightPIDValue);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightPIDValue);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00186}00186\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentMode.equals(DEBUG\_MODE))\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (debugEnabledWheel)\{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *\ leftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ rightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(leftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00201}00201\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentMode.equals(STOP\_MODE))\{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ STOP!!!!!\ set\ motors\ to\ 0}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ slower\ stop}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ slowingLeftVel\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(slowingLeftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ slowingRightVel\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(slowingRightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ leftVictor.set(ControlMode.PercentOutput,\ -\/1\ *slowingLeftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ leftSparkMax.set(slowingLeftVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ rightTalon.set(ControlMode.PercentOutput,\ slowingRightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ rightVictor.set(ControlMode.PercentOutput,\ slowingRightVel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00211}00211\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00212}00212\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00213}00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{updatePosition}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(rightTalon.getSelectedSensorVelocity());\ //\ clicks\ per\ 100ms}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00215}00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(rightTalon.getSelectedSensorVelocity()\ *\ 10\ *\ 60\ /\ 4096);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00216}00216\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println(sparkMaxEncoder.getVelocity());\ //\ actual\ rpm}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ System.out.println("{}"{});}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00218}00218\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00219}00219\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00220}00220\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00221}00221\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00222}00222\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ Print\ angular\ velocity\ and\ motor\ use\ level}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00225}00225\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00226}00226\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00227}00227\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00228}00228\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ (Math.abs(leftRPS)\ >\ 0.1)\{}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00229}00229\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ //\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00230}00230\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ double\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ Constants.ENCODER\_CPR;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00231}00231\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ System.out.println("{}Right\ Rps:\ "{}\ +\ rightRPS\ +\ "{}\(\backslash\)nLeft\ RPS:\ "{}\ +\ leftRPS);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00232}00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ System.out.println("{}Right\ velocity\ from\ controller:\ "{}\ +\ rightVel\ +\ "{}\(\backslash\)nLeft\ Velocity\ from\ controller:\ "{}\ +\ leftVel);}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00233}00233\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \}}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00234}00234\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00235}00235\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00236}00236\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00237}00237\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00238}00238\ \textcolor{comment}{\ \ \ \ /**}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00239}00239\ \textcolor{comment}{\ \ \ \ \ *\ This\ will\ return\ a\ value\ lower\ than\ the\ input,\ and\ it\ is\ used\ to\ slow\ }}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00240}00240\ \textcolor{comment}{\ \ \ \ \ *\ down\ the\ motors\ during\ stop\ mode}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00241}00241\ \textcolor{comment}{\ \ \ \ \ *\ }}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00242}00242\ \textcolor{comment}{\ \ \ \ \ *\ @param\ inputVelocity\ between\ -\/1\ and\ 1\ (double)}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00243}00243\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ new\ value\ (lower)}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00244}00244\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00245}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{00245}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(\textcolor{keywordtype}{double}\ inputVelocity)\{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00246}00246\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ is\ between\ -\/1\ and\ 1}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00247}00247\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ newVelocity;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00248}00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Math.abs(inputVelocity)\ >\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a70b830d44706c08bc0e4c58e2c2c5ac3}{SLOW\_DOWN\_CUTOFF}})\{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ velocity\ still\ needs\ to\ be\ reduced\ (magnatude\ is\ above\ cutoff)}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ newVelocity\ =\ inputVelocity\ /\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_af0d5426b2415f6f21a59557ffa06377f}{SLOW\_DOWN\_FACTOR}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00251}00251\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ has\ reached\ cutoff,\ now\ returning\ 0\ speed}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00254}00254\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ newVelocity;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00256}00256\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00257}00257\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00258}00258\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00259}00259\ \textcolor{comment}{\ \ \ \ /**}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00260}00260\ \textcolor{comment}{\ \ \ \ \ *\ The\ speed\ bracket\ controls\ the\ multiplier\ for\ all\ the\ speeds\ }}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00261}00261\ \textcolor{comment}{\ \ \ \ \ *\ So\ when\ you\ change\ it,\ lets\ say,\ to\ 1/2\ speed,\ all\ directions\ will\ be}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00262}00262\ \textcolor{comment}{\ \ \ \ \ *\ \ at\ 1/2\ speed}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00263}00263\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00264}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a59c78f7aa9b053b2257df220a22c39b8}{00264}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a59c78f7aa9b053b2257df220a22c39b8}{increaseSpeedBracket}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00265}00265\ \ \ \ \ \ \ \ \ maxSpeed\ =\ Math.min(0.8,\ maxSpeed\ +\ 0.1);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00266}00266\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00267}00267\ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00268}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a9ba9969195a1939d01aa7ae0f35a98a5}{00268}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a9ba9969195a1939d01aa7ae0f35a98a5}{decreaseSpeedBracket}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00269}00269\ \ \ \ \ \ \ \ \ maxSpeed\ =\ Math.max(0.2,\ maxSpeed\ -\/\ 0.1);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00270}00270\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00271}00271\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00272}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a1d8f7c0218965f0da8df3950d1d2a97c}{00272}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a1d8f7c0218965f0da8df3950d1d2a97c}{turnOnDefaultMode}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00273}00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE))\ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00274}00274\ \ \ \ \ \ \ \ \ currentMode\ =\ DEFAULT\_MODE;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00275}00275\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEFAULT\ MODE"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00276}00276\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00277}00277\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00278}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_aa5d3b279c5f3acea4a5357e0a1ad04b8}{00278}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_aa5d3b279c5f3acea4a5357e0a1ad04b8}{turnOnDebugMode}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00279}00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEBUG\_MODE))\ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00280}00280\ \ \ \ \ \ \ \ \ currentMode\ =\ DEBUG\_MODE;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00281}00281\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEBUG\ MODE"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00282}00282\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00283}00283\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00284}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ad7f6cfb9f2f764610daf7f1d9724ba63}{00284}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ad7f6cfb9f2f764610daf7f1d9724ba63}{turnOnStopMode}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00285}00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(STOP\_MODE))\ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00286}00286\ \ \ \ \ \ \ \ \ currentMode\ =\ STOP\_MODE;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00287}00287\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ mode\ activated,\ so\ now\ the\ robot\ needs\ to\ slow\ down}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00288}00288\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ start\ by\ saving\ the\ last\ left\ and\ right\ velocities\ }}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00289}00289\ \ \ \ \ \ \ \ \ slowingLeftVel\ =\ leftVel;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00290}00290\ \ \ \ \ \ \ \ \ slowingRightVel\ =\ rightVel;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00291}00291\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}STOP\ MODE"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00292}00292\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00293}00293\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00294}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a91519cc4e458f83fde01af354765f1e7}{00294}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a91519cc4e458f83fde01af354765f1e7}{turnONPIDTurningMode}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00295}00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(PID\_TUNING\_MODE))\ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00296}00296\ \ \ \ \ \ \ \ \ currentMode\ =\ PID\_TUNING\_MODE;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00297}00297\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}PID\ TUNING\ MODE"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00298}00298\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00299}00299\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00300}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a8fcd4a8eb2c726c4bfe0e8df77b5a032}{00300}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a8fcd4a8eb2c726c4bfe0e8df77b5a032}{cycleWheelDebugMode}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00301}00301\ \ \ \ \ \ \ \ \ debugEnabledWheel++;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00302}00302\ \ \ \ \ \ \ \ \ debugEnabledWheel\ \%=\ 4;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00303}00303\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Current\ Wheel:\ "{}}\ +\ debugEnabledWheel);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00304}00304\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00305}00305\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00306}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac435438b289c67c5e517409bb16f30fe}{00306}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac435438b289c67c5e517409bb16f30fe}{updateRobotVelocity}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00307}00307\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00308}00308\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00309}00309\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00310}00310\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00311}00311\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00312}00312\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ Constants.ENCODER\_CPR;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00313}00313\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00314}00314\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ find\ linear\ velocities\ in\ m/s}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00315}00315\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftVel\ =\ (leftRPS\ *\ 2\ *\ Math.PI)\ *\ Constants.TANK\_WHEEL\_RADIUS;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00316}00316\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ rightVel\ =\ (rightRPS\ *\ 2\ *\ Math.PI)\ *\ Constants.TANK\_WHEEL\_RADIUS;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00317}00317\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00318}00318\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ currentSpeeds.leftMetersPerSecond\ =\ leftVel;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00319}00319\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ currentSpeeds.rightMetersPerSecond\ =\ rightVel;}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00320}00320\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00321}00321\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00322}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a99e8f62affb6b9785a60aaa764840995}{00322}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a99e8f62affb6b9785a60aaa764840995}{getPosition}}()}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00323}00323\ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00324}00324\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00325}00325\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00326}00326\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00327}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{00327}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{updatePosition}}()}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00328}00328\ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00329}00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ left\ wheel\ and\ convert\ to\ meters}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00330}00330\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftWheelPos\ =\ -\/1\ *\ sparkMaxEncoder.getPosition()\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00331}00331\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00332}00332\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ right\ wheel\ and\ convert\ to\ meters}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00333}00333\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightWheelPos\ =\ rightTalon.getSelectedSensorPosition()\ /\ Constants.ENCODER\_CPR\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00334}00334\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00335}00335\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ angle\ of\ the\ robot}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00336}00336\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ theta\ =\ navx.getAngle()\ /\ 180\ *\ Math.PI;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00337}00337\ \ \ \ \ \ \ \ \ Rotation2d\ rot\ =\ \textcolor{keyword}{new}\ Rotation2d(theta);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00338}00338\ \ \ \ \ \ \ \ \ odometer.update(rot,\ leftWheelPos,\ rightWheelPos);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00339}00339\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00340}00340\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00341}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab33ec4044a6bf16d9e6d7b926e77f451}{00341}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab33ec4044a6bf16d9e6d7b926e77f451}{AButtonPressed}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00342}00342\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00343}00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEFAULT\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00345}00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEBUG\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00347}00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();\ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00348}00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00349}00349\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STOP\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00350}00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();\ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00351}00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00352}00352\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00353}00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{incrementPIDConstant}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00354}00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00355}00355\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00356}00356\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00357}00357\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00358}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a3264e574df7b3dc084e02d234c0320e6}{00358}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a3264e574df7b3dc084e02d234c0320e6}{BButtonPressed}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00359}00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00360}00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEFAULT\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00361}00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00362}00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00363}00363\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEBUG\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00364}00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();\ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00365}00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00366}00366\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STOP\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00367}00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00368}00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00369}00369\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{cyclePIDConstant}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00371}00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00372}00372\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00373}00373\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00374}00374\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00375}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_afba85f8615473eae432cec820ca16594}{00375}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_afba85f8615473eae432cec820ca16594}{XButtonPressed}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00376}00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{toggleDecreasingPIDIncrement}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00379}00379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00380}00380\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00381}00381\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00382}00382\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00383}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a567b4175134130703842f7fd4774f733}{00383}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a567b4175134130703842f7fd4774f733}{YButtonPressed}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00384}00384\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00386}00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{printPIDConstants}}();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00388}00388\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00389}00389\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00390}00390\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00391}00391\ \textcolor{comment}{\ \ \ \ /**}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00392}00392\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Increments\ the\ selected\ PID\ constant}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00393}00393\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00394}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{00394}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{incrementPIDConstant}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00395}00395\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(increasingPIDConstant)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00396}00396\ \ \ \ \ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ +=\ PIDIncrements[currentPIDConstant];}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00397}00397\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ -\/=\ PIDIncrements[currentPIDConstant];}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00399}00399\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00400}00400\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ make\ sure\ constants\ are\ in\ [0,\ constantMax]}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00401}00401\ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ =\ Math.min(PIDConstants[currentPIDConstant],\ PIDMaximums[currentPIDConstant]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00402}00402\ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ =\ Math.max(PIDConstants[currentPIDConstant],\ 0);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00403}00403\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00404}00404\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ print\ PID\ constants}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00405}00405\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP:\ "{}}\ +\ PIDConstants[0]\ +\ \textcolor{stringliteral}{"{},\ kI:\ "{}}\ +\ PIDConstants[1]\ +\ \textcolor{stringliteral}{"{},\ kD:\ "{}}\ +\ PIDConstants[2]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00406}00406\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00407}00407\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ PID\ constant\ in\ the\ PID\ controllers}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00408}00408\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 0)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00409}00409\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setP(PIDConstants[0]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00410}00410\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setP(PIDConstants[0]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00411}00411\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentPIDConstant\ ==\ 1)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00412}00412\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setI(PIDConstants[1]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00413}00413\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setI(PIDConstants[1]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00414}00414\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentPIDConstant\ ==\ 2)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00415}00415\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setD(PIDConstants[2]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00416}00416\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setD(PIDConstants[2]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00417}00417\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00418}00418\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00419}00419\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00420}00420\ \textcolor{comment}{\ \ \ \ /**}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00421}00421\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Cycles\ between\ the\ PID\ constants}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00422}00422\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00423}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{00423}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{cyclePIDConstant}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00424}00424\ \ \ \ \ \ \ \ \ currentPIDConstant++;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00425}00425\ \ \ \ \ \ \ \ \ currentPIDConstant\ \%=\ 3;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00426}00426\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 0)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00427}00427\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP\ Selected"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00428}00428\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00429}00429\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 1)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00430}00430\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kI\ Selected"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00431}00431\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00432}00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 2)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00433}00433\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kD\ Selected"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00434}00434\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00435}00435\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00436}00436\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00437}00437\ \ \ \ \ \textcolor{comment}{/*}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00438}00438\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Toggles\ between\ increasing\ and\ decreasing\ the\ PID\ constants\ on\ each\ increment}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00439}00439\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00440}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{00440}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{toggleDecreasingPIDIncrement}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00441}00441\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(increasingPIDConstant)\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ increasingPIDConstant\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Decreasing\ PID\ Constants"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00444}00444\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ increasingPIDConstant\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00446}00446\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Increasing\ PID\ Constants"{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00447}00447\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00448}00448\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00449}00449\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00450}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{00450}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{printPIDConstants}}()\ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00451}00451\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP:\ "{}}\ +\ PIDConstants[0]\ +\ \textcolor{stringliteral}{"{},\ kI:\ "{}}\ +\ PIDConstants[1]\ +\ \textcolor{stringliteral}{"{},\ kD:\ "{}}\ +\ PIDConstants[2]);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00452}00452\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00453}00453\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00454}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{00454}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}()}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00455}00455\ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00456}00456\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reset\ the\ sensors\ to\ zero\ the\ position}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00457}00457\ \ \ \ \ \ \ \ \ navx.reset();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00458}00458\ \ \ \ \ \ \ \ \ navx.resetDisplacement();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00459}00459\ \ \ \ \ \ \ \ \ sparkMaxEncoder.setPosition(0);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00460}00460\ \ \ \ \ \ \ \ \ rightTalon.setSelectedSensorPosition(0);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00461}00461\ \ \ \ \ \ \ \ \ odometer.resetPosition(\textcolor{keyword}{new}\ Pose2d(),\ \textcolor{keyword}{new}\ Rotation2d());}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00462}00462\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00463}00463\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00464}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{00464}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}()}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00465}00465\ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00466}00466\ \ \ \ \ \ \ \ \ Pose2d\ posFromWheelDisplacement\ =\ odometer.getPoseMeters();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00467}00467\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Position\ from\ odometer\ and\ wheel:\ "{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00468}00468\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}X:\ "{}}\ +\ posFromWheelDisplacement.getX()\ +\ \textcolor{stringliteral}{"{}\ Y:\ "{}}\ +\ posFromWheelDisplacement.getY()\ +\ \textcolor{stringliteral}{"{}\ rotation:\ "{}}\ +\ posFromWheelDisplacement.getRotation());}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00469}00469\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00470}00470\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}\(\backslash\)nPosition\ info\ from\ navx:\ "{}});}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00471}00471\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}X:\ "{}}\ +\ navx.getDisplacementX()\ +\ \textcolor{stringliteral}{"{}\ Y:\ "{}}\ +\ navx.getDisplacementY()\ +\ \textcolor{stringliteral}{"{}\ rotation:\ "{}}\ +\ navx.getAngle());}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00472}00472\ \ \ \ \ \ \ \ \ System.out.println();}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00473}00473\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00474}00474\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ left\ wheel\ and\ convert\ to\ meters}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00475}00475\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftWheelPos\ =\ -\/1\ *\ sparkMaxEncoder.getPosition()\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00476}00476\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00477}00477\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ right\ wheel\ and\ convert\ to\ meters}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00478}00478\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightWheelPos\ =\ rightTalon.getSelectedSensorPosition()\ /\ Constants.ENCODER\_CPR\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00479}00479\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right\ Pos:\ "{}}\ +\ rightWheelPos\ +\ \textcolor{stringliteral}{"{}\ left\ pos:\ "{}}\ +\ leftWheelPos);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00222}00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ Print\ angular\ velocity\ and\ motor\ use\ level}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00225}00225\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ (Math.abs(leftRPS)\ >\ 0.1)\{}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00228}00228\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ //\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00229}00229\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ double\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ Constants.ENCODER\_CPR;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00230}00230\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ System.out.println("{}Right\ Rps:\ "{}\ +\ rightRPS\ +\ "{}\(\backslash\)nLeft\ RPS:\ "{}\ +\ leftRPS);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00231}00231\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ System.out.println("{}Right\ velocity\ from\ controller:\ "{}\ +\ rightVel\ +\ "{}\(\backslash\)nLeft\ Velocity\ from\ controller:\ "{}\ +\ leftVel);}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00232}00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00233}00233\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00235}00235\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00236}00236\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00237}00237\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00238}00238\ \textcolor{comment}{\ \ \ \ \ *\ This\ will\ return\ a\ value\ lower\ than\ the\ input,\ and\ it\ is\ used\ to\ slow\ }}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00239}00239\ \textcolor{comment}{\ \ \ \ \ *\ down\ the\ motors\ during\ stop\ mode}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00240}00240\ \textcolor{comment}{\ \ \ \ \ *\ }}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00241}00241\ \textcolor{comment}{\ \ \ \ \ *\ @param\ inputVelocity\ between\ -\/1\ and\ 1\ (double)}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00242}00242\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ new\ value\ (lower)}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00243}00243\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00244}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{00244}}\ \ \ \ \ \textcolor{keyword}{private}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_add169688b9161a4d1e518b26bf4a5131}{slowDown}}(\textcolor{keywordtype}{double}\ inputVelocity)\{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00245}00245\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ is\ between\ -\/1\ and\ 1}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00246}00246\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ newVelocity;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00247}00247\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Math.abs(inputVelocity)\ >\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a70b830d44706c08bc0e4c58e2c2c5ac3}{SLOW\_DOWN\_CUTOFF}})\{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ velocity\ still\ needs\ to\ be\ reduced\ (magnatude\ is\ above\ cutoff)}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ newVelocity\ =\ inputVelocity\ /\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_af0d5426b2415f6f21a59557ffa06377f}{SLOW\_DOWN\_FACTOR}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00250}00250\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ has\ reached\ cutoff,\ now\ returning\ 0\ speed}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00253}00253\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ newVelocity;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00255}00255\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00256}00256\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00257}00257\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00258}00258\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00259}00259\ \textcolor{comment}{\ \ \ \ \ *\ The\ speed\ bracket\ controls\ the\ multiplier\ for\ all\ the\ speeds\ }}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00260}00260\ \textcolor{comment}{\ \ \ \ \ *\ So\ when\ you\ change\ it,\ lets\ say,\ to\ 1/2\ speed,\ all\ directions\ will\ be}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00261}00261\ \textcolor{comment}{\ \ \ \ \ *\ \ at\ 1/2\ speed}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00262}00262\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00263}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a59c78f7aa9b053b2257df220a22c39b8}{00263}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a59c78f7aa9b053b2257df220a22c39b8}{increaseSpeedBracket}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00264}00264\ \ \ \ \ \ \ \ \ maxSpeed\ =\ Math.min(0.8,\ maxSpeed\ +\ 0.1);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00265}00265\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00266}00266\ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00267}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a9ba9969195a1939d01aa7ae0f35a98a5}{00267}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a9ba9969195a1939d01aa7ae0f35a98a5}{decreaseSpeedBracket}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00268}00268\ \ \ \ \ \ \ \ \ maxSpeed\ =\ Math.max(0.2,\ maxSpeed\ -\/\ 0.1);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00269}00269\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00271}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a1d8f7c0218965f0da8df3950d1d2a97c}{00271}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a1d8f7c0218965f0da8df3950d1d2a97c}{turnOnDefaultMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00272}00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00273}00273\ \ \ \ \ \ \ \ \ currentMode\ =\ DEFAULT\_MODE;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00274}00274\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEFAULT\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00275}00275\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00277}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_aa5d3b279c5f3acea4a5357e0a1ad04b8}{00277}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_aa5d3b279c5f3acea4a5357e0a1ad04b8}{turnOnDebugMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00278}00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEBUG\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00279}00279\ \ \ \ \ \ \ \ \ currentMode\ =\ DEBUG\_MODE;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00280}00280\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEBUG\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00281}00281\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00282}00282\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00283}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ad7f6cfb9f2f764610daf7f1d9724ba63}{00283}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ad7f6cfb9f2f764610daf7f1d9724ba63}{turnOnStopMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00284}00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(STOP\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00285}00285\ \ \ \ \ \ \ \ \ currentMode\ =\ STOP\_MODE;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00286}00286\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ mode\ activated,\ so\ now\ the\ robot\ needs\ to\ slow\ down}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00287}00287\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ start\ by\ saving\ the\ last\ left\ and\ right\ velocities\ }}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00288}00288\ \ \ \ \ \ \ \ \ slowingLeftVel\ =\ leftVel;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00289}00289\ \ \ \ \ \ \ \ \ slowingRightVel\ =\ rightVel;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00290}00290\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}STOP\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00291}00291\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00292}00292\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00293}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a91519cc4e458f83fde01af354765f1e7}{00293}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a91519cc4e458f83fde01af354765f1e7}{turnONPIDTurningMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00294}00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(PID\_TUNING\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00295}00295\ \ \ \ \ \ \ \ \ currentMode\ =\ PID\_TUNING\_MODE;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00296}00296\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}PID\ TUNING\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00297}00297\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00299}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a8fcd4a8eb2c726c4bfe0e8df77b5a032}{00299}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a8fcd4a8eb2c726c4bfe0e8df77b5a032}{cycleWheelDebugMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00300}00300\ \ \ \ \ \ \ \ \ debugEnabledWheel++;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00301}00301\ \ \ \ \ \ \ \ \ debugEnabledWheel\ \%=\ 4;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00302}00302\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Current\ Wheel:\ "{}}\ +\ debugEnabledWheel);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00303}00303\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00304}00304\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00305}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac435438b289c67c5e517409bb16f30fe}{00305}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac435438b289c67c5e517409bb16f30fe}{updateRobotVelocity}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00306}00306\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00307}00307\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00308}00308\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00309}00309\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00310}00310\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00311}00311\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ Constants.ENCODER\_CPR;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00312}00312\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00313}00313\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ find\ linear\ velocities\ in\ m/s}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00314}00314\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ leftVel\ =\ (leftRPS\ *\ 2\ *\ Math.PI)\ *\ Constants.TANK\_WHEEL\_RADIUS;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00315}00315\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ double\ rightVel\ =\ (rightRPS\ *\ 2\ *\ Math.PI)\ *\ Constants.TANK\_WHEEL\_RADIUS;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00317}00317\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ currentSpeeds.leftMetersPerSecond\ =\ leftVel;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00318}00318\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ currentSpeeds.rightMetersPerSecond\ =\ rightVel;}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00319}00319\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00320}00320\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00321}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a99e8f62affb6b9785a60aaa764840995}{00321}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a99e8f62affb6b9785a60aaa764840995}{getPosition}}()}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00322}00322\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00324}00324\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00325}00325\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00326}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{00326}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_acad2c3242f8cc6307960d5224d972673}{updatePosition}}()}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00327}00327\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00328}00328\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ left\ wheel\ and\ convert\ to\ meters}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00329}00329\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftWheelPos\ =\ -\/1\ *\ sparkMaxEncoder.getPosition()\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00330}00330\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00331}00331\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ right\ wheel\ and\ convert\ to\ meters}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00332}00332\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightWheelPos\ =\ rightTalon.getSelectedSensorPosition()\ /\ Constants.ENCODER\_CPR\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00333}00333\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00334}00334\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ angle\ of\ the\ robot}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00335}00335\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ theta\ =\ navx.getAngle()\ /\ 180\ *\ Math.PI;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00336}00336\ \ \ \ \ \ \ \ \ Rotation2d\ rot\ =\ \textcolor{keyword}{new}\ Rotation2d(theta);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00337}00337\ \ \ \ \ \ \ \ \ odometer.update(rot,\ leftWheelPos,\ rightWheelPos);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00338}00338\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00339}00339\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00340}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab33ec4044a6bf16d9e6d7b926e77f451}{00340}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab33ec4044a6bf16d9e6d7b926e77f451}{AButtonPressed}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00341}00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00342}00342\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEFAULT\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00343}00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00345}00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEBUG\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();\ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00347}00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00348}00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STOP\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00349}00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}();\ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00350}00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00351}00351\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00352}00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{incrementPIDConstant}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00353}00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00354}00354\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00355}00355\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00356}00356\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00357}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a3264e574df7b3dc084e02d234c0320e6}{00357}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a3264e574df7b3dc084e02d234c0320e6}{BButtonPressed}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00358}00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00359}00359\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEFAULT\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00360}00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00361}00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00362}00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEBUG\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00363}00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();\ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00364}00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00365}00365\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STOP\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00366}00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00367}00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00368}00368\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00369}00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{cyclePIDConstant}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00371}00371\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00372}00372\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00374}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_afba85f8615473eae432cec820ca16594}{00374}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_afba85f8615473eae432cec820ca16594}{XButtonPressed}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00375}00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00376}00376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{toggleDecreasingPIDIncrement}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00379}00379\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00380}00380\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00381}00381\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00382}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a567b4175134130703842f7fd4774f733}{00382}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a567b4175134130703842f7fd4774f733}{YButtonPressed}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00383}00383\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(currentMode)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{printPIDConstants}}();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00386}00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00387}00387\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00388}00388\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00389}00389\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00390}00390\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00391}00391\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Increments\ the\ selected\ PID\ constant}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00392}00392\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00393}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{00393}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab958f1afb28c47e574797f419826c9fb}{incrementPIDConstant}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00394}00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(increasingPIDConstant)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00395}00395\ \ \ \ \ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ +=\ PIDIncrements[currentPIDConstant];}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00396}00396\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00397}00397\ \ \ \ \ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ -\/=\ PIDIncrements[currentPIDConstant];}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00398}00398\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00399}00399\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ make\ sure\ constants\ are\ in\ [0,\ constantMax]}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00400}00400\ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ =\ Math.min(PIDConstants[currentPIDConstant],\ PIDMaximums[currentPIDConstant]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00401}00401\ \ \ \ \ \ \ \ \ PIDConstants[currentPIDConstant]\ =\ Math.max(PIDConstants[currentPIDConstant],\ 0);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00402}00402\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00403}00403\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ print\ PID\ constants}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00404}00404\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP:\ "{}}\ +\ PIDConstants[0]\ +\ \textcolor{stringliteral}{"{},\ kI:\ "{}}\ +\ PIDConstants[1]\ +\ \textcolor{stringliteral}{"{},\ kD:\ "{}}\ +\ PIDConstants[2]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00405}00405\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00406}00406\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ PID\ constant\ in\ the\ PID\ controllers}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00407}00407\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00408}00408\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setP(PIDConstants[0]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00409}00409\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setP(PIDConstants[0]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00410}00410\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentPIDConstant\ ==\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00411}00411\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setI(PIDConstants[1]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00412}00412\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setI(PIDConstants[1]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00413}00413\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (currentPIDConstant\ ==\ 2)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00414}00414\ \ \ \ \ \ \ \ \ \ \ \ \ leftPID.setD(PIDConstants[2]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00415}00415\ \ \ \ \ \ \ \ \ \ \ \ \ rightPID.setD(PIDConstants[2]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00416}00416\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00417}00417\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00418}00418\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00419}00419\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00420}00420\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Cycles\ between\ the\ PID\ constants}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00421}00421\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00422}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{00422}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ae67e5adc3b73af025f759a38dd7f47c2}{cyclePIDConstant}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00423}00423\ \ \ \ \ \ \ \ \ currentPIDConstant++;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00424}00424\ \ \ \ \ \ \ \ \ currentPIDConstant\ \%=\ 3;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00425}00425\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP\ Selected"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00427}00427\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00428}00428\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00429}00429\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kI\ Selected"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00430}00430\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00431}00431\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(currentPIDConstant\ ==\ 2)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00432}00432\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kD\ Selected"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00433}00433\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00434}00434\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00435}00435\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00436}00436\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00437}00437\ \textcolor{comment}{\ \ \ \ \ *\ PID\ Tuning\ Mode:\ Toggles\ between\ increasing\ and\ decreasing\ the\ PID\ constants\ on\ each\ increment}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00438}00438\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00439}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{00439}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_af6a1b70da3b261822588ddfb0d1b18ce}{toggleDecreasingPIDIncrement}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00440}00440\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(increasingPIDConstant)\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00441}00441\ \ \ \ \ \ \ \ \ \ \ \ \ increasingPIDConstant\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Decreasing\ PID\ Constants"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00443}00443\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ increasingPIDConstant\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Increasing\ PID\ Constants"{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00446}00446\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00447}00447\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00448}00448\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00449}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{00449}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a132e5a7394b824d265e2653e4b884378}{printPIDConstants}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00450}00450\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}kP:\ "{}}\ +\ PIDConstants[0]\ +\ \textcolor{stringliteral}{"{},\ kI:\ "{}}\ +\ PIDConstants[1]\ +\ \textcolor{stringliteral}{"{},\ kD:\ "{}}\ +\ PIDConstants[2]);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00451}00451\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00452}00452\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00453}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{00453}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a4ae39c2932c554e2af22c6fa8eb28508}{resetPosition}}()}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00454}00454\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00455}00455\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reset\ the\ sensors\ to\ zero\ the\ position}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00456}00456\ \ \ \ \ \ \ \ \ navx.reset();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00457}00457\ \ \ \ \ \ \ \ \ navx.resetDisplacement();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00458}00458\ \ \ \ \ \ \ \ \ sparkMaxEncoder.setPosition(0);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00459}00459\ \ \ \ \ \ \ \ \ rightTalon.setSelectedSensorPosition(0);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00460}00460\ \ \ \ \ \ \ \ \ odometer.resetPosition(\textcolor{keyword}{new}\ Pose2d(),\ \textcolor{keyword}{new}\ Rotation2d());}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00461}00461\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00462}00462\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00463}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{00463}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ac8f0e7940d6e17253370467f802ff339}{printPosition}}()}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00464}00464\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00465}00465\ \ \ \ \ \ \ \ \ Pose2d\ posFromWheelDisplacement\ =\ odometer.getPoseMeters();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00466}00466\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Position\ from\ odometer\ and\ wheel:\ "{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00467}00467\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}X:\ "{}}\ +\ posFromWheelDisplacement.getX()\ +\ \textcolor{stringliteral}{"{}\ Y:\ "{}}\ +\ posFromWheelDisplacement.getY()\ +\ \textcolor{stringliteral}{"{}\ rotation:\ "{}}\ +\ posFromWheelDisplacement.getRotation());}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00468}00468\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00469}00469\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}\(\backslash\)nPosition\ info\ from\ navx:\ "{}});}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00470}00470\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}X:\ "{}}\ +\ navx.getDisplacementX()\ +\ \textcolor{stringliteral}{"{}\ Y:\ "{}}\ +\ navx.getDisplacementY()\ +\ \textcolor{stringliteral}{"{}\ rotation:\ "{}}\ +\ navx.getAngle());}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00471}00471\ \ \ \ \ \ \ \ \ System.out.println();}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00472}00472\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00473}00473\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ left\ wheel\ and\ convert\ to\ meters}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00474}00474\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftWheelPos\ =\ -\/1\ *\ sparkMaxEncoder.getPosition()\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00475}00475\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00476}00476\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ linear\ position\ of\ the\ right\ wheel\ and\ convert\ to\ meters}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00477}00477\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightWheelPos\ =\ rightTalon.getSelectedSensorPosition()\ /\ Constants.ENCODER\_CPR\ *\ 2\ *\ Math.PI\ *\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a622ec78eed37b1e4844b420eff555e44}{TANK\_WHEEL\_RADIUS}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00478}00478\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right\ Pos:\ "{}}\ +\ rightWheelPos\ +\ \textcolor{stringliteral}{"{}\ left\ pos:\ "{}}\ +\ leftWheelPos);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00479}00479\ }
 \DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00480}00480\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00481}00481\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00482}00482\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Print\ angular\ velocity\ and\ motor\ use\ level}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00483}00483\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00484}00484\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00485}00485\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00486}00486\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00487}00487\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a6934a6465ade1371afc7bb6f2d202d0a}{ENCODER\_CPR}};}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00488}00488\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right\ Rps:\ "{}}\ +\ rightRPS\ +\ \textcolor{stringliteral}{"{}\(\backslash\)nLeft\ RPS:\ "{}}\ +\ leftRPS);}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00489}00489\ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00490}00490\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00491}00491\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00492}00492\ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00481}00481\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Print\ angular\ velocity\ and\ motor\ use\ level}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00482}00482\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ rotational\ speeds\ from\ the\ motors\ on\ each\ side}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00483}00483\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ divide\ by\ 60\ to\ get\ rotations\ per\ second}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00484}00484\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftRPS\ =\ -\/1\ *\ sparkMaxEncoder.getVelocity()\ /\ 60;}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00485}00485\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ //\ multiply\ by\ 10\ because\ this\ is\ per\ 100ms\ -\/\ we\ want\ rps}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00486}00486\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightRPS\ =\ rightTalon.getSelectedSensorVelocity()\ *\ 10\ /\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a6934a6465ade1371afc7bb6f2d202d0a}{ENCODER\_CPR}};}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00487}00487\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Right\ Rps:\ "{}}\ +\ rightRPS\ +\ \textcolor{stringliteral}{"{}\(\backslash\)nLeft\ RPS:\ "{}}\ +\ leftRPS);}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00488}00488\ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00489}00489\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00490}00490\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_tank_drive_8java_source_l00491}00491\ \}}
 
 \end{DoxyCode}
