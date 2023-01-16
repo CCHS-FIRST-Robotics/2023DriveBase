@@ -7,12 +7,7 @@ import frc.robot.Constants;
 
 import java.lang.Math;
 
-public class MecaDrive {
-
-	// between 0 and 1
-    // 1 would be full max speed, 0.5 would be half speed, etc
-	double speedMultiplier = 0.6;
-
+public class MecaDrive extends DriveBase {
     // scaling down vertical speed because its faster than other speeds
     final double verticalSpeedMultiplier = 0.8;
 
@@ -20,23 +15,6 @@ public class MecaDrive {
     final double horizontalSPeedMultiplier = 2.5;
 
     TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
-
-    // debug mode stops all wheels except one
-    boolean debugMode = false;
-
-
-	/**
-	 * Adding modes from TankDrive (it would be better to have a super class that has modes)
-	 */
-
-	 String currentMode;
-	 final String DEFAULT_MODE = "DEFAULT";
-	 final String DEBUG_MODE = "DEBUG";
-	 final String PID_TUNING_MODE = "PIDTUNING";
-	 final String STOP_MODE = "STOP";
-
-    // the wheel to be activited during debug mode
-    int debugEnabledWheel = 0;
 
 	// Stop mode variables
 
@@ -46,8 +24,6 @@ public class MecaDrive {
 	// this makes the left and right vel scope include the function that sets
 	// the slowing values so the function can use them
 	double[] combinedSpeeds = new double[4];
-
-
 
     /**
      * Constructor for Mecanum Drive Class
@@ -111,7 +87,6 @@ public class MecaDrive {
 			rightAnalogX = 0;
 		}					
 
-		
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
 
@@ -122,7 +97,7 @@ public class MecaDrive {
 				frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
 				rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
-
+				break;
 			case STOP_MODE:
 				// STOP!!!!! set motors to 0
 				// slower stop
@@ -132,11 +107,11 @@ public class MecaDrive {
 				frontRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[1]);
 				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2] * -1);
 				rearRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[3]);
-
+				break;
 			case DEBUG_MODE:
 				// Debug mode (toggle wheels with left stick button)
 				
-				switch (debugEnabledWheel){
+				switch (debugEnabledMotor){
 					case 0:
 						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
 						break;
@@ -148,12 +123,13 @@ public class MecaDrive {
 						break;
 					case 3:
 						rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
-						break;
-					
+						break;	
         		}
 
+				break;
 			case PID_TUNING_MODE:
 				// nothing yet
+				break;
 		}
     }
 
@@ -234,28 +210,7 @@ public class MecaDrive {
 		return newVelocity;
 	}
 
-	/* 
-	the speed bracket is the range of speeds that the tank can move and turn in
-	 */
-	public void increaseSpeedBracket() {
-		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
-	}
-	public void decreaseSpeedBracket() {
-		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
-	}
-
-	public void turnOnDefaultMode() {
-		if(currentMode.equals(DEFAULT_MODE)) return;
-		currentMode = DEFAULT_MODE;
-		System.out.println("DEFAULT MODE");
-	}
-
-	public void turnOnDebugMode() {
-		if(currentMode.equals(DEBUG_MODE)) return;
-        currentMode = DEBUG_MODE;
-        System.out.println("DEBUG MODE");
-    }
-
+	@Override
 	public void turnOnStopMode() {
 		if(currentMode.equals(STOP_MODE)) return;
 		currentMode = STOP_MODE;
@@ -264,24 +219,11 @@ public class MecaDrive {
 		slowingDownSpeeds = combinedSpeeds;
 		System.out.println("STOP MODE");
 	}
-	// for enabling debug and testing different wheels
-    public void toggleDebugMode() {
-		if (debugMode){
-			turnOnDebugMode();
-		} else{
-			turnOnDefaultMode();
-		}
-        debugMode = !debugMode;
-		//quick fix
-        System.out.println("Debug Mode: " + debugMode);
-    }
 
     // cycles through the activated wheels during debug mode
-    public void cycleWheelDebugMode() {
-        debugEnabledWheel++;
-        debugEnabledWheel %= 4;
-        System.out.println("Current Wheel: " + debugEnabledWheel);
+    public void cycleMotorDebugMode() {
+        debugEnabledMotor++;
+        debugEnabledMotor %= 4;
+        System.out.println("Current Motor: " + debugEnabledMotor);
     }
-
-    // keep implementing modes (stop, debug, defualt) with button presses
 }

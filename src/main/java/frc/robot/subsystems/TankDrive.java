@@ -23,7 +23,7 @@ import edu.wpi.first.math.MathUtil;
  * Manages the tank drive base
  * 
  */
-public class TankDrive {
+public class TankDrive extends DriveBase{
 	
 	// between 0 and 1 - 1 would be full max speed, 0.5 would be half speed, etc
 	double maxSpeed = 0.5;
@@ -46,9 +46,6 @@ public class TankDrive {
 	final String DEBUG_MODE = "DEBUG";
 	final String PID_TUNING_MODE = "PIDTUNING";
 	final String STOP_MODE = "STOP";
-
-	// debug mode variables
-    int debugEnabledWheel = 0;
 
 	// Stop mode variables
 
@@ -138,8 +135,8 @@ public class TankDrive {
 		double scaleFactor = 1 / Math.max(Math.max(Math.abs(preScaledLeftVel), Math.abs(preScaledRightVel)), 1);
 		
 		// scale to what the controller asks
-		leftVel = preScaledLeftVel * scaleFactor * maxSpeed;
-		rightVel = preScaledRightVel * scaleFactor * maxSpeed;
+		leftVel = preScaledLeftVel * scaleFactor * speedMultiplier;
+		rightVel = preScaledRightVel * scaleFactor * speedMultiplier;
 		
 		// // leftTalon.set(ControlMode.PercentOutput, leftVel);
 		// leftVictor.set(ControlMode.PercentOutput, leftVel);
@@ -184,7 +181,7 @@ public class TankDrive {
 			
 
         } else if (currentMode.equals(DEBUG_MODE)) {
-            switch (debugEnabledWheel){
+            switch (debugEnabledMotor){
                 case 0:
                     leftVictor.set(ControlMode.PercentOutput, -1 * leftVel);
                     break;
@@ -254,32 +251,7 @@ public class TankDrive {
 		return newVelocity;
 	}
 
-
-	/**
-	 * The speed bracket controls the multiplier for all the speeds 
-	 * So when you change it, lets say, to 1/2 speed, all directions will be
-	 * 	at 1/2 speed
-	 */
-	public void increaseSpeedBracket() {
-		maxSpeed = Math.min(0.8, maxSpeed + 0.1);
-	}
-  
-	public void decreaseSpeedBracket() {
-		maxSpeed = Math.max(0.2, maxSpeed - 0.1);
-	}
-
-	public void turnOnDefaultMode() {
-		if(currentMode.equals(DEFAULT_MODE)) return;
-		currentMode = DEFAULT_MODE;
-		System.out.println("DEFAULT MODE");
-	}
-
-	public void turnOnDebugMode() {
-		if(currentMode.equals(DEBUG_MODE)) return;
-        currentMode = DEBUG_MODE;
-        System.out.println("DEBUG MODE");
-    }
-
+	@Override
 	public void turnOnStopMode() {
 		if(currentMode.equals(STOP_MODE)) return;
 		currentMode = STOP_MODE;
@@ -290,16 +262,10 @@ public class TankDrive {
 		System.out.println("STOP MODE");
 	}
 
-	public void turnONPIDTurningMode() {
-		if(currentMode.equals(PID_TUNING_MODE)) return;
-		currentMode = PID_TUNING_MODE;
-		System.out.println("PID TUNING MODE");
-	}
-
-    public void cycleWheelDebugMode() {
-        debugEnabledWheel++;
-        debugEnabledWheel %= 4;
-        System.out.println("Current Wheel: " + debugEnabledWheel);
+    public void cycleMotorDebugMode() {
+        debugEnabledMotor++;
+        debugEnabledMotor %= 4;
+        System.out.println("Current Motor: " + debugEnabledMotor);
     }
 
 	public void updateRobotVelocity() {
@@ -337,6 +303,7 @@ public class TankDrive {
 		odometer.update(rot, leftWheelPos, rightWheelPos);
 	}
 
+	@Override
 	public void AButtonPressed() {
 		switch(currentMode) {
 			case DEFAULT_MODE:
@@ -354,6 +321,7 @@ public class TankDrive {
 		}
 	}
 
+	@Override
 	public void BButtonPressed() {
 		switch(currentMode) {
 			case DEFAULT_MODE:
@@ -371,6 +339,7 @@ public class TankDrive {
 		}
 	}
 
+	@Override
 	public void XButtonPressed() {
 		switch(currentMode) {
 			case PID_TUNING_MODE:
@@ -379,6 +348,7 @@ public class TankDrive {
 		}
 	}
 
+	@Override
 	public void YButtonPressed() {
 		switch(currentMode) {
 			case PID_TUNING_MODE:
