@@ -3,6 +3,7 @@ var annotated_dup =
     [ "frc", null, [
       [ "robot", "d8/d89/namespacefrc_1_1robot.html", [
         [ "subsystems", "d3/d88/namespacefrc_1_1robot_1_1subsystems.html", [
+          [ "DriveBase", "da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html", "da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base" ],
           [ "MecaDrive", "d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html", "d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive" ],
           [ "TankDrive", "dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html", "dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive" ]
         ] ],
