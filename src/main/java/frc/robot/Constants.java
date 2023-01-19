@@ -7,7 +7,6 @@ import java.lang.Math;
  * Naming convention is all caps, spaces are underscores LIKE_THIS
  */
 public class Constants {
-	// TODO: add actual values for all constants (current values are placeholder)
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0; 
@@ -39,7 +38,7 @@ public class Constants {
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
 	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
 	
-	public static final double ANALOG_DEAD_ZONE = 0.05;
+	public static final double ANALOG_DEAD_ZONE = 0.1;
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)

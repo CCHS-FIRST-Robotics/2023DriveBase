@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private TankDrive driveBase;
+  private DriveBase driveBase;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,9 +42,9 @@ public class Robot extends TimedRobot {
 
 
     // tank drive initialization
-    driveBase = createTankDrive();    
+    // driveBase = createTankDrive();    
     // mecanum drive initialization
-    // driveBase = createMecanumDrive();
+    driveBase = createMecanumDrive();
     
     // // set the dead zone for the controller analog sticks
     // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
@@ -108,14 +108,14 @@ public class Robot extends TimedRobot {
     if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
     // right
     if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
-	// left
-	if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
+    // left
+    if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
     // down
-    if (xboxController.getPOV() == 180) driveBase.turnONPIDTurningMode();
+    if (xboxController.getPOV() == 180) driveBase.turnONPIDTuningMode();
 
 
     // Debug controls
-    if (xboxController.getRightStickButtonPressed()) driveBase.cycleWheelDebugMode();
+    if (xboxController.getRightStickButtonPressed()) driveBase.cycleMotorDebugMode();
 
     // actions of the four button presses
     if (xboxController.getAButtonPressed()) {

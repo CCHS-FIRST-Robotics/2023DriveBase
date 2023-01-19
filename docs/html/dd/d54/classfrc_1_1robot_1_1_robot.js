@@ -12,7 +12,7 @@ var classfrc_1_1robot_1_1_robot =
     [ "teleopPeriodic", "dd/d54/classfrc_1_1robot_1_1_robot.html#ae807171661cbc29081bc10f06d6831e7", null ],
     [ "testInit", "dd/d54/classfrc_1_1robot_1_1_robot.html#acdebc9c7e7e31ffccb3c2496b8d33944", null ],
     [ "testPeriodic", "dd/d54/classfrc_1_1robot_1_1_robot.html#abd152f34b9f33d5cdf835aa61331f33e", null ],
-    [ "driveBase", "dd/d54/classfrc_1_1robot_1_1_robot.html#a24003cd1081e48133158049543422b25", null ],
+    [ "driveBase", "dd/d54/classfrc_1_1robot_1_1_robot.html#aabb2f82e41b101b19281f03d8797b726", null ],
     [ "kCustomAuto", "dd/d54/classfrc_1_1robot_1_1_robot.html#a54c04bb5c1485d849f56b3f2088d1cb0", null ],
     [ "kDefaultAuto", "dd/d54/classfrc_1_1robot_1_1_robot.html#afca4ff71c5afc20b4492382a68a94bc6", null ],
     [ "m_autoSelected", "dd/d54/classfrc_1_1robot_1_1_robot.html#a1b21da051611678b4f9af38ce2125dfb", null ],
