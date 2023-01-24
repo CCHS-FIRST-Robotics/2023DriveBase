@@ -50,7 +50,7 @@ final Sendable\+Chooser$<$ String $>$ \mbox{\hyperlink{classfrc_1_1robot_1_1_rob
 \item 
 Xbox\+Controller \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xbox\+Controller}} = new Xbox\+Controller(\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a206905e4394c98fd731ede373c835475}{Constants.\+XBOX\+\_\+\+CONTROLLER\+\_\+\+PORT}})
 \item 
-\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive}{Tank\+Drive}} \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{drive\+Base}}
+\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base}{Drive\+Base}} \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{drive\+Base}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Private Attributes}
 \begin{DoxyCompactItemize}
@@ -141,14 +141,14 @@ References \mbox{\hyperlink{_robot_8java_source_l00024}{frc.\+robot.\+Robot.\+k\
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00165}{165}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00166}{166}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive}{MecaDrive}}(\mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a67a148a95933c5bee3f14237fdb48980}{FL\_TALON\_PORT}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a1a0febc2ed67a2f10db6b8861348ad9b}{FR\_TALON\_PORT}},}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a59761b835fe99c899f20a7856ff2f64b}{RL\_TALON\_PORT}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a17cc7ab7721d0945bf359315e5f1a6ec}{RR\_TALON\_PORT}});}
-\DoxyCodeLine{00168\ \ \ \}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive}{MecaDrive}}(\mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a67a148a95933c5bee3f14237fdb48980}{FL\_TALON\_PORT}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a1a0febc2ed67a2f10db6b8861348ad9b}{FR\_TALON\_PORT}},}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a59761b835fe99c899f20a7856ff2f64b}{RL\_TALON\_PORT}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a17cc7ab7721d0945bf359315e5f1a6ec}{RR\_TALON\_PORT}});}
+\DoxyCodeLine{00169\ \ \ \}}
 
 \end{DoxyCode}
 
@@ -163,23 +163,19 @@ References \mbox{\hyperlink{_constants_8java_source_l00033}{frc.\+robot.\+Consta
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00160}{160}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00161}{161}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive}{TankDrive}}(\mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a5aead21bed4cadff90aa9958665e3ae0}{SPARK\_MAX\_ID}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a0832d8035bdbd8e950894da741f045a6}{LEFT\_VICTOR\_ID}},}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a204ca7168b6bd06af3442aee506b165e}{TALON\_ID}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_ab6e09f1f27c102e82e6633925b66f9eb}{RIGHT\_VICTOR\_ID}});}
-\DoxyCodeLine{00163\ \ \ \}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive}{TankDrive}}(\mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a5aead21bed4cadff90aa9958665e3ae0}{SPARK\_MAX\_ID}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a0832d8035bdbd8e950894da741f045a6}{LEFT\_VICTOR\_ID}},}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_a204ca7168b6bd06af3442aee506b165e}{TALON\_ID}},\ \mbox{\hyperlink{classfrc_1_1robot_1_1_constants}{Constants}}.\mbox{\hyperlink{classfrc_1_1robot_1_1_constants_ab6e09f1f27c102e82e6633925b66f9eb}{RIGHT\_VICTOR\_ID}});}
+\DoxyCodeLine{00164\ \ \ \}}
 
 \end{DoxyCode}
 
 
 References \mbox{\hyperlink{_constants_8java_source_l00026}{frc.\+robot.\+Constants.\+LEFT\+\_\+\+VICTOR\+\_\+\+ID}}, \mbox{\hyperlink{_constants_8java_source_l00027}{frc.\+robot.\+Constants.\+RIGHT\+\_\+\+VICTOR\+\_\+\+ID}}, \mbox{\hyperlink{_constants_8java_source_l00029}{frc.\+robot.\+Constants.\+SPARK\+\_\+\+MAX\+\_\+\+ID}}, and \mbox{\hyperlink{_constants_8java_source_l00028}{frc.\+robot.\+Constants.\+TALON\+\_\+\+ID}}.
-
-
-
-Referenced by \mbox{\hyperlink{_robot_8java_source_l00036}{frc.\+robot.\+Robot.\+robot\+Init()}}.
 
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_ac19810fbf26efd4cd47cbd7568b4ad2a}\label{classfrc_1_1robot_1_1_robot_ac19810fbf26efd4cd47cbd7568b4ad2a}} 
 \index{frc.robot.Robot@{frc.robot.Robot}!disabledInit@{disabledInit}}
@@ -193,11 +189,11 @@ This function is called once when the robot is disabled.
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00146}{146}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00147}{147}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00146\ \{\}}
+\DoxyCodeLine{00147\ \{\}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_a2bc1b0ce100e4783ba3d549e6ac07ae3}\label{classfrc_1_1robot_1_1_robot_a2bc1b0ce100e4783ba3d549e6ac07ae3}} 
@@ -212,11 +208,11 @@ This function is called periodically when disabled.
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00149}{149}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00150}{150}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00149\ \{\}}
+\DoxyCodeLine{00150\ \{\}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_a1d28582cf3dc31568c3581f631c92f13}\label{classfrc_1_1robot_1_1_robot_a1d28582cf3dc31568c3581f631c92f13}} 
@@ -244,7 +240,7 @@ Definition at line \mbox{\hyperlink{_robot_8java_source_l00036}{36}} of file \mb
 \DoxyCodeLine{00042\ }
 \DoxyCodeLine{00043\ }
 \DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ tank\ drive\ initialization}}
-\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_ac62d85124791b5dfe048640be9f8b17a}{createTankDrive}}();\ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ driveBase\ =\ createTankDrive();\ \ \ \ }}
 \DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ mecanum\ drive\ initialization}}
 \DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ driveBase\ =\ createMecanumDrive();}}
 \DoxyCodeLine{00048\ \ \ \ \ }
@@ -255,7 +251,7 @@ Definition at line \mbox{\hyperlink{_robot_8java_source_l00036}{36}} of file \mb
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{_robot_8java_source_l00160}{frc.\+robot.\+Robot.\+create\+Tank\+Drive()}}, \mbox{\hyperlink{_robot_8java_source_l00029}{frc.\+robot.\+Robot.\+drive\+Base}}, \mbox{\hyperlink{_robot_8java_source_l00024}{frc.\+robot.\+Robot.\+k\+Custom\+Auto}}, \mbox{\hyperlink{_robot_8java_source_l00023}{frc.\+robot.\+Robot.\+k\+Default\+Auto}}, and \mbox{\hyperlink{_robot_8java_source_l00026}{frc.\+robot.\+Robot.\+m\+\_\+chooser}}.
+References \mbox{\hyperlink{_robot_8java_source_l00024}{frc.\+robot.\+Robot.\+k\+Custom\+Auto}}, \mbox{\hyperlink{_robot_8java_source_l00023}{frc.\+robot.\+Robot.\+k\+Default\+Auto}}, and \mbox{\hyperlink{_robot_8java_source_l00026}{frc.\+robot.\+Robot.\+m\+\_\+chooser}}.
 
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_a7e63e32ebe8ad3d33bbc3b09092a9f1f}\label{classfrc_1_1robot_1_1_robot_a7e63e32ebe8ad3d33bbc3b09092a9f1f}} 
 \index{frc.robot.Robot@{frc.robot.Robot}!robotPeriodic@{robotPeriodic}}
@@ -316,51 +312,52 @@ Definition at line \mbox{\hyperlink{_robot_8java_source_l00100}{100}} of file \m
 \DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ TODO:\ put\ the\ driving\ loop\ here}}
 \DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ if\ buttons\ are\ pressed\ and\ comment\ controller\ mapping}}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightBumperPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a59c78f7aa9b053b2257df220a22c39b8}{increaseSpeedBracket}}();}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftBumperPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a9ba9969195a1939d01aa7ae0f35a98a5}{decreaseSpeedBracket}}();}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightBumperPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a97fbe2c1ad11cb61f867f6bc91cbf6e7}{increaseSpeedBracket}}();}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftBumperPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5be34889c14ab7762918aa2b5f9add5a}{decreaseSpeedBracket}}();}
 \DoxyCodeLine{00105\ }
 \DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//\ switch\ between\ modes\ (for\ DPad,\ 0\ is\ up,\ and\ angles\ go\ clockwise,\ so\ 90\ is\ right)}}
 \DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ up}}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 0)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a1d8f7c0218965f0da8df3950d1d2a97c}{turnOnDefaultMode}}();}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 0)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a52ad0ed4423eb1822e8fc0b3ce504886}{turnOnDefaultMode}}();}
 \DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ right}}
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 90)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ad7f6cfb9f2f764610daf7f1d9724ba63}{turnOnStopMode}}();}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 90)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a4cb5f3623af8bb9ad9fc252cd51ea84c}{turnOnStopMode}}();}
 \DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{//\ left}}
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 270)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_aa5d3b279c5f3acea4a5357e0a1ad04b8}{turnOnDebugMode}}();}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 270)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_af54ad3d7bec7bfa3dfccf01134f432de}{turnOnDebugMode}}();}
 \DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{//\ down}}
-\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 180)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a91519cc4e458f83fde01af354765f1e7}{turnONPIDTurningMode}}();}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getPOV()\ ==\ 180)\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5106f46d8dccf769d2ba4c408a6a3355}{turnONPIDTuningMode}}();}
 \DoxyCodeLine{00115\ }
 \DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{//\ Debug\ controls}}
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightStickButtonPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a8fcd4a8eb2c726c4bfe0e8df77b5a032}{cycleWheelDebugMode}}();}
-\DoxyCodeLine{00119\ }
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{//\ actions\ of\ the\ four\ button\ presses}}
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getAButtonPressed())\ \{}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_ab33ec4044a6bf16d9e6d7b926e77f451}{AButtonPressed}}();}
-\DoxyCodeLine{00123\ \ \ \ \ \}}
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getBButtonPressed())\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a3264e574df7b3dc084e02d234c0320e6}{BButtonPressed}}();}
-\DoxyCodeLine{00126\ \ \ \ \ \}}
-\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getXButtonPressed())\ \{}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_afba85f8615473eae432cec820ca16594}{XButtonPressed}}();}
-\DoxyCodeLine{00129\ \ \ \ \ \}}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getYButtonPressed())\ \{}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a567b4175134130703842f7fd4774f733}{YButtonPressed}}();}
-\DoxyCodeLine{00132\ \ \ \ \ \}}
-\DoxyCodeLine{00133\ }
-\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//\ get\ analog\ input\ from\ xbox\ controller}}
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{double}\ leftAnalogX\ \ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftX();}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{double}\ leftAnalogY\ \ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftY();}
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{double}\ rightAnalogX\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightX();}
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{double}\ rightAnalogY\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightY();}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ process\ input\ (determine\ wheelspeeds)}}
-\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive_a7ce62bf5173758eaf0ddeb2d926f0fef}{drive}}(leftAnalogX,\ leftAnalogY,\ rightAnalogX,\ rightAnalogY);}
-\DoxyCodeLine{00142\ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ Debug\ controls}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightStickButtonPressed())\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a1aa46ec2e2d9964ee1fc919c3e641390}{cycleMotorDebugMode}}();}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//\ actions\ of\ the\ four\ button\ presses}}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getAButtonPressed())\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a7a1474cf4405224381673f1c42764d8a}{AButtonPressed}}();}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getBButtonPressed())\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a8087088762188d309de5e7401e42f498}{BButtonPressed}}();}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getXButtonPressed())\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_aa693685bed995fad0a4d9758de2cb22c}{XButtonPressed}}();}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getYButtonPressed())\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a6fa494359aef97594023369c068463e1}{YButtonPressed}}();}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ get\ analog\ input\ from\ xbox\ controller}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{double}\ leftAnalogX\ \ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftX();}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{double}\ leftAnalogY\ \ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getLeftY();}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{double}\ rightAnalogX\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightX();}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{double}\ rightAnalogY\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_a2bc2fa242adf710a367914fe781c02e7}{xboxController}}.getRightY();}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{//\ process\ input\ (determine\ wheelspeeds)}}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}{driveBase}}.\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a329a00e5b85c880d53092d743384721f}{drive}}(leftAnalogX,\ leftAnalogY,\ rightAnalogX,\ rightAnalogY);}
+\DoxyCodeLine{00143\ \ \ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{_tank_drive_8java_source_l00340}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+AButton\+Pressed()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00357}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+BButton\+Pressed()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00299}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+cycle\+Wheel\+Debug\+Mode()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00267}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+decrease\+Speed\+Bracket()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00120}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+drive()}}, \mbox{\hyperlink{_robot_8java_source_l00029}{frc.\+robot.\+Robot.\+drive\+Base}}, \mbox{\hyperlink{_tank_drive_8java_source_l00263}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+increase\+Speed\+Bracket()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00277}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+turn\+On\+Debug\+Mode()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00271}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+turn\+On\+Default\+Mode()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00293}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+turn\+ONPIDTurning\+Mode()}}, \mbox{\hyperlink{_tank_drive_8java_source_l00283}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+turn\+On\+Stop\+Mode()}}, \mbox{\hyperlink{_robot_8java_source_l00028}{frc.\+robot.\+Robot.\+xbox\+Controller}}, \mbox{\hyperlink{_tank_drive_8java_source_l00374}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+XButton\+Pressed()}}, and \mbox{\hyperlink{_tank_drive_8java_source_l00382}{frc.\+robot.\+subsystems.\+Tank\+Drive.\+YButton\+Pressed()}}.
+References \mbox{\hyperlink{_drive_base_8java_source_l00078}{frc.\+robot.\+subsystems.\+Drive\+Base.\+AButton\+Pressed()}}, \mbox{\hyperlink{_drive_base_8java_source_l00080}{frc.\+robot.\+subsystems.\+Drive\+Base.\+BButton\+Pressed()}}, \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a1aa46ec2e2d9964ee1fc919c3e641390}{frc.\+robot.\+subsystems.\+Drive\+Base.\+cycle\+Motor\+Debug\+Mode()}}, \mbox{\hyperlink{_drive_base_8java_source_l00037}{frc.\+robot.\+subsystems.\+Drive\+Base.\+decrease\+Speed\+Bracket()}}, \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a329a00e5b85c880d53092d743384721f}{frc.\+robot.\+subsystems.\+Drive\+Base.\+drive()}}, \mbox{\hyperlink{_robot_8java_source_l00029}{frc.\+robot.\+Robot.\+drive\+Base}}, \mbox{\hyperlink{_drive_base_8java_source_l00033}{frc.\+robot.\+subsystems.\+Drive\+Base.\+increase\+Speed\+Bracket()}}, \mbox{\hyperlink{_drive_base_8java_source_l00048}{frc.\+robot.\+subsystems.\+Drive\+Base.\+turn\+On\+Debug\+Mode()}}, \mbox{\hyperlink{_drive_base_8java_source_l00042}{frc.\+robot.\+subsystems.\+Drive\+Base.\+turn\+On\+Default\+Mode()}}, \mbox{\hyperlink{_drive_base_8java_source_l00065}{frc.\+robot.\+subsystems.\+Drive\+Base.\+turn\+ONPIDTuning\+Mode()}}, \mbox{\hyperlink{_drive_base_8java_source_l00059}{frc.\+robot.\+subsystems.\+Drive\+Base.\+turn\+On\+Stop\+Mode()}}, \mbox{\hyperlink{_robot_8java_source_l00028}{frc.\+robot.\+Robot.\+xbox\+Controller}}, \mbox{\hyperlink{_drive_base_8java_source_l00082}{frc.\+robot.\+subsystems.\+Drive\+Base.\+XButton\+Pressed()}}, and \mbox{\hyperlink{_drive_base_8java_source_l00084}{frc.\+robot.\+subsystems.\+Drive\+Base.\+YButton\+Pressed()}}.
 
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_acdebc9c7e7e31ffccb3c2496b8d33944}\label{classfrc_1_1robot_1_1_robot_acdebc9c7e7e31ffccb3c2496b8d33944}} 
 \index{frc.robot.Robot@{frc.robot.Robot}!testInit@{testInit}}
@@ -374,11 +371,11 @@ This function is called once when test mode is enabled.
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00153}{153}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00154}{154}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00153\ \{\}}
+\DoxyCodeLine{00154\ \{\}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_abd152f34b9f33d5cdf835aa61331f33e}\label{classfrc_1_1robot_1_1_robot_abd152f34b9f33d5cdf835aa61331f33e}} 
@@ -393,21 +390,21 @@ This function is called periodically during test mode.
 
 
 
-Definition at line \mbox{\hyperlink{_robot_8java_source_l00157}{157}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
+Definition at line \mbox{\hyperlink{_robot_8java_source_l00158}{158}} of file \mbox{\hyperlink{_robot_8java_source}{Robot.\+java}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00157\ \{\}}
+\DoxyCodeLine{00158\ \{\}}
 
 \end{DoxyCode}
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}\label{classfrc_1_1robot_1_1_robot_a24003cd1081e48133158049543422b25}} 
+\mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}\label{classfrc_1_1robot_1_1_robot_aabb2f82e41b101b19281f03d8797b726}} 
 \index{frc.robot.Robot@{frc.robot.Robot}!driveBase@{driveBase}}
 \index{driveBase@{driveBase}!frc.robot.Robot@{frc.robot.Robot}}
 \doxysubsubsection{\texorpdfstring{driveBase}{driveBase}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_tank_drive}{Tank\+Drive}} frc.\+robot.\+Robot.\+drive\+Base\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base}{Drive\+Base}} frc.\+robot.\+Robot.\+drive\+Base\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
@@ -415,7 +412,7 @@ Definition at line \mbox{\hyperlink{_robot_8java_source_l00029}{29}} of file \mb
 
 
 
-Referenced by \mbox{\hyperlink{_robot_8java_source_l00036}{frc.\+robot.\+Robot.\+robot\+Init()}}, and \mbox{\hyperlink{_robot_8java_source_l00100}{frc.\+robot.\+Robot.\+teleop\+Periodic()}}.
+Referenced by \mbox{\hyperlink{_robot_8java_source_l00100}{frc.\+robot.\+Robot.\+teleop\+Periodic()}}.
 
 \mbox{\Hypertarget{classfrc_1_1robot_1_1_robot_a54c04bb5c1485d849f56b3f2088d1cb0}\label{classfrc_1_1robot_1_1_robot_a54c04bb5c1485d849f56b3f2088d1cb0}} 
 \index{frc.robot.Robot@{frc.robot.Robot}!kCustomAuto@{kCustomAuto}}

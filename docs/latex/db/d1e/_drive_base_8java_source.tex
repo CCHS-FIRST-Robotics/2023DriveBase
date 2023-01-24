@@ -1,0 +1,91 @@
+\hypertarget{_drive_base_8java_source}{}\doxysection{Drive\+Base.\+java}
+\label{_drive_base_8java_source}\index{robotics/2023DriveBase/src/main/java/frc/robot/subsystems/DriveBase.java@{robotics/2023DriveBase/src/main/java/frc/robot/subsystems/DriveBase.java}}
+\mbox{\hyperlink{_drive_base_8java}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00001}\mbox{\hyperlink{namespacefrc_1_1robot_1_1subsystems}{00001}}\ \textcolor{keyword}{package\ }frc.robot.subsystems;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00002}00002\ \textcolor{keyword}{import}\ java.lang.Math;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00004}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base}{00004}}\ \textcolor{keyword}{public}\ \textcolor{keyword}{abstract}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base}{DriveBase}}\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00005}00005\ \ \ \ \ \textcolor{comment}{//\ used\ to\ scale\ speeds\ -\/\ 1\ would\ be\ max\ speed,\ 0.5\ would\ be\ half\ speed,\ etc.}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00006}00006\ \ \ \ \ \textcolor{keywordtype}{double}\ speedMultiplier\ =\ 0.6;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00008}00008\ \ \ \ \ \textcolor{comment}{//\ different\ modes}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00009}00009\ \ \ \ \ String\ currentMode;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00010}00010\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{final}\ String\ DEFAULT\_MODE\ =\ \textcolor{stringliteral}{"{}DEFAULT"{}};\ \textcolor{comment}{//\ regular\ driving}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00011}00011\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{final}\ String\ DEBUG\_MODE\ =\ \textcolor{stringliteral}{"{}DEBUG"{}};\ \textcolor{comment}{//\ spin\ only\ one\ motor\ at\ a\ time}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00012}00012\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{final}\ String\ PID\_TUNING\_MODE\ =\ \textcolor{stringliteral}{"{}PIDTUNING"{}};\ \textcolor{comment}{//\ tune\ PID\ constants}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00013}00013\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{final}\ String\ STOP\_MODE\ =\ \textcolor{stringliteral}{"{}STOP"{}};\ \textcolor{comment}{//\ stop\ the\ robot}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00015}00015\ \ \ \ \ \textcolor{comment}{//\ the\ motor\ to\ be\ activated\ during\ debug\ mode}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00016}00016\ \ \ \ \ \textcolor{keywordtype}{int}\ debugEnabledMotor\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00017}00017\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00018}00018\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00019}00019\ \textcolor{comment}{\ \ \ \ \ *\ Drive\ the\ robot\ with\ controller\ input}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00020}00020\ \textcolor{comment}{\ \ \ \ \ *\ }}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00021}00021\ \textcolor{comment}{\ \ \ \ \ *\ These\ are\ doubles\ on\ the\ interval\ [-\/1,\ 1]\ and\ come\ from\ the\ controller's}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00022}00022\ \textcolor{comment}{\ \ \ \ \ *\ analog\ sticks}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00023}00023\ \textcolor{comment}{\ \ \ \ \ *\ }}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00024}00024\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00025}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a329a00e5b85c880d53092d743384721f}{00025}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{abstract}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a329a00e5b85c880d53092d743384721f}{drive}}(\textcolor{keywordtype}{double}\ leftAnalogX,\ \textcolor{keywordtype}{double}\ leftAnalogY,}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ rightAnalogX,\ \textcolor{keywordtype}{double}\ rightAnalogY);}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00027}00027\ \ \ \ \ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00028}00028\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00029}00029\ \textcolor{comment}{\ \ \ \ \ *\ The\ speed\ bracket\ controls\ the\ multiplire\ for\ al\ the\ speeds}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00030}00030\ \textcolor{comment}{\ \ \ \ \ *\ So\ when\ you\ change\ it,\ lets\ say,\ to\ 1/2\ speed,\ all\ movement\ will\ be\ at}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00031}00031\ \textcolor{comment}{\ \ \ \ \ *\ 1/2\ speed}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00032}00032\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00033}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a97fbe2c1ad11cb61f867f6bc91cbf6e7}{00033}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a97fbe2c1ad11cb61f867f6bc91cbf6e7}{increaseSpeedBracket}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00034}00034\ \ \ \ \ \ \ \ \ speedMultiplier\ =\ Math.min(1,\ speedMultiplier\ +\ 0.1);}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00035}00035\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00037}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5be34889c14ab7762918aa2b5f9add5a}{00037}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5be34889c14ab7762918aa2b5f9add5a}{decreaseSpeedBracket}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ min\ is\ 0.2\ because\ below\ that\ the\ robot\ is\ unlikely\ to\ move}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00039}00039\ \ \ \ \ \ \ \ \ speedMultiplier\ =\ Math.max(0.2,\ speedMultiplier\ -\/\ 0.1);}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00040}00040\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00042}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a52ad0ed4423eb1822e8fc0b3ce504886}{00042}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a52ad0ed4423eb1822e8fc0b3ce504886}{turnOnDefaultMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00043}00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00044}00044\ \ \ \ \ \ \ \ \ currentMode\ =\ DEFAULT\_MODE;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00045}00045\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEFAULT\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00046}00046\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00048}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_af54ad3d7bec7bfa3dfccf01134f432de}{00048}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_af54ad3d7bec7bfa3dfccf01134f432de}{turnOnDebugMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEBUG\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00050}00050\ \ \ \ \ \ \ \ \ currentMode\ =\ DEBUG\_MODE;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00051}00051\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEBUG\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00052}00052\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00053}00053\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00054}00054\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00055}00055\ \textcolor{comment}{\ \ \ \ \ *\ should\ be\ overridden\ for\ actual\ functionality\ because\ depends\ on}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00056}00056\ \textcolor{comment}{\ \ \ \ \ *\ drive\ base\ specifc\ speeds\ (for\ tank\ drive,\ there\ is\ a\ left\ and\ right}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00057}00057\ \textcolor{comment}{\ \ \ \ \ *\ speed,\ whereas\ for\ mecanum\ there\ are\ 4)}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00058}00058\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00059}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a4cb5f3623af8bb9ad9fc252cd51ea84c}{00059}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a4cb5f3623af8bb9ad9fc252cd51ea84c}{turnOnStopMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(STOP\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00061}00061\ \ \ \ \ \ \ \ \ currentMode\ =\ STOP\_MODE;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00062}00062\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}STOP\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00065}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5106f46d8dccf769d2ba4c408a6a3355}{00065}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a5106f46d8dccf769d2ba4c408a6a3355}{turnONPIDTuningMode}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(PID\_TUNING\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00067}00067\ \ \ \ \ \ \ \ \ currentMode\ =\ PID\_TUNING\_MODE;}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00068}00068\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}PID\ TUNING\ MODE"{}});}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00069}00069\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00070}00070\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00071}00071\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00072}00072\ \textcolor{comment}{\ \ \ \ \ *\ Again\ needs\ to\ be\ implemented\ in\ sub\ classes\ becuase\ there\ might}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00073}00073\ \textcolor{comment}{\ \ \ \ \ *\ be\ different\ numbers\ of\ motors}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00075}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a1aa46ec2e2d9964ee1fc919c3e641390}{00075}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{abstract}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a1aa46ec2e2d9964ee1fc919c3e641390}{cycleMotorDebugMode}}();}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00076}00076\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00077}00077\ \ \ \ \ \textcolor{comment}{//\ the\ following\ methods\ can\ be\ overridden\ for\ real\ functionality}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00078}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a7a1474cf4405224381673f1c42764d8a}{00078}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a7a1474cf4405224381673f1c42764d8a}{AButtonPressed}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00080}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a8087088762188d309de5e7401e42f498}{00080}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a8087088762188d309de5e7401e42f498}{BButtonPressed}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00082}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_aa693685bed995fad0a4d9758de2cb22c}{00082}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_aa693685bed995fad0a4d9758de2cb22c}{XButtonPressed}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00084}\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a6fa494359aef97594023369c068463e1}{00084}}\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_drive_base_a6fa494359aef97594023369c068463e1}{YButtonPressed}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_drive_base_8java_source_l00085}00085\ \}}
+
+\end{DoxyCode}

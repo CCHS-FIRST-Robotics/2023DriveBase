@@ -9,7 +9,11 @@ var searchData=
   ['teleopperiodic_6',['teleopPeriodic',['../dd/d54/classfrc_1_1robot_1_1_robot.html#ae807171661cbc29081bc10f06d6831e7',1,'frc::robot::Robot']]],
   ['testinit_7',['testInit',['../dd/d54/classfrc_1_1robot_1_1_robot.html#acdebc9c7e7e31ffccb3c2496b8d33944',1,'frc::robot::Robot']]],
   ['testperiodic_8',['testPeriodic',['../dd/d54/classfrc_1_1robot_1_1_robot.html#abd152f34b9f33d5cdf835aa61331f33e',1,'frc::robot::Robot']]],
+<<<<<<< HEAD
   ['toggledecreasingpidincrement_9',['toggleDecreasingPIDIncrement',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc::robot::subsystems::TankDrive']]],
+=======
+  ['toggledecreasingpidincrement_9',['toggleDecreasingPIDIncrement',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc.robot.subsystems.TankDrive.toggleDecreasingPIDIncrement()'],['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc.robot.subsystems.TankDrive.toggleDecreasingPIDIncrement()']]],
+>>>>>>> ee51188 (rebase)
   ['turnondebugmode_10',['turnOnDebugMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#af54ad3d7bec7bfa3dfccf01134f432de',1,'frc::robot::subsystems::DriveBase']]],
   ['turnondefaultmode_11',['turnOnDefaultMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a52ad0ed4423eb1822e8fc0b3ce504886',1,'frc::robot::subsystems::DriveBase']]],
   ['turnonpidtuningmode_12',['turnONPIDTuningMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a5106f46d8dccf769d2ba4c408a6a3355',1,'frc::robot::subsystems::DriveBase']]],
