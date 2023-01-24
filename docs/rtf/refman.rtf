@@ -631,7 +631,7 @@ final int frc.robot.Constants.RL_TALON_PORT = 4{\f2 [static]}}}
 \pard\plain \s61\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid 
 \par
 {
-Definition at line {\b 35} of file {\b Constants.java}.}\par
+Definition at line {\b 34} of file {\b Constants.java}.}\par
 {
 \ql
 Referenced by {\b frc.robot.Robot.createMecanumDrive()}.}\par
@@ -730,7 +730,7 @@ final int frc.robot.Constants.SPARK_MAX_ID = 12{\f2 [static]}}}
 \pard\plain \s61\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid 
 \par
 {
-Definition at line {\b 29} of file {\b Constants.java}.}\par
+Definition at line {\b 28} of file {\b Constants.java}.}\par
 {
 \ql
 Referenced by {\b frc.robot.Robot.createTankDrive()}.}\par
@@ -1384,6 +1384,26 @@ This will return a value lower than the input, and it is used to slow down the m
 }\par
 }\par}
 }
+\pard\plain \s3\sb240\sa60\keepn\widctlpar\adjustright \b\f1\cgrid 
+Private Member Functions\par
+\pard\plain 
+
+{
+\pard\plain \s120\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
+double[] {\b combineSpeeds} (double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY)\par
+{
+\pard\plain \s61\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid {\i {\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
+Process the controller input into speeds for mecanum wheels. }{
+}\par
+}\par}
+\pard\plain \s120\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
+double[] {\b slowDown} (double[] inputVelocity)\par
+{
+\pard\plain \s61\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid {\i {\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
+This will return a value lower than the input, and it is used to slow down the motors during stop mode. }{
+}\par
+}\par}
+}
 {\pard\widctlpar\brdrb\brdrs\brdrw5\brsp20 \adjustright \par}
 \pard\plain \s3\sb240\sa60\keepn\widctlpar\adjustright \b\f1\cgrid 
 Detailed Description\par
@@ -1440,8 +1460,9 @@ Parameters\par}
 {\row }
 }
 }{
-Definition at line {\b 36} of file {\b MecaDrive.java}.}\par
+Definition at line {\b 60} of file {\b MecaDrive.java}.}\par
 {
+<<<<<<< HEAD
 \pard\plain \s41\li360\widctlpar\adjustright \shading1000\cbpat8 \f2\fs16\cgrid 00037                                                                     \{\par
 00038         frontLeftMotor = {\cf17 new} TalonSRX(frontLeftMotorPort);\par
 00039         frontRightMotor = {\cf17 new} TalonSRX(frontRightMotorPort);\par
@@ -1453,6 +1474,14 @@ Definition at line {\b 36} of file {\b MecaDrive.java}.}\par
 00042         System.out.println({\cf22 "Hello World"});\par
 00043     \} \par
 >>>>>>> ee51188 (rebase)
+=======
+\pard\plain \s41\li360\widctlpar\adjustright \shading1000\cbpat8 \f2\fs16\cgrid 00061                                                                     \{\par
+00062         frontLeftMotor = {\cf17 new} TalonSRX(frontLeftMotorPort);\par
+00063         frontRightMotor = {\cf17 new} TalonSRX(frontRightMotorPort);\par
+00064         rearLeftMotor = {\cf17 new} TalonSRX(rearLeftMotorPort);\par
+00065         rearRightMotor = {\cf17 new} TalonSRX(rearRightMotorPort);\par
+00066     \} \par
+>>>>>>> ab33c38 (update doxygen)
 }
 }
 {\pard\widctlpar\brdrb\brdrs\brdrw5\brsp20 \adjustright \par}
@@ -2975,8 +3004,8 @@ References {\b frc.robot.subsystems.TankDrive.cyclePIDConstant()}, and {\b frc.r
 {\b 
 void frc.robot.subsystems.TankDrive.cycleMotorDebugMode ()}}
 \par
-{\bkmkstart AAAAAAAACX}
-{\bkmkend AAAAAAAACX}
+{\bkmkstart AAAAAAAADC}
+{\bkmkend AAAAAAAADC}
 {
 \pard\plain \s61\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid 
 \par
