@@ -1,5 +1,9 @@
 # 2023 Drive Base
+<<<<<<< HEAD
 [![CI](https://github.com/CCHS-FIRST-Robotics/2023DriveBase/actions/workflows/main.yml/badge.svg)](https://github.com/CCHS-FIRST-Robotics/2023DriveBase/actions/workflows/main.yml)
+=======
+
+>>>>>>> ca32de5 (copied readme over (I don't know why this didn't happen automatically))
 [Project Board](https://docs.google.com/document/d/15ajK8g77htJsg22ZYEKL1gVa0hAAOZJdVJMOak42eIU/edit?usp=sharing)
 
 ## Contributing
