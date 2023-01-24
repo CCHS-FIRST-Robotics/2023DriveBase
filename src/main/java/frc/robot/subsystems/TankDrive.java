@@ -78,51 +78,7 @@ public class TankDrive extends DriveBase{
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	double maxAngularVel = 53; // determined experimentally
-
-	DifferentialDriveOdometry odometer;
-	AHRS navx;
-
-	// different modes
-	String currentMode;
-	final String DEFAULT_MODE = "DEFAULT";
-	final String DEBUG_MODE = "DEBUG";
-	final String PID_TUNING_MODE = "PIDTUNING";
-
-	// debug mode variables
-    int debugEnabledWheel = 0;
-
-	// Stop mode variables
-
-	// to save the last velocities so the robot can slow down
-	double slowingLeftVel = 0;
-	double slowingRightVel = 0;
-
-	// this makes the left and right vel scope include the function that sets
-	// the slowing values so the function can use them
-	double leftVel;
-	double rightVel;
-
-	// PID variables
-
-	// amount to increment constant during PID Tuning Mode
-	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
-
-	// PID constants
-	double[] PIDConstants = {1, 0, 0}; // kP, kI, kD
-
-	// Upper bound for PID constants
-	double[] PIDMaximums = {2, 1, 1};
 	
-	PIDController leftPID;
-	PIDController rightPID;
-	
-	// current constant to be tuned
-	int currentPIDConstant = 0; // 0 = kP, 1 = kI, 2 = kD
-
-	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
-	boolean increasingPIDConstant = true;
-
 	double maxAngularVel = 53; // determined experimentally
 
 	/**
@@ -426,69 +382,6 @@ public class TankDrive extends DriveBase{
 		} else if (currentPIDConstant == 1) {
 			leftPID.setI(PIDConstants[1]);
 			rightPID.setI(PIDConstants[1]);
-		} else if (currentPIDConstant == 2) {
-			leftPID.setD(PIDConstants[2]);
-			rightPID.setD(PIDConstants[2]);
-		}
-	}
-
-	/**
-	 * PID Tuning Mode: Cycles between the PID constants
-	 */
-	public void cyclePIDConstant() {
-		currentPIDConstant++;
-		currentPIDConstant %= 3;
-		if(currentPIDConstant == 0) {
-			System.out.println("kP Selected");
-		}
-		else if(currentPIDConstant == 1) {
-			System.out.println("kI Selected");
-		}
-		else if(currentPIDConstant == 2) {
-			System.out.println("kD Selected");
-		}
-	}
-
-	/*
-	 * PID Tuning Mode: Toggles between increasing and decreasing the PID constants on each increment
-	 */
-	public void toggleDecreasingPIDIncrement() {
-		if(increasingPIDConstant) {
-			increasingPIDConstant = false;
-			System.out.println("Decreasing PID Constants");
-		} else {
-			increasingPIDConstant = true;
-			System.out.println("Increasing PID Constants");
-		}
-	}
-
-	public void printPIDConstants() {
-		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
-	}
-
-	/**
-	 * PID Tuning Mode: Increments the selected PID constant
-	 */
-	public void incrementPIDConstant() {
-		if(increasingPIDConstant) {
-			PIDConstants[currentPIDConstant] += PIDIncrements[currentPIDConstant];
-		} else {
-			PIDConstants[currentPIDConstant] -= PIDIncrements[currentPIDConstant];
-		}
-		// make sure constants are in [0, constantMax]
-		PIDConstants[currentPIDConstant] = Math.min(PIDConstants[currentPIDConstant], PIDMaximums[currentPIDConstant]);
-		PIDConstants[currentPIDConstant] = Math.max(PIDConstants[currentPIDConstant], 0);
-
-		// print PID constants
-		System.out.println("kP: " + PIDConstants[0] + ", kI: " + PIDConstants[1] + ", kD: " + PIDConstants[2]);
-
-		// set PID constant in the PID controllers
-		if(currentPIDConstant == 0) {
-			leftPID.setP(PIDConstants[0]);
-			rightPID.setP(PIDConstants[0]);
-		} else if (currentPIDConstant == 1) {
-			leftPID.setP(PIDConstants[1]);
-			rightPID.setP(PIDConstants[1]);
 		} else if (currentPIDConstant == 2) {
 			leftPID.setD(PIDConstants[2]);
 			rightPID.setD(PIDConstants[2]);
