@@ -1,0 +1,465 @@
+\hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive}{}\doxysection{frc.\+robot.\+subsystems.\+Meca\+Drive Class Reference}
+\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive}\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae119368705c142049296275748376227}{Meca\+Drive}} (int front\+Left\+Motor\+Port, int front\+Right\+Motor\+Port, int rear\+Left\+Motor\+Port, int rear\+Right\+Motor\+Port)
+\begin{DoxyCompactList}\small\item\em Constructor for Mecanum Drive Class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a4a63dfffbc472878244e3e7dec539f05}{drive}} (double left\+AnalogX, double left\+AnalogY, double right\+AnalogX, double right\+AnalogY)
+\begin{DoxyCompactList}\small\item\em drive the robot using controller inputs \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a957a2ff8c710360b5a0811f74c3a7b0e}{increase\+Speed\+Bracket}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ad57fb5ac245bdeeebe35db83016c62d3}{decrease\+Speed\+Bracket}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0f4912d79c670118f12643378b7346b0}{turn\+On\+Default\+Mode}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5d209e2da986229d31e3d8c04f73f515}{turn\+On\+Debug\+Mode}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae0c5f7e7754a51af6f40686d7194fed6}{turn\+On\+Stop\+Mode}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0c618e0cf128d15c9ab60d59de83cb1f}{toggle\+Debug\+Mode}} ()
+\item 
+void \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5aef7f2af036768e69267bc3dde179c1}{cycle\+Wheel\+Debug\+Mode}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a85b9b0f0dab71815fd4f081af92e1aaa}{combine\+Speeds}} (double left\+AnalogX, double left\+AnalogY, double right\+AnalogX, double right\+AnalogY)
+\begin{DoxyCompactList}\small\item\em Process the controller input into speeds for mecanum wheels. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a3c1c70c54057eda834ba2f1adc580fe0}{slow\+Down}} (double\mbox{[}$\,$\mbox{]} input\+Velocity)
+\begin{DoxyCompactList}\small\item\em This will return a value lower than the input, and it is used to slow down the motors during stop mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00010}{10}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae119368705c142049296275748376227}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae119368705c142049296275748376227}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!MecaDrive@{MecaDrive}}
+\index{MecaDrive@{MecaDrive}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{MecaDrive()}{MecaDrive()}}
+{\footnotesize\ttfamily frc.\+robot.\+subsystems.\+Meca\+Drive.\+Meca\+Drive (\begin{DoxyParamCaption}\item[{int}]{front\+Left\+Motor\+Port,  }\item[{int}]{front\+Right\+Motor\+Port,  }\item[{int}]{rear\+Left\+Motor\+Port,  }\item[{int}]{rear\+Right\+Motor\+Port }\end{DoxyParamCaption})}
+
+
+
+Constructor for Mecanum Drive Class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Left\+Motor\+Port} & \\
+\hline
+{\em rear\+Left\+Motor\+Port} & \\
+\hline
+{\em front\+Right\+Motor\+Port} & \\
+\hline
+{\em rear\+Right\+Motor\+Port} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00060}{60}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ frontLeftMotor\ =\ \textcolor{keyword}{new}\ TalonSRX(frontLeftMotorPort);}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ frontRightMotor\ =\ \textcolor{keyword}{new}\ TalonSRX(frontRightMotorPort);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ rearLeftMotor\ =\ \textcolor{keyword}{new}\ TalonSRX(rearLeftMotorPort);}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ rearRightMotor\ =\ \textcolor{keyword}{new}\ TalonSRX(rearRightMotorPort);}
+\DoxyCodeLine{00066\ \ \ \ \ \}\ }
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a85b9b0f0dab71815fd4f081af92e1aaa}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a85b9b0f0dab71815fd4f081af92e1aaa}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!combineSpeeds@{combineSpeeds}}
+\index{combineSpeeds@{combineSpeeds}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{combineSpeeds()}{combineSpeeds()}}
+{\footnotesize\ttfamily double\mbox{[}$\,$\mbox{]} frc.\+robot.\+subsystems.\+Meca\+Drive.\+combine\+Speeds (\begin{DoxyParamCaption}\item[{double}]{left\+AnalogX,  }\item[{double}]{left\+AnalogY,  }\item[{double}]{right\+AnalogX,  }\item[{double}]{right\+AnalogY }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Process the controller input into speeds for mecanum wheels. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em left\+AnalogX} & \\
+\hline
+{\em left\+AnalogY} & \\
+\hline
+{\em right\+AnalogX} & \\
+\hline
+{\em right\+AnalogY} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array of all processed speeds \{front left, front right, back left, back right\} 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00171}{171}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ leftAnalogY\ *=\ verticalSpeedMultiplier;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ leftAnalogX\ *=\ horizontalSPeedMultiplier;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ arrays\ for\ wheel\ speeds\ (percents)}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1st\ is\ front\ left,\ 2nd\ is\ front\ right,\ 3rd\ is\ back\ left,\ 4th\ is\ back\ right}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}[]\ verticalSpeeds\ =\ \{leftAnalogY,\ leftAnalogY,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAnalogY,\ leftAnalogY\};}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ negatives\ due\ to\ wheels\ going\ in\ opposite\ directions\ during\ left\ or\ right\ translation}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}[]\ horizontalSpeeds\ =\ \{-\/1\ *\ leftAnalogX,\ leftAnalogX,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAnalogX,\ -\/1\ *\ leftAnalogX\};}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ and\ right\ wheels\ should\ go\ different\ directions\ to\ rotate\ the\ robot}}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}[]\ rotationSpeeds\ =\ \{-\/1\ *\ rightAnalogX,\ rightAnalogX,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1\ *\ rightAnalogX,\ rightAnalogX\};}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ so\ these\ could\ exceed\ 1\ (not\ good;\ we\ cannot\ run\ the\ motors\ at\ over\ 100\%)}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ we\ will\ use\ the\ maximum\ speed\ to\ scale\ all\ the\ other\ speeds\ to\ something\ below\ 1}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 4;\ i\ ++)}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ combinedSpeeds[i]\ =\ verticalSpeeds[i]\ +\ horizontalSpeeds[i]\ +\ rotationSpeeds[i];}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ the\ max\ of\ the\ above\ speeds\ so\ we\ can\ check\ if\ it\ is\ above\ 1}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ maxSpeed\ =\ Integer.MIN\_VALUE;}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 4;\ i++)}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Math.abs(combinedSpeeds[i])\ >\ maxSpeed)\ maxSpeed\ =\ Math.abs(combinedSpeeds[i]);}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ maxSpeed\ =\ Math.max(1,\ maxSpeed);\ \textcolor{comment}{//\ if\ it\ is\ under\ 1,\ we\ can\ basically\ ignore\ it\ \ \ \ }}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 4;\ i++)\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ scale\ the\ speeds}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ combinedSpeeds[i]\ =\ (1\ /\ maxSpeed)\ *\ combinedSpeeds[i];}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ we\ also\ need\ to\ scale\ the\ speeds\ by\ the\ speed\ multiplier}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ combinedSpeeds[i]\ =\ combinedSpeeds[i]\ *\ speedMultiplier;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ combinedSpeeds;}
+\DoxyCodeLine{00212\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{_meca_drive_8java_source_l00090}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+drive()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5aef7f2af036768e69267bc3dde179c1}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5aef7f2af036768e69267bc3dde179c1}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!cycleWheelDebugMode@{cycleWheelDebugMode}}
+\index{cycleWheelDebugMode@{cycleWheelDebugMode}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{cycleWheelDebugMode()}{cycleWheelDebugMode()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+cycle\+Wheel\+Debug\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00280}{280}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ debugEnabledWheel++;}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ debugEnabledWheel\ \%=\ 4;}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Current\ Wheel:\ "{}}\ +\ debugEnabledWheel);}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ad57fb5ac245bdeeebe35db83016c62d3}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ad57fb5ac245bdeeebe35db83016c62d3}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!decreaseSpeedBracket@{decreaseSpeedBracket}}
+\index{decreaseSpeedBracket@{decreaseSpeedBracket}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{decreaseSpeedBracket()}{decreaseSpeedBracket()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+decrease\+Speed\+Bracket (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00243}{243}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ speedMultiplier\ =\ Math.max(0.2,\ speedMultiplier\ -\/\ 0.1);}
+\DoxyCodeLine{00245\ \ \ \ \ \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a4a63dfffbc472878244e3e7dec539f05}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a4a63dfffbc472878244e3e7dec539f05}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!drive@{drive}}
+\index{drive@{drive}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{drive()}{drive()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+drive (\begin{DoxyParamCaption}\item[{double}]{left\+AnalogX,  }\item[{double}]{left\+AnalogY,  }\item[{double}]{right\+AnalogX,  }\item[{double}]{right\+AnalogY }\end{DoxyParamCaption})}
+
+
+
+drive the robot using controller inputs 
+
+Left analog stick controls translation Right analog stick controls rotation (move it right -\/\texorpdfstring{$>$}{>} rotate clockwise, move it left -\/\texorpdfstring{$>$}{>} rotate counterclockwise)
+
+positive is right/up
+
+
+\begin{DoxyParams}{Parameters}
+{\em left\+AnalogX} & the x position of the left analog stick; range\+: \mbox{[}-\/1, 1\mbox{]} \\
+\hline
+{\em left\+AnalogY} & the y position of the left analog stick; range\+: \mbox{[}-\/1, 1\mbox{]} \\
+\hline
+{\em right\+AnalogX} & the x position of the right analog stick; range\+: \mbox{[}-\/1, 1\mbox{]} \\
+\hline
+{\em right\+AnalogY} & the y position of the right analog stick; range\+: \mbox{[}-\/1, 1\mbox{]}\\
+\hline
+\end{DoxyParams}
+Debug mode\+: \begin{DoxyVerb}When you press the left stick down (left stick button) the robot enters
+\end{DoxyVerb}
+ debug mode (bool debug\+Mode), and the robot will only move power one wheel at a time. Toggle through these wheels by pressing the left stick button more (FL -\/\texorpdfstring{$>$}{>} FR -\/\texorpdfstring{$>$}{>} BL -\/\texorpdfstring{$>$}{>} BR) then, after BR, it will leave debug mode and go back into all wheel drive Add deadzone (stop all movement when input is under a certain amount) Compare joystick distance from normal position (0)
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00090}{90}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ analog\ stick\ controls\ translation}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ right\ analog\ stick\ controls\ rotation}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00096\ \textcolor{comment}{}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Add\ deadzone\ (stop\ all\ movement\ when\ input\ is\ under\ a\ certain\ amount)}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Compare\ joystick\ distance\ from\ normal\ position\ (0)}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ analog\ joystick\ distance\ from\ origin\ from\ pythagoreas\ }}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ leftJoystickDistance\ =\ Math.sqrt(Math.pow(leftAnalogX,\ 2)\ +}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Math.pow(leftAnalogY,\ 2));}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (leftJoystickDistance\ <\ Constants.ANALOG\_DEAD\_ZONE)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ joystick\ is\ within\ the\ deadzone,\ so\ set\ to\ 0}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ leftAnalogX\ =\ 0;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ leftAnalogY\ =\ 0;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (rightAnalogX\ <\ Constants.ANALOG\_DEAD\_ZONE)\{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ rightAnalogX\ =\ 0;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ combinedSpeeds\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a85b9b0f0dab71815fd4f081af92e1aaa}{combineSpeeds}}(leftAnalogX,\ \ leftAnalogY,\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAnalogX,\ rightAnalogY);}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (currentMode)\{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEFAULT\_MODE:}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor\ speeds\ (normal)}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontLeftMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[0]\ *\ -\/1);}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontRightMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[1]);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearLeftMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[2]\ *\ -\/1);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearRightMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[3]);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STOP\_MODE:}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ STOP!!!!!\ set\ motors\ to\ 0}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ slower\ stop}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slowingDownSpeeds\ =\ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a3c1c70c54057eda834ba2f1adc580fe0}{slowDown}}(slowingDownSpeeds);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontLeftMotor.set(ControlMode.PercentOutput,\ slowingDownSpeeds[0]\ *\ -\/1);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontRightMotor.set(ControlMode.PercentOutput,\ slowingDownSpeeds[1]);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearLeftMotor.set(ControlMode.PercentOutput,\ slowingDownSpeeds[2]\ *\ -\/1);}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearRightMotor.set(ControlMode.PercentOutput,\ slowingDownSpeeds[3]);}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DEBUG\_MODE:}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Debug\ mode\ (toggle\ wheels\ with\ left\ stick\ button)}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (debugEnabledWheel)\{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontLeftMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[0]\ *\ -\/1);}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ frontRightMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[1]);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearLeftMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[2]\ *\ -\/1);}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rearRightMotor.set(ControlMode.PercentOutput,\ combinedSpeeds[3]);}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PID\_TUNING\_MODE:}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ nothing\ yet}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{_constants_8java_source_l00041}{frc.\+robot.\+Constants.\+ANALOG\+\_\+\+DEAD\+\_\+\+ZONE}}, \mbox{\hyperlink{_meca_drive_8java_source_l00171}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+combine\+Speeds()}}, and \mbox{\hyperlink{_meca_drive_8java_source_l00221}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+slow\+Down()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a957a2ff8c710360b5a0811f74c3a7b0e}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a957a2ff8c710360b5a0811f74c3a7b0e}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!increaseSpeedBracket@{increaseSpeedBracket}}
+\index{increaseSpeedBracket@{increaseSpeedBracket}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{increaseSpeedBracket()}{increaseSpeedBracket()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+increase\+Speed\+Bracket (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00240}{240}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ speedMultiplier\ =\ Math.min(1,\ speedMultiplier\ +\ 0.1);}
+\DoxyCodeLine{00242\ \ \ \ \ \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a3c1c70c54057eda834ba2f1adc580fe0}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a3c1c70c54057eda834ba2f1adc580fe0}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!slowDown@{slowDown}}
+\index{slowDown@{slowDown}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{slowDown()}{slowDown()}}
+{\footnotesize\ttfamily double\mbox{[}$\,$\mbox{]} frc.\+robot.\+subsystems.\+Meca\+Drive.\+slow\+Down (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{input\+Velocity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+This will return a value lower than the input, and it is used to slow down the motors during stop mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Velocity} & between -\/1 and 1 (double) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the new value (lower) 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00221}{221}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ is\ between\ -\/1\ and\ 1}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}[]\ newVelocity\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{double}[4];}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 4;\ i++)\{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Math.abs(inputVelocity[i])\ >\ Constants.SLOW\_DOWN\_CUTOFF)\{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ velocity\ still\ needs\ to\ be\ reduced\ (magnatude\ is\ above\ cutoff)}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ newVelocity[i]\ =\ inputVelocity[i]\ /\ Constants.SLOW\_DOWN\_FACTOR;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ input\ has\ reached\ cutoff,\ now\ returning\ 0\ speed}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ newVelocity[i]\ =\ 0;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ newVelocity;}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{_constants_8java_source_l00045}{frc.\+robot.\+Constants.\+SLOW\+\_\+\+DOWN\+\_\+\+CUTOFF}}, and \mbox{\hyperlink{_constants_8java_source_l00046}{frc.\+robot.\+Constants.\+SLOW\+\_\+\+DOWN\+\_\+\+FACTOR}}.
+
+
+
+Referenced by \mbox{\hyperlink{_meca_drive_8java_source_l00090}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+drive()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0c618e0cf128d15c9ab60d59de83cb1f}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0c618e0cf128d15c9ab60d59de83cb1f}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!toggleDebugMode@{toggleDebugMode}}
+\index{toggleDebugMode@{toggleDebugMode}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{toggleDebugMode()}{toggleDebugMode()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+toggle\+Debug\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00268}{268}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (debugMode)\{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5d209e2da986229d31e3d8c04f73f515}{turnOnDebugMode}}();}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0f4912d79c670118f12643378b7346b0}{turnOnDefaultMode}}();}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ debugMode\ =\ !debugMode;}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{comment}{//quick\ fix}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}Debug\ Mode:\ "{}}\ +\ debugMode);}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{_meca_drive_8java_source_l00253}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+turn\+On\+Debug\+Mode()}}, and \mbox{\hyperlink{_meca_drive_8java_source_l00247}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+turn\+On\+Default\+Mode()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5d209e2da986229d31e3d8c04f73f515}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a5d209e2da986229d31e3d8c04f73f515}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!turnOnDebugMode@{turnOnDebugMode}}
+\index{turnOnDebugMode@{turnOnDebugMode}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{turnOnDebugMode()}{turnOnDebugMode()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+turn\+On\+Debug\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00253}{253}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEBUG\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ currentMode\ =\ DEBUG\_MODE;}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEBUG\ MODE"{}});}
+\DoxyCodeLine{00257\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{_meca_drive_8java_source_l00268}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+toggle\+Debug\+Mode()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0f4912d79c670118f12643378b7346b0}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_a0f4912d79c670118f12643378b7346b0}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!turnOnDefaultMode@{turnOnDefaultMode}}
+\index{turnOnDefaultMode@{turnOnDefaultMode}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{turnOnDefaultMode()}{turnOnDefaultMode()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+turn\+On\+Default\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00247}{247}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(DEFAULT\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ currentMode\ =\ DEFAULT\_MODE;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}DEFAULT\ MODE"{}});}
+\DoxyCodeLine{00251\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{_meca_drive_8java_source_l00268}{frc.\+robot.\+subsystems.\+Meca\+Drive.\+toggle\+Debug\+Mode()}}.
+
+\mbox{\Hypertarget{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae0c5f7e7754a51af6f40686d7194fed6}\label{classfrc_1_1robot_1_1subsystems_1_1_meca_drive_ae0c5f7e7754a51af6f40686d7194fed6}} 
+\index{frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}!turnOnStopMode@{turnOnStopMode}}
+\index{turnOnStopMode@{turnOnStopMode}!frc.robot.subsystems.MecaDrive@{frc.robot.subsystems.MecaDrive}}
+\doxysubsubsection{\texorpdfstring{turnOnStopMode()}{turnOnStopMode()}}
+{\footnotesize\ttfamily void frc.\+robot.\+subsystems.\+Meca\+Drive.\+turn\+On\+Stop\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_meca_drive_8java_source_l00259}{259}} of file \mbox{\hyperlink{_meca_drive_8java_source}{Meca\+Drive.\+java}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentMode.equals(STOP\_MODE))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ currentMode\ =\ STOP\_MODE;}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ mode\ activated,\ so\ now\ the\ robot\ needs\ to\ slow\ down}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ start\ by\ saving\ the\ last\ left\ and\ right\ velocities\ }}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ slowingDownSpeeds\ =\ combinedSpeeds;}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ System.out.println(\textcolor{stringliteral}{"{}STOP\ MODE"{}});}
+\DoxyCodeLine{00266\ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+robotics/2023\+Drive\+Base/src/main/java/frc/robot/subsystems/\mbox{\hyperlink{_meca_drive_8java}{Meca\+Drive.\+java}}\end{DoxyCompactItemize}
