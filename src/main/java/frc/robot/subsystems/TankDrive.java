@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import javax.print.DocFlavor.STRING;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -24,10 +22,6 @@ import edu.wpi.first.math.MathUtil;
  * 
  */
 public class TankDrive extends DriveBase{
-	
-	// between 0 and 1 - 1 would be full max speed, 0.5 would be half speed, etc
-	double maxSpeed = 0.5;
-
 	// scales the rotational speed of the robot, controlled by the right analog
 	double rotationalSpeedMultiplier = 0.75;
 
@@ -39,13 +33,6 @@ public class TankDrive extends DriveBase{
 
 	DifferentialDriveOdometry odometer;
 	AHRS navx;
-
-	// different modes
-	String currentMode;
-	final String DEFAULT_MODE = "DEFAULT";
-	final String DEBUG_MODE = "DEBUG";
-	final String PID_TUNING_MODE = "PIDTUNING";
-	final String STOP_MODE = "STOP";
 
 	// Stop mode variables
 
@@ -78,7 +65,6 @@ public class TankDrive extends DriveBase{
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
-	
 	double maxAngularVel = 53; // determined experimentally
 
 	/**
