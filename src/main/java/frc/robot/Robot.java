@@ -42,11 +42,12 @@ public class Robot extends TimedRobot {
 
 
     // tank drive initialization
-    // driveBase = createTankDrive();    
+    // driveBase = createTankDrive();
+
     // mecanum drive initialization
     driveBase = createMecanumDrive();
     
-    // // set the dead zone for the controller analog sticks
+    // set the dead zone for the controller analog sticks
     // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
   }
 
@@ -98,53 +99,21 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // TODO: put the driving loop here
-    // TODO: check if buttons are pressed and comment controller mapping
-    if (xboxController.getRightBumperPressed()) driveBase.increaseSpeedBracket();
-    if (xboxController.getLeftBumperPressed()) driveBase.decreaseSpeedBracket();
 
-    // switch between modes (for DPad, 0 is up, and angles go clockwise, so 90 is right)
-    // up
-    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
-    // right
-    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
-    // left
-    if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
-    // down
-    if (xboxController.getPOV() == 180) driveBase.turnONPIDTuningMode();
+    // switch between driving modes
+    checkForModeSwitches();
 
+    // check for button/bumper presses
+    checkForButtonPresses();
 
-
-    // Debug controls
-    if (xboxController.getRightStickButtonPressed()) driveBase.cycleMotorDebugMode();
-
-    // actions of the four button presses
-    if (xboxController.getAButtonPressed()) {
-      driveBase.AButtonPressed();
-    }
-    if (xboxController.getBButtonPressed()) {
-      driveBase.BButtonPressed();
-    }
-    if (xboxController.getXButtonPressed()) {
-      driveBase.XButtonPressed();
-    }
-    if (xboxController.getYButtonPressed()) {
-      driveBase.YButtonPressed();
-    }
-
-    // get analog input from xbox controller
-    double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= xboxController.getLeftY();
-    double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = xboxController.getRightY();
-
-    // process input (determine wheelspeeds)
-    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+    // powers motors based on the analog inputs
+    drive();
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
+
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
@@ -157,6 +126,58 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
+  /**
+   * Switches between different driving modes
+   * For the DPad, 0 is up, and angles go clockwise, so 90 is right
+   */
+  private void checkForModeSwitches() {
+    // up
+    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
+    // right
+    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
+    // left
+    if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
+    // down
+    if (xboxController.getPOV() == 180) driveBase.turnONPIDTuningMode();
+  }
+
+  /**
+   * Checks for button presses and activates their functions
+   */
+  private void checkForButtonPresses() {
+    if (xboxController.getAButtonPressed()) {
+      driveBase.AButtonPressed();
+    }
+    if (xboxController.getBButtonPressed()) {
+      driveBase.BButtonPressed();
+    }
+    if (xboxController.getXButtonPressed()) {
+      driveBase.XButtonPressed();
+    }
+    if (xboxController.getYButtonPressed()) {
+      driveBase.YButtonPressed();
+    }
+    if (xboxController.getLeftBumperPressed()) {
+      driveBase.leftBumperPressed();
+    }
+    if (xboxController.getRightBumperPressed()) {
+      driveBase.rightBumperPressed();
+    }
+  }
+
+  /** 
+   * Powers motors based on the analog inputs
+   */
+  private void drive() {
+    // get analog input from xbox controller
+    double leftAnalogX 	= xboxController.getLeftX();
+    double leftAnalogY 	= xboxController.getLeftY();
+    double rightAnalogX = xboxController.getRightX();
+    double rightAnalogY = xboxController.getRightY();
+
+    // process input (determine wheelspeeds)
+    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+  }
 
   private TankDrive createTankDrive() {
     return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,

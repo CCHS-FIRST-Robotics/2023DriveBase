@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants;
 
@@ -14,7 +14,7 @@ public class MecaDrive extends DriveBase {
     // scaling up horinzontal speed because its slower than the other speeds
     final double horizontalSPeedMultiplier = 2.5;
 
-    TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
+    WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
 	// Stop mode variables
 
@@ -35,10 +35,10 @@ public class MecaDrive extends DriveBase {
      */
     public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
                      int rearLeftMotorPort, int rearRightMotorPort) {
-        frontLeftMotor = new TalonSRX(frontLeftMotorPort);
-        frontRightMotor = new TalonSRX(frontRightMotorPort);
-        rearLeftMotor = new TalonSRX(rearLeftMotorPort);
-        rearRightMotor = new TalonSRX(rearRightMotorPort);
+        frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
+        frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
+        rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
+        rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
     } 
 
     /**
@@ -54,13 +54,9 @@ public class MecaDrive extends DriveBase {
      * @param rightAnalogX the x position of the right analog stick; range: [-1, 1]
      * @param rightAnalogY the y position of the right analog stick; range: [-1, 1]
 	 * 
-	 * Debug mode:
-	 * 
-	 * 	When you press the left stick down (left stick button) the robot enters
-	 * debug mode (bool debugMode), and the robot will only move power one wheel
-	 * at a time. Toggle through these wheels by pressing the left stick button 
-	 * more (FL -> FR -> BL -> BR) then, after BR, it will leave debug mode and 
-	 * go back into all wheel drive
+	 * In Debug Mode, the robot will only power one wheel at a time.
+	 * Toggle through these wheels by pressing A.
+	 * Wheel Order: FL -> FR -> BL -> BR -> FL -> ...
 	 * 
      */
     public void drive(double leftAnalogX, double leftAnalogY,
@@ -133,6 +129,58 @@ public class MecaDrive extends DriveBase {
 		}
     }
 
+	@Override
+	public void printControlsOfCurrentMode() {
+		System.out.println("Controls:");
+		switch(currentMode) {
+			case DEFAULT_MODE:
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case DEBUG_MODE:
+				System.out.println("A: Cycle active motor");
+				System.out.println("B: Print current active motor");
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case STOP_MODE:
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case PID_TUNING_MODE:
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+		}
+	}
+
+	@Override
+	public void AButtonPressed() {
+		switch(currentMode) {
+			case DEBUG_MODE:
+				cycleMotor();
+				break;
+		}
+	}
+
+	@Override
+	public void BButtonPressed() {
+		switch(currentMode) {
+			case DEBUG_MODE:
+				printActiveMotorDebugMode();
+				break;
+		}
+	}
+
+	@Override
+	public void leftBumperPressed() {
+		decreaseSpeedBracket();
+	}
+
+	@Override
+	public void rightBumperPressed() {
+		increaseSpeedBracket();
+	}
 
 	/**
 	 * 
@@ -220,8 +268,13 @@ public class MecaDrive extends DriveBase {
 		System.out.println("STOP MODE");
 	}
 
-    // cycles through the activated wheels during debug mode
-    public void cycleMotorDebugMode() {
+	// prints the number of the currently activated motor during debug mode
+	public void printActiveMotorDebugMode() {
+		System.out.println("Current Motor: " + debugEnabledMotor);
+	}
+
+    // cycles through the activated motors during debug mode
+    public void cycleMotor() {
         debugEnabledMotor++;
         debugEnabledMotor %= 4;
         System.out.println("Current Motor: " + debugEnabledMotor);
