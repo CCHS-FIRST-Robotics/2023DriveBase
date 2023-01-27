@@ -12,7 +12,7 @@ public class MecaDrive extends DriveBase {
     final double verticalSpeedMultiplier = 0.8;
 
     // scaling up horinzontal speed because its slower than the other speeds
-    final double horizontalSPeedMultiplier = 2.5;
+    final double horizontalSPeedMultiplier = 0.8;
 
     WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
@@ -79,7 +79,7 @@ public class MecaDrive extends DriveBase {
 			leftAnalogX = 0;
 			leftAnalogY = 0;
 		}
-		if (rightAnalogX < Constants.ANALOG_DEAD_ZONE){
+		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
 			rightAnalogX = 0;
 		}					
 

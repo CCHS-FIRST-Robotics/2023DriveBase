@@ -6,11 +6,11 @@ public abstract class DriveBase {
 	double speedMultiplier = 0.6;
 
 	// different modes
-	String currentMode;
 	static final String DEFAULT_MODE = "DEFAULT"; // regular driving
 	static final String DEBUG_MODE = "DEBUG"; // spin only one motor at a time
 	static final String PID_TUNING_MODE = "PIDTUNING"; // tune PID constants
 	static final String STOP_MODE = "STOP"; // stop the robot
+	String currentMode = DEFAULT_MODE;
 
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
@@ -49,14 +49,18 @@ public abstract class DriveBase {
 	public void turnOnDefaultMode() {
 		if(currentMode.equals(DEFAULT_MODE)) return;
 		currentMode = DEFAULT_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: DEFAULT Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 
 	public void turnOnDebugMode() {
 		if(currentMode.equals(DEBUG_MODE)) return;
         currentMode = DEBUG_MODE;
+		System.out.println("********************************");
         System.out.println("Current Mode: DEBUG Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
     }
 
@@ -68,14 +72,18 @@ public abstract class DriveBase {
 	public void turnOnStopMode() {
 		if(currentMode.equals(STOP_MODE)) return;
 		currentMode = STOP_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: STOP Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 
 	public void turnONPIDTuningMode() {
 		if(currentMode.equals(PID_TUNING_MODE)) return;
 		currentMode = PID_TUNING_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: PID TUNING Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 

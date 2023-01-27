@@ -37,8 +37,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    CameraServer.startAutomaticCapture(0);
-    CameraServer.startAutomaticCapture(1);
+    // CameraServer.startAutomaticCapture(0);
+    // CameraServer.startAutomaticCapture(1);
 
 
     // tank drive initialization
