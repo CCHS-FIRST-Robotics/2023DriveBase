@@ -29,10 +29,10 @@ public class Constants {
 	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_PORT = 2;
-	public static final int FL_TALON_PORT = 8;
-	public static final int RR_TALON_PORT = 10;
-	public static final int RL_TALON_PORT = 4;
+	public static final int FR_TALON_PORT = 1; // 2
+	public static final int FL_TALON_PORT = 2; // 8
+	public static final int RR_TALON_PORT = 3; // 10
+	public static final int RL_TALON_PORT = 4; // 4
 
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM

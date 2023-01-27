@@ -91,6 +91,7 @@ public class TankDrive extends DriveBase{
 		resetPosition();
 	}
 	
+	
 	/**
 	 * Drive the robot tank base from controller input 
 	 * 
@@ -250,12 +251,6 @@ public class TankDrive extends DriveBase{
 		System.out.println("STOP MODE");
 	}
 
-    public void cycleMotorDebugMode() {
-        debugEnabledMotor++;
-        debugEnabledMotor %= 4;
-        System.out.println("Current Motor: " + debugEnabledMotor);
-    }
-
 	public void updateRobotVelocity() {
 		
 		// get rotational speeds from the motors on each side
@@ -292,16 +287,44 @@ public class TankDrive extends DriveBase{
 	}
 
 	@Override
+	public void printControlsOfCurrentMode() {
+		System.out.println("Controls:");
+		switch(currentMode) {
+			case DEFAULT_MODE:
+				System.out.println("A: Print position");
+				System.out.println("B: Reset position to 0");
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case DEBUG_MODE:
+				System.out.println("A: Cycle active motor");
+				System.out.println("B: Print current active motor");
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case STOP_MODE:
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+			case PID_TUNING_MODE:
+				System.out.println("A: Increment selected PID constant");
+				System.out.println("B: Cycle selected PID constant");
+				System.out.println("X: Toggle between increasing/decreasing PID constant");
+				System.out.println("Y: Print PID constant");
+				System.out.println("Left Bracket: Decrease speed multiplier");
+				System.out.println("Right Bracket: Increase speed multiplier");
+				break;
+		}
+	}
+
+	@Override
 	public void AButtonPressed() {
 		switch(currentMode) {
 			case DEFAULT_MODE:
 				printPosition();
 				break;
 			case DEBUG_MODE:
-				printPosition();	
-				break;
-			case STOP_MODE:
-				printPosition();	
+				cycleMotor();
 				break;
 			case PID_TUNING_MODE:
 				incrementPIDConstant();
@@ -316,10 +339,7 @@ public class TankDrive extends DriveBase{
 				resetPosition();
 				break;
 			case DEBUG_MODE:
-				resetPosition();	
-				break;
-			case STOP_MODE:
-				resetPosition();
+				printActiveMotorDebugMode();
 				break;
 			case PID_TUNING_MODE:
 				cyclePIDConstant();
@@ -344,6 +364,28 @@ public class TankDrive extends DriveBase{
 				break;
 		}
 	}
+
+	@Override
+	public void leftBumperPressed() {
+		decreaseSpeedBracket();
+	}
+
+	@Override
+	public void rightBumperPressed() {
+		increaseSpeedBracket();
+	}
+
+	// prints the number of the currently activated motor during debug mode
+	public void printActiveMotorDebugMode() {
+		System.out.println("Current Motor: " + debugEnabledMotor);
+	}
+
+    public void cycleMotor() {
+        debugEnabledMotor++;
+        debugEnabledMotor %= 4;
+        System.out.println("Current Motor: " + debugEnabledMotor);
+    }
+
 
 	/**
 	 * PID Tuning Mode: Increments the selected PID constant
