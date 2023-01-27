@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
   }
 
   private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_PORT, Constants.FR_TALON_PORT,
-                         Constants.RL_TALON_PORT, Constants.RR_TALON_PORT);
+    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
+                         Constants.RL_TALON_ID, Constants.RR_TALON_ID);
   }
 }

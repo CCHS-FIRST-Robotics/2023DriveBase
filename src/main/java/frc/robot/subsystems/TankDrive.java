@@ -81,7 +81,7 @@ public class TankDrive extends DriveBase{
 		rightVictor = new VictorSPX(rightVictorPort);
 		sparkMaxEncoder = leftSparkMax.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, Constants.ENCODER_CPR);
 
-		currentMode = DEFAULT_MODE;
+		currentMode = Mode.DEFAULT_MODE;
 
 		leftPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
 		rightPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
@@ -132,7 +132,7 @@ public class TankDrive extends DriveBase{
 		// rightTalon.set(ControlMode.PercentOutput, rightVel);
 		// rightVictor.set(ControlMode.PercentOutput, rightVel);
 		// set the motor speeds
-        if(currentMode.equals(DEFAULT_MODE) || currentMode.equals(PID_TUNING_MODE)) {
+        if(currentMode == Mode.DEFAULT_MODE || currentMode == Mode.PID_TUNING_MODE) {
 			leftVictor.set(ControlMode.PercentOutput, -1 *leftVel);
 			leftSparkMax.set(leftVel);
 			rightTalon.set(ControlMode.PercentOutput, rightVel);
@@ -169,7 +169,7 @@ public class TankDrive extends DriveBase{
 
 			
 
-        } else if (currentMode.equals(DEBUG_MODE)) {
+        } else if (currentMode == Mode.DEBUG_MODE) {
             switch (debugEnabledMotor){
                 case 0:
                     leftVictor.set(ControlMode.PercentOutput, -1 * leftVel);
@@ -184,7 +184,7 @@ public class TankDrive extends DriveBase{
                     leftSparkMax.set(leftVel);
                     break;
             }
-        } else if (currentMode.equals(STOP_MODE)){
+        } else if (currentMode == Mode.STOP_MODE){
 			// STOP!!!!! set motors to 0
 			// slower stop
 			slowingLeftVel = slowDown(slowingLeftVel);
@@ -242,8 +242,8 @@ public class TankDrive extends DriveBase{
 
 	@Override
 	public void turnOnStopMode() {
-		if(currentMode.equals(STOP_MODE)) return;
-		currentMode = STOP_MODE;
+		if(currentMode == Mode.STOP_MODE) return;
+		currentMode = Mode.STOP_MODE;
 		// Stop mode activated, so now the robot needs to slow down
 		// start by saving the last left and right velocities 
 		slowingLeftVel = leftVel;
@@ -329,6 +329,8 @@ public class TankDrive extends DriveBase{
 			case PID_TUNING_MODE:
 				incrementPIDConstant();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -344,6 +346,8 @@ public class TankDrive extends DriveBase{
 			case PID_TUNING_MODE:
 				cyclePIDConstant();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -353,6 +357,8 @@ public class TankDrive extends DriveBase{
 			case PID_TUNING_MODE:
 				toggleDecreasingPIDIncrement();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -361,6 +367,8 @@ public class TankDrive extends DriveBase{
 		switch(currentMode) {
 			case PID_TUNING_MODE:
 				printPIDConstants();
+				break;
+			default:
 				break;
 		}
 	}

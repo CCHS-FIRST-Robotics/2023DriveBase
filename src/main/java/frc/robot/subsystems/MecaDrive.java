@@ -67,21 +67,26 @@ public class MecaDrive extends DriveBase {
 		
 
 		 /**
-		 * Add deadzone (stop all movement when input is under a certain amount)
-		 * Compare joystick distance from normal position (0)
+		 * Add deadbands (stop all movement when input is under a certain amount)
+		 * This allows you to go online in one direction more easily because it 
+		 * prevents slight (unintentional) inputs in the perpendicular direction
 		 */
-		
-		// Left analog joystick distance from origin from pythagoreas 
-		double leftJoystickDistance = Math.sqrt(Math.pow(leftAnalogX, 2) +
-									 			Math.pow(leftAnalogY, 2));
-		if (leftJoystickDistance < Constants.ANALOG_DEAD_ZONE) {
-			// joystick is within the deadzone, so set to 0
-			leftAnalogX = 0;
+		if (Math.abs(leftAnalogY) < Constants.ANALOG_DEAD_ZONE) {
 			leftAnalogY = 0;
 		}
+		
+		if (Math.abs(leftAnalogX) < Constants.ANALOG_DEAD_ZONE) {
+			leftAnalogX = 0;
+		}
+
 		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
 			rightAnalogX = 0;
 		}					
+
+		// cube inputs to make fine control of the robot easier
+		leftAnalogX = Math.pow(leftAnalogX, 3);
+		leftAnalogY = Math.pow(leftAnalogY, 3);
+		rightAnalogX = Math.pow(rightAnalogX, 3);
 
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
@@ -160,6 +165,8 @@ public class MecaDrive extends DriveBase {
 			case DEBUG_MODE:
 				cycleMotor();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -168,6 +175,8 @@ public class MecaDrive extends DriveBase {
 		switch(currentMode) {
 			case DEBUG_MODE:
 				printActiveMotorDebugMode();
+				break;
+			default:
 				break;
 		}
 	}
@@ -260,8 +269,8 @@ public class MecaDrive extends DriveBase {
 
 	@Override
 	public void turnOnStopMode() {
-		if(currentMode.equals(STOP_MODE)) return;
-		currentMode = STOP_MODE;
+		if(currentMode == Mode.STOP_MODE) return;
+		currentMode = Mode.STOP_MODE;
 		// Stop mode activated, so now the robot needs to slow down
 		// start by saving the last left and right velocities 
 		slowingDownSpeeds = combinedSpeeds;
