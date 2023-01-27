@@ -87,7 +87,7 @@ public class TankDrive extends DriveBase{
 		rightPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
 
 		navx = new AHRS(SPI.Port.kMXP);
-		odometer = new DifferentialDriveOdometry(new Rotation2d());
+		odometer = new DifferentialDriveOdometry(new Rotation2d(), 0, 0);
 		resetPosition();
 	}
 	
@@ -415,7 +415,7 @@ public class TankDrive extends DriveBase{
 		navx.resetDisplacement();
 		sparkMaxEncoder.setPosition(0);
 		rightTalon.setSelectedSensorPosition(0);
-		odometer.resetPosition(new Pose2d(), new Rotation2d());
+		odometer.resetPosition(new Rotation2d(), 0, 0, new Pose2d());
 	}
 
 	public void printPosition()
