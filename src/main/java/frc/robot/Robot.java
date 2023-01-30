@@ -29,7 +29,6 @@ public class Robot extends TimedRobot {
   private DriveBase driveBase;
   Limelight limelight = new Limelight();
   Sensors sensors = new Sensors();
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -58,12 +57,15 @@ public class Robot extends TimedRobot {
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
+   * 
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
+    limelight.smartDash();
+    limelight.printVal();
+    System.out.print("hello wo5rld");
   }
 
   /**
