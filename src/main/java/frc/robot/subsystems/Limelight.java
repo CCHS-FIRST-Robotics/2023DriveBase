@@ -13,25 +13,27 @@ public class Limelight {
 
     public void limelight() {
 
-        NetworkTable table   = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
-        
+
         x    = tx.getDouble(0.0);
         y    = ty.getDouble(0.0);
         area = ta.getDouble(0.0);
 
     }
 
-    public void printVal(){
+    public void printVal() {
         System.out.println("limeval" + x);
-
     }
 
-    public void smartDash(){
+    public void smartDash() {
+
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
+
     }
 }
