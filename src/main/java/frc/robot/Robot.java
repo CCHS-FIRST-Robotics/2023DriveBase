@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
   private DriveBase driveBase;
   Limelight limelight = new Limelight();
+  Sensors sensors = new Sensors();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -173,13 +175,17 @@ public class Robot extends TimedRobot {
    */
   private void drive() {
     // get analog input from xbox controller
-    double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= xboxController.getLeftY();
-    double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = xboxController.getRightY();
+    double leftAnalogX 	= controllerExp(xboxController.getLeftX());
+    double leftAnalogY 	= controllerExp(xboxController.getLeftY());
+    double rightAnalogX = controllerExp(xboxController.getRightX());
+    double rightAnalogY = controllerExp(xboxController.getRightY());
 
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+  }
+
+  private double controllerExp(analog) {
+    return Constants.CONTROLLER_POLY_K * Math.pow(analog, Constants.CONTROLLER_POLY_DEGREE)
   }
 
   private TankDrive createTankDrive() {
