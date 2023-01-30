@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
   private DriveBase driveBase;
-
+  Limelight limelight = new Limelight();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     // CameraServer.startAutomaticCapture(0);
     // CameraServer.startAutomaticCapture(1);
 
+    limelight.printVal();
 
     // tank drive initialization
     // driveBase = createTankDrive();
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
     // mecanum drive initialization
     driveBase = createMecanumDrive();
     
+
     // set the dead zone for the controller analog sticks
     // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
   }
@@ -59,7 +61,8 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -188,4 +191,5 @@ public class Robot extends TimedRobot {
     return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
                          Constants.RL_TALON_ID, Constants.RR_TALON_ID);
   }
+
 }
