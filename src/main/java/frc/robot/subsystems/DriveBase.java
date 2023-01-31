@@ -17,6 +17,9 @@ public abstract class DriveBase {
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
 
+	// sensors object
+	public Sensors sensors;
+
 	/**
 	 * Drive the robot with controller input
 	 * 
