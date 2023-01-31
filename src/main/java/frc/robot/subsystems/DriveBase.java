@@ -18,7 +18,7 @@ public abstract class DriveBase {
 	int debugEnabledMotor = 0;
 
 	// sensors object
-	public Sensors sensors;
+	public Sensors sensors = new Sensors();
 
 	/**
 	 * Drive the robot with controller input
