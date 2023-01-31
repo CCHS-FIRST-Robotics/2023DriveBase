@@ -176,7 +176,8 @@ public class Robot extends TimedRobot {
     double rightAnalogY = xboxController.getRightY();
 
     // process input (determine wheelspeeds)
-    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+    // driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+    driveBase.driveWPI(leftAnalogX, leftAnalogY, rightAnalogX);
   }
 
   private TankDrive createTankDrive() {

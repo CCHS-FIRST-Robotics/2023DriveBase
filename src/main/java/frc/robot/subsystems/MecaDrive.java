@@ -3,27 +3,32 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import java.lang.Math;
 
 public class MecaDrive extends DriveBase {
     // scaling down vertical speed because its faster than other speeds
-    final double verticalSpeedMultiplier = 0.8;
+    private final double verticalSpeedMultiplier = 0.8;
 
     // scaling up horinzontal speed because its slower than the other speeds
-    final double horizontalSPeedMultiplier = 2.5;
+    private final double horizontalSPeedMultiplier = 0.8;
 
-    WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
+    private WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
 	// Stop mode variables
 
 	// to save the last velocities so the robot can slow down
-	double[] slowingDownSpeeds = new double[4];
+	private double[] slowingDownSpeeds = new double[4];
 
 	// this makes the left and right vel scope include the function that sets
 	// the slowing values so the function can use them
-	double[] combinedSpeeds = new double[4];
+	private double[] combinedSpeeds = new double[4];
+
+	private MecanumDrive mDrive;
+
 
     /**
      * Constructor for Mecanum Drive Class
@@ -39,6 +44,8 @@ public class MecaDrive extends DriveBase {
         frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
         rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+
+		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
     } 
 
     /**
@@ -79,7 +86,7 @@ public class MecaDrive extends DriveBase {
 			leftAnalogX = 0;
 			leftAnalogY = 0;
 		}
-		if (rightAnalogX < Constants.ANALOG_DEAD_ZONE){
+		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
 			rightAnalogX = 0;
 		}					
 
@@ -128,6 +135,17 @@ public class MecaDrive extends DriveBase {
 				break;
 		}
     }
+
+
+	/**
+	 * WPI_LIB Drive Function
+	 * 
+	 * @param x empty argument meant for differentiating the two drive mthods. Does nothing, input any integer
+	 * 
+	 */
+	public void driveWPI(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
+		mDrive.driveCartesian(leftAnalogY, rightAnalogX, rightAnalogX);
+	}
 
 	@Override
 	public void printControlsOfCurrentMode() {
@@ -279,4 +297,7 @@ public class MecaDrive extends DriveBase {
         debugEnabledMotor %= 4;
         System.out.println("Current Motor: " + debugEnabledMotor);
     }
+
 }
+
+
