@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   Limelight limelight = new Limelight();
   Sensors sensors = new Sensors();
   double test = 0;
+  long counter = 0; // for calling functions every n loops
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -121,6 +122,12 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     drive();
+
+    if (counter % 10 == 0) {
+      driveBase.sensors.getValues();
+      driveBase.sensors.pushShuffleboard();
+    }
+    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
