@@ -11,13 +11,15 @@ public class Limelight {
     double y;
     double area;
 
+    NetworkTableEntry tx, ty, ta;
+
     public void limelight() {
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-        NetworkTableEntry tx = table.getEntry("tx");
-        NetworkTableEntry ty = table.getEntry("ty");
-        NetworkTableEntry ta = table.getEntry("ta");
+        tx = table.getEntry("tx");
+        ty = table.getEntry("ty");
+        ta = table.getEntry("ta");
 
         x    = tx.getDouble(0.0);
         y    = ty.getDouble(0.0);
@@ -26,7 +28,7 @@ public class Limelight {
     }
 
     public void printVal() {
-        System.out.println("limeval" + x);
+        System.out.println("limeval " + x);
     }
 
     public void smartDash() {

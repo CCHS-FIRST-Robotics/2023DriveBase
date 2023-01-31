@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     limelight.smartDash();
     limelight.printVal();
-    System.out.print("hello wo5rld");
+    //System.out.print("hello wo5rld");
   }
 
   /**
