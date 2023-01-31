@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
   private DriveBase driveBase;
   Limelight limelight = new Limelight();
-  
+  Sensors sensors = new Sensors();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     // CameraServer.startAutomaticCapture(0);
     // CameraServer.startAutomaticCapture(1);
 
-    // limelight.smartDash();
+    limelight.printVal();
 
     // tank drive initialization
     // driveBase = createTankDrive();
@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * 
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
@@ -176,13 +177,17 @@ public class Robot extends TimedRobot {
    */
   private void drive() {
     // get analog input from xbox controller
-    double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= xboxController.getLeftY();
-    double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = xboxController.getRightY();
+    double leftAnalogX 	= controllerExp(xboxController.getLeftX());
+    double leftAnalogY 	= controllerExp(xboxController.getLeftY());
+    double rightAnalogX = controllerExp(xboxController.getRightX());
+    double rightAnalogY = controllerExp(xboxController.getRightY());
 
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+  }
+
+  private double controllerExp(analog) {
+    return Constants.CONTROLLER_POLY_K * Math.pow(analog, Constants.CONTROLLER_POLY_DEGREE)
   }
 
   private TankDrive createTankDrive() {
