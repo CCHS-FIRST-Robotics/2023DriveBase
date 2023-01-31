@@ -7,15 +7,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
 
-    double x;
-    double y;
-    double area;
-
+    double x, y, area;
     NetworkTableEntry tx, ty, ta;
+    NetworkTable table;
+    double test2 = 0;
 
     public void limelight() {
 
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        table = NetworkTableInstance.getDefault().getTable("limelight");
 
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
@@ -37,5 +36,10 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
 
+    }
+
+    public void test(){
+        SmartDashboard.putNumber("test2", test2);
+        test2 += 1;
     }
 }

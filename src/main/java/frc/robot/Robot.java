@@ -42,8 +42,8 @@ public class Robot extends TimedRobot {
     // CameraServer.startAutomaticCapture(0);
     // CameraServer.startAutomaticCapture(1);
 
-    limelight.printVal();
-    limelight.smartDash();
+    //limelight.printVal();
+    //limelight.smartDash();
 
     // tank drive initialization
     // driveBase = createTankDrive();
@@ -66,12 +66,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     
-    SmartDashboard.putNumber("test", test);
+    // SmartDashboard.putNumber("test", test);
     limelight.smartDash();
-    limelight.printVal();
-    System.out.println("hello wo5rld");
+    // limelight.test();
+    // System.out.println("hello wo5rld");
 
-    test += 1;
+    // test += 1;
   }
 
   /**
