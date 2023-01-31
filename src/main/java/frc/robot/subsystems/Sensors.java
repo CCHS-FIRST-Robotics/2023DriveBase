@@ -23,13 +23,6 @@ public class Sensors {
 		heading = navx.getFusedHeading();
 	}
 
-	public void pushNetworkTables() {
-		NetworkTable table   = NetworkTableInstance.getDefault().getTable("numbers");
-		table.putNumber("NavX", x);
-		table.putNumber("NavY", y);
-		table.putNumber("NavZ", z);
-	}
-
 	public void pushShuffleboard() {
 		SmartDashboard.putNumber("NavX", x);
         SmartDashboard.putNumber("NavY", y);

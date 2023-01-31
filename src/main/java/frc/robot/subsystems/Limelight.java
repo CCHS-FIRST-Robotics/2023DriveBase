@@ -21,9 +21,9 @@ public class Limelight {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
-        x    = tx.getDouble(0.0);
-        y    = ty.getDouble(0.0);
-        area = ta.getDouble(0.0);
+        x    = tx.getDouble(0);
+        y    = ty.getDouble(0);
+        area = ta.getDouble(0);
 
     }
 

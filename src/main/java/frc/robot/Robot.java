@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   private DriveBase driveBase;
   Limelight limelight = new Limelight();
   Sensors sensors = new Sensors();
+  double test = 0;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
     // CameraServer.startAutomaticCapture(1);
 
     limelight.printVal();
+    limelight.smartDash();
 
     // tank drive initialization
     // driveBase = createTankDrive();
@@ -63,9 +65,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    
+    SmartDashboard.putNumber("test", test);
     limelight.smartDash();
     limelight.printVal();
-    //System.out.print("hello wo5rld");
+    System.out.println("hello wo5rld");
+
+    test += 1;
   }
 
   /**
@@ -177,17 +183,13 @@ public class Robot extends TimedRobot {
    */
   private void drive() {
     // get analog input from xbox controller
-    double leftAnalogX 	= controllerExp(xboxController.getLeftX());
-    double leftAnalogY 	= controllerExp(xboxController.getLeftY());
-    double rightAnalogX = controllerExp(xboxController.getRightX());
-    double rightAnalogY = controllerExp(xboxController.getRightY());
+    double leftAnalogX 	= xboxController.getLeftX();
+    double leftAnalogY 	= xboxController.getLeftY();
+    double rightAnalogX = xboxController.getRightX();
+    double rightAnalogY = xboxController.getRightY();
 
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
-  }
-
-  private double controllerExp(analog) {
-    return Constants.CONTROLLER_POLY_K * Math.pow(analog, Constants.CONTROLLER_POLY_DEGREE)
   }
 
   private TankDrive createTankDrive() {

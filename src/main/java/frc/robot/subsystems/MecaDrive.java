@@ -25,6 +25,11 @@ public class MecaDrive extends DriveBase {
 	// the slowing values so the function can use them
 	double[] combinedSpeeds = new double[4];
 
+	// input curving for better fine control
+	static final double LEFT_Y_EXPONENT = 2;
+	static final double LEFT_X_EXPONENT = 2;
+	static final double RIGHT_X_EXPONENT = 2;
+
     /**
      * Constructor for Mecanum Drive Class
      * 
@@ -74,19 +79,23 @@ public class MecaDrive extends DriveBase {
 		if (Math.abs(leftAnalogY) < Constants.ANALOG_DEAD_ZONE) {
 			leftAnalogY = 0;
 		}
+		else {
+			leftAnalogY = Math.pow(Math.abs(leftAnalogY), LEFT_Y_EXPONENT) * Math.signum(leftAnalogY);
+		}
 		
 		if (Math.abs(leftAnalogX) < Constants.ANALOG_DEAD_ZONE) {
 			leftAnalogX = 0;
 		}
+		else {
+			leftAnalogX = Math.pow(Math.abs(leftAnalogX), LEFT_X_EXPONENT) * Math.signum(leftAnalogX);
+		}
 
 		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
 			rightAnalogX = 0;
-		}					
-
-		// cube inputs to make fine control of the robot easier
-		leftAnalogX = Math.pow(leftAnalogX, 3);
-		leftAnalogY = Math.pow(leftAnalogY, 3);
-		rightAnalogX = Math.pow(rightAnalogX, 3);
+		}
+		else {
+			rightAnalogX = Math.pow(Math.abs(rightAnalogX), RIGHT_X_EXPONENT) * Math.signum(rightAnalogX);
+		}
 
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
