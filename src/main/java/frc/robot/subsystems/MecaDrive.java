@@ -27,8 +27,7 @@ public class MecaDrive extends DriveBase {
 	// the slowing values so the function can use them
 	private double[] combinedSpeeds = new double[4];
 
-	private MecanumDrive mDrive;
-
+	MecaSubsystem subsystem;
 
     /**
      * Constructor for Mecanum Drive Class
@@ -45,7 +44,7 @@ public class MecaDrive extends DriveBase {
         rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 
-		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+		subsystem = new MecaSubsystem(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
     } 
 
     /**
@@ -136,16 +135,18 @@ public class MecaDrive extends DriveBase {
 		}
     }
 
-
 	/**
-	 * WPI_LIB Drive Function
+	 * Drive method for WPI_Lib motor objects
 	 * 
-	 * @param x empty argument meant for differentiating the two drive mthods. Does nothing, input any integer
-	 * 
+	 * @param leftAnalogX
+	 * @param leftAnalogY
+	 * @param rightAnalogX
 	 */
-	public void driveWPI(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
-		mDrive.driveCartesian(leftAnalogY, rightAnalogX, rightAnalogX);
+
+	public void drive(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
+		subsystem.drive(leftAnalogX, leftAnalogY, rightAnalogX);
 	}
+	
 
 	@Override
 	public void printControlsOfCurrentMode() {
@@ -298,6 +299,22 @@ public class MecaDrive extends DriveBase {
         System.out.println("Current Motor: " + debugEnabledMotor);
     }
 
+	private class MecaSubsystem extends SubsystemBase {
+
+		MecanumDrive mDrive;
+
+		MecaSubsystem(WPI_TalonFX frontLeftMotor, WPI_TalonFX rearLeftMotor, WPI_TalonFX frontRightMotor, WPI_TalonFX rearRightMotor) {
+			mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+		}
+
+		
+		void drive(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
+			mDrive.driveCartesian(leftAnalogY, rightAnalogX, rightAnalogX);
+		}
+
+		// TODO: create structure for odometry
+
+	}
 }
 
 

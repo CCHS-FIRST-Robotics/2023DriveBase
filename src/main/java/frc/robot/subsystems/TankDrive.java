@@ -220,10 +220,6 @@ public class TankDrive extends DriveBase{
 
 	}
 
-	public void driveWPI(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
-		
-	}
-
 	/**
 	 * This will return a value lower than the input, and it is used to slow 
 	 * down the motors during stop mode

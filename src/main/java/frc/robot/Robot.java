@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private DriveBase driveBase;
+  private MecaDrive driveBase;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
 
     // process input (determine wheelspeeds)
     // driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
-    driveBase.driveWPI(leftAnalogX, leftAnalogY, rightAnalogX);
+    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX);
   }
 
   private TankDrive createTankDrive() {

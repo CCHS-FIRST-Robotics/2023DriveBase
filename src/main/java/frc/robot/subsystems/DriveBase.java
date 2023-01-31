@@ -25,7 +25,6 @@ public abstract class DriveBase {
 	public abstract void drive(double leftAnalogX, double leftAnalogY,
 					  double rightAnalogX, double rightAnalogY);
 
-	public abstract void driveWPI(double leftAnalogX, double leftAnalogY, double rightAnalogX);
 
 	/**
 	 * Prints the controls of the current driving mode
