@@ -305,11 +305,19 @@ public class MecaDrive extends DriveBase {
 
 		MecaSubsystem(WPI_TalonFX frontLeftMotor, WPI_TalonFX rearLeftMotor, WPI_TalonFX frontRightMotor, WPI_TalonFX rearRightMotor) {
 			mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+			rearLeftMotor.setInverted(true);
+			frontLeftMotor.setInverted(true);
 		}
 
 		
 		void drive(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
-			mDrive.driveCartesian(leftAnalogY, rightAnalogX, rightAnalogX);
+			if(Math.abs(leftAnalogX) < Constants.ANALOG_CROSS_DEADZONE) {
+				leftAnalogX = 0;
+			}
+			if(Math.abs(leftAnalogY) < Constants.ANALOG_CROSS_DEADZONE) {
+				leftAnalogY = 0;
+			}
+			mDrive.driveCartesian(leftAnalogY, leftAnalogX, rightAnalogX);
 		}
 
 		// TODO: create structure for odometry
