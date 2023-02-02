@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
 
@@ -26,11 +27,15 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
-  private DriveBase driveBase;
+  private MecaDrive driveBase;
   Limelight limelight = new Limelight();
   Sensors sensors = new Sensors();
   double test = 0;
   long counter = 0; // for calling functions every n loops
+
+  // shuffleboard tabs
+  ShuffleboardTab tuningTab;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -51,10 +56,11 @@ public class Robot extends TimedRobot {
 
     // mecanum drive initialization
     driveBase = createMecanumDrive();
-    
 
-    // set the dead zone for the controller analog sticks
-    // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
+    // set up tuning tab
+    tuningTab = Shuffleboard.getTab("Tuning");
+
+
   }
 
   /**
@@ -108,7 +114,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    // get exponents for input curving
+    // set default values for some inputs
+    MecaDrive.LEFT_X_EXPONENT = tuningTab.add("LeftXExp", 2.0).getEntry().getDouble(2.0);
+    MecaDrive.LEFT_Y_EXPONENT = tuningTab.add("LeftYExp", 2.0).getEntry().getDouble(2.0);
+    MecaDrive.RIGHT_X_EXPONENT = tuningTab.add("RightXExp", 2.0).getEntry().getDouble(2.0);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -191,9 +203,9 @@ public class Robot extends TimedRobot {
   private void drive() {
     // get analog input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= xboxController.getLeftY();
+    double leftAnalogY 	= -1 * xboxController.getLeftY(); // flip input because up is negative natively
     double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = xboxController.getRightY();
+    double rightAnalogY = -1 * xboxController.getRightY(); // flip input becasue up is negative natively
 
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);

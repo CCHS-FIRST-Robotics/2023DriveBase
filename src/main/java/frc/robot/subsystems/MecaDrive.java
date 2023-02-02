@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants;
 
+
 import java.lang.Math;
 
 public class MecaDrive extends DriveBase {
@@ -26,9 +27,9 @@ public class MecaDrive extends DriveBase {
 	double[] combinedSpeeds = new double[4];
 
 	// input curving for better fine control
-	static final double LEFT_Y_EXPONENT = 2;
-	static final double LEFT_X_EXPONENT = 2;
-	static final double RIGHT_X_EXPONENT = 2;
+	public static double LEFT_Y_EXPONENT = 2;
+	public static double LEFT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 2;
 
     /**
      * Constructor for Mecanum Drive Class
@@ -44,6 +45,12 @@ public class MecaDrive extends DriveBase {
         frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
         rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+		
+		// invert motors to make forward the right direction
+		frontLeftMotor.setInverted(true);
+		frontRightMotor.setInverted(true);
+		rearLeftMotor.setInverted(true);
+		rearRightMotor.setInverted(true);
     } 
 
     /**
@@ -222,12 +229,12 @@ public class MecaDrive extends DriveBase {
                                    leftAnalogY, leftAnalogY};
         
         // negatives due to wheels going in opposite directions during left or right translation
-        double[] horizontalSpeeds = {-1 * leftAnalogX, leftAnalogX,
-                                     leftAnalogX, -1 * leftAnalogX};
+        double[] horizontalSpeeds = {leftAnalogX, -1 * leftAnalogX,
+                                     -1 * leftAnalogX, leftAnalogX};
 
         // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {-1 * rightAnalogX, rightAnalogX,
-                                   -1 * rightAnalogX, rightAnalogX};
+        double[] rotationSpeeds = {rightAnalogX, -1 * rightAnalogX,
+                                   rightAnalogX, -1 * rightAnalogX};
         
         // so these could exceed 1 (not good; we cannot run the motors at over 100%)
         // we will use the maximum speed to scale all the other speeds to something below 1
