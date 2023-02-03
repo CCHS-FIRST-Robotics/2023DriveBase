@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
 
@@ -27,6 +28,13 @@ public class Robot extends TimedRobot {
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
   private MecaDrive driveBase;
+  Limelight limelight = new Limelight();
+  Sensors sensors = new Sensors();
+  double test = 0;
+  long counter = 0; // for calling functions every n loops
+
+  // shuffleboard tabs
+  ShuffleboardTab tuningTab;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,29 +45,41 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    CameraServer.startAutomaticCapture(0);
-    CameraServer.startAutomaticCapture(1);
+    // CameraServer.startAutomaticCapture(0);
+    // CameraServer.startAutomaticCapture(1);
 
+    //limelight.printVal();
+    //limelight.smartDash();
 
     // tank drive initialization
     // driveBase = createTankDrive();
 
     // mecanum drive initialization
     driveBase = createMecanumDrive();
-    
-    // set the dead zone for the controller analog sticks
-    // driveBase.setDeadband(Constants.ANALOG_DEAD_ZONE);
+
+    // set up tuning tab
+    tuningTab = Shuffleboard.getTab("Tuning");
+
+
   }
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
+   * 
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    
+    // SmartDashboard.putNumber("test", test);
+    limelight.smartDash();
+    // limelight.test();
+    // System.out.println("hello wo5rld");
+
+    // test += 1;
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -94,7 +114,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    // get exponents for input curving
+    // set default values for some inputs
+    MecaDrive.LEFT_X_EXPONENT = tuningTab.add("LeftXExp", 2.0).getEntry().getDouble(2.0);
+    MecaDrive.LEFT_Y_EXPONENT = tuningTab.add("LeftYExp", 2.0).getEntry().getDouble(2.0);
+    MecaDrive.RIGHT_X_EXPONENT = tuningTab.add("RightXExp", 2.0).getEntry().getDouble(2.0);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -108,6 +134,12 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     drive();
+
+    if (counter % 10 == 0) {
+      driveBase.sensors.getValues();
+      driveBase.sensors.pushShuffleboard();
+    }
+    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -171,9 +203,9 @@ public class Robot extends TimedRobot {
   private void drive() {
     // get analog input from xbox controller
     double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= xboxController.getLeftY();
+    double leftAnalogY 	= -1 * xboxController.getLeftY(); // flip input because up is negative natively
     double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = xboxController.getRightY();
+    double rightAnalogY = -1 * xboxController.getRightY(); // flip input becasue up is negative natively
 
     // process input (determine wheelspeeds)
     // driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
@@ -186,7 +218,8 @@ public class Robot extends TimedRobot {
   }
 
   private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_PORT, Constants.FR_TALON_PORT,
-                         Constants.RL_TALON_PORT, Constants.RR_TALON_PORT);
+    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
+                         Constants.RL_TALON_ID, Constants.RR_TALON_ID);
   }
+
 }

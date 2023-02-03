@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -31,7 +32,7 @@ public class MecaDrive extends DriveBase {
     private final double verticalSpeedMultiplier = 0.8;
 
     // scaling up horinzontal speed because its slower than the other speeds
-    private final double horizontalSPeedMultiplier = 0.8;
+    final double horizontalSPeedMultiplier = 0.8;
 
     private WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
@@ -45,6 +46,11 @@ public class MecaDrive extends DriveBase {
 	private double[] combinedSpeeds = new double[4];
 
 	MecaSubsystem subsystem;
+
+	// input curving for better fine control
+	public static double LEFT_Y_EXPONENT = 2;
+	public static double LEFT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 2;
 
     /**
      * Constructor for Mecanum Drive Class
@@ -62,6 +68,12 @@ public class MecaDrive extends DriveBase {
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 
 		subsystem = new MecaSubsystem(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+		
+		// invert motors to make forward the right direction
+		frontLeftMotor.setInverted(true);
+		frontRightMotor.setInverted(true);
+		rearLeftMotor.setInverted(true);
+		rearRightMotor.setInverted(true);
     } 
 
     /**
@@ -90,21 +102,23 @@ public class MecaDrive extends DriveBase {
 		
 
 		 /**
-		 * Add deadzone (stop all movement when input is under a certain amount)
-		 * Compare joystick distance from normal position (0)
+		 * Add deadbands (stop all movement when input is under a certain amount)
+		 * This allows you to go online in one direction more easily because it 
+		 * prevents slight (unintentional) inputs in the perpendicular direction
 		 */
 		
-		// Left analog joystick distance from origin from pythagoreas 
-		double leftJoystickDistance = Math.sqrt(Math.pow(leftAnalogX, 2) +
-									 			Math.pow(leftAnalogY, 2));
-		if (leftJoystickDistance < Constants.ANALOG_DEAD_ZONE) {
-			// joystick is within the deadzone, so set to 0
+		if (Math.abs(leftAnalogX) < Constants.ANALOG_DEAD_ZONE) {
 			leftAnalogX = 0;
-			leftAnalogY = 0;
+		}
+		else {
+			leftAnalogX = Math.pow(Math.abs(leftAnalogX), LEFT_X_EXPONENT) * Math.signum(leftAnalogX);
 		}
 		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
 			rightAnalogX = 0;
-		}					
+		}
+		else {
+			rightAnalogX = Math.pow(Math.abs(rightAnalogX), RIGHT_X_EXPONENT) * Math.signum(rightAnalogX);
+		}
 
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
@@ -196,6 +210,8 @@ public class MecaDrive extends DriveBase {
 			case DEBUG_MODE:
 				cycleMotor();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -204,6 +220,8 @@ public class MecaDrive extends DriveBase {
 		switch(currentMode) {
 			case DEBUG_MODE:
 				printActiveMotorDebugMode();
+				break;
+			default:
 				break;
 		}
 	}
@@ -240,12 +258,12 @@ public class MecaDrive extends DriveBase {
                                    leftAnalogY, leftAnalogY};
         
         // negatives due to wheels going in opposite directions during left or right translation
-        double[] horizontalSpeeds = {-1 * leftAnalogX, leftAnalogX,
-                                     leftAnalogX, -1 * leftAnalogX};
+        double[] horizontalSpeeds = {leftAnalogX, -1 * leftAnalogX,
+                                     -1 * leftAnalogX, leftAnalogX};
 
         // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {-1 * rightAnalogX, rightAnalogX,
-                                   -1 * rightAnalogX, rightAnalogX};
+        double[] rotationSpeeds = {rightAnalogX, -1 * rightAnalogX,
+                                   rightAnalogX, -1 * rightAnalogX};
         
         // so these could exceed 1 (not good; we cannot run the motors at over 100%)
         // we will use the maximum speed to scale all the other speeds to something below 1
@@ -296,8 +314,8 @@ public class MecaDrive extends DriveBase {
 
 	@Override
 	public void turnOnStopMode() {
-		if(currentMode.equals(STOP_MODE)) return;
-		currentMode = STOP_MODE;
+		if(currentMode == Mode.STOP_MODE) return;
+		currentMode = Mode.STOP_MODE;
 		// Stop mode activated, so now the robot needs to slow down
 		// start by saving the last left and right velocities 
 		slowingDownSpeeds = combinedSpeeds;

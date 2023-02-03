@@ -32,10 +32,10 @@ public class Constants {
 	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_PORT = 1; // 2
-	public static final int FL_TALON_PORT = 2; // 8
-	public static final int RR_TALON_PORT = 3; // 10
-	public static final int RL_TALON_PORT = 4; // 4
+	public static final int FR_TALON_ID = 1; // 2
+	public static final int FL_TALON_ID = 2; // 8
+	public static final int RR_TALON_ID = 3; // 10
+	public static final int RL_TALON_ID = 4; // 4 
 
 	public static final int FR_ENCODER_ID = 1;
 	public static final int FL_ENCODER_ID = 2;

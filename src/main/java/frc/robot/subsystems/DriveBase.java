@@ -6,14 +6,19 @@ public abstract class DriveBase {
 	double speedMultiplier = 0.6;
 
 	// different modes
-	String currentMode;
-	static final String DEFAULT_MODE = "DEFAULT"; // regular driving
-	static final String DEBUG_MODE = "DEBUG"; // spin only one motor at a time
-	static final String PID_TUNING_MODE = "PIDTUNING"; // tune PID constants
-	static final String STOP_MODE = "STOP"; // stop the robot
+	enum Mode {
+		DEFAULT_MODE,
+		DEBUG_MODE,
+		PID_TUNING_MODE,
+		STOP_MODE
+	}
+	Mode currentMode = Mode.DEFAULT_MODE;
 
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
+
+	// sensors object
+	public Sensors sensors = new Sensors();
 
 	/**
 	 * Drive the robot with controller input
@@ -48,16 +53,20 @@ public abstract class DriveBase {
 	}
 
 	public void turnOnDefaultMode() {
-		if(currentMode.equals(DEFAULT_MODE)) return;
-		currentMode = DEFAULT_MODE;
+		if(currentMode == Mode.DEFAULT_MODE) return;
+		currentMode = Mode.DEFAULT_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: DEFAULT Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 
 	public void turnOnDebugMode() {
-		if(currentMode.equals(DEBUG_MODE)) return;
-        currentMode = DEBUG_MODE;
+		if(currentMode == Mode.DEBUG_MODE) return;
+        currentMode = Mode.DEBUG_MODE;
+		System.out.println("********************************");
         System.out.println("Current Mode: DEBUG Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
     }
 
@@ -67,16 +76,20 @@ public abstract class DriveBase {
 	 * speed, whereas for mecanum there are 4)
 	 */
 	public void turnOnStopMode() {
-		if(currentMode.equals(STOP_MODE)) return;
-		currentMode = STOP_MODE;
+		if(currentMode == Mode.STOP_MODE) return;
+		currentMode = Mode.STOP_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: STOP Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 
 	public void turnONPIDTuningMode() {
-		if(currentMode.equals(PID_TUNING_MODE)) return;
-		currentMode = PID_TUNING_MODE;
+		if(currentMode == Mode.PID_TUNING_MODE) return;
+		currentMode = Mode.PID_TUNING_MODE;
+		System.out.println("********************************");
 		System.out.println("Current Mode: PID TUNING Mode");
+		System.out.println("********************************");
 		printControlsOfCurrentMode();
 	}
 
