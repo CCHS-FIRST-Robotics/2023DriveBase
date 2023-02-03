@@ -328,7 +328,7 @@ public class MecaDrive extends DriveBase {
 		// TODO: determine whether we need to update navx
 
 		// The gyro sensor
-			// TODO: determine whether we are using SPI or I2C Port class
+			// TODO: USE SHUFFLEBOARD/SENSORS.JAVA NOT NAVX IN THIS FILE
 		final AHRS navx = new AHRS(Port.kMXP);
 
 
