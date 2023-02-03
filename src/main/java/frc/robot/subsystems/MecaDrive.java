@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -12,9 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
@@ -310,172 +316,56 @@ public class MecaDrive extends DriveBase {
         System.out.println("Current Motor: " + debugEnabledMotor);
     }
 
+	/**
+	 * 
+	 * MecaSubsystem class handles all drive functions outside of manual driving
+	 * 
+	 */
 	private class MecaSubsystem extends SubsystemBase {
 
-		MecanumDrive mDrive;
+		// TODO: create better modules for teleop and autonomous driving / odometry
 
+		// TODO: determine whether we need to update navx
 
 		// The gyro sensor
-		public final AHRS navx = new AHRS(SPI.Port.kMXP);
+			// TODO: determine whether we are using SPI or I2C Port class
+		final AHRS navx = new AHRS(Port.kMXP);
 
 
 		// Odometry class for tracking robot pose
-		private final MecanumDriveOdometry m_odometry;
+		final MecanumDriveOdometry mOdom;
 
+		// Drive Object
+		MecanumDrive mDrive;
+
+		// Motor Controller Objects
+		WPI_TalonFX frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor;
+
+		// Motor Sensor Objects
+		TalonFXSensorCollection flFalconSensor, rlFalconSensor, frFalconSensor, rrFalconSensor;
+
+		// Motor positions Object
+		MecanumDriveWheelPositions wheelPositions;
 
 		MecaSubsystem(WPI_TalonFX frontLeftMotor, WPI_TalonFX rearLeftMotor, WPI_TalonFX frontRightMotor, WPI_TalonFX rearRightMotor) {
-			mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
-			rearLeftMotor.setInverted(true);
-			frontLeftMotor.setInverted(true);
+
+			// Initializing motors, drive
+			this.frontLeftMotor = frontLeftMotor;
+			this.rearLeftMotor = rearLeftMotor;
+			this.frontRightMotor = frontRightMotor;
+			this.rearRightMotor = rearRightMotor;
+			this.rearLeftMotor.setInverted(true);
+			this.frontLeftMotor.setInverted(true);
+			mDrive = new MecanumDrive(this.frontLeftMotor, this.rearLeftMotor, this.frontRightMotor, this.rearRightMotor);
 			
+			// Initializing Falcon sensors
+			flFalconSensor = new TalonFXSensorCollection(this.frontLeftMotor);
+			rlFalconSensor = new TalonFXSensorCollection(this.rearLeftMotor);
+			frFalconSensor = new TalonFXSensorCollection(this.frontRightMotor);
+			rrFalconSensor = new TalonFXSensorCollection(this.rearRightMotor);
 
-			/** Creates a new DriveSubsystem. */
-			
-			// We need to invert one side of the drivetrain so that positive voltages
-			// result in both sides moving forward. Depending on how your robot's
-			// gearbox is constructed, you might have to invert the left side instead.
-		
-
-			// Sets the distance per pulse for the encoders
-		
-			m_odometry =
-				new MecanumDriveOdometry(
-					m_gyro.getRotation2d(), ), m_rightEncoder.getDistance());
-			}
-
-			@Override
-			public void periodic() {
-			// Update the odometry in the periodic block
-			m_odometry.update(
-				m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
-			}
-
-			/**
-			 * Returns the currently-estimated pose of the robot.
-			 *
-			 * @return The pose.
-			 */
-			public Pose2d getPose() {
-			return m_odometry.getPoseMeters();
-			}
-
-			/**
-			 * Returns the current wheel speeds of the robot.
-			 *
-			 * @return The current wheel speeds.
-			 */
-			public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-			return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
-			}
-
-			/**
-			 * Resets the odometry to the specified pose.
-			 *
-			 * @param pose The pose to which to set the odometry.
-			 */
-			public void resetOdometry(Pose2d pose) {
-			resetEncoders();
-			m_odometry.resetPosition(
-				m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance(), pose);
-			}
-
-			/**
-			 * Drives the robot using arcade controls.
-			 *
-			 * @param fwd the commanded forward movement
-			 * @param rot the commanded rotation
-			 */
-			public void arcadeDrive(double fwd, double rot) {
-			m_drive.arcadeDrive(fwd, rot);
-			}
-
-			/**
-			 * Controls the left and right sides of the drive directly with voltages.
-			 *
-			 * @param leftVolts the commanded left output
-			 * @param rightVolts the commanded right output
-			 */
-			public void tankDriveVolts(double leftVolts, double rightVolts) {
-			m_leftMotors.setVoltage(leftVolts);
-			m_rightMotors.setVoltage(rightVolts);
-			m_drive.feed();
-			}
-
-			/** Resets the drive encoders to currently read a position of 0. */
-			public void resetEncoders() {
-			m_leftEncoder.reset();
-			m_rightEncoder.reset();
-			}
-
-			/**
-			 * Gets the average distance of the two encoders.
-			 *
-			 * @return the average of the two encoder readings
-			 */
-			public double getAverageEncoderDistance() {
-			return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
-			}
-
-			/**
-			 * Gets the left drive encoder.
-			 *
-			 * @return the left drive encoder
-			 */
-			public Encoder getLeftEncoder() {
-			return m_leftEncoder;
-			}
-
-			/**
-			 * Gets the right drive encoder.
-			 *
-			 * @return the right drive encoder
-			 */
-			public Encoder getRightEncoder() {
-			return m_rightEncoder;
-			}
-
-			/**
-			 * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
-			 *
-			 * @param maxOutput the maximum output to which the drive will be constrained
-			 */
-			public void setMaxOutput(double maxOutput) {
-			m_drive.setMaxOutput(maxOutput);
-			}
-
-			/** Zeroes the heading of the robot. */
-			public void zeroHeading() {
-			m_gyro.reset();
-			}
-
-			/**
-			 * Returns the heading of the robot.
-			 *
-			 * @return the robot's heading in degrees, from -180 to 180
-			 */
-			public double getHeading() {
-			return m_gyro.getRotation2d().getDegrees();
-			}
-
-			/**
-			 * Returns the turn rate of the robot.
-			 *
-			 * @return The turn rate of the robot, in degrees per second
-			 */
-			public double getTurnRate() {
-			return -m_gyro.getRate();
-			}
-			}
-
-
-
-
-
-
-
-
-
-
+			// Odometry: !!secondary constructor takes initialPose argument
+			mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions());
 		}
 
 		void drive(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
@@ -487,29 +377,89 @@ public class MecaDrive extends DriveBase {
 			}
 			mDrive.driveCartesian(leftAnalogY, leftAnalogX, rightAnalogX);
 		}
-
-// pasted from wpilib example
-//************************************************************************
-
- 
-
-
-
-
-
-
-
-
-
-
-		private final Encoder frontLeftEcoder = new Encoder(Constants.FL_ENCODER_ID, Constants.FL_ENCODER_ID);
-		public MecanumDriveWheelSpeeds getWheelSpeeds(){
-
+		
+		@Override
+		public void periodic() {
+			// Update the odometry in the periodic block
+			mOdom.update(new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions());
 		}
-		private final MotorControllerGroup frontLeft = new MotorControllerGroup(null, null)
+
+		/**
+		 * Returns the total distances measured by each motor
+		 * 
+		 * @return wheel positions
+		 */
+		MecanumDriveWheelPositions getWheelPositions() {
+
+			// TODO: determine whether should use absolute position or jsut position
+
+			return new MecanumDriveWheelPositions(flFalconSensor.getIntegratedSensorAbsolutePosition(), 
+												  frFalconSensor.getIntegratedSensorAbsolutePosition(), 
+												  rlFalconSensor.getIntegratedSensorAbsolutePosition(),
+												  rrFalconSensor.getIntegratedSensorAbsolutePosition());
+		}
+
+		/**
+		 * Returns the currently-estimated pose of the robot.
+		 *
+		 * @return The pose.
+		 */
+		Pose2d getPose() {
+			return mOdom.getPoseMeters();
+		}
+
+		// TODO: create method that returns wheel speeds of the robot
+		// TODO: create mthod that allows control of wheels with voltages
+		// TODO: method of averages of encoder distances
+
+		/**
+		 * Resets the odometry to the specified pose.
+		 *
+		 * @param pose The pose to which to set the odometry.
+		 */
+		void resetOdometry(Pose2d pose) {
+			//resetEncoders();
+			mOdom.resetPosition(
+				new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions(), pose);
+		}
+
+		/**
+		 * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
+		 *
+		 * @param maxOutput the maximum output to which the drive will be constrained
+		 */
+		public void setMaxOutput(double maxOutput) {
+			mDrive.setMaxOutput(maxOutput);
+		}
+
+		/** Zeroes the heading of the robot. */
+		public void zeroHeading() {
+			navx.reset();
+		}
+
+		/**
+		 * Returns the heading of the robot.
+		 *
+		 * @return the robot's heading in degrees, from -180 to 180
+		 */
+		public double getHeading() {
+			return navx.getYaw();
+		}
+
+		/**
+		 * Returns the turn rate of the robot.
+		 *
+		 * @return The turn rate of the robot, in degrees per second
+		 */
+		public double getTurnRate() {
+			return -navx.getVelocityZ();
+		}
+
+		
+		
 		// TODO: create structure for odometry
 
 	}
-}
 
+}
 

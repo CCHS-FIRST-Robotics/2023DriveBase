@@ -2,6 +2,9 @@ package frc.robot;
 
 import java.lang.Math;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+
 /**
  * Constants - set once, and use throught the code
  * Naming convention is all caps, spaces are underscores LIKE_THIS
@@ -34,11 +37,15 @@ public class Constants {
 	public static final int RR_TALON_PORT = 3; // 10
 	public static final int RL_TALON_PORT = 4; // 4
 
-	public static final int FR_ENCONDER_ID = 1;
+	public static final int FR_ENCODER_ID = 1;
 	public static final int FL_ENCODER_ID = 2;
-	public static final int RR_ENCONDER_ID = 3;
+	public static final int RR_ENCODER_ID = 3;
 	public static final int RL_ENCODER_ID = 4;
 
+
+	/*
+	 * Physical Constants
+	 */
 
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
@@ -54,7 +61,19 @@ public class Constants {
 	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
 	//previous speed is divided by this factor (higher = slow down faster)
 
-	Constants() {
-		
-	}
+	// Robot's kinematics --> cartesian location of each wheel to the physical center of the robot in meters 
+		// TODO: MUST DETERMINE THESE VALUES
+	public static final Translation2d FL_WHEEL_POS = new Translation2d(0, 0);
+	public static final Translation2d FR_WHEEL_POS = new Translation2d(0, 0);
+	public static final Translation2d RL_WHEEL_POS = new Translation2d(0, 0);
+	public static final Translation2d RR_WHEEL_POS = new Translation2d(0, 0);
+
+	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
+
+
+	/*
+	 * SENSORS 
+	 */
+
+
 }
