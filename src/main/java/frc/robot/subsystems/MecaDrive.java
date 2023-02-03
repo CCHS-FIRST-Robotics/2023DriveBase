@@ -393,7 +393,7 @@ public class MecaDrive extends DriveBase {
 			if(Math.abs(leftAnalogY) < Constants.ANALOG_CROSS_DEADZONE) {
 				leftAnalogY = 0;
 			}
-			mDrive.driveCartesian(leftAnalogY, leftAnalogX, rightAnalogX);
+			mDrive.driveCartesian(leftAnalogX, leftAnalogY, rightAnalogX);
 		}
 		
 		@Override
