@@ -62,11 +62,13 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	// Robot's kinematics --> cartesian location of each wheel to the physical center of the robot in meters 
-		// TODO: MUST DETERMINE THESE VALUES
-	public static final Translation2d FL_WHEEL_POS = new Translation2d(-0.2794, 0.31115);
-	public static final Translation2d FR_WHEEL_POS = new Translation2d(0.2794, 0.31115);
-	public static final Translation2d RL_WHEEL_POS = new Translation2d(-0.2794, -0.31115);
-	public static final Translation2d RR_WHEEL_POS = new Translation2d(0.2794, -0.31115);
+	public static final double WHEEL_ABSOLUTE_X_METERS = 0.2794;
+	public static final double WHEEL_ABSOLUTE_Y_METERS = 0.31115;
+	
+	public static final Translation2d FL_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_X_METERS, WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d FR_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_X_METERS, WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d RL_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_X_METERS, -WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d RR_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_X_METERS, -WHEEL_ABSOLUTE_Y_METERS);
 
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
