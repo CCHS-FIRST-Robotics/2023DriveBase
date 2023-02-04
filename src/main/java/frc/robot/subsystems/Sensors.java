@@ -39,19 +39,3 @@ public class Sensors {
 		yAccel = navx.getRawAccelY();
 		zAccel = navx.getRawAccelZ();
 	}
-
-	public void pushShuffleboard() {
-		SmartDashboard.putNumber("NavX", x);
-        SmartDashboard.putNumber("NavY", y);
-        SmartDashboard.putNumber("NavZ", z);
-        SmartDashboard.putNumber("NavHead", heading);
-		SmartDashboard.putNumber("NavRotationZ", zRotationalVelocity);
-		SmartDashboard.putNumber("NavXVel", xVelocity);
-		SmartDashboard.putNumber("NavYVel", yVelocity);
-		SmartDashboard.putNumber("NavPitch", pitch);
-		SmartDashboard.putNumber("NavXAccel", xAccel);
-		SmartDashboard.putNumber("NavYAccel", yAccel);
-		SmartDashboard.putNumber("NavZAccel", zAccel);
-		SmartDashboard.putBoolean("NavConnected", isConnected);
-	}
-}
