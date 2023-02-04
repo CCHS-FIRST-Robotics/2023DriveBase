@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
@@ -343,13 +343,6 @@ public class MecaDrive extends DriveBase {
 
 		// TODO: create better modules for teleop and autonomous driving / odometry
 
-		// TODO: determine whether we need to update navx
-
-		// The gyro sensor
-			// TODO: USE SHUFFLEBOARD/SENSORS.JAVA NOT NAVX IN THIS FILE
-		final AHRS navx = new AHRS(Port.kMXP);
-
-
 		// Odometry class for tracking robot pose
 		final MecanumDriveOdometry mOdom;
 
@@ -383,7 +376,7 @@ public class MecaDrive extends DriveBase {
 			rrFalconSensor = new TalonFXSensorCollection(this.rearRightMotor);
 
 			// Odometry: !!secondary constructor takes initialPose argument
-			mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions());
+			mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
 		}
 		
 		void drive(double speedX, double speedY, double rotateSpeed) {
@@ -404,7 +397,7 @@ public class MecaDrive extends DriveBase {
 		@Override
 		public void periodic() {
 			// Update the odometry in the periodic block
-			mOdom.update(new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions());
+			mOdom.update(new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
 		}
 
 		/**
@@ -414,7 +407,7 @@ public class MecaDrive extends DriveBase {
 		 */
 		MecanumDriveWheelPositions getWheelPositions() {
 
-			// TODO: determine whether should use absolute position or jsut position
+			// TODO: determine whether should use absolute position or just position
 
 			return new MecanumDriveWheelPositions(flFalconSensor.getIntegratedSensorAbsolutePosition(), 
 												  frFalconSensor.getIntegratedSensorAbsolutePosition(), 
@@ -443,7 +436,7 @@ public class MecaDrive extends DriveBase {
 		void resetOdometry(Pose2d pose) {
 			//resetEncoders();
 			mOdom.resetPosition(
-				new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions(), pose);
+				new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
 		}
 
 		/**
@@ -455,29 +448,37 @@ public class MecaDrive extends DriveBase {
 			mDrive.setMaxOutput(maxOutput);
 		}
 
-		/** Zeroes the heading of the robot. */
-		public void zeroHeading() {
-			navx.reset();
-		}
 
-		/**
-		 * Returns the heading of the robot.
-		 *
-		 * @return the robot's heading in degrees, from -180 to 180
-		 */
-		public double getHeading() {
-			return navx.getYaw();
-		}
 
-		/**
-		 * Returns the turn rate of the robot.
-		 *
-		 * @return The turn rate of the robot, in degrees per second
-		 */
-		public double getTurnRate() {
-			return -navx.getVelocityZ();
-		}
+		/* TODO: Why do we have methods for this stuff, can we pull from shuffleboard or is there a reason to have these?? */
 
+		
+		// /** Zeroes the heading of the robot. */
+		// public void zeroHeading() {
+		// 	navx.reset();
+		// }
+
+		// /**
+		//  * Returns the heading of the robot.
+		//  *
+		//  * @return the robot's heading in degrees, from -180 to 180
+		//  */
+		// public double getHeading() {
+		// 	return navx.getYaw();
+		// }
+
+		
+		// /**
+		//  * Returns the turn rate of the robot.
+		//  *
+		//  * @return The turn rate of the robot, in degrees per second
+		//  */
+		// public double getTurnRate() {
+		// 	// TODO: why is the turn rate the Z velocity? Don't we want ang vel?
+		// 	// return -navx.getVelocityZ();
+		// 	return navx.getRate();
+		// }
+		
 		
 		
 		// TODO: create structure for odometry

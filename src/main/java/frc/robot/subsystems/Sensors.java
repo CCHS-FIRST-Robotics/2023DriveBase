@@ -31,8 +31,9 @@ public class Sensors {
 		pitch = navx.getPitch();
 		isConnected = navx.isConnected();
 		heading = navx.getFusedHeading();
+		if (navx.isMagneticDisturbance() || !navx.isMagnetometerCalibrated()) heading = navx.getYaw();
 
-		// might be better to use the "WorldLinear" methods
+		// might be better to use the "WorldLinear" methods - removes the effect of gravity
 		// units are G
 		xAccel = navx.getRawAccelX();
 		yAccel = navx.getRawAccelY();
