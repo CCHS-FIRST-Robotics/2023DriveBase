@@ -385,15 +385,20 @@ public class MecaDrive extends DriveBase {
 			// Odometry: !!secondary constructor takes initialPose argument
 			mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(navx.getAngle())), getWheelPositions());
 		}
+		
+		void drive(double speedX, double speedY, double rotateSpeed) {
 
-		void drive(double leftAnalogX, double leftAnalogY, double rightAnalogX) {
-			if(Math.abs(leftAnalogX) < Constants.ANALOG_CROSS_DEADZONE) {
-				leftAnalogX = 0;
+			//TODO: I think we'd only want this for teleop so maybe we throw it in Robot.java since all drive systems use it?
+			if(Math.abs(speedX) < Constants.ANALOG_CROSS_DEADZONE) {
+				speedX = 0;
 			}
-			if(Math.abs(leftAnalogY) < Constants.ANALOG_CROSS_DEADZONE) {
-				leftAnalogY = 0;
+			if(Math.abs(speedY) < Constants.ANALOG_CROSS_DEADZONE) {
+				speedY = 0;
 			}
-			mDrive.driveCartesian(leftAnalogX, leftAnalogY, rightAnalogX);
+			
+			// method defines Y as left/right and X as forward/backward - left/forward are positive
+			// TODO: check to make sure xbox controller defines left as negative (which is why we reverse the sign here)
+			mDrive.driveCartesian(speedY, -speedX, rotateSpeed);
 		}
 		
 		@Override
