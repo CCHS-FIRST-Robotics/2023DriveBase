@@ -28,8 +28,11 @@ public class Robot extends TimedRobot {
 
   private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
   private MecaDrive driveBase;
+
   Limelight limelight = new Limelight();
-  Sensors sensors = new Sensors();
+  IMU imu = new IMU();
+  SmartDash smartdash = new SmartDash();
+  
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
@@ -72,9 +75,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
     
     // SmartDashboard.putNumber("test", test);
-    limelight.smartDash();
     // limelight.test();
     // System.out.println("hello wo5rld");
 
@@ -136,8 +139,8 @@ public class Robot extends TimedRobot {
     drive();
 
     if (counter % 10 == 0) {
-      driveBase.sensors.getValues();
-      driveBase.sensors.pushShuffleboard();
+      imu.updateValues();
+      smartdash.pushDashboard(limelight, imu);
     }
     counter++;
   }

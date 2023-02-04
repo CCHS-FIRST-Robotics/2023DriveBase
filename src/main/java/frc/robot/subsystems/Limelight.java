@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
 
-    double x, y, area;
+    private double x, y, area;
     NetworkTableEntry tx, ty, ta;
     NetworkTable table;
     double test2 = 0;
@@ -26,16 +26,22 @@ public class Limelight {
 
     }
 
-    public void printVal() {
-        System.out.println("limeval " + x);
+
+    // TODO: include comments/documentation for what these vals actually are 
+    public double getX() {
+        return x;
     }
 
-    public void smartDash() {
+    public double getY() {
+        return y;
+    }
 
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
+    public double getArea() {
+        return area;
+    }
 
+    public void printVal() {
+        System.out.println("limeval " + x);
     }
 
     public void test(){
