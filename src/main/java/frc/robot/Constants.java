@@ -46,6 +46,10 @@ public class Constants {
 	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
 	//previous speed is divided by this factor (higher = slow down faster)
 
+	// arm lengths in meters
+	public static final double UPPER_ARM_LENGTH = 1.0; 
+	public static final double LOWER_ARM_LENGTH = 0.5;
+
 	Constants() {
 		
 	}
