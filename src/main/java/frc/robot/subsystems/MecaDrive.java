@@ -9,12 +9,6 @@ import frc.robot.Constants;
 import java.lang.Math;
 
 public class MecaDrive extends DriveBase {
-    // scaling down vertical speed because its faster than other speeds
-    final double verticalSpeedMultiplier = 0.8;
-
-    // scaling up horinzontal speed because its slower than the other speeds
-    final double horizontalSPeedMultiplier = 0.8;
-
     WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
 	// Stop mode variables
@@ -47,9 +41,7 @@ public class MecaDrive extends DriveBase {
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 		
 		// invert motors to make forward the right direction
-		frontLeftMotor.setInverted(true);
 		frontRightMotor.setInverted(true);
-		rearLeftMotor.setInverted(true);
 		rearRightMotor.setInverted(true);
     } 
 
@@ -83,9 +75,9 @@ public class MecaDrive extends DriveBase {
 		switch (currentMode){
 			case DEFAULT_MODE:
 				 // set the motor speeds as a percent 0-1 (normal)
-				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
 				frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
 				rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
 				break;
 			case STOP_MODE:
@@ -93,9 +85,9 @@ public class MecaDrive extends DriveBase {
 				// slower stop
 				slowingDownSpeeds = slowDown(slowingDownSpeeds);
 
-				frontLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[0] * -1);
+				frontLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[0]);
 				frontRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2] * -1);
+				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2]);
 				rearRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[3]);
 				break;
 			case DEBUG_MODE:
@@ -103,13 +95,13 @@ public class MecaDrive extends DriveBase {
 				
 				switch (debugEnabledMotor){
 					case 0:
-						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
 						break;
 					case 1:
 						frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 						break;
 					case 2:
-						rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+						rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
 						break;
 					case 3:
 						rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
@@ -181,11 +173,7 @@ public class MecaDrive extends DriveBase {
 	 * @return array of all processed speeds {front left, front right, back left, back right}
 	 */
 	private double[] combineSpeeds(double leftAnalogX,  double leftAnalogY,
-								   double rightAnalogX, double rightAnalogY){
-
-		leftAnalogY *= verticalSpeedMultiplier;
-        leftAnalogX *= horizontalSPeedMultiplier;
-       
+								   double rightAnalogX, double rightAnalogY){       
         // arrays for wheel speeds for each movement direction (percents)
         // 1st is front left, 2nd is front right, 3rd is back left, 4th is back right
         double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
@@ -200,13 +188,15 @@ public class MecaDrive extends DriveBase {
                                    rightAnalogX, -rightAnalogX};
 		
 
-		double maxSpeed = 0;
+		double maxSpeed = Integer.MIN_VALUE;
 		/* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
         we will use the maximum speed to scale all the other speeds to something below 1 */
 		for (int i = 0; i < 4; i++) {
 			combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
 			if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
 		}
+
+		maxSpeed = Math.max(1, maxSpeed); // if the max is under 1, we can ignore (we don't have to do any scaling)
 
         for (int i = 0; i < 4; i++) {
             // nomralize the speeds and scale by speed multiplier

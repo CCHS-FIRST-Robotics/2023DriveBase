@@ -36,9 +36,6 @@ public class Robot extends TimedRobot {
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
-  // shuffleboard tabs
-  ShuffleboardTab tuningTab;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -59,11 +56,6 @@ public class Robot extends TimedRobot {
 
     // mecanum drive initialization
     driveBase = createMecanumDrive();
-
-    // set up tuning tab
-    tuningTab = Shuffleboard.getTab("Tuning");
-
-
   }
 
   /**
@@ -118,11 +110,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    // get exponents for input curving
-    // set default values for some inputs
-    MecaDrive.LEFT_X_EXPONENT = tuningTab.add("LeftXExp", 2.0).getEntry().getDouble(2.0);
-    MecaDrive.LEFT_Y_EXPONENT = tuningTab.add("LeftYExp", 2.0).getEntry().getDouble(2.0);
-    MecaDrive.RIGHT_X_EXPONENT = tuningTab.add("RightXExp", 2.0).getEntry().getDouble(2.0);
+    smartdash.updateControllerExponents();
   }
 
   /** This function is called periodically during operator control. */
