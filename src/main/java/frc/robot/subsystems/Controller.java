@@ -36,10 +36,12 @@ public class Controller extends XboxController{
     }
 
     //flip input for Y-axis because up is negative natively
+    @Override
     public double getLeftY() {
         return -super.getLeftY();
     }
 
+    @Override
     public double getRightY() {
         return -super.getRightY();
     }

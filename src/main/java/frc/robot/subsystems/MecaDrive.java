@@ -218,6 +218,7 @@ public class MecaDrive extends DriveBase {
 
         /* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
         we will use the maximum speed to scale all the other speeds to something below 1 */
+		// TODO: ensure this doesn't overwrite combinedSpeeds
         double maxSpeed = Arrays.stream(combinedSpeeds).sorted().toArray()[3];
 
         for (int i = 0; i < 4; i++) {
@@ -240,11 +241,11 @@ public class MecaDrive extends DriveBase {
 		double[] newVelocity = new double[4];
 
 		for (int i = 0; i < 4; i++){
-			if (Math.abs(inputVelocity[i]) > Constants.SLOW_DOWN_CUTOFF){
-				// velocity still needs to be reduced (magnatude is above cutoff)
-				newVelocity[i] = inputVelocity[i] / Constants.SLOW_DOWN_FACTOR;
-			} else {
-				// input has reached cutoff, now returning 0 speed
+			// velocity needs to be reduced
+			newVelocity[i] = inputVelocity[i] / Constants.SLOW_DOWN_FACTOR;
+
+			// input has reached cutoff, now returning 0 speed
+			if (Math.abs(inputVelocity[i]) < Constants.SLOW_DOWN_CUTOFF){
 				newVelocity[i] = 0;
 			}
 		}
