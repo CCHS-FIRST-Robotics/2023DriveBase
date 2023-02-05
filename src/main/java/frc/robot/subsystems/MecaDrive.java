@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Arrays;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -150,36 +148,26 @@ public class MecaDrive extends DriveBase {
 		}
 	}
 
+	
+	/**
+	 * Cycle between each motor during debug mode
+	 */
 	@Override
-	public void AButtonPressed() {
-		switch(currentMode) {
-			case DEBUG_MODE:
-				cycleMotor();
-				break;
-			default:
-				break;
+	public void cycleMotor() {
+		if (currentMode == Mode.DEBUG_MODE) {
+			debugEnabledMotor++;
+        	debugEnabledMotor %= 4;
+        	System.out.println("Current Motor: " + debugEnabledMotor);
 		}
 	}
 
-	@Override
-	public void BButtonPressed() {
-		switch(currentMode) {
-			case DEBUG_MODE:
-				printActiveMotorDebugMode();
-				break;
-			default:
-				break;
+	/**
+	* prints the number of the currently activated motors during debug mode
+	*/
+	public void printActiveMotorDebugMode() {
+		if (currentMode == Mode.DEBUG_MODE) {
+			System.out.println("Current Motor: " + debugEnabledMotor);
 		}
-	}
-
-	@Override
-	public void leftBumperPressed() {
-		decreaseSpeedBracket();
-	}
-
-	@Override
-	public void rightBumperPressed() {
-		increaseSpeedBracket();
 	}
 
 	/**
@@ -211,15 +199,14 @@ public class MecaDrive extends DriveBase {
         double[] rotationSpeeds = {rightAnalogX, -rightAnalogX,
                                    rightAnalogX, -rightAnalogX};
 		
-		// combine speeds
+
+		double maxSpeed = 0;
+		/* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
+        we will use the maximum speed to scale all the other speeds to something below 1 */
 		for (int i = 0; i < 4; i++) {
 			combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
+			if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
 		}
-
-        /* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
-        we will use the maximum speed to scale all the other speeds to something below 1 */
-		// TODO: ensure this doesn't overwrite combinedSpeeds
-        double maxSpeed = Arrays.stream(combinedSpeeds).sorted().toArray()[3];
 
         for (int i = 0; i < 4; i++) {
             // nomralize the speeds and scale by speed multiplier
@@ -262,15 +249,4 @@ public class MecaDrive extends DriveBase {
 		System.out.println("STOP MODE");
 	}
 
-	// prints the number of the currently activated motor during debug mode
-	public void printActiveMotorDebugMode() {
-		System.out.println("Current Motor: " + debugEnabledMotor);
-	}
-
-    // cycles through the activated motors during debug mode
-    public void cycleMotor() {
-        debugEnabledMotor++;
-        debugEnabledMotor %= 4;
-        System.out.println("Current Motor: " + debugEnabledMotor);
-    }
 }

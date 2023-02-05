@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
 
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
-  SmartDash smartdash = new SmartDash();
+  BetterShuffleboard smartdash = new BetterShuffleboard();
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -135,14 +135,10 @@ public class Robot extends TimedRobot {
     // check for button/bumper presses
     checkForButtonPresses();
 
-    xboxController.updateValues();
-    xboxController.applyPreferences();
-
     // powers motors based on the analog inputs
     drive();
 
     if (counter % 10 == 0) {
-      imu.updateValues();
       smartdash.pushDashboard(limelight, imu);
     }
     counter++;
@@ -184,22 +180,16 @@ public class Robot extends TimedRobot {
    */
   private void checkForButtonPresses() {
     if (xboxController.getAButtonPressed()) {
-      driveBase.AButtonPressed();
+      driveBase.cycleMotor();
     }
     if (xboxController.getBButtonPressed()) {
-      driveBase.BButtonPressed();
-    }
-    if (xboxController.getXButtonPressed()) {
-      driveBase.XButtonPressed();
-    }
-    if (xboxController.getYButtonPressed()) {
-      driveBase.YButtonPressed();
+      driveBase.printActiveMotorDebugMode();
     }
     if (xboxController.getLeftBumperPressed()) {
-      driveBase.leftBumperPressed();
+      driveBase.decreaseSpeedBracket();
     }
     if (xboxController.getRightBumperPressed()) {
-      driveBase.rightBumperPressed();
+      driveBase.increaseSpeedBracket();
     }
   }
 
@@ -210,12 +200,13 @@ public class Robot extends TimedRobot {
 
     // process input (determine wheelspeeds)
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    // System.out.println(xboxController.getLeftY());
   }
 
-  private TankDrive createTankDrive() {
-    return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
-                         Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
-  }
+  // private TankDrive createTankDrive() {
+  //   return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
+  //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
+  // }
 
   private MecaDrive createMecanumDrive() {
     return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
