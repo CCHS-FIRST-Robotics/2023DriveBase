@@ -67,13 +67,12 @@ public class MecaDrive extends DriveBase {
         rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 
-		subsystem = new MecaSubsystem(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
-		
 		// invert motors to make forward the right direction
-		frontLeftMotor.setInverted(true);
 		frontRightMotor.setInverted(true);
-		rearLeftMotor.setInverted(true);
 		rearRightMotor.setInverted(true);
+
+		subsystem = new MecaSubsystem(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+
     } 
 
     /**
@@ -365,8 +364,7 @@ public class MecaDrive extends DriveBase {
 			this.rearLeftMotor = rearLeftMotor;
 			this.frontRightMotor = frontRightMotor;
 			this.rearRightMotor = rearRightMotor;
-			this.rearLeftMotor.setInverted(true);
-			this.frontLeftMotor.setInverted(true);
+
 			mDrive = new MecanumDrive(this.frontLeftMotor, this.rearLeftMotor, this.frontRightMotor, this.rearRightMotor);
 			
 			// Initializing Falcon sensors
@@ -389,9 +387,8 @@ public class MecaDrive extends DriveBase {
 				speedY = 0;
 			}
 			
-			// method defines Y as left/right and X as forward/backward - left/forward are positive
-			// TODO: check to make sure xbox controller defines left as negative (which is why we reverse the sign here)
-			mDrive.driveCartesian(speedY, -speedX, rotateSpeed);
+			// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
+			mDrive.driveCartesian(speedY, speedX, rotateSpeed);
 		}
 		
 		@Override
