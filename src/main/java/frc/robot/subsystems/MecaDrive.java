@@ -276,18 +276,6 @@ public class MecaDrive extends DriveBase {
 		System.out.println("STOP MODE");
 	}
 
-	// prints the number of the currently activated motor during debug mode
-	public void printActiveMotorDebugMode() {
-		System.out.println("Current Motor: " + debugEnabledMotor);
-	}
-
-    // cycles through the activated motors during debug mode
-    public void cycleMotor() {
-        debugEnabledMotor++;
-        debugEnabledMotor %= 4;
-        System.out.println("Current Motor: " + debugEnabledMotor);
-    }
-
 	/**
 	 * 
 	 * MecaSubsystem class handles all drive functions outside of manual driving
