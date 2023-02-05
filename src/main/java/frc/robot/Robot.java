@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
+  private XboxController xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT);
   private MecaDrive driveBase;
 
   Limelight limelight = new Limelight();
@@ -135,8 +135,16 @@ public class Robot extends TimedRobot {
     // check for button/bumper presses
     checkForButtonPresses();
 
+    double leftAnalogX 	= xboxController.getLeftX();
+    double leftAnalogY 	= -1 * xboxController.getLeftY(); // flip input because up is negative natively
+    double rightAnalogX = xboxController.getRightX();
+    double rightAnalogY = -1 * xboxController.getRightY(); // flip input becasue up is negative natively
+
     // powers motors based on the analog inputs
-    drive();
+    drive(
+      xboxController.getLeftX();
+
+    );
 
     if (counter % 10 == 0) {
       imu.updateValues();
@@ -203,12 +211,7 @@ public class Robot extends TimedRobot {
   /** 
    * Powers motors based on the analog inputs
    */
-  private void drive() {
-    // get analog input from xbox controller
-    double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= -1 * xboxController.getLeftY(); // flip input because up is negative natively
-    double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = -1 * xboxController.getRightY(); // flip input becasue up is negative natively
+  private void drive(double speedX, double speedY, double speedRotate) {
 
     // process input (determine wheelspeeds)
     driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
