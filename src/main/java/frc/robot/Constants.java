@@ -39,6 +39,7 @@ public class Constants {
 	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
 	
 	public static final double ANALOG_DEAD_ZONE = 0.1;
+	public static final double EXPONENT = 2; // TODO: remove this and implement with shuffleboard instead
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)

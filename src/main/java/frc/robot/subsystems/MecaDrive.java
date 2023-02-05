@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -76,40 +78,13 @@ public class MecaDrive extends DriveBase {
         
         // left analog stick controls translation
         // right analog stick controls rotation
-		
-
-		 /**
-		 * Add deadbands (stop all movement when input is under a certain amount)
-		 * This allows you to go online in one direction more easily because it 
-		 * prevents slight (unintentional) inputs in the perpendicular direction
-		 */
-		if (Math.abs(leftAnalogY) < Constants.ANALOG_DEAD_ZONE) {
-			leftAnalogY = 0;
-		}
-		else {
-			leftAnalogY = Math.pow(Math.abs(leftAnalogY), LEFT_Y_EXPONENT) * Math.signum(leftAnalogY);
-		}
-		
-		if (Math.abs(leftAnalogX) < Constants.ANALOG_DEAD_ZONE) {
-			leftAnalogX = 0;
-		}
-		else {
-			leftAnalogX = Math.pow(Math.abs(leftAnalogX), LEFT_X_EXPONENT) * Math.signum(leftAnalogX);
-		}
-
-		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
-			rightAnalogX = 0;
-		}
-		else {
-			rightAnalogX = Math.pow(Math.abs(rightAnalogX), RIGHT_X_EXPONENT) * Math.signum(rightAnalogX);
-		}
 
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
 
 		switch (currentMode){
 			case DEFAULT_MODE:
-				 // set the motor speeds (normal)
+				 // set the motor speeds as a percent 0-1 (normal)
 				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
 				frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
@@ -223,38 +198,31 @@ public class MecaDrive extends DriveBase {
 		leftAnalogY *= verticalSpeedMultiplier;
         leftAnalogX *= horizontalSPeedMultiplier;
        
-        // arrays for wheel speeds (percents)
+        // arrays for wheel speeds for each movement direction (percents)
         // 1st is front left, 2nd is front right, 3rd is back left, 4th is back right
         double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
                                    leftAnalogY, leftAnalogY};
         
         // negatives due to wheels going in opposite directions during left or right translation
-        double[] horizontalSpeeds = {leftAnalogX, -1 * leftAnalogX,
-                                     -1 * leftAnalogX, leftAnalogX};
+        double[] horizontalSpeeds = {leftAnalogX, -leftAnalogX,
+                                     -leftAnalogX, leftAnalogX};
 
         // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {rightAnalogX, -1 * rightAnalogX,
-                                   rightAnalogX, -1 * rightAnalogX};
-        
-        // so these could exceed 1 (not good; we cannot run the motors at over 100%)
-        // we will use the maximum speed to scale all the other speeds to something below 1
-        for (int i = 0; i < 4; i ++)
-            combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
+        double[] rotationSpeeds = {rightAnalogX, -rightAnalogX,
+                                   rightAnalogX, -rightAnalogX};
+		
+		// combine speeds
+		for (int i = 0; i < 4; i++) {
+			combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
+		}
 
-        // find the max of the above speeds so we can check if it is above 1
-        double maxSpeed = Integer.MIN_VALUE;
-
-        for (int i = 0; i < 4; i++)
-            if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
-        
-        maxSpeed = Math.max(1, maxSpeed); // if it is under 1, we can basically ignore it    
+        /* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
+        we will use the maximum speed to scale all the other speeds to something below 1 */
+        double maxSpeed = Arrays.stream(combinedSpeeds).sorted().toArray()[3];
 
         for (int i = 0; i < 4; i++) {
-            // scale the speeds
-            combinedSpeeds[i] = (1 / maxSpeed) * combinedSpeeds[i];
-
-            // we also need to scale the speeds by the speed multiplier
-            combinedSpeeds[i] = combinedSpeeds[i] * speedMultiplier;
+            // nomralize the speeds and scale by speed multiplier
+            combinedSpeeds[i] = (speedMultiplier / maxSpeed) * combinedSpeeds[i];
         }
 
 		return combinedSpeeds;
