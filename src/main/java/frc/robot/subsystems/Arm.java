@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -36,37 +35,45 @@ public class Arm {
 	 * @param elbowTalonPort
 	 */
 	public Arm(int shoulderTalonPort, int elbowTalonPort) {
+		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
 		// initialize motors
         shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
         elbowMotor = new WPI_TalonSRX(elbowTalonPort);
 
-		// Initializing Falcon sensors
+		// setup motor encoders
+		TalonSRXConfiguration config = new TalonSRXConfiguration();
+		config.peakCurrentLimit = 40; // the peak current, in amps
+		config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
+		config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
+		shoulderMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+		elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+
+		// initialize Falcon motors (USE LATER)
+        // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
+        // elbowMotor = new WPI_TalonFX(elbowTalonPort);
+
+		// Initializing Falcon sensors (USE LATER)
 		//shoulderFalconSensor = new TalonFXSensorCollection(shoulderMotor);
 		//elbowFalconSensor = new TalonFXSensorCollection(elbowMotor);
 
-		// shoulderEncoder = new TalonFXSensorCollection(shoulderMotor);
-		// elbowEncoder = new TalonFXSensorCollection(elbowMotor);
-
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
-
-
     }
 
-	public double getAlpha() {
-		return 0;
+	public double getShoulderAngle() {
+		return shoulderMotor.getSelectedSensorPosition(); // prints the position of the selected sensor
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	public double getBeta() {
-		return 0;
+	public double getElbowAngle() {
+		return elbowMotor.getSelectedSensorPosition();
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	public void setAlpha() {
+	public void setShoulder() {
 	}
 
-	public void setBeta() {
+	public void setElbow() {
 	}
 
 	public void moveArm(double leftAnalogX, double leftAnalogY) {

@@ -128,10 +128,10 @@ public class Robot extends TimedRobot {
     // drive();
 
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
-    System.out.println("Alpha:" + arm.getAlpha());
-    System.out.println("Beta:" + arm.getBeta());
+    System.out.println("Alpha:" + arm.getShoulderAngle());
+    System.out.println("Beta:" + arm.getElbowAngle());
     System.out.println("\n");
-    arm.testMove();
+    // arm.testMove();
 
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu);
