@@ -26,15 +26,15 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
+  private Controller xboxController = new Controller();
   private MecaDrive driveBase;
+
   Limelight limelight = new Limelight();
-  Sensors sensors = new Sensors();
+  IMU imu = new IMU();
+  BetterShuffleboard smartdash = new BetterShuffleboard();
+  
   double test = 0;
   long counter = 0; // for calling functions every n loops
-
-  // shuffleboard tabs
-  ShuffleboardTab tuningTab;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -56,11 +56,6 @@ public class Robot extends TimedRobot {
 
     // mecanum drive initialization
     driveBase = createMecanumDrive();
-
-    // set up tuning tab
-    tuningTab = Shuffleboard.getTab("Tuning");
-
-
   }
 
   /**
@@ -72,9 +67,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
     
     // SmartDashboard.putNumber("test", test);
-    limelight.smartDash();
     // limelight.test();
     // System.out.println("hello wo5rld");
 
@@ -115,11 +110,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    // get exponents for input curving
-    // set default values for some inputs
-    MecaDrive.LEFT_X_EXPONENT = tuningTab.add("LeftXExp", 2.0).getEntry().getDouble(2.0);
-    MecaDrive.LEFT_Y_EXPONENT = tuningTab.add("LeftYExp", 2.0).getEntry().getDouble(2.0);
-    MecaDrive.RIGHT_X_EXPONENT = tuningTab.add("RightXExp", 2.0).getEntry().getDouble(2.0);
+    smartdash.updateControllerExponents();
   }
 
   /** This function is called periodically during operator control. */
@@ -136,8 +127,7 @@ public class Robot extends TimedRobot {
     drive();
 
     if (counter % 10 == 0) {
-      driveBase.sensors.getValues();
-      driveBase.sensors.pushShuffleboard();
+      smartdash.pushDashboard(limelight, imu);
     }
     counter++;
   }
@@ -178,22 +168,16 @@ public class Robot extends TimedRobot {
    */
   private void checkForButtonPresses() {
     if (xboxController.getAButtonPressed()) {
-      driveBase.AButtonPressed();
+      driveBase.cycleMotor();
     }
     if (xboxController.getBButtonPressed()) {
-      driveBase.BButtonPressed();
-    }
-    if (xboxController.getXButtonPressed()) {
-      driveBase.XButtonPressed();
-    }
-    if (xboxController.getYButtonPressed()) {
-      driveBase.YButtonPressed();
+      driveBase.printActiveMotorDebugMode();
     }
     if (xboxController.getLeftBumperPressed()) {
-      driveBase.leftBumperPressed();
+      driveBase.decreaseSpeedBracket();
     }
     if (xboxController.getRightBumperPressed()) {
-      driveBase.rightBumperPressed();
+      driveBase.increaseSpeedBracket();
     }
   }
 
@@ -201,20 +185,16 @@ public class Robot extends TimedRobot {
    * Powers motors based on the analog inputs
    */
   private void drive() {
-    // get analog input from xbox controller
-    double leftAnalogX 	= xboxController.getLeftX();
-    double leftAnalogY 	= -1 * xboxController.getLeftY(); // flip input because up is negative natively
-    double rightAnalogX = xboxController.getRightX();
-    double rightAnalogY = -1 * xboxController.getRightY(); // flip input becasue up is negative natively
 
     // process input (determine wheelspeeds)
-    driveBase.drive(leftAnalogX, leftAnalogY, rightAnalogX, rightAnalogY);
+    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    // System.out.println(xboxController.getLeftY());
   }
 
-  private TankDrive createTankDrive() {
-    return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
-                         Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
-  }
+  // private TankDrive createTankDrive() {
+  //   return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
+  //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
+  // }
 
   private MecaDrive createMecanumDrive() {
     return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
