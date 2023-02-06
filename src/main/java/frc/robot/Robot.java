@@ -5,12 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
+
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,11 +30,14 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Controller xboxController = new Controller();
-  private MecaDrive driveBase;
+  private MecaSubsystem driveBase;
 
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
+
+  MecanumDriveOdometry mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
+  
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -187,7 +193,6 @@ public class Robot extends TimedRobot {
   private void drive() {
 
     // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());
   }
 
@@ -196,8 +201,8 @@ public class Robot extends TimedRobot {
   //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
   // }
 
-  private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
+  private MecaSubsystem createMecanumDrive() {
+    return new MecaSubsystem(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
                          Constants.RL_TALON_ID, Constants.RR_TALON_ID);
   }
 

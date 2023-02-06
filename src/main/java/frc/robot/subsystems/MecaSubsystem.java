@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -17,13 +16,9 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 import java.lang.Math;
 
@@ -47,9 +42,6 @@ public class MecaSubsystem extends SubsystemBase {
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
 
-	// Odometry class for tracking robot pose
-	final MecanumDriveOdometry mOdom;
-
 	// Drive Object
 	MecanumDrive mDrive;
 
@@ -62,12 +54,12 @@ public class MecaSubsystem extends SubsystemBase {
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
 
-	MecaSubsystem(int frontLeftMotorPort, int frontRightMotorPort,
+	public MecaSubsystem(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort) {
 
 		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
 		frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
-		rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
+		rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort); 
 		rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 
 		// invert motors to make forward the right direction
@@ -83,11 +75,9 @@ public class MecaSubsystem extends SubsystemBase {
 		frFalconSensor = new TalonFXSensorCollection(frontRightMotor);
 		rrFalconSensor = new TalonFXSensorCollection(rearRightMotor);
 
-		// Odometry: !!secondary constructor takes initialPose argument
-		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
 	}
 	
-	void drive(double speedX, double speedY, double rotateSpeed) {
+	public void drive(double speedX, double speedY, double rotateSpeed) {
 
 		switch (currentMode){
 			case STOP_MODE:
@@ -146,7 +136,6 @@ public class MecaSubsystem extends SubsystemBase {
 		return newVelocity;
 	}
 
-		@Override
 	public void printControlsOfCurrentMode() {
 		System.out.println("Controls:");
 		switch(currentMode) {
@@ -178,12 +167,14 @@ public class MecaSubsystem extends SubsystemBase {
 	 */
 	public void increaseSpeedBracket() {
 		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
+		setMaxOutput(speedMultiplier);
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
 	public void decreaseSpeedBracket() {
 		// the min is 0.2 because below that the robot is unlikely to move
 		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
+		setMaxOutput(speedMultiplier);
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
@@ -205,10 +196,18 @@ public class MecaSubsystem extends SubsystemBase {
 		printControlsOfCurrentMode();
     }
 
+	public void turnONPIDTuningMode() {
+		if(currentMode == Mode.PID_TUNING_MODE) return;
+		currentMode = Mode.PID_TUNING_MODE;
+		System.out.println("********************************");
+		System.out.println("Current Mode: PID TUNING Mode");
+		System.out.println("********************************");
+		printControlsOfCurrentMode();
+	}
+
 	/**
 	 * Cycle between each motor during debug mode
 	 */
-	@Override
 	public void cycleMotor() {
 		if (currentMode == Mode.DEBUG_MODE) {
 			debugEnabledMotor++;
@@ -236,47 +235,6 @@ public class MecaSubsystem extends SubsystemBase {
 		
 	@Override
 	public void periodic() {
-		// Update the odometry in the periodic block
-		mOdom.update(new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
-	}
-
-	/**
-	 * Returns the total distances measured by each motor
-	 * 
-	 * @return wheel positions
-	 */
-	MecanumDriveWheelPositions getWheelPositions() {
-
-		// TODO: determine whether should use absolute position or just position
-
-		return new MecanumDriveWheelPositions(flFalconSensor.getIntegratedSensorAbsolutePosition(), 
-												frFalconSensor.getIntegratedSensorAbsolutePosition(), 
-												rlFalconSensor.getIntegratedSensorAbsolutePosition(),
-												rrFalconSensor.getIntegratedSensorAbsolutePosition());
-	}
-
-	/**
-	 * Returns the currently-estimated pose of the robot.
-	 *
-	 * @return The pose.
-	 */
-	Pose2d getPose() {
-		return mOdom.getPoseMeters();
-	}
-
-	// TODO: create method that returns wheel speeds of the robot
-	// TODO: create mthod that allows control of wheels with voltages
-	// TODO: method of averages of encoder distances
-
-	/**
-	 * Resets the odometry to the specified pose.
-	 *
-	 * @param pose The pose to which to set the odometry.
-	 */
-	void resetOdometry(Pose2d pose) {
-		//resetEncoders();
-		mOdom.resetPosition(
-			new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
 	}
 
 	/**
@@ -287,9 +245,6 @@ public class MecaSubsystem extends SubsystemBase {
 	public void setMaxOutput(double maxOutput) {
 		mDrive.setMaxOutput(maxOutput);
 	}
-	
-	
-	// TODO: create structure for odometry
 
 }
 
