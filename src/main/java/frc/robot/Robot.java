@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   private Controller xboxController = new Controller();
   private MecaDrive driveBase;
 
+
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID);
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
@@ -116,7 +118,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
     // switch between driving modes
     checkForModeSwitches();
 
@@ -124,7 +125,13 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
+
+    // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
+    System.out.println("Alpha:" + arm.getAlpha());
+    System.out.println("Beta:" + arm.getBeta());
+    System.out.println("\n");
+    arm.testMove();
 
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu);
@@ -185,6 +192,7 @@ public class Robot extends TimedRobot {
    * Powers motors based on the analog inputs
    */
   private void drive() {
+
 
     // process input (determine wheelspeeds)
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());

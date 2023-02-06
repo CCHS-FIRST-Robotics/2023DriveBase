@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,21 +14,12 @@ import edu.wpi.first.math.MathUtil;
 
 public class Arm {
 
-    // define objects
-	TalonSRX leftTalon, rightTalon;
-	VictorSPX leftVictor, rightVictor;
-	CANSparkMax leftSparkMax;
-	RelativeEncoder sparkMaxEncoder;
+    // define motor and encoder objects
+	WPI_TalonSRX shoulderMotor, elbowMotor;
+	// TalonFXSensorCollection shoulderFalconSensor, elbowFalconSensor;
 
-    // amount to increment constant during PID Tuning Mode
-	double[] PIDIncrements = {0.05, 0.05, 0.05}; // kP, kI, kD increments
 
-	// PID constants
-	double[] PIDConstants = {1, 0, 0}; // kP, kI, kD
-
-	// Upper bound for PID constants
-	double[] PIDMaximums = {2, 1, 1};
-	
+	//TODO: add claw encoder and PID constants
 	PIDController shoulderPID;
 	PIDController elbowPID;
 
@@ -44,28 +32,54 @@ public class Arm {
     /**
 	 * Constructor for Arm Class -- setup as tankdrive until I figure out what motors we're using 
 	 * 
-	 * @param leftMotorPort
-	 * @param rightMotorPort
+	 * @param shoulderTalonPort
+	 * @param elbowTalonPort
 	 */
-	public Arm(int leftTalonPort, int leftVictorPort,
-                    int rightTalonPort, int rightVictorPort) {
+	public Arm(int shoulderTalonPort, int elbowTalonPort) {
+		// initialize motors
+        shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
+        elbowMotor = new WPI_TalonSRX(elbowTalonPort);
 
-        leftVictor = new VictorSPX(leftVictorPort);
-        leftSparkMax = new CANSparkMax(leftTalonPort, CANSparkMaxLowLevel.MotorType.kBrushed);
-        rightTalon = new TalonSRX(rightTalonPort);
-        rightVictor = new VictorSPX(rightVictorPort);
-        sparkMaxEncoder = leftSparkMax.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, Constants.ENCODER_CPR);
+		// Initializing Falcon sensors
+		//shoulderFalconSensor = new TalonFXSensorCollection(shoulderMotor);
+		//elbowFalconSensor = new TalonFXSensorCollection(elbowMotor);
 
-        shoulderPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
-        elbowPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
+		// shoulderEncoder = new TalonFXSensorCollection(shoulderMotor);
+		// elbowEncoder = new TalonFXSensorCollection(elbowMotor);
+
+        shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
+        elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
+
+
     }
 
 	public double getAlpha() {
 		return 0;
+		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
 	public double getBeta() {
 		return 0;
+		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
+	}
+
+	public void setAlpha() {
+	}
+
+	public void setBeta() {
+	}
+
+	public void moveArm(double leftAnalogX, double leftAnalogY) {
+		double[] combinedSpeeds = speedInverseKinematics(leftAnalogX, leftAnalogY);
+
+		// set the motor speeds as a percent 0-1 (normal)
+		shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
+		elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+	}
+
+	public void testMove() {
+		// elbowMotor.set(ControlMode.PercentOutput, -.2);
+		shoulderMotor.set(ControlMode.PercentOutput, .2);
 	}
 
 	//TODO: write method
@@ -77,7 +91,8 @@ public class Arm {
 	 * @return angles
 	 */
     private double[] forwardKinematics(double alpha, double beta) {
-        return 0;
+		double[] x = {0, 0};
+        return x;
     }
 
     /**
@@ -100,7 +115,7 @@ public class Arm {
 		double l = l1*l1 - l2*l2 + dist*dist;
 		double h = Math.sqrt(l1*l1 - l*l);
 
-		double x1 = l/dist * xPos - h/dist * yPos;
+		// double x1 = l/dist * xPos - h/dist * yPos;
     	double y1 = l/dist * yPos + h/dist * xPos;
 
 		double alpha = Math.asin(y1/l1);

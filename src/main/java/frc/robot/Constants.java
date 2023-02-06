@@ -35,6 +35,9 @@ public class Constants {
 	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
+	public static final int SHOULDER_TALON_ID = 0;
+	public static final int ELBOW_TALON_ID = 5;
+
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
 	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
@@ -56,6 +59,29 @@ public class Constants {
 	// arm lengths in meters
 	public static final double UPPER_ARM_LENGTH = 1.0; 
 	public static final double LOWER_ARM_LENGTH = 0.5;
+
+	public static final double SHOULDER_KP = 0;
+	public static final double SHOULDER_KI = 0;
+	public static final double SHOULDER_KD = 0;
+
+	public static final double ELBOW_KP = 0;
+	public static final double ELBOW_KI = 0;
+	public static final double ELBOW_KD = 0;
+
+	// TODO: set values
+	public static final double minX = 0;
+	public static final double maxX = 100;
+	public static final double minY = 0;
+	public static final double maxY = 100;
+
+	// alpha is the bottom angle in relation to the horizontal
+	// beta is the center angle in relation to the shoulder segment
+	// angles in degrees
+	public static final double minAlpha = -30;
+	public static final double maxAlpha = 120;
+
+	public static final double minBeta = -30;
+	public static final double maxBeta = 90;
 
 	Constants() {
 		
