@@ -146,7 +146,6 @@ public class MecaSubsystem extends SubsystemBase {
 		return newVelocity;
 	}
 
-		@Override
 	public void printControlsOfCurrentMode() {
 		System.out.println("Controls:");
 		switch(currentMode) {
@@ -208,7 +207,6 @@ public class MecaSubsystem extends SubsystemBase {
 	/**
 	 * Cycle between each motor during debug mode
 	 */
-	@Override
 	public void cycleMotor() {
 		if (currentMode == Mode.DEBUG_MODE) {
 			debugEnabledMotor++;
