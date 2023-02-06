@@ -177,12 +177,14 @@ public class MecaSubsystem extends SubsystemBase {
 	 */
 	public void increaseSpeedBracket() {
 		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
+		mDrive.setMaxOutput(speedMultiplier);
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
 	public void decreaseSpeedBracket() {
 		// the min is 0.2 because below that the robot is unlikely to move
 		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
+		mDrive.setMaxOutput(speedMultiplier);
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
@@ -277,14 +279,6 @@ public class MecaSubsystem extends SubsystemBase {
 			new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
 	}
 
-	/**
-	 * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
-	 *
-	 * @param maxOutput the maximum output to which the drive will be constrained
-	 */
-	public void setMaxOutput(double maxOutput) {
-		mDrive.setMaxOutput(maxOutput);
-	}
 	
 	
 	// TODO: create structure for odometry
