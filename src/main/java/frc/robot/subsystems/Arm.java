@@ -7,6 +7,7 @@ import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.MathUtil;
 
@@ -19,11 +20,11 @@ public class Arm {
 
 
 	//TODO: add claw encoder and PID constants
-	PIDController shoulderPID;
-	PIDController elbowPID;
+	PIDController shoulderPID, elbowPID;
+	ArmFeedforward shoulderFeedforward, elbowFeedforward;
 
     // current constant to be tuned
-	int currentPIDConstant = 0; // 0 = kP, 1 = kI, 2 = kD
+	int currentPIDConstant = 0; 
 
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
@@ -58,6 +59,9 @@ public class Arm {
 
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
+
+		shoulderFeedforward = new ArmFeedforward(Constants.SHOULDER_KS, Constants.SHOULDER_KG, Constants.SHOULDER_KV, Constants.SHOULDER_KA);
+		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
     }
 
 	public double getShoulderAngle() {
@@ -70,10 +74,29 @@ public class Arm {
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	public void setShoulder() {
+	/**
+	 * @param xPos (double) x position of the end effector - METERS
+	 * @param yPos (double) y position of the end effector - METERS
+	 * @return angles (double[]) array of angles for each arm length
+	 */
+	double setEndEffector(double xPos, double yPos) {
+		double[] angles = positionInverseKinematics(xPos, yPos);
+		
+		double alpha = Math.toDegrees(angles[0]);
+		double beta = Math.toDegrees(angles[1]);
+
+		setShoulder(alpha);
+		setElbow(beta);
+		
+		return angles[0];
 	}
 
-	public void setElbow() {
+	private void setShoulder(double alpha) {
+		shoulderMotor.setVoltage(shoulderPID.calculate(getShoulderAngle(), alpha) + shoulderFeedforward.calculate(alpha, 0, 0));
+	}
+
+	private void setElbow(double beta) {
+		elbowMotor.setVoltage(elbowPID.calculate(getElbowAngle(), beta) + elbowFeedforward.calculate(beta, 0, 0));
 	}
 
 	public void moveArm(double leftAnalogX, double leftAnalogY) {
@@ -143,33 +166,33 @@ public class Arm {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 
-		double alpha = getAlpha();
-		double beta = getBeta();
+		double alpha = Math.toRadians(getShoulderAngle());
+		double beta = Math.toRadians(getElbowAngle());
 
 		double v1x = l1 * Math.cos(alpha);
 		double v1y = l1 * Math.sin(alpha);
 
-		double v2x = l2 * Math.cos(beta - alpha);
-		double v2y = l2 * Math.sin(beta - alpha);
+		double v2x = l2 * Math.cos(beta);
+		double v2y = l2 * Math.sin(beta);
 
 		double w1x, w2x, w1y, w2y;
 
 		// LATERAL MOVEMENT:
 		if (v2y > v1y) {
 			w1x = 1;
-			w2x = -v1y/v2y;
+			w2x = -v1y/v2y * w1x;
 		} else {
 			w2x = 1;
-			w1x = -v2y/v1y;
+			w1x = -v2y/v1y * w2x;
 		}
 
 		// VERTICAL MOVEMENT:
 		if (v2x > v1x) {
 			w1y = 1;
-			w2y = -v1x/v2x;
+			w2y = -v1x/v2x * w1y;
 		} else {
 			w2y = 1;
-			w1y = -v2x/v1x;
+			w1y = -v2x/v1x * w2y;
 		}
 
 		double[] combinedSpeeds = {w1x + w1y, w2x + w2y};

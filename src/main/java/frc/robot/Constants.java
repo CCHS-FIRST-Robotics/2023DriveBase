@@ -60,13 +60,25 @@ public class Constants {
 	public static final double UPPER_ARM_LENGTH = 1.0; 
 	public static final double LOWER_ARM_LENGTH = 0.5;
 
+	// Shoulder PID and Feedfoward gains
 	public static final double SHOULDER_KP = 0;
 	public static final double SHOULDER_KI = 0;
 	public static final double SHOULDER_KD = 0;
 
+	public static final double SHOULDER_KS = 0;
+	public static final double SHOULDER_KG = 0;
+	public static final double SHOULDER_KV = 0;
+	public static final double SHOULDER_KA = 0;
+
+	// Elbow PID and Feedfoward gains
 	public static final double ELBOW_KP = 0;
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0;
+
+	public static final double ELBOW_KS = 0;
+	public static final double ELBOW_KG = 0;
+	public static final double ELBOW_KV = 0;
+	public static final double ELBOW_KA = 0;
 
 	// TODO: set values
 	public static final double minX = 0;
@@ -74,8 +86,8 @@ public class Constants {
 	public static final double minY = 0;
 	public static final double maxY = 100;
 
-	// alpha is the bottom angle in relation to the horizontal
-	// beta is the center angle in relation to the shoulder segment
+	// alpha is the shoulder joint angle in relation to the horizontal
+	// beta is the elbow joint angle in relation to the horzinontal
 	// angles in degrees
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 120;
