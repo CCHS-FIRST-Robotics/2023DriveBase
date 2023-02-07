@@ -67,6 +67,9 @@ public class MecaDrive extends DriveBase {
 	
 	@Override
 	public void drive(double speedX, double speedY, double rotateSpeed) {
+		speedX *= speedMultiplier;
+		speedY *= speedMultiplier;
+		rotateSpeed *= speedMultiplier;
 
 		switch (currentMode){
 			case STOP_MODE:
@@ -103,7 +106,7 @@ public class MecaDrive extends DriveBase {
 		}
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
-		mDrive.driveCartesian(speedMultiplier * speedY, speedMultiplier * speedX, speedMultiplier * rotateSpeed);
+		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
 	}
 
 	/**
