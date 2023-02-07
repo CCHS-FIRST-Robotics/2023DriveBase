@@ -127,13 +127,21 @@ public class Robot extends TimedRobot {
     // powers motors based on the analog inputs
     // drive();
 
+    
+    
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
-    System.out.println("Alpha:" + arm.getShoulderAngle());
-    System.out.println("Beta:" + arm.getElbowAngle());
-    System.out.println("\n");
-    // arm.testMove();
+    // System.out.println("Alpha:" + arm.getShoulderAngle());
+    // System.out.println("Beta:" + arm.getElbowAngle());
+    // System.out.println("\n\n");
+
+    // arm.testMoveShoulder(xboxController.getRightX());
+    // arm.testMoveElbow(xboxController.getRightY());
+
+    // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
     if (counter % 10 == 0) {
+      smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
+      smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
       smartdash.pushDashboard(limelight, imu);
     }
     counter++;

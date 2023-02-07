@@ -44,6 +44,10 @@ public class BetterShuffleboard {
         odomTab = Shuffleboard.getTab("Odometry");
     }
 
+    public void putNumber(String key, double x) {
+        SmartDashboard.putNumber(key, x);
+    }
+
     public void pushDashboard(Limelight limelight, IMU imu){
         pushLimelight(limelight);
         pushIMU(imu);

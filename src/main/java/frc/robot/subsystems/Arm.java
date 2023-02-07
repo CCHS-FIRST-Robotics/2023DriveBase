@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -51,7 +52,11 @@ public class Arm {
 		elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
 
 		// if that doesnt work: https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
-		// talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		shoulderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+
+		// shoulderMotor.configFactoryDefault();
+		// elbowMotor.configFactoryDefault();
 
 
 		// initialize Falcon motors (USE LATER)
@@ -69,14 +74,53 @@ public class Arm {
 		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
     }
 
+	public boolean shouldMotorStop() {
+		return (
+			getShoulderAngle() < Constants.minAlpha |
+			getShoulderAngle() > Constants.maxAlpha |
+			getElbowAngle() < Constants.minBeta | 
+			getElbowAngle() > Constants.maxBeta
+		);
+	}
+
+	public void setMotorLimits() {
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * -Constants.minAlpha + 2048);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
+		
+
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * -Constants.minBeta);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
+	}
+
 	public double getShoulderAngle() {
-		return shoulderMotor.getSelectedSensorPosition(); // prints the position of the selected sensor
+		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096; // prints the position of the selected sensor
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
 	public double getElbowAngle() {
-		return elbowMotor.getSelectedSensorPosition();
+		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees
+		return elbowMotor.getSelectedSensorPosition(1) * -360/4096 + 10;
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
+	}
+
+	public void testMoveShoulder(double analogX) {
+		if(shouldMotorStop()){
+			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+			return;
+		}
+
+		if (Math.abs(analogX) < Constants.ANALOG_DEAD_ZONE) analogX = 0;
+		shoulderMotor.set(ControlMode.PercentOutput, -0.3 * analogX);
+	}
+
+	public void testMoveElbow(double analogY) {
+		if(shouldMotorStop()){
+			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+			return;
+		}
+
+		if (Math.abs(analogY) < Constants.ANALOG_DEAD_ZONE) analogY = 0;
+		elbowMotor.set(ControlMode.PercentOutput, 0.3 * analogY);
 	}
 
 	/**
@@ -85,6 +129,11 @@ public class Arm {
 	 * @return angles (double[]) array of angles for each arm length
 	 */
 	double setEndEffector(double xPos, double yPos) {
+		if(shouldMotorStop()){
+			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+			return 0;
+		}
+
 		double[] angles = positionInverseKinematics(xPos, yPos);
 		
 		double alpha = Math.toDegrees(angles[0]);
@@ -105,16 +154,16 @@ public class Arm {
 	}
 
 	public void moveArm(double leftAnalogX, double leftAnalogY) {
+		if(shouldMotorStop()){
+			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+			return;
+		}
+		
 		double[] combinedSpeeds = speedInverseKinematics(leftAnalogX, leftAnalogY);
 
 		// set the motor speeds as a percent 0-1 (normal)
 		shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
 		elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-	}
-
-	public void testMove() {
-		// elbowMotor.set(ControlMode.PercentOutput, -.2);
-		shoulderMotor.set(ControlMode.PercentOutput, .2);
 	}
 
 	//TODO: write method

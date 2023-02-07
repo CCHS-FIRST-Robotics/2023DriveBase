@@ -30,9 +30,9 @@ public class Constants {
 	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_ID = 1; // 2
-	public static final int FL_TALON_ID = 2; // 8
-	public static final int RR_TALON_ID = 3; // 10
+	public static final int FR_TALON_ID = 2; // 1
+	public static final int FL_TALON_ID = 8; // 2
+	public static final int RR_TALON_ID = 10; // 3
 	public static final int RL_TALON_ID = 4; // 4 
 
 	public static final int SHOULDER_TALON_ID = 0;
@@ -82,9 +82,9 @@ public class Constants {
 
 	// TODO: set values
 	public static final double minX = 0;
-	public static final double maxX = 100;
+	public static final double maxX = 120;
 	public static final double minY = 0;
-	public static final double maxY = 100;
+	public static final double maxY = 200;
 
 	// alpha is the shoulder joint angle in relation to the horizontal
 	// beta is the elbow joint angle in relation to the horzinontal
