@@ -37,6 +37,7 @@ public class Arm {
 	 */
 	public Arm(int shoulderTalonPort, int elbowTalonPort) {
 		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
+		
 		// initialize motors
         shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
         elbowMotor = new WPI_TalonSRX(elbowTalonPort);
@@ -48,6 +49,10 @@ public class Arm {
 		config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
 		shoulderMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
 		elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+
+		// if that doesnt work: https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
+		// talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+
 
 		// initialize Falcon motors (USE LATER)
         // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
