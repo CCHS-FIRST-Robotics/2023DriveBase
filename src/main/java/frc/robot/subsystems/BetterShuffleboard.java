@@ -16,6 +16,7 @@ public class BetterShuffleboard {
     GenericEntry leftXExp, leftYExp, rightXExp, rightYExp;
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
+    GenericEntry odomX, odomY, odomHead;
 
     public BetterShuffleboard() {
         tuningTab = Shuffleboard.getTab("Tuning");
@@ -43,9 +44,21 @@ public class BetterShuffleboard {
 
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
+        odomX = odomTab.add("OdomX", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("visible time", 20))
+            .getEntry();
+        odomY = odomTab.add("OdomY", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("visible time", 20))
+            .getEntry();
+        odomHead = odomTab.add("OdomHead", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", 0, "max", 360))
+            .getEntry();
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu, MecaSubsystem drive){
+    public void pushDashboard(Limelight limelight, IMU imu, MecaDrive drive){
         pushLimelight(limelight);
         pushIMU(imu);
         pushOdom(drive);
@@ -58,10 +71,10 @@ public class BetterShuffleboard {
         Constants.RIGHT_Y_EXPONENT = rightYExp.getDouble(2);
     }
 
-    public void pushOdom(MecaSubsystem drive) {
-        SmartDashboard.putNumber("OdomX", drive.getOdomX());
-        SmartDashboard.putNumber("OdomY", drive.getOdomY());
-        SmartDashboard.putNumber("OdomHeading", drive.getOdomHeading());
+    public void pushOdom(MecaDrive drive) {
+        odomX.setDouble(drive.getOdomX());
+        odomY.setDouble(drive.getOdomY());
+        odomHead.setDouble(drive.getOdomHeading());
     }
 
     public void pushLimelight(Limelight limelight) {

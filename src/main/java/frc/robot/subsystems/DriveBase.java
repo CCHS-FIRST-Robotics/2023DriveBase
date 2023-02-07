@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 import java.lang.Math;
 
-public abstract class DriveBase {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public abstract class DriveBase extends SubsystemBase {
 	// used to scale speeds - 1 would be max speed, 0.5 would be half speed, etc.
 	double speedMultiplier = 0.6;
 
@@ -25,8 +27,13 @@ public abstract class DriveBase {
 	 * analog sticks
 	 * 
 	 */
-	public abstract void drive(double leftAnalogX, double leftAnalogY,
-					  double rightAnalogX, double rightAnalogY);
+	public void drive(double leftAnalogX, double leftAnalogY,
+					  double rightAnalogX, double rightAnalogY){};
+
+
+	public void drive(double leftAnalogX, double leftAnalogY,
+					  double rightAnalogX){};
+
 
 
 	/**
