@@ -116,7 +116,7 @@ public class MecaDrive extends DriveBase {
 		}
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
-		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+		mDrive.driveCartesian(speedMultiplier * speedY, speedMultiplier * speedX, speedMultiplier * rotateSpeed);
 	}
 
 	/**
