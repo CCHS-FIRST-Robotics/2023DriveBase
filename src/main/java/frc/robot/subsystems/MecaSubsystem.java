@@ -1,29 +1,18 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 import java.lang.Math;
 
@@ -88,7 +77,7 @@ public class MecaSubsystem extends SubsystemBase {
 		this.imu = imu;
 
 		// Odometry: !!secondary constructor takes initialPose argument
-		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
+		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
 	}
 	
 	public void drive(double speedX, double speedY, double rotateSpeed) {
@@ -250,7 +239,7 @@ public class MecaSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// Update the odometry in the periodic block
-		mOdom.update(new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
+		mOdom.update(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
 	}
 
 	/**
@@ -301,7 +290,7 @@ public class MecaSubsystem extends SubsystemBase {
 	public void resetOdometry(Pose2d pose) {
 		//resetEncoders();
 		mOdom.resetPosition(
-			new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
+			new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), pose);
 	}
 
 	
