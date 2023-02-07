@@ -58,7 +58,7 @@ public class BetterShuffleboard {
             .getEntry();
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu, MecaSubsystem drive){
+    public void pushDashboard(Limelight limelight, IMU imu, MecaDrive drive){
         pushLimelight(limelight);
         pushIMU(imu);
         pushOdom(drive);
@@ -71,7 +71,7 @@ public class BetterShuffleboard {
         Constants.RIGHT_Y_EXPONENT = rightYExp.getDouble(2);
     }
 
-    public void pushOdom(MecaSubsystem drive) {
+    public void pushOdom(MecaDrive drive) {
         odomX.setDouble(drive.getOdomX());
         odomY.setDouble(drive.getOdomY());
         odomHead.setDouble(drive.getOdomHeading());

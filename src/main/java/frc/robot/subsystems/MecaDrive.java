@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -28,21 +27,9 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import java.lang.Math;
 
 
-public class MecaSubsystem extends SubsystemBase {
+public class MecaDrive extends DriveBase {
 
 	// TODO: create better modules for teleop and autonomous driving / odometry
-
-	// used to scale speeds - 1 would be max speed, 0.5 would be half speed, etc.
-	double speedMultiplier = 0.6;
-
-	// different modes
-	enum Mode {
-		DEFAULT_MODE,
-		DEBUG_MODE,
-		PID_TUNING_MODE,
-		STOP_MODE
-	}
-	Mode currentMode = Mode.DEFAULT_MODE;
 
 	IMU imu;
 
@@ -64,7 +51,7 @@ public class MecaSubsystem extends SubsystemBase {
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
 
-	public MecaSubsystem(int frontLeftMotorPort, int frontRightMotorPort,
+	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
 
 		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
@@ -91,6 +78,7 @@ public class MecaSubsystem extends SubsystemBase {
 		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
 	}
 	
+	@Override
 	public void drive(double speedX, double speedY, double rotateSpeed) {
 
 		switch (currentMode){
@@ -175,53 +163,9 @@ public class MecaSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * The speed bracket controls the multiplier for al the speeds
-	 * So when you change it, lets say, to 1/2 speed, all movement will be at
-	 * 1/2 speed
-	 */
-	public void increaseSpeedBracket() {
-		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
-		mDrive.setMaxOutput(speedMultiplier);
-		System.out.println("Current speed multiplier: " + speedMultiplier);
-	}
-
-	public void decreaseSpeedBracket() {
-		// the min is 0.2 because below that the robot is unlikely to move
-		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
-		mDrive.setMaxOutput(speedMultiplier);
-		System.out.println("Current speed multiplier: " + speedMultiplier);
-	}
-
-	public void turnOnDefaultMode() {
-		if(currentMode == Mode.DEFAULT_MODE) return;
-		currentMode = Mode.DEFAULT_MODE;
-		System.out.println("********************************");
-		System.out.println("Current Mode: DEFAULT Mode");
-		System.out.println("********************************");
-		printControlsOfCurrentMode();
-	}
-
-	public void turnOnDebugMode() {
-		if(currentMode == Mode.DEBUG_MODE) return;
-        currentMode = Mode.DEBUG_MODE;
-		System.out.println("********************************");
-        System.out.println("Current Mode: DEBUG Mode");
-		System.out.println("********************************");
-		printControlsOfCurrentMode();
-    }
-
-	public void turnONPIDTuningMode() {
-		if(currentMode == Mode.PID_TUNING_MODE) return;
-		currentMode = Mode.PID_TUNING_MODE;
-		System.out.println("********************************");
-		System.out.println("Current Mode: PID TUNING Mode");
-		System.out.println("********************************");
-		printControlsOfCurrentMode();
-	}
-
-	/**
 	 * Cycle between each motor during debug mode
 	 */
+	@Override
 	public void cycleMotor() {
 		if (currentMode == Mode.DEBUG_MODE) {
 			debugEnabledMotor++;
@@ -237,14 +181,6 @@ public class MecaSubsystem extends SubsystemBase {
 		if (currentMode == Mode.DEBUG_MODE) {
 			System.out.println("Current Motor: " + debugEnabledMotor);
 		}
-	}
-
-	
-	public void turnOnStopMode() {
-		if(currentMode == Mode.STOP_MODE) return;
-		currentMode = Mode.STOP_MODE;
-
-		System.out.println("STOP MODE");
 	}
 		
 	@Override
@@ -304,9 +240,6 @@ public class MecaSubsystem extends SubsystemBase {
 			new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
 	}
 
-	
-	
 	// TODO: create structure for odometry
 
 }
-
