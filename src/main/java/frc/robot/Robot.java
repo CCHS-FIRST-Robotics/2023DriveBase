@@ -26,12 +26,12 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Controller xboxController = new Controller();
-  private MecaDrive driveBase;
-
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
+
+  private Controller xboxController = new Controller();
+  private MecaSubsystem driveBase = new MecaSubsystem(Constants.FL_TALON_ID, Constants.RL_TALON_ID, Constants.FR_TALON_ID, Constants.RR_TALON_ID, imu);
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -53,9 +53,6 @@ public class Robot extends TimedRobot {
 
     // tank drive initialization
     // driveBase = createTankDrive();
-
-    // mecanum drive initialization
-    driveBase = createMecanumDrive();
   }
 
   /**
@@ -127,7 +124,7 @@ public class Robot extends TimedRobot {
     drive();
 
     if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu);
+      smartdash.pushDashboard(limelight, imu, driveBase);
     }
     counter++;
   }
@@ -187,7 +184,7 @@ public class Robot extends TimedRobot {
   private void drive() {
 
     // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    // driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());
   }
 
@@ -195,10 +192,5 @@ public class Robot extends TimedRobot {
   //   return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
   //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
   // }
-
-  private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
-                         Constants.RL_TALON_ID, Constants.RR_TALON_ID);
-  }
 
 }

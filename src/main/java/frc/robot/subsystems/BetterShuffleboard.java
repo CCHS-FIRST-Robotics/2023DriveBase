@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+
 import java.util.Map;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -44,9 +45,10 @@ public class BetterShuffleboard {
         odomTab = Shuffleboard.getTab("Odometry");
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu){
+    public void pushDashboard(Limelight limelight, IMU imu, MecaSubsystem drive){
         pushLimelight(limelight);
         pushIMU(imu);
+        pushOdom(drive);
     }
 
     public void updateControllerExponents() {
@@ -54,6 +56,12 @@ public class BetterShuffleboard {
         Constants.LEFT_Y_EXPONENT = leftYExp.getDouble(2);
         Constants.RIGHT_X_EXPONENT = rightXExp.getDouble(2);
         Constants.RIGHT_Y_EXPONENT = rightYExp.getDouble(2);
+    }
+
+    public void pushOdom(MecaSubsystem drive) {
+        SmartDashboard.putNumber("OdomX", drive.getOdomX());
+        SmartDashboard.putNumber("OdomY", drive.getOdomY());
+        SmartDashboard.putNumber("OdomHeading", drive.getOdomHeading());
     }
 
     public void pushLimelight(Limelight limelight) {

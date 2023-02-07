@@ -44,6 +44,8 @@ public class MecaSubsystem extends SubsystemBase {
 	}
 	Mode currentMode = Mode.DEFAULT_MODE;
 
+	IMU imu;
+
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
 
@@ -62,8 +64,8 @@ public class MecaSubsystem extends SubsystemBase {
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
 
-	MecaSubsystem(int frontLeftMotorPort, int frontRightMotorPort,
-					int rearLeftMotorPort, int rearRightMotorPort) {
+	public MecaSubsystem(int frontLeftMotorPort, int frontRightMotorPort,
+					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
 
 		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
 		frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
@@ -83,11 +85,13 @@ public class MecaSubsystem extends SubsystemBase {
 		frFalconSensor = new TalonFXSensorCollection(frontRightMotor);
 		rrFalconSensor = new TalonFXSensorCollection(rearRightMotor);
 
+		this.imu = imu;
+
 		// Odometry: !!secondary constructor takes initialPose argument
-		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
+		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
 	}
 	
-	void drive(double speedX, double speedY, double rotateSpeed) {
+	public void drive(double speedX, double speedY, double rotateSpeed) {
 
 		switch (currentMode){
 			case STOP_MODE:
@@ -206,6 +210,15 @@ public class MecaSubsystem extends SubsystemBase {
 		printControlsOfCurrentMode();
     }
 
+	public void turnONPIDTuningMode() {
+		if(currentMode == Mode.PID_TUNING_MODE) return;
+		currentMode = Mode.PID_TUNING_MODE;
+		System.out.println("********************************");
+		System.out.println("Current Mode: PID TUNING Mode");
+		System.out.println("********************************");
+		printControlsOfCurrentMode();
+	}
+
 	/**
 	 * Cycle between each motor during debug mode
 	 */
@@ -237,7 +250,7 @@ public class MecaSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// Update the odometry in the periodic block
-		mOdom.update(new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions());
+		mOdom.update(new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
 	}
 
 	/**
@@ -260,8 +273,20 @@ public class MecaSubsystem extends SubsystemBase {
 	 *
 	 * @return The pose.
 	 */
-	Pose2d getPose() {
+	public Pose2d getPose() {
 		return mOdom.getPoseMeters();
+	}
+
+	public double getOdomX() {
+		return mOdom.getPoseMeters().getTranslation().getX();
+	}
+
+	public double getOdomY() {
+		return mOdom.getPoseMeters().getTranslation().getY();
+	}
+
+	public double getOdomHeading() {
+		return mOdom.getPoseMeters().getRotation().getDegrees();
 	}
 
 	// TODO: create method that returns wheel speeds of the robot
@@ -273,7 +298,7 @@ public class MecaSubsystem extends SubsystemBase {
 	 *
 	 * @param pose The pose to which to set the odometry.
 	 */
-	void resetOdometry(Pose2d pose) {
+	public void resetOdometry(Pose2d pose) {
 		//resetEncoders();
 		mOdom.resetPosition(
 			new Rotation2d(Math.toRadians(SmartDashboard.getNumber("NavHead", 0))), getWheelPositions(), pose);
