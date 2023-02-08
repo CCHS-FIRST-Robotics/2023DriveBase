@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
 
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
+  ZED zed = new ZED();
   BetterShuffleboard smartdash = new BetterShuffleboard();
   
   double test = 0;
@@ -127,7 +128,7 @@ public class Robot extends TimedRobot {
     drive();
 
     if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu);
+      smartdash.pushDashboard(limelight, imu, zed);
     }
     counter++;
   }
