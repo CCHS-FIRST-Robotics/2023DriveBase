@@ -9,34 +9,14 @@ import java.lang.Math;
 
 public class Limelight {
 
-    double x, y, area, forwardDist;
-    NetworkTableEntry tx, ty, ta;
-    NetworkTable table;
+    private double x, y, area, forwardDist;
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    public Limelight() {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-
-        tx = table.getEntry("tx");
-        ty = table.getEntry("ty");
-        ta = table.getEntry("ta");
-
-    }
-
-    public void smartDash() {
-        x    = tx.getDouble(0);
-        y    = ty.getDouble(0);
-        area = ta.getDouble(0);
-
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
-
-    }
 
     public double getForwardDist(){
         double goalHeightInches           = Constants.TARGET_HIEGHT;
         double limelightLensHeight        = Constants.LIME_HIEGHT;
-        double targetOffsetAngle_Vertical = ty.getDouble(0.0) * ((Math.PI)/(180));
+        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
         double limelightMountAngle        = Constants.LIME_ANGLE;
 
         double angleToGoal = limelightMountAngle + targetOffsetAngle_Vertical;
@@ -44,6 +24,26 @@ public class Limelight {
         forwardDist = (goalHeightInches - limelightLensHeight)/Math.tan(angleToGoal);
 
         return forwardDist;
+    }
+    
+    public double getHeadingDisplacement() {
+        return table.getEntry("tx").getDouble(0.0) * ((Math.PI)/(180));
+    }
+
+    // TODO: include comments/documentation for what these vals actually are 
+    public double getX() {
+            x = table.getEntry("tx").getDouble(0);
+            return x;
+    }
+    
+    public double getY() {
+            y = table.getEntry("ty").getDouble(0);
+            return y;
+   }
+    
+    public double getArea() {
+        area = table.getEntry("ta").getDouble(0);
+        return area;
     }
 
 }

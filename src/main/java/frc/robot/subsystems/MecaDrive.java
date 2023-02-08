@@ -5,15 +5,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants;
 
+
 import java.lang.Math;
 
 public class MecaDrive extends DriveBase {
-    // scaling down vertical speed because its faster than other speeds
-    final double verticalSpeedMultiplier = 0.8;
-
-    // scaling up horinzontal speed because its slower than the other speeds
-    final double horizontalSPeedMultiplier = 0.8;
-
     WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
 	// Stop mode variables
@@ -26,9 +21,9 @@ public class MecaDrive extends DriveBase {
 	double[] combinedSpeeds = new double[4];
 
 	// input curving for better fine control
-	static final double LEFT_Y_EXPONENT = 2;
-	static final double LEFT_X_EXPONENT = 2;
-	static final double RIGHT_X_EXPONENT = 2;
+	public static double LEFT_Y_EXPONENT = 2;
+	public static double LEFT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 2;
 
     /**
      * Constructor for Mecanum Drive Class
@@ -44,6 +39,10 @@ public class MecaDrive extends DriveBase {
         frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
         rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
         rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+		
+		// invert motors to make forward the right direction
+		frontRightMotor.setInverted(true);
+		rearRightMotor.setInverted(true);
     } 
 
     /**
@@ -69,43 +68,16 @@ public class MecaDrive extends DriveBase {
         
         // left analog stick controls translation
         // right analog stick controls rotation
-		
-
-		 /**
-		 * Add deadbands (stop all movement when input is under a certain amount)
-		 * This allows you to go online in one direction more easily because it 
-		 * prevents slight (unintentional) inputs in the perpendicular direction
-		 */
-		if (Math.abs(leftAnalogY) < Constants.ANALOG_DEAD_ZONE) {
-			leftAnalogY = 0;
-		}
-		else {
-			leftAnalogY = Math.pow(Math.abs(leftAnalogY), LEFT_Y_EXPONENT) * Math.signum(leftAnalogY);
-		}
-		
-		if (Math.abs(leftAnalogX) < Constants.ANALOG_DEAD_ZONE) {
-			leftAnalogX = 0;
-		}
-		else {
-			leftAnalogX = Math.pow(Math.abs(leftAnalogX), LEFT_X_EXPONENT) * Math.signum(leftAnalogX);
-		}
-
-		if (Math.abs(rightAnalogX) < Constants.ANALOG_DEAD_ZONE){
-			rightAnalogX = 0;
-		}
-		else {
-			rightAnalogX = Math.pow(Math.abs(rightAnalogX), RIGHT_X_EXPONENT) * Math.signum(rightAnalogX);
-		}
 
 		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
 									   rightAnalogX, rightAnalogY);
 
 		switch (currentMode){
 			case DEFAULT_MODE:
-				 // set the motor speeds (normal)
-				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+				 // set the motor speeds as a percent 0-1 (normal)
+				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
 				frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
 				rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
 				break;
 			case STOP_MODE:
@@ -113,9 +85,9 @@ public class MecaDrive extends DriveBase {
 				// slower stop
 				slowingDownSpeeds = slowDown(slowingDownSpeeds);
 
-				frontLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[0] * -1);
+				frontLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[0]);
 				frontRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2] * -1);
+				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2]);
 				rearRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[3]);
 				break;
 			case DEBUG_MODE:
@@ -123,13 +95,13 @@ public class MecaDrive extends DriveBase {
 				
 				switch (debugEnabledMotor){
 					case 0:
-						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0] * -1);
+						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
 						break;
 					case 1:
 						frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 						break;
 					case 2:
-						rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2] * -1);
+						rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
 						break;
 					case 3:
 						rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
@@ -168,36 +140,26 @@ public class MecaDrive extends DriveBase {
 		}
 	}
 
+	
+	/**
+	 * Cycle between each motor during debug mode
+	 */
 	@Override
-	public void AButtonPressed() {
-		switch(currentMode) {
-			case DEBUG_MODE:
-				cycleMotor();
-				break;
-			default:
-				break;
+	public void cycleMotor() {
+		if (currentMode == Mode.DEBUG_MODE) {
+			debugEnabledMotor++;
+        	debugEnabledMotor %= 4;
+        	System.out.println("Current Motor: " + debugEnabledMotor);
 		}
 	}
 
-	@Override
-	public void BButtonPressed() {
-		switch(currentMode) {
-			case DEBUG_MODE:
-				printActiveMotorDebugMode();
-				break;
-			default:
-				break;
+	/**
+	* prints the number of the currently activated motors during debug mode
+	*/
+	public void printActiveMotorDebugMode() {
+		if (currentMode == Mode.DEBUG_MODE) {
+			System.out.println("Current Motor: " + debugEnabledMotor);
 		}
-	}
-
-	@Override
-	public void leftBumperPressed() {
-		decreaseSpeedBracket();
-	}
-
-	@Override
-	public void rightBumperPressed() {
-		increaseSpeedBracket();
 	}
 
 	/**
@@ -211,43 +173,34 @@ public class MecaDrive extends DriveBase {
 	 * @return array of all processed speeds {front left, front right, back left, back right}
 	 */
 	private double[] combineSpeeds(double leftAnalogX,  double leftAnalogY,
-								   double rightAnalogX, double rightAnalogY){
-
-		leftAnalogY *= verticalSpeedMultiplier;
-        leftAnalogX *= horizontalSPeedMultiplier;
-       
-        // arrays for wheel speeds (percents)
+								   double rightAnalogX, double rightAnalogY){       
+        // arrays for wheel speeds for each movement direction (percents)
         // 1st is front left, 2nd is front right, 3rd is back left, 4th is back right
         double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
                                    leftAnalogY, leftAnalogY};
         
         // negatives due to wheels going in opposite directions during left or right translation
-        double[] horizontalSpeeds = {-1 * leftAnalogX, leftAnalogX,
-                                     leftAnalogX, -1 * leftAnalogX};
+        double[] horizontalSpeeds = {leftAnalogX, -leftAnalogX,
+                                     -leftAnalogX, leftAnalogX};
 
         // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {-1 * rightAnalogX, rightAnalogX,
-                                   -1 * rightAnalogX, rightAnalogX};
-        
-        // so these could exceed 1 (not good; we cannot run the motors at over 100%)
-        // we will use the maximum speed to scale all the other speeds to something below 1
-        for (int i = 0; i < 4; i ++)
-            combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
+        double[] rotationSpeeds = {rightAnalogX, -rightAnalogX,
+                                   rightAnalogX, -rightAnalogX};
+		
 
-        // find the max of the above speeds so we can check if it is above 1
-        double maxSpeed = Integer.MIN_VALUE;
+		double maxSpeed = Integer.MIN_VALUE;
+		/* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
+        we will use the maximum speed to scale all the other speeds to something below 1 */
+		for (int i = 0; i < 4; i++) {
+			combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
+			if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
+		}
 
-        for (int i = 0; i < 4; i++)
-            if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
-        
-        maxSpeed = Math.max(1, maxSpeed); // if it is under 1, we can basically ignore it    
+		maxSpeed = Math.max(1, maxSpeed); // if the max is under 1, we can ignore (we don't have to do any scaling)
 
         for (int i = 0; i < 4; i++) {
-            // scale the speeds
-            combinedSpeeds[i] = (1 / maxSpeed) * combinedSpeeds[i];
-
-            // we also need to scale the speeds by the speed multiplier
-            combinedSpeeds[i] = combinedSpeeds[i] * speedMultiplier;
+            // nomralize the speeds and scale by speed multiplier
+            combinedSpeeds[i] = (speedMultiplier / maxSpeed) * combinedSpeeds[i];
         }
 
 		return combinedSpeeds;
@@ -265,11 +218,11 @@ public class MecaDrive extends DriveBase {
 		double[] newVelocity = new double[4];
 
 		for (int i = 0; i < 4; i++){
-			if (Math.abs(inputVelocity[i]) > Constants.SLOW_DOWN_CUTOFF){
-				// velocity still needs to be reduced (magnatude is above cutoff)
-				newVelocity[i] = inputVelocity[i] / Constants.SLOW_DOWN_FACTOR;
-			} else {
-				// input has reached cutoff, now returning 0 speed
+			// velocity needs to be reduced
+			newVelocity[i] = inputVelocity[i] / Constants.SLOW_DOWN_FACTOR;
+
+			// input has reached cutoff, now returning 0 speed
+			if (Math.abs(inputVelocity[i]) < Constants.SLOW_DOWN_CUTOFF){
 				newVelocity[i] = 0;
 			}
 		}
@@ -286,15 +239,4 @@ public class MecaDrive extends DriveBase {
 		System.out.println("STOP MODE");
 	}
 
-	// prints the number of the currently activated motor during debug mode
-	public void printActiveMotorDebugMode() {
-		System.out.println("Current Motor: " + debugEnabledMotor);
-	}
-
-    // cycles through the activated motors during debug mode
-    public void cycleMotor() {
-        debugEnabledMotor++;
-        debugEnabledMotor %= 4;
-        System.out.println("Current Motor: " + debugEnabledMotor);
-    }
 }
