@@ -92,14 +92,22 @@ public class Arm {
 		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
 	}
 
+	/**
+	 * @return angle (double) degrees of the first linkage from the horizontal
+	 */
 	public double getShoulderAngle() {
+		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
 		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096; // prints the position of the selected sensor
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
+	/**
+	 * @return angle (double) degrees of the second linkage from the horizontal
+	 */
 	public double getElbowAngle() {
-		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees
-		return elbowMotor.getSelectedSensorPosition(1) * -360/4096 + 10;
+		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
+		// offset  by shoulder angle so that the angle is relative to the horizotal
+		return (elbowMotor.getSelectedSensorPosition(1) * -360/4096 + 10) - getShoulderAngle();
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
@@ -248,6 +256,13 @@ public class Arm {
 			w2y = 1;
 			w1y = -v2x/v1x * w2y;
 		}
+
+		// Scale by controller input:
+		w1x *= xSpeed;
+		w2x *= xSpeed;
+
+		w1y *= ySpeed;
+		w2y *= ySpeed;
 
 		double[] combinedSpeeds = {w1x + w1y, w2x + w2y};
 
