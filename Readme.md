@@ -49,6 +49,8 @@ Then, learn about our [drivebase code](https://cchs-first-robotics.github.io/202
 The arm is controlled very simply the same way we control the drive base. The most difficult part to understand is the kinematic models that help us determine how we should move the motors in order to move the arm at a certain (x, y) linear veloicty -- as opposed to controlling the angular veocity -- or finding the angular position the encoders need to be for a given cartesian (x, y) position. 
 
 If you would like to better understand these models, here are some diagrams/math which show the derivation:
+![alt text](https://github.com/CCHS-FIRST-Robotics/2023DriveBase/blob/main/images/2R-positional-forward-inverse-kinematics.jpg)
+![alt text](https://github.com/CCHS-FIRST-Robotics/2023DriveBase/blob/main/images/2R-speed-inverse-kinematics.jpg)
 
 ### Motors and components
 
