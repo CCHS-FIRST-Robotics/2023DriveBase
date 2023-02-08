@@ -57,6 +57,7 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	// arm lengths in meters
+	//TODO: UPDATE ARM VALUES
 	public static final double UPPER_ARM_LENGTH = 1.0; 
 	public static final double LOWER_ARM_LENGTH = 0.5;
 
