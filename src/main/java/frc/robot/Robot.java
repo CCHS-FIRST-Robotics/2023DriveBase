@@ -65,7 +65,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    
+    driveBase.updateOdometry();
+
     // SmartDashboard.putNumber("test", test);
     // limelight.test();
     // System.out.println("hello wo5rld");

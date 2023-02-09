@@ -172,11 +172,16 @@ public class MecaDrive extends DriveBase {
 			System.out.println("Current Motor: " + debugEnabledMotor);
 		}
 	}
-		
+	
+
+	//TODO: remove since it's never called
 	@Override
 	public void periodic() {
-		// Update the odometry in the periodic block
-		mOdom.update(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
+		// Update the odometry in the periodic block		
+	}
+
+	public void updateOdometry() {
+		mOdom.update(new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
 	}
 
 	/**
@@ -187,11 +192,11 @@ public class MecaDrive extends DriveBase {
 	MecanumDriveWheelPositions getWheelPositions() {
 
 		// TODO: determine whether should use absolute position or just position
-
-		return new MecanumDriveWheelPositions(flFalconSensor.getIntegratedSensorAbsolutePosition(), 
-												frFalconSensor.getIntegratedSensorAbsolutePosition(), 
-												rlFalconSensor.getIntegratedSensorAbsolutePosition(),
-												rrFalconSensor.getIntegratedSensorAbsolutePosition());
+		//double since falcon units go from 2048 to 4096
+		return new MecanumDriveWheelPositions(2*flFalconSensor.getIntegratedSensorPosition(), 
+												2*frFalconSensor.getIntegratedSensorPosition(), 
+												2*rlFalconSensor.getIntegratedSensorPosition(),
+												2*rrFalconSensor.getIntegratedSensorPosition());
 	}
 
 	/**
