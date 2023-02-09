@@ -13,11 +13,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.MathUtil;
 
 
-//TODO: UPDATE ARM LENGTHS IN CONSTANTS BEFORE RUNNING!!!!!!!!
-//TODO: UPDATE ARM LENGTHS IN CONSTANTS BEFORE RUNNING!!!!!!!!
-//TODO: UPDATE ARM LENGTHS IN CONSTANTS BEFORE RUNNING!!!!!!!!
-//TODO: UPDATE ARM LENGTHS IN CONSTANTS BEFORE RUNNING!!!!!!!!
-
 public class Arm {
 
     // define motor and encoder objects
@@ -103,7 +98,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096; // prints the position of the selected sensor
+		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 95; // prints the position of the selected sensor
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
@@ -113,7 +108,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return (elbowMotor.getSelectedSensorPosition(1) * -360/4096 + 10) - getShoulderAngle();
+		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096);
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
@@ -188,14 +183,14 @@ public class Arm {
      * @param beta (double) - angle of elbow from horizontal, in degrees
 	 * @return position (double[]) - (x, y) position of the end effector, in meters
 	 */
-    private double[] forwardKinematics(double alpha, double beta) {
+    public double[] forwardKinematics(double alpha, double beta) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
 					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
 
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
 					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
 
-		double[] pos = {x, y};
+		double[] pos = {x, y + .59};
 		return pos;
     }
 

@@ -92,10 +92,10 @@ public class Constants {
 	// beta is the elbow joint angle in relation to the horzinontal
 	// angles in degrees
 	public static final double minAlpha = -30;
-	public static final double maxAlpha = 120;
+	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -30;
-	public static final double maxBeta = 90;
+	public static final double minBeta = -75;
+	public static final double maxBeta = 240;
 
 	Constants() {
 		
