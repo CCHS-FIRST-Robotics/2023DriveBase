@@ -60,6 +60,7 @@ public class BetterShuffleboard {
         SmartDashboard.putNumber("LimelightX", limelight.getX());
         SmartDashboard.putNumber("LimelightY", limelight.getY());
         SmartDashboard.putNumber("LimelightArea", limelight.getArea());
+        SmartDashboard.putNumber("HeadingOffset", limelight.getHeadingDisplacement());
     }
 
     public void pushIMU(IMU imu) {
