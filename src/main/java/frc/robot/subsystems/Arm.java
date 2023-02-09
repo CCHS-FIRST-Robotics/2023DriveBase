@@ -48,6 +48,10 @@ public class Arm {
         shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
         elbowMotor = new WPI_TalonSRX(elbowTalonPort);
 
+		// set the config to default in case there's something else I'm missing
+		shoulderMotor.configFactoryDefault();
+		elbowMotor.configFactoryDefault();
+
 		// setup motor encoders
 		TalonSRXConfiguration config = new TalonSRXConfiguration();
 		config.peakCurrentLimit = 40; // the peak current, in amps
@@ -56,12 +60,9 @@ public class Arm {
 		shoulderMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
 		elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
 
-		// if that doesnt work: https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
+		// https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
 		shoulderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-
-		// shoulderMotor.configFactoryDefault();
-		// elbowMotor.configFactoryDefault();
 
 
 		// initialize Falcon motors (USE LATER)
