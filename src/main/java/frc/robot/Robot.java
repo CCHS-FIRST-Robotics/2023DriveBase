@@ -124,12 +124,18 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
+
+    limelightTestDrive();
 
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu);
     }
     counter++;
+  }
+
+  public void limelightTestDrive() {
+    driveBase.drive(0, 0, -.1*limelight.getHeadingDisplacement(), 0);
   }
 
   /** This function is called once when the robot is disabled. */
