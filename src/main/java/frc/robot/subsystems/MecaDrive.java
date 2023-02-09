@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -10,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 
 import java.lang.Math;
 
@@ -32,9 +32,6 @@ public class MecaDrive extends DriveBase {
 	// Motor Controller Objects
 	WPI_TalonFX frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor;
 
-	// Motor Sensor Objects
-	TalonFXSensorCollection flFalconSensor, rlFalconSensor, frFalconSensor, rrFalconSensor;
-
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
 
@@ -52,12 +49,6 @@ public class MecaDrive extends DriveBase {
 
 
 		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
-		
-		// Initializing Falcon sensors
-		flFalconSensor = new TalonFXSensorCollection(frontLeftMotor);
-		rlFalconSensor = new TalonFXSensorCollection(rearLeftMotor);
-		frFalconSensor = new TalonFXSensorCollection(frontRightMotor);
-		rrFalconSensor = new TalonFXSensorCollection(rearRightMotor);
 
 		this.imu = imu;
 
@@ -103,10 +94,12 @@ public class MecaDrive extends DriveBase {
 			case PID_TUNING_MODE:
 				// nothing yet
 				break;
+			default:
+				break;
 		}
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
-		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+		mDrive.driveCartesian(speedX, speedY, rotateSpeed);
 	}
 
 	/**
@@ -185,6 +178,19 @@ public class MecaDrive extends DriveBase {
 	}
 
 	/**
+	 * Converts raw position units to meters
+	 * @param rawPosition the position from an encoder in raw sensor units
+	 * @return the position in meters
+	 */
+	private double convertPosition(double rawPosition) {
+		// raw units are "clicks," so divide by "clicks" per rotation to get rotations
+		double position = rawPosition / Constants.TALON_FX_CPR;
+		// multiply by circumference to get linear distance
+		position *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
+		return position;
+	}
+
+	/**
 	 * Returns the total distances measured by each motor
 	 * 
 	 * @return wheel positions
@@ -192,11 +198,36 @@ public class MecaDrive extends DriveBase {
 	MecanumDriveWheelPositions getWheelPositions() {
 
 		// TODO: determine whether should use absolute position or just position
-		//double since falcon units go from 2048 to 4096
-		return new MecanumDriveWheelPositions(2*flFalconSensor.getIntegratedSensorPosition(), 
-												2*frFalconSensor.getIntegratedSensorPosition(), 
-												2*rlFalconSensor.getIntegratedSensorPosition(),
-												2*rrFalconSensor.getIntegratedSensorPosition());
+
+		return new MecanumDriveWheelPositions(convertPosition(frontLeftMotor.getSelectedSensorPosition()), 
+											  convertPosition(frontRightMotor.getSelectedSensorPosition()),
+											  convertPosition(rearLeftMotor.getSelectedSensorPosition()),
+											  convertPosition(rearRightMotor.getSelectedSensorPosition()));
+	}
+
+	/**
+	 * Converts raw sensor velocity to meters/second
+	 * @param rawVelocity the velocity from an encoder in raw sensor units
+	 * @return velocity in m/s
+	 */
+	private double convertVelocity(double rawVelocity) {
+		// convert to rotations per second because raw units are "clicks" per 100ms
+		double velocity = rawVelocity / Constants.TALON_FX_CPR * 10;
+		// multiply by circumference to get linear velocity
+		velocity *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
+		return velocity;
+	}
+
+	/**
+	 * Returns the current wheel speeds of each motor
+	 * 
+	 * @return wheel speeds
+	 */
+	MecanumDriveWheelSpeeds getWheelSpeeds() {
+		return new MecanumDriveWheelSpeeds(convertVelocity(frontLeftMotor.getSelectedSensorVelocity()),
+										   convertVelocity(frontRightMotor.getSelectedSensorVelocity()), 
+										   convertVelocity(rearLeftMotor.getSelectedSensorVelocity()),
+										   convertVelocity(rearRightMotor.getSelectedSensorVelocity()));
 	}
 
 	/**

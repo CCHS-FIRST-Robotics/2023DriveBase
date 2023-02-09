@@ -72,6 +72,11 @@ public class Robot extends TimedRobot {
     // System.out.println("hello wo5rld");
 
     // test += 1;
+
+    if (counter % 10 == 0) {
+      smartdash.pushDashboard(limelight, imu, driveBase);
+    }
+    counter++;
   }
 
   /**
@@ -123,11 +128,6 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     drive();
-
-    if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu, driveBase);
-    }
-    counter++;
   }
 
   /** This function is called once when the robot is disabled. */

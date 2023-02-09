@@ -16,7 +16,11 @@ public class BetterShuffleboard {
     GenericEntry leftXExp, leftYExp, rightXExp, rightYExp;
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
-    GenericEntry odomX, odomY, odomHead;
+    GenericEntry odomX, odomY, odomHead; // calculated odometry stuff
+    GenericEntry FLVel, FRVel, RLVel, RRVel; // encoder velocities
+    // navx data
+    GenericEntry NavXVel, NavYVel, NavXAccel, NavYAccel, NavZAccel,
+                 NavRoll, NavPitch, NavHeading, NavConnected, NavRotationRateZ;
 
     public BetterShuffleboard() {
         tuningTab = Shuffleboard.getTab("Tuning");
@@ -54,7 +58,62 @@ public class BetterShuffleboard {
             .getEntry();
         odomHead = odomTab.add("OdomHead", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("min", 0, "max", 360))
+            .withProperties(Map.of("min", -180, "max", 180))
+            .getEntry();
+        FRVel = odomTab.add("FRVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        FLVel = odomTab.add("FLVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        RRVel = odomTab.add("RRVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        RLVel = odomTab.add("RLVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavXVel = odomTab.add("NavXVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavYVel = odomTab.add("NavYVel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavRotationRateZ = odomTab.add("NavRotationRateZ", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavXAccel = odomTab.add("NavXAccel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavYAccel = odomTab.add("NavYAccel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavZAccel = odomTab.add("NavZAccel", 0)
+            .withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+        NavRoll = odomTab.add("NavRoll", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -180, "max", 180))
+            .getEntry();
+        NavPitch = odomTab.add("NavPitch", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -180, "max", 180))
+            .getEntry();
+        NavHeading = odomTab.add("NavHeading", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -180, "max", 180))
+            .getEntry();
+        NavConnected = odomTab.add("NavConnected", 0)
+            .withWidget(BuiltInWidgets.kBooleanBox)
             .getEntry();
     }
 
@@ -75,6 +134,10 @@ public class BetterShuffleboard {
         odomX.setDouble(drive.getOdomX());
         odomY.setDouble(drive.getOdomY());
         odomHead.setDouble(drive.getOdomHeading());
+        FLVel.setDouble(drive.getWheelSpeeds().frontLeftMetersPerSecond);
+        FRVel.setDouble(drive.getWheelSpeeds().frontRightMetersPerSecond);
+        RLVel.setDouble(drive.getWheelSpeeds().rearLeftMetersPerSecond);
+        RRVel.setDouble(drive.getWheelSpeeds().rearRightMetersPerSecond);
     }
 
     public void pushLimelight(Limelight limelight) {
@@ -84,22 +147,22 @@ public class BetterShuffleboard {
     }
 
     public void pushIMU(IMU imu) {
-        SmartDashboard.putNumber("NavX", imu.getDisplacementX());
-        SmartDashboard.putNumber("NavY", imu.getDisplacementY());
-        SmartDashboard.putNumber("NavZ", imu.getDisplacementZ());
+        // SmartDashboard.putNumber("NavX", imu.getDisplacementX());
+        // SmartDashboard.putNumber("NavY", imu.getDisplacementY());
+        // SmartDashboard.putNumber("NavZ", imu.getDisplacementZ());
 
-        SmartDashboard.putNumber("NavXVel", imu.getVelocityX());
-		SmartDashboard.putNumber("NavYVel", imu.getVelocityY());
+        NavXVel.setDouble(imu.getVelocityX());
+        NavYVel.setDouble(imu.getVelocityY());
 
-        SmartDashboard.putNumber("NavXAccel", imu.getRawAccelX());
-		SmartDashboard.putNumber("NavYAccel", imu.getRawAccelY());
-		SmartDashboard.putNumber("NavZAccel", imu.getRawAccelZ());
+        NavXAccel.setDouble(imu.getWorldLinearAccelX());
+        NavYAccel.setDouble(imu.getWorldLinearAccelY());
+        NavZAccel.setDouble(imu.getWorldLinearAccelZ());
 
-        SmartDashboard.putNumber("NavRoll",imu.getRoll());
-        SmartDashboard.putNumber("NavPitch", imu.getPitch());
-        SmartDashboard.putNumber("NavHeading", imu.getHeading());
+        NavRoll.setDouble(imu.getRoll());
+        NavPitch.setDouble(imu.getPitch());
+        NavHeading.setDouble(imu.getHeading());
 
-		SmartDashboard.putNumber("NavRotationRateZ", imu.getRate());
-		SmartDashboard.putBoolean("NavConnected", imu.isConnected());
+        NavRotationRateZ.setDouble(imu.getRate());
+        NavConnected.setBoolean(imu.isConnected());
     }
 }

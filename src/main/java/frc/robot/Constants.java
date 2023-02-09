@@ -18,10 +18,12 @@ public class Constants {
 	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
 	
 	public static final double TANK_WHEEL_RADIUS 			= 0.075; // meters
+	public static final double MECANUM_WHEEL_DIAMETER 		= 0.1524; // meters
 
 	public static double maxVelocity;
 
 	public static final int ENCODER_CPR = 4096;
+	public static final int TALON_FX_CPR = 2048;
 
 	// the amount of time (in seconds) between calls of the periodic function
 	public static final double dt = 0.02;
