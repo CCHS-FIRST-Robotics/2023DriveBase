@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 import java.lang.Math;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class DriveBase extends SubsystemBase {
@@ -19,6 +21,19 @@ public abstract class DriveBase extends SubsystemBase {
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
 
+
+	private Trajectory currentTrajectory;
+	public Trajectory getTrajectory()	{return currentTrajectory;}
+	public void setTrajectory(Trajectory newTrajectory)	{currentTrajectory = newTrajectory;}
+
+	private double trajectoryTime;
+	public double getTrajectoryTime()	{return trajectoryTime;}
+	public void setTrajectoryTime(double newTrajectoryTime)	{trajectoryTime = newTrajectoryTime;}
+
+	// https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
+	// needed for the updateTrajectory method in Autonomous
+	protected TrajectoryConfig trajectoryConfig;
+	public TrajectoryConfig getTrajectoryConfig() {return trajectoryConfig;}
 
 	/**
 	 * Drive the robot with controller input

@@ -9,13 +9,16 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.MathUtil;
+
+
 
 /**
  * Manages the tank drive base
@@ -89,6 +92,10 @@ public class TankDrive extends DriveBase{
 		navx = new AHRS(SPI.Port.kMXP);
 		//odometer = new DifferentialDriveOdometry(new Rotation2d());
 		resetPosition();
+
+		// see declaration in DriveBase
+		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
+		trajectoryConfig.setReversed(true);
 	}
 	
 	

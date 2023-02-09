@@ -81,6 +81,15 @@ public class Constants {
 
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
+	//  Directly from: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/ramsete.html
+	public static final double RAMSETE_B = 2.0;
+	public static final double RAMSETE_ZETA = 0.7;
+
+
+	// for: https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
+	// todo get values
+	public static final double maxAccelerationMetersPerSecond = 0;
+	public static final double maxVelocityMetersPerSecond = 0;
 
 	/*
 	 * SENSORS 

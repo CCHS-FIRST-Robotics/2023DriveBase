@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 
 import java.lang.Math;
 
@@ -54,6 +55,10 @@ public class MecaDrive extends DriveBase {
 
 		// Odometry: !!secondary constructor takes initialPose argument
 		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
+	
+		// see declaration in DriveBase
+		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
+		trajectoryConfig.setReversed(true);
 	}
 	
 	@Override
@@ -99,6 +104,7 @@ public class MecaDrive extends DriveBase {
 		}
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
+		// https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-drive-subsystem.html
 		mDrive.driveCartesian(speedX, speedY, rotateSpeed);
 	}
 
@@ -117,7 +123,7 @@ public class MecaDrive extends DriveBase {
 		if (Math.abs(inputVelocity) < Constants.SLOW_DOWN_CUTOFF){
 			newVelocity = 0;
 		}
-		
+	
 		return newVelocity;
 	}
 
@@ -269,3 +275,4 @@ public class MecaDrive extends DriveBase {
 	// TODO: create structure for odometry
 
 }
+
