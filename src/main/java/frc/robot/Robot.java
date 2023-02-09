@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
     limelightTestDrive();
 
     if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu);
+      smartdash.pushDashboard(limelight, imu, Constants.SHORT_PIPE_NUM); //for now just picked one of two pipes
     }
     counter++;
   }
