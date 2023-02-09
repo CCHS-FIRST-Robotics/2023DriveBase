@@ -58,8 +58,9 @@ public class Constants {
 
 	// arm lengths in meters
 	//TODO: UPDATE ARM VALUES
-	public static final double UPPER_ARM_LENGTH = 1.0; 
-	public static final double LOWER_ARM_LENGTH = 0.5;
+	public static final double UPPER_ARM_LENGTH = 0.97; 
+	public static final double LOWER_ARM_LENGTH = 0.71;
+	public static final double WRIST_LENGTH = 0;
 
 	// Shoulder PID and Feedfoward gains
 	public static final double SHOULDER_KP = 0;

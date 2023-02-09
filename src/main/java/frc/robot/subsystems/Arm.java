@@ -184,14 +184,45 @@ public class Arm {
     /**
 	 * This will return the desired x, y pos for the given angle of each length
 	 * 
-	 * @param xPos (double)
-     * @param yPos (double)
-	 * @return angles
+	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
+     * @param beta (double) - angle of elbow from horizontal, in degrees
+	 * @return position (double[]) - (x, y) position of the end effector, in meters
 	 */
     private double[] forwardKinematics(double alpha, double beta) {
-		double[] x = {0, 0};
-        return x;
+		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
+
+		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
+
+		double[] pos = {x, y};
+		return pos;
     }
+
+	/**
+	 * This will return the desired x, y pos for the given angle of each length - includes wrist
+	 * ASSUMES WRIST IS A REVOLVING JOINT ON THE SAME PLANE AS THE OTHER LENGTHS
+	 * 
+	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
+     * @param beta (double) - angle of elbow from horizontal, in degrees
+	 * @param theta (double) - angle of wrist from horizontal, in degrees
+	 * @return position (double[]) - (x, y) position of the end effector, in meters
+	 */
+	public double[] forwardKinematics(double alpha, double beta, double theta) {
+		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta)) +
+					Constants.WRIST_LENGTH * Math.cos(Math.toRadians(theta));
+
+		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta)) +
+					Constants.WRIST_LENGTH * Math.sin(Math.toRadians(theta));
+
+		double[] pos = {x, y};
+		return pos;
+	}
+
+
+	//TODO: develop code for a 3R arm in case we have a wrist (though it may depend on how we implement the wrist)
 
     /**
 	 * This will return the desired angle of each arm length using IK
@@ -207,7 +238,6 @@ public class Arm {
     private double[] positionInverseKinematics(double xPos, double yPos) {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
-
 
 		double dist = Math.sqrt(xPos*xPos + yPos*yPos);
 		double l = l1*l1 - l2*l2 + dist*dist;
