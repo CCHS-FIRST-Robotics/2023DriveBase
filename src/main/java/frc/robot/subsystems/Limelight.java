@@ -10,14 +10,18 @@ import java.lang.Math;
 public class Limelight {
 
     private double x, y, area, forwardDist;
+    private int pipeNum;
+
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 
-    public double getForwardDist(){
+    public double getForwardDist(int pipeChoice){
+        changePipeline(pipeChoice);
+
         double goalHeightInches           = Constants.TARGET_HIEGHT;
         double limelightLensHeight        = Constants.LIME_HIEGHT;
-        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
         double limelightMountAngle        = Constants.LIME_ANGLE;
+        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
         double angleToGoal = limelightMountAngle + targetOffsetAngle_Vertical;
 
@@ -26,24 +30,38 @@ public class Limelight {
         return forwardDist;
     }
     
-    public double getHeadingDisplacement() {
+    public double getHeadingDisplacement(int pipeChoice) {
+        changePipeline(pipeChoice);
         return table.getEntry("tx").getDouble(0.0) * ((Math.PI)/(180));
     }
 
     // TODO: include comments/documentation for what these vals actually are 
-    public double getX() {
-            x = table.getEntry("tx").getDouble(0);
-            return x;
+    public double getX(int pipeChoice) {
+        changePipeline(pipeChoice);
+        x = table.getEntry("tx").getDouble(0);
+        return x;
     }
     
-    public double getY() {
-            y = table.getEntry("ty").getDouble(0);
-            return y;
+    public double getY(int pipeChoice) {
+        changePipeline(pipeChoice);
+        y = table.getEntry("ty").getDouble(0);
+        return y;
    }
     
-    public double getArea() {
+    public double getArea(int pipeChoice) {
+        changePipeline(pipeChoice);
         area = table.getEntry("ta").getDouble(0);
         return area;
+    }
+
+    public void changePipeline(int newPipeNum){
+        table.getEntry("pipeline").setInteger(newPipeNum);
+
+        pipeNum = newPipeNum;
+    }
+
+    public int getPipeline(){
+        return pipeNum;
     }
 
 }

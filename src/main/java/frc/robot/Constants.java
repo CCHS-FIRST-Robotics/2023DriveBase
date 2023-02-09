@@ -54,12 +54,14 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	//for limelight
-	public static final double LIME_HIEGHT = 16.5;
+	public static final double LIME_HIEGHT    = 16.5;
 	//height from floor to center of limelight lense in inches
-	public static final double LIME_ANGLE  = 0; 
+	public static final double LIME_ANGLE     = 0; 
 	//number of degrees from perfectly vertical
-	public static final double TARGET_HIEGHT = 1;
+	public static final double TARGET_HIEGHT  = 1;
 	//height from floor to target in inches
+	public static final double SHORT_PIPE_NUM = 0;
+	public static final double TALL_PIPE_NUM  = 1;
 
 	Constants() {
 		
