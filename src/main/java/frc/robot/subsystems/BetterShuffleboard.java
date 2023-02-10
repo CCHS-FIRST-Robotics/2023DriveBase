@@ -13,8 +13,12 @@ public class BetterShuffleboard {
     // shuffleboard tabs
     ShuffleboardTab tuningTab; // used for adjusting things like controller exponent
     GenericEntry leftXExp, leftYExp, rightXExp, rightYExp;
+
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
+
+    ShuffleboardTab limelightTab; // used for limelight data
+    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading;
 
     public BetterShuffleboard() {
         tuningTab = Shuffleboard.getTab("Tuning");
@@ -40,6 +44,16 @@ public class BetterShuffleboard {
             .getEntry();
         rightYExp.setDouble(Constants.RIGHT_Y_EXPONENT);
 
+        // LIMELIGHT
+        limelightTab = Shuffleboard.getTab("Limelight");
+        
+        highPostX = limelightTab.add("highPostX", 0).getEntry();
+        lowPostX = limelightTab.add("lowPostX", 0).getEntry();
+        lowPostY = limelightTab.add("lowPostY", 0).getEntry();
+        highPostY = limelightTab.add("highPostY", 0).getEntry();
+        highPostHeading = limelightTab.add("highPostHeading", 0).getEntry();
+        lowPostHeading = limelightTab.add("lowPostHeading", 0).getEntry();
+
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
     }
@@ -57,10 +71,20 @@ public class BetterShuffleboard {
     }
 
     public void pushLimelight(Limelight limelight, int pipeChoice) {
-        SmartDashboard.putNumber("LimelightX", limelight.getX(pipeChoice));
-        SmartDashboard.putNumber("LimelightY", limelight.getY(pipeChoice));
-        SmartDashboard.putNumber("LimelightArea", limelight.getArea(pipeChoice));
-        SmartDashboard.putNumber("HeadingOffset", limelight.getHeadingDisplacement(pipeChoice));
+        if (pipeChoice == 0) pushLimelightHigh(limelight);
+        else pushLimelightLow(limelight);
+    }
+
+    private void pushLimelightHigh(Limelight limelight) {
+        highPostX.setDouble(limelight.getX(0));
+        highPostY.setDouble(limelight.getY(0));
+        highPostHeading.setDouble(limelight.getHeadingDisplacement(0));
+    }
+
+    private void pushLimelightLow(Limelight limelight) {
+        lowPostX.setDouble(limelight.getX(1));
+        lowPostY.setDouble(limelight.getY(1));
+        lowPostHeading.setDouble(limelight.getHeadingDisplacement(1));
     }
 
     public void pushIMU(IMU imu) {

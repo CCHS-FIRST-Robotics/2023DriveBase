@@ -238,5 +238,4 @@ public class MecaDrive extends DriveBase {
 		slowingDownSpeeds = combinedSpeeds;
 		System.out.println("STOP MODE");
 	}
-
 }
