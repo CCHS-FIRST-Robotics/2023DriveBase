@@ -53,7 +53,7 @@ public class Constants {
 	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
 	//previous speed is divided by this factor (higher = slow down faster)
 
-	//for limelight @avani why the fuck are your comments below the code you heathen
+	//for limelight - @avani why the fuck are your comments below the code you heathen
 	public static final double LIME_HIEGHT    = 16.5;
 	//height from floor to center of limelight lense in inches
 	public static final double LIME_ANGLE     = 0; 
@@ -64,7 +64,7 @@ public class Constants {
 	public static final int SHORT_PIPE_NUM = 0;
 	public static final int TALL_PIPE_NUM  = 1;
 	// make sure its in the same units as the limelight vals
-	public static final double PIPE_DISTANCE = ; // im aware this gives an error its a reminder to measure it lol
+	public static final double PIPE_DISTANCE = .42; // pipes are ~.42 meters away from each other in the lateral direction
 
 	Constants() {
 		
