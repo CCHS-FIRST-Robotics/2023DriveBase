@@ -137,6 +137,8 @@ public class Robot extends TimedRobot {
     arm.testMoveShoulder(xboxController.getRightX());
     arm.testMoveElbow(xboxController.getRightY());
 
+    // arm.setEndEffector(1, 1);
+
     // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
     if (counter % 10 == 0) {
@@ -144,8 +146,9 @@ public class Robot extends TimedRobot {
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
       smartdash.putNumber("END EFFECTOR X", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       smartdash.pushDashboard(limelight, imu);
-      System.out.println(xboxController.getRightY());
+      // System.out.println(xboxController.getRightY());
     }
     counter++;
   }
@@ -190,6 +193,9 @@ public class Robot extends TimedRobot {
     }
     if (xboxController.getBButtonPressed()) {
       driveBase.printActiveMotorDebugMode();
+    }
+    if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
+      arm.toggleMotorCheck();
     }
     if (xboxController.getLeftBumperPressed()) {
       driveBase.decreaseSpeedBracket();

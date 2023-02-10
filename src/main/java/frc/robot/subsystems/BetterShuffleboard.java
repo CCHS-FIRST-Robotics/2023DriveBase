@@ -47,6 +47,9 @@ public class BetterShuffleboard {
     public void putNumber(String key, double x) {
         SmartDashboard.putNumber(key, x);
     }
+    public void putBoolean(String key, boolean x) {
+        SmartDashboard.putBoolean(key, x);
+    }
 
     public void pushDashboard(Limelight limelight, IMU imu){
         pushLimelight(limelight);

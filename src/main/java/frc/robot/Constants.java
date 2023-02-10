@@ -63,7 +63,7 @@ public class Constants {
 	public static final double WRIST_LENGTH = 0;
 
 	// Shoulder PID and Feedfoward gains
-	public static final double SHOULDER_KP = 0;
+	public static final double SHOULDER_KP = .15;
 	public static final double SHOULDER_KI = 0;
 	public static final double SHOULDER_KD = 0;
 
@@ -94,6 +94,10 @@ public class Constants {
 
 	public static boolean isBelowElectricalBoard(double y) {
 		return (y < .6); // top of electrical board is ~0.6 meters off the ground
+	}
+
+	public static boolean isBelowFrame(double y) {
+		return (y < .2);
 	}
 
 	// alpha is the shoulder joint angle in relation to the horizontal

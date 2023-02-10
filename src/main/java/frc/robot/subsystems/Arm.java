@@ -30,6 +30,8 @@ public class Arm {
 	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
 	boolean increasingPIDConstant = true;
 
+	public boolean motorLimits = true;
+
     /**
 	 * Constructor for Arm Class -- setup as tankdrive until I figure out what motors we're using 
 	 * 
@@ -93,9 +95,10 @@ public class Arm {
 
 			y < Constants.minY |
 			y > Constants.maxY |
- 
-			(Constants.isInFrameX(x) & Constants.isBelowElectricalBoard(y))
-		);
+
+			(Constants.isInFrameX(x) & Constants.isBelowFrame(y)) |
+			(Constants.isInFrameX(x) & Constants.isBelowElectricalBoard(y) & x < 0)
+		) & motorLimits;
 	}
 
 	public void setMotorLimits() {
@@ -105,6 +108,15 @@ public class Arm {
 
 		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * -Constants.minBeta);
 		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
+	}
+
+	public void toggleMotorCheck() {
+		motorLimits = !motorLimits;
+	}
+
+	public void stopMotors() {
+		shoulderMotor.set(ControlMode.PercentOutput, 0);
+		elbowMotor.set(ControlMode.PercentOutput, 0);
 	}
 
 	/**
@@ -122,12 +134,13 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096);
+		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) - 57;
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
 	public void testMoveShoulder(double analogX) {
 		if(shouldMotorStop()){
+			stopMotors();
 			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
 			return;
 		}
@@ -138,6 +151,7 @@ public class Arm {
 
 	public void testMoveElbow(double analogY) {
 		if(shouldMotorStop()){
+			stopMotors();
 			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
 			return;
 		}
@@ -151,8 +165,9 @@ public class Arm {
 	 * @param yPos (double) y position of the end effector - METERS
 	 * @return angles (double[]) array of angles for each arm length
 	 */
-	double setEndEffector(double xPos, double yPos) {
+	public double setEndEffector(double xPos, double yPos) {
 		if(shouldMotorStop()){
+			stopMotors();
 			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
 			return 0;
 		}
@@ -169,15 +184,22 @@ public class Arm {
 	}
 
 	private void setShoulder(double alpha) {
-		shoulderMotor.setVoltage(shoulderPID.calculate(getShoulderAngle(), alpha) + shoulderFeedforward.calculate(alpha, 0, 0));
+		// System.out.println(
+		// 	shoulderFeedforward.calculate(alpha, 0, 0)
+		// );
+		// System.out.println(
+		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
+		// );
+		shoulderMotor.setVoltage(-shoulderPID.calculate(getShoulderAngle(), alpha) + shoulderFeedforward.calculate(alpha, 0, 0));
 	}
 
 	private void setElbow(double beta) {
-		elbowMotor.setVoltage(elbowPID.calculate(getElbowAngle(), beta) + elbowFeedforward.calculate(beta, 0, 0));
+		elbowMotor.setVoltage(-elbowPID.calculate(getElbowAngle(), beta) + elbowFeedforward.calculate(beta, 0, 0));
 	}
 
 	public void moveArm(double leftAnalogX, double leftAnalogY) {
 		if(shouldMotorStop()){
+			stopMotors();
 			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
 			return;
 		}
@@ -248,7 +270,7 @@ public class Arm {
 		double l2 = Constants.UPPER_ARM_LENGTH;
 
 		double dist = Math.sqrt(xPos*xPos + yPos*yPos);
-		double l = l1*l1 - l2*l2 + dist*dist;
+		double l = (l1*l1 - l2*l2 + dist*dist) / (2*dist);
 		double h = Math.sqrt(l1*l1 - l*l);
 
 		// double x1 = l/dist * xPos - h/dist * yPos;
