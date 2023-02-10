@@ -48,6 +48,11 @@ public class MecaDrive extends DriveBase {
 		frontRightMotor.setInverted(true);
 		rearRightMotor.setInverted(true);
 
+		// zero encoders
+		frontLeftMotor.setSelectedSensorPosition(0);
+		frontRightMotor.setSelectedSensorPosition(0);
+		rearLeftMotor.setSelectedSensorPosition(0);
+		rearRightMotor.setSelectedSensorPosition(0);
 
 		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 
@@ -106,7 +111,7 @@ public class MecaDrive extends DriveBase {
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
 		// https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-drive-subsystem.html
-		mDrive.driveCartesian(speedX, speedY, rotateSpeed);
+		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
 	}
 
 	/**
@@ -191,7 +196,8 @@ public class MecaDrive extends DriveBase {
 	 */
 	private double convertPosition(double rawPosition) {
 		// raw units are "clicks," so divide by "clicks" per rotation to get rotations
-		double position = rawPosition / Constants.TALON_FX_CPR;
+		// also account for gear ratio because the encoders measure motor output, not actual wheel
+		double position = rawPosition / (Constants.TALON_FX_CPR * Constants.FALCON_GEARBOX_RATIO);
 		// multiply by circumference to get linear distance
 		position *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
 		return position;
@@ -219,7 +225,8 @@ public class MecaDrive extends DriveBase {
 	 */
 	private double convertVelocity(double rawVelocity) {
 		// convert to rotations per second because raw units are "clicks" per 100ms
-		double velocity = rawVelocity / Constants.TALON_FX_CPR * 10;
+		// also account for gear ratio because the encoders measure motor output, not actual wheel
+		double velocity = rawVelocity / (Constants.TALON_FX_CPR * Constants.FALCON_GEARBOX_RATIO) * 10;
 		// multiply by circumference to get linear velocity
 		velocity *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
 		return velocity;

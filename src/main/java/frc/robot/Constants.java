@@ -40,11 +40,8 @@ public class Constants {
 	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
-	public static final int FR_ENCODER_ID = 1;
-	public static final int FL_ENCODER_ID = 2;
-	public static final int RR_ENCODER_ID = 3;
-	public static final int RL_ENCODER_ID = 4;
-
+	// gear ratio of the motor gearbox
+	public static final double FALCON_GEARBOX_RATIO = 10.71; 
 
 	/*
 	 * Physical Constants
