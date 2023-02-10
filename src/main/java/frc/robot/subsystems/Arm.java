@@ -76,11 +76,25 @@ public class Arm {
     }
 
 	public boolean shouldMotorStop() {
+		double alpha = getShoulderAngle();
+		double beta = getElbowAngle();
+		double x = forwardKinematics(alpha, beta)[0];
+		double y = forwardKinematics(alpha, beta)[1];
+
 		return (
-			getShoulderAngle() < Constants.minAlpha |
-			getShoulderAngle() > Constants.maxAlpha |
-			getElbowAngle() < Constants.minBeta | 
-			getElbowAngle() > Constants.maxBeta
+			alpha < Constants.minAlpha |
+			alpha > Constants.maxAlpha |
+
+			beta < Constants.minBeta | 
+			beta > Constants.maxBeta |
+
+			x < Constants.minX |
+			x > Constants.maxX |
+
+			y < Constants.minY |
+			y > Constants.maxY |
+ 
+			(Constants.isInFrameX(x) & Constants.isBelowElectricalBoard(y))
 		);
 	}
 
@@ -175,7 +189,6 @@ public class Arm {
 		elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 	}
 
-	//TODO: write method
     /**
 	 * This will return the desired x, y pos for the given angle of each length
 	 * 
@@ -190,7 +203,7 @@ public class Arm {
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
 					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
 
-		double[] pos = {x, y + .59};
+		double[] pos = {x, y + .59}; // shoulder joint is ~.59 meters off the ground
 		return pos;
     }
 

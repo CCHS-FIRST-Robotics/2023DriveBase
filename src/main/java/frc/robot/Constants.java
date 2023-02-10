@@ -82,11 +82,19 @@ public class Constants {
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
-	// TODO: set values
-	public static final double minX = 0;
-	public static final double maxX = 120;
-	public static final double minY = 0;
-	public static final double maxY = 200;
+	// hard min/max x and y values for the arm
+	public static final double minX = 0.05;
+	public static final double maxX = 100;
+	public static final double minY = 0.05	;
+	public static final double maxY = 1.95; // 6'6"
+
+	public static boolean isInFrameX(double x) {
+		return (Math.abs(x) < .5); // frame is ~1 meter long
+	}
+
+	public static boolean isBelowElectricalBoard(double y) {
+		return (y < .6); // top of electrical board is ~0.6 meters off the ground
+	}
 
 	// alpha is the shoulder joint angle in relation to the horizontal
 	// beta is the elbow joint angle in relation to the horzinontal
