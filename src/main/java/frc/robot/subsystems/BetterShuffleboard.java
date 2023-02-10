@@ -58,8 +58,8 @@ public class BetterShuffleboard {
         odomTab = Shuffleboard.getTab("Odometry");
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu, int pipeChoice){
-        pushLimelight(limelight, pipeChoice);
+    public void pushDashboard(Limelight limelight, IMU imu){
+        pushLimelight(limelight);
         pushIMU(imu);
     }
 
@@ -70,18 +70,11 @@ public class BetterShuffleboard {
         Constants.RIGHT_Y_EXPONENT = rightYExp.getDouble(2);
     }
 
-    public void pushLimelight(Limelight limelight, int pipeChoice) {
-        if (pipeChoice == 0) pushLimelightHigh(limelight);
-        else pushLimelightLow(limelight);
-    }
-
-    private void pushLimelightHigh(Limelight limelight) {
+    public void pushLimelight(Limelight limelight) {
         highPostX.setDouble(limelight.getX(0));
         highPostY.setDouble(limelight.getY(0));
         highPostHeading.setDouble(limelight.getHeadingDisplacement(0));
-    }
-
-    private void pushLimelightLow(Limelight limelight) {
+        
         lowPostX.setDouble(limelight.getX(1));
         lowPostY.setDouble(limelight.getY(1));
         lowPostHeading.setDouble(limelight.getHeadingDisplacement(1));
