@@ -71,13 +71,13 @@ public class BetterShuffleboard {
     }
 
     public void pushLimelight(Limelight limelight) {
-        highPostX.setDouble(limelight.getX(0));
-        highPostY.setDouble(limelight.getY(0));
-        highPostHeading.setDouble(limelight.getHeadingDisplacement(0));
+        highPostX.setDouble(limelight.getX(Constants.TALL_PIPE_NUM));
+        highPostY.setDouble(limelight.getY(Constants.TALL_PIPE_NUM));
+        highPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.TALL_PIPE_NUM));
         
-        lowPostX.setDouble(limelight.getX(1));
-        lowPostY.setDouble(limelight.getY(1));
-        lowPostHeading.setDouble(limelight.getHeadingDisplacement(1));
+        lowPostX.setDouble(limelight.getX(Constants.SHORT_PIPE_NUM));
+        lowPostY.setDouble(limelight.getY(Constants.SHORT_PIPE_NUM));
+        lowPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM));
     }
 
     public void pushIMU(IMU imu) {

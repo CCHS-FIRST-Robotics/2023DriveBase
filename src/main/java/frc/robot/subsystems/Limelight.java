@@ -47,6 +47,13 @@ public class Limelight {
         y = table.getEntry("ty").getDouble(0);
         return y;
    }
+
+   public double getDistance(int pipeChoice) {
+        return Math.sqrt( 
+            Math.pow(getX(pipeChoice), 2) + 
+            Math.pow(getY(pipeChoice), 2) 
+        );
+   }
     
     public double getArea(int pipeChoice) {
         changePipeline(pipeChoice);

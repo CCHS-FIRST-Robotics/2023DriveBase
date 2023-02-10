@@ -135,7 +135,23 @@ public class Robot extends TimedRobot {
   }
 
   public void limelightTestDrive() {
-    // driveBase.drive(0, 0, 1*limelight.getHeadingDisplacement(), 0);
+    double kP = .1;
+
+    double d1 = limelight.getDistance(Constants.SHORT_PIPE_NUM);
+    double d2 = limelight.getDistance(Constants.TALL_PIPE_NUM);
+    double h = Constants.PIPE_DISTANCE;
+
+    double l2 = d2*d2 - d1*d1 - h*h;
+    double l1 = Math.sqrt( d1*d1 - l2*l2 );
+
+    double Fx = kP * Math.abs(l1) * Math.sin(
+      Math.toRadians(imu.getHeading()) - limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM)
+    );
+    double Fy = kP * Math.abs(l1) * Math.cos(
+      Math.toRadians(imu.getHeading()) - limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM)
+    );
+
+    driveBase.drive(Fx, Fy, 1*limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
   }
 
   /** This function is called once when the robot is disabled. */
