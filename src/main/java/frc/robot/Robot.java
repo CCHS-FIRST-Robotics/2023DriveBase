@@ -126,17 +126,48 @@ public class Robot extends TimedRobot {
     // powers motors based on the analog inputs
     // drive();
 
-    limelightTestDrive();
+    // limelightTestDrive();
 
     if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu, Constants.SHORT_PIPE_NUM); //for now just picked one of two pipes
+      smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
+
+
+      // TO TEST VALS FIRST
+      double d1 = limelight.getForwardDist(Constants.SHORT_PIPE_NUM);
+      double d2 = limelight.getForwardDist(Constants.TALL_PIPE_NUM);
+      double h = Constants.TARGETS_DISTANCE;
+
+      double l2 = d2*d2 - d1*d1 - h*h;
+      double l1 = Math.sqrt( d1*d1 - l2*l2 );
+      System.out.println(Math.toDegrees(
+        limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
+         Math.atan(l2 / l1)
+      ));
     }
     counter++;
   }
 
   public void limelightTestDrive() {
-    // driveBase.drive(0, 0, 1*limelight.getHeadingDisplacement(), 0);
-    // driveBase.drive(0, 0, )
+    double kP = .1;
+
+    double d1 = limelight.getForwardDist(Constants.SHORT_PIPE_NUM);
+    double d2 = limelight.getForwardDist(Constants.TALL_PIPE_NUM);
+    double h = Constants.TARGETS_DISTANCE; 
+
+    double l2 = d2*d2 - d1*d1 - h*h;
+    double l1 = Math.sqrt( d1*d1 - l2*l2 );
+
+    double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
+    double beta = Math.atan(l2 / l1);
+
+    double Fx = kP * Math.abs(l1) * Math.sin(
+      beta + alpha
+    );
+    double Fy = kP * Math.abs(l1) * Math.cos(
+      beta + alpha
+    );
+
+    driveBase.drive(Fx, Fy, 1*limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
   }
 
   /** This function is called once when the robot is disabled. */
