@@ -18,6 +18,12 @@ public class Limelight {
     public double getForwardDist(int pipeChoice){
         changePipeline(pipeChoice);
 
+        if (pipeChoice == 0) {
+            double goalHeightInches = Constants.SHORT_TARGET_HEIGHT;
+        } else if (pipeChoice == 1) {
+            double goalHeightInches = Constants.TALL_TARGET_HEIGHT;
+        }
+
         double goalHeightInches           = Constants.TARGET_HIEGHT;
         double limelightLensHeight        = Constants.LIME_HIEGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
@@ -46,13 +52,6 @@ public class Limelight {
         changePipeline(pipeChoice);
         y = table.getEntry("ty").getDouble(0);
         return y;
-   }
-
-   public double getDistance(int pipeChoice) {
-        return Math.sqrt( 
-            Math.pow(getX(pipeChoice), 2) + 
-            Math.pow(getY(pipeChoice), 2) 
-        );
    }
     
     public double getArea(int pipeChoice) {
