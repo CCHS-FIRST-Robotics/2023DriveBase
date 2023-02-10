@@ -66,6 +66,7 @@ public class MecaDrive extends DriveBase {
 		speedX *= speedMultiplier;
 		speedY *= speedMultiplier;
 		rotateSpeed *= speedMultiplier;
+		// these speeds are linearized from 1 to -1
 
 		switch (currentMode){
 			case STOP_MODE:
