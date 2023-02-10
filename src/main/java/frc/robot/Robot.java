@@ -144,11 +144,14 @@ public class Robot extends TimedRobot {
     double l2 = d2*d2 - d1*d1 - h*h;
     double l1 = Math.sqrt( d1*d1 - l2*l2 );
 
+    double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
+    double beta = Math.atan(l2 / l1);
+
     double Fx = kP * Math.abs(l1) * Math.sin(
-      Math.toRadians(imu.getHeading()) - limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM)
+      beta + alpha
     );
     double Fy = kP * Math.abs(l1) * Math.cos(
-      Math.toRadians(imu.getHeading()) - limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM)
+      beta + alpha
     );
 
     driveBase.drive(Fx, Fy, 1*limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
