@@ -65,7 +65,7 @@ public class BetterShuffleboard {
         SmartDashboard.putNumber("LimelightY", limelight.getY());
         SmartDashboard.putNumber("LimelightArea", limelight.getArea());
     }
-
+    
     public void pushIMU(IMU imu) {
         SmartDashboard.putNumber("NavX", imu.getDisplacementX());
         SmartDashboard.putNumber("NavY", imu.getDisplacementY());
