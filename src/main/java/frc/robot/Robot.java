@@ -126,10 +126,23 @@ public class Robot extends TimedRobot {
     // powers motors based on the analog inputs
     // drive();
 
-    limelightTestDrive();
+    // limelightTestDrive();
 
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
+
+
+      // TO TEST VALS FIRST
+      double d1 = limelight.getDistance(Constants.SHORT_PIPE_NUM);
+      double d2 = limelight.getDistance(Constants.TALL_PIPE_NUM);
+      double h = Constants.PIPE_DISTANCE;
+
+      double l2 = d2*d2 - d1*d1 - h*h;
+      double l1 = Math.sqrt( d1*d1 - l2*l2 );
+      System.out.println(Math.toDegrees(
+        limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
+         Math.atan(l2 / l1)
+      ));
     }
     counter++;
   }
