@@ -150,8 +150,8 @@ public class Robot extends TimedRobot {
     if (counter % 10 == 0) {
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
-      smartdash.putNumber("END EFFECTOR X", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
-      smartdash.putNumber("END EFFECTOR Y", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
