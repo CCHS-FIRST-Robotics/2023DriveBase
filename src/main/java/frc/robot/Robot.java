@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
   Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID);
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
+  ZED zed = new ZED();
   BetterShuffleboard smartdash = new BetterShuffleboard();
   
   double test = 0;
@@ -152,8 +153,8 @@ public class Robot extends TimedRobot {
       smartdash.putNumber("END EFFECTOR X", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", arm.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
-      smartdash.pushDashboard(limelight, imu);
       // System.out.println(xboxController.getRightY());
+      smartdash.pushDashboard(limelight, imu, zed);
     }
     counter++;
   }

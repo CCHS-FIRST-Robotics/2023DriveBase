@@ -54,6 +54,7 @@ public class BetterShuffleboard {
     public void pushDashboard(Limelight limelight, IMU imu){
         pushLimelight(limelight);
         pushIMU(imu);
+        pushZED(zed);
     }
 
     public void updateControllerExponents() {
@@ -87,5 +88,11 @@ public class BetterShuffleboard {
 
 		SmartDashboard.putNumber("NavRotationRateZ", imu.getRate());
 		SmartDashboard.putBoolean("NavConnected", imu.isConnected());
+    }
+
+    public void pushZED(ZED zed) {
+        SmartDashboard.putNumber("AprilTagX", zed.getAprilTagX());
+        SmartDashboard.putNumber("AprilTagY", zed.getAprilTagY());
+        SmartDashboard.putNumber("AprilTagZ", zed.getAprilTagZ());
     }
 }
