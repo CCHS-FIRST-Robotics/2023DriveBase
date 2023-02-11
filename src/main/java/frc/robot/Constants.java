@@ -62,7 +62,7 @@ public class Constants {
 	public static final double LOWER_ARM_LENGTH = 0.72;
 	public static final double WRIST_LENGTH = 0;
 
-	// Shoulder PID and Feedfoward gains
+	// Shoulder PID and Feedfoward gains for positional control
 	public static final double SHOULDER_KP = .15;
 	public static final double SHOULDER_KI = 0;
 	public static final double SHOULDER_KD = 0;
@@ -81,6 +81,27 @@ public class Constants {
 	public static final double ELBOW_KG = 0;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
+
+	// Shoulder PID and Feedfoward gains for velocity control
+	public static final double SHOULDER_VELOCITY_KP = 0;
+	public static final double SHOULDER_VELOCITY_KI = 0;
+	public static final double SHOULDER_VELOCITY_KD = 0;
+
+	public static final double SHOULDER_VELOCITY_KS = 0;
+	public static final double SHOULDER_VELOCITY_KG = 0;
+	public static final double SHOULDER_VELOCITY_KV = 0;
+	public static final double SHOULDER_VELOCITY_KA = 0;
+
+	// Elbow PID and Feedfoward gains
+	public static final double ELBOW_VELOCITY_KP = 0;
+	public static final double ELBOW_VELOCITY_KI = 0;
+	public static final double ELBOW_VELOCITY_KD = 0;
+
+	public static final double ELBOW_VELOCITY_KS = 0;
+	public static final double ELBOW_VELOCITY_KG = 0;
+	public static final double ELBOW_VELOCITY_KV = 0;
+	public static final double ELBOW_VELOCITY_KA = 0;
+
 
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.05;

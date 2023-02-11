@@ -75,11 +75,20 @@ public class Arm {
 		//shoulderFalconSensor = new TalonFXSensorCollection(shoulderMotor);
 		//elbowFalconSensor = new TalonFXSensorCollection(elbowMotor);
 
+
+		// Positional PID Controllers
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
+		// Velocity PID Controllers
+		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
+        elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
 
+		// Positional Feedforward Controllers
 		shoulderFeedforward = new ArmFeedforward(Constants.SHOULDER_KS, Constants.SHOULDER_KG, Constants.SHOULDER_KV, Constants.SHOULDER_KA);
 		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
+		//Velocity Feedforward Controllers
+		shoulderVelocityFeedforward = new ArmFeedforward(Constants.SHOULDER_VELOCITY_KS, Constants.SHOULDER_VELOCITY_KG, Constants.SHOULDER_VELOCITY_KV, Constants.SHOULDER_VELOCITY_KA);
+		elbowVelocityFeedforward = new ArmFeedforward(Constants.ELBOW_VELOCITY_KS, Constants.ELBOW_VELOCITY_KG, Constants.ELBOW_VELOCITY_KV, Constants.ELBOW_VELOCITY_KA);
     }
 
 	/**
@@ -155,11 +164,11 @@ public class Arm {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
 		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) - 57;
-		
+
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	// TODO probably gotta fix this and just calculate it manually tbh - havent tested yet
+	// TODO probably gotta fix units and maybe just calculate it manually tbh - havent tested yet
 	/**
 	 * @return angle (double) angular velocity of the shoulder joint
 	 */
@@ -234,6 +243,32 @@ public class Arm {
 		);
 	}
 
+	// TODO: copilot just spat this out but like maybe they just do the control loops for you??? goateedd
+	// TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
+	private void setShoulderVelocity(double velocity) {
+		shoulderMotor.set(ControlMode.Velocity, velocity);
+	}
+	
+	private void setElbowVelocity(double velocity) {
+		elbowMotor.set(ControlMode.Velocity, velocity);
+	}
+
+	// Uses custom PID/Feedforward control loops - using the useless input so I can use overload and make it easier to switch between the two when testing
+	//TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
+	private void setShoulderVelocity(double velocity, double useless) {
+		shoulderMotor.setVoltage(
+			shoulderVelocityPID.calculate(getShoulderAngularVelocity(), velocity) +
+			shoulderVelocityFeedforward.calculate(0, velocity, 0) // this really seems like it wont work but idk
+		);
+	}
+	
+	private void setElbowVelocity(double velocity, double useless) {
+		elbowMotor.setVoltage(
+			elbowVelocityPID.calculate(getElbowAngularVelocity(), velocity) +
+			elbowVelocityFeedforward.calculate(0, velocity, 0) // this really seems like it wont work but idk
+		);
+	}
+
 	/**
 	 * This moves the arm at the given input speed in the horizontal and vertical directions
 	 * 
@@ -243,9 +278,13 @@ public class Arm {
 	public void moveArm(double leftAnalogX, double leftAnalogY) {
 		double[] combinedSpeeds = speedInverseKinematics(leftAnalogX, leftAnalogY);
 
-		// set the motor speeds as a percent 0-1 (normal)
-		shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
-		elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+		// set the motor speeds as a percent 0-1 (normal) - leaving it commented out so I can test the velocity control
+		// shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
+		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+
+		// TODO: fix units - should be change encoder ticks per 100ms
+		setShoulderVelocity(combinedSpeeds[0]);
+		setElbowVelocity(combinedSpeeds[1]);
 	}
 
     /**
