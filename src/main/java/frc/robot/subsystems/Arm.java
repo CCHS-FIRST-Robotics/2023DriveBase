@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -23,6 +25,9 @@ public class Arm {
 	//TODO: add claw encoder and PID constants
 	PIDController shoulderPID, elbowPID;
 	ArmFeedforward shoulderFeedforward, elbowFeedforward;
+
+	PIDController shoulderVelocityPID, elbowVelocityPID;
+	ArmFeedforward shoulderVelocityFeedforward, elbowVelocityFeedforward;
 
     // current constant to be tuned
 	int currentPIDConstant = 0; 
@@ -77,6 +82,16 @@ public class Arm {
 		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
     }
 
+	/**
+	 * toggles whether motor limits are activated - called when X and Y are pressed simultaneously on the xbox controller
+	 */
+	public void toggleMotorCheck() {
+		motorLimits = !motorLimits;
+	}
+
+	/**
+	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits - ignores the limits if motorLimits is false
+	 */
 	public boolean shouldMotorStop() {
 		double alpha = getShoulderAngle();
 		double beta = getElbowAngle();
@@ -101,22 +116,26 @@ public class Arm {
 		) & motorLimits;
 	}
 
-	public void setMotorLimits() {
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * -Constants.minAlpha + 2048);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
-		
-
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * -Constants.minBeta);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
-	}
-
-	public void toggleMotorCheck() {
-		motorLimits = !motorLimits;
-	}
-
+	/**
+	 * Sets the motor output to 0 and sets the motor to brake mode
+	 */
 	public void stopMotors() {
 		shoulderMotor.set(ControlMode.PercentOutput, 0);
 		elbowMotor.set(ControlMode.PercentOutput, 0);
+
+		shoulderMotor.setNeutralMode(NeutralMode.Brake);
+		elbowMotor.setNeutralMode(NeutralMode.Brake);
+	}
+
+
+	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
+	public void setMotorLimits() {
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minAlpha + 2048);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
+		
+
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minBeta);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
 	}
 
 	/**
@@ -125,6 +144,7 @@ public class Arm {
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
 		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 95; // prints the position of the selected sensor
+
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
@@ -135,43 +155,44 @@ public class Arm {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
 		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) - 57;
+		
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	public void testMoveShoulder(double analogX) {
-		if(shouldMotorStop()){
-			stopMotors();
-			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
-			return;
-		}
+	// TODO probably gotta fix this and just calculate it manually tbh - havent tested yet
+	/**
+	 * @return angle (double) angular velocity of the shoulder joint
+	 */
+	public double getShoulderAngularVelocity() {
+		return shoulderMotor.getSelectedSensorVelocity(1) * 360/4096;
+	}
 
+	/**
+	 * @return angle (double) angular velocity of the elbow joint
+	 */
+	public double getElbowAngularVelocity() {
+		return elbowMotor.getSelectedSensorVelocity(1) * 360/4096;
+	}
+
+
+	public void testMoveShoulder(double analogX) {
 		if (Math.abs(analogX) < Constants.ANALOG_DEAD_ZONE) analogX = 0;
+
 		shoulderMotor.set(ControlMode.PercentOutput, -0.3 * analogX);
 	}
 
 	public void testMoveElbow(double analogY) {
-		if(shouldMotorStop()){
-			stopMotors();
-			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
-			return;
-		}
-
 		if (Math.abs(analogY) < Constants.ANALOG_DEAD_ZONE) analogY = 0;
+
 		elbowMotor.set(ControlMode.PercentOutput, 0.3 * analogY);
 	}
 
 	/**
 	 * @param xPos (double) x position of the end effector - METERS
 	 * @param yPos (double) y position of the end effector - METERS
-	 * @return angles (double[]) array of angles for each arm length
+	 * @return angles (double[2]) array of angles for each arm length
 	 */
 	public double setEndEffector(double xPos, double yPos) {
-		if(shouldMotorStop()){
-			stopMotors();
-			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
-			return 0;
-		}
-
 		double[] angles = positionInverseKinematics(xPos, yPos);
 		
 		double alpha = Math.toDegrees(angles[0]);
@@ -183,6 +204,11 @@ public class Arm {
 		return angles[0];
 	}
 
+	/**
+	 * Uses the PID and feedforward control loops to set the shoulder at given setpoint
+	 * 
+	 * @param alpha (double) setpoint for the shoulder angle, in degrees
+	 */
 	private void setShoulder(double alpha) {
 		// System.out.println(
 		// 	shoulderFeedforward.calculate(alpha, 0, 0)
@@ -190,20 +216,31 @@ public class Arm {
 		// System.out.println(
 		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
 		// );
-		shoulderMotor.setVoltage(-shoulderPID.calculate(getShoulderAngle(), alpha) + shoulderFeedforward.calculate(alpha, 0, 0));
+		shoulderMotor.setVoltage(
+			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
+			shoulderFeedforward.calculate(alpha, 0, 0)
+		);
 	}
 
+	/**
+	 * Uses the PID and feedforward control loops to set the elbow at given setpoint
+	 * 
+	 * @param beta (double) setpoint for the elbow angle, in degrees
+	 */
 	private void setElbow(double beta) {
-		elbowMotor.setVoltage(-elbowPID.calculate(getElbowAngle(), beta) + elbowFeedforward.calculate(beta, 0, 0));
+		elbowMotor.setVoltage(
+			-elbowPID.calculate(getElbowAngle(), beta) + 
+			elbowFeedforward.calculate(beta, 0, 0)
+		);
 	}
 
+	/**
+	 * This moves the arm at the given input speed in the horizontal and vertical directions
+	 * 
+	 * @param leftAnalogX (double) - [0, 1] controller X linear velocity input
+	 * @param leftAnalogY (double) - [0, 1] controller Y linear velocity input
+	 */
 	public void moveArm(double leftAnalogX, double leftAnalogY) {
-		if(shouldMotorStop()){
-			stopMotors();
-			System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
-			return;
-		}
-		
 		double[] combinedSpeeds = speedInverseKinematics(leftAnalogX, leftAnalogY);
 
 		// set the motor speeds as a percent 0-1 (normal)

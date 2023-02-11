@@ -134,12 +134,17 @@ public class Robot extends TimedRobot {
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
 
-    arm.testMoveShoulder(xboxController.getRightX());
-    arm.testMoveElbow(xboxController.getRightY());
+    if (arm.shouldMotorStop()) {
+      arm.stopMotors();
+      System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+    } else {
+      arm.testMoveShoulder(xboxController.getRightX());
+      arm.testMoveElbow(xboxController.getRightY());
 
-    // arm.setEndEffector(1, 1);
+      // arm.setEndEffector(1, 1);
+      // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
+    }
 
-    // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
     if (counter % 10 == 0) {
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
