@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Kinematics {
     /**
@@ -16,7 +17,7 @@ public class Kinematics {
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
 					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
 
-		double[] pos = {x, y + .59}; // shoulder joint is ~.59 meters off the ground
+		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT}; // shoulder joint is ~.59 meters off the ground
 		return pos;
     }
 
@@ -60,6 +61,8 @@ public class Kinematics {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 
+		yPos -= Constants.SHOULDER_JOINT_HEIGHT;
+
 		double dist = Math.sqrt(xPos*xPos + yPos*yPos);
 		double l = (l1*l1 - l2*l2 + dist*dist) / (2*dist);
 		double h = Math.sqrt(l1*l1 - l*l);
@@ -70,6 +73,9 @@ public class Kinematics {
 		double alpha = Math.asin(y1/l1);
     	double beta = -Math.PI/2 + alpha - Math.asin((l1*l1 + l2*l2 - dist*dist)/(2*l1*l2));
 		
+		SmartDashboard.putNumber("DESIRED ALPHA", Math.toDegrees(alpha));
+		SmartDashboard.putNumber("DESIRED BETA", Math.toDegrees(beta));
+
 		double[] angles = {alpha, beta};
         return angles;
     }

@@ -139,9 +139,9 @@ public class Robot extends TimedRobot {
       arm.stopMotors();
       System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
     } else {
-      arm.testMoveShoulder(xboxController.getRightX());
-      arm.testMoveElbow(xboxController.getRightY());
-
+      // arm.testMoveShoulder(xboxController.getRightX());
+      // arm.testMoveElbow(xboxController.getRightY());
+      arm.stopMotors();
       // arm.setEndEffector(1, 1);
       // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
     }
@@ -198,7 +198,8 @@ public class Robot extends TimedRobot {
       driveBase.cycleMotor();
     }
     if (xboxController.getBButtonPressed()) {
-      driveBase.printActiveMotorDebugMode();
+      // driveBase.printActiveMotorDebugMode();
+      arm.stopMotors();
     }
     if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
       arm.toggleMotorCheck();

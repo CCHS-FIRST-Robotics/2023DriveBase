@@ -62,23 +62,31 @@ public class Constants {
 	public static final double LOWER_ARM_LENGTH = 0.72;
 	public static final double WRIST_LENGTH = 0;
 
+	public static final double UPPER_ARM_COM_DIST = .6; // meters
+	public static final double LOWER_ARM_COM_DIST = .36; // meters
+
+	public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
+	public static final double LOWER_ARM_WEIGHT = 4.5; // kg
+
+	public static final double SHOULDER_JOINT_HEIGHT = .59; // shoulder joint is .59m from the floor
+
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = .15;
+	public static final double SHOULDER_KP = .6;
 	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = 0;
+	public static final double SHOULDER_KD = 1;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 0;
+	public static final double SHOULDER_KG = 1.8;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = 0;
+	public static final double ELBOW_KP = .2;
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0;
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = 0;
+	public static final double ELBOW_KG = 1.6;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
@@ -87,20 +95,10 @@ public class Constants {
 	public static final double SHOULDER_VELOCITY_KI = 0;
 	public static final double SHOULDER_VELOCITY_KD = 0;
 
-	public static final double SHOULDER_VELOCITY_KS = 0;
-	public static final double SHOULDER_VELOCITY_KG = 0;
-	public static final double SHOULDER_VELOCITY_KV = 0;
-	public static final double SHOULDER_VELOCITY_KA = 0;
-
 	// Elbow PID and Feedfoward gains
 	public static final double ELBOW_VELOCITY_KP = 0;
 	public static final double ELBOW_VELOCITY_KI = 0;
 	public static final double ELBOW_VELOCITY_KD = 0;
-
-	public static final double ELBOW_VELOCITY_KS = 0;
-	public static final double ELBOW_VELOCITY_KG = 0;
-	public static final double ELBOW_VELOCITY_KV = 0;
-	public static final double ELBOW_VELOCITY_KA = 0;
 
 
 	// hard min/max x and y values for the arm

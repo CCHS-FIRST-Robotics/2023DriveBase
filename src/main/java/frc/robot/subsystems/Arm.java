@@ -86,9 +86,6 @@ public class Arm {
 		// Positional Feedforward Controllers
 		shoulderFeedforward = new ArmFeedforward(Constants.SHOULDER_KS, Constants.SHOULDER_KG, Constants.SHOULDER_KV, Constants.SHOULDER_KA);
 		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
-		//Velocity Feedforward Controllers
-		shoulderVelocityFeedforward = new ArmFeedforward(Constants.SHOULDER_VELOCITY_KS, Constants.SHOULDER_VELOCITY_KG, Constants.SHOULDER_VELOCITY_KV, Constants.SHOULDER_VELOCITY_KA);
-		elbowVelocityFeedforward = new ArmFeedforward(Constants.ELBOW_VELOCITY_KS, Constants.ELBOW_VELOCITY_KG, Constants.ELBOW_VELOCITY_KV, Constants.ELBOW_VELOCITY_KA);
     }
 
 	/**
@@ -129,13 +126,35 @@ public class Arm {
 	 * Sets the motor output to 0 and sets the motor to brake mode
 	 */
 	public void stopMotors() {
-		shoulderMotor.set(ControlMode.PercentOutput, 0);
-		elbowMotor.set(ControlMode.PercentOutput, 0);
+		// System.out.println(getElbowFeedforward());
+		// System.out.println(getShoulderFeedforward());
+		shoulderMotor.setVoltage(getShoulderFeedforward());
+		elbowMotor.setVoltage(getElbowFeedforward());
+
+		System.out.println("code is working");
+		
 
 		shoulderMotor.setNeutralMode(NeutralMode.Brake);
 		elbowMotor.setNeutralMode(NeutralMode.Brake);
 	}
 
+	public double getElbowFeedforward() {
+		return Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
+	}
+
+	public double getShoulderFeedforward() {
+		double d1 = Constants.UPPER_ARM_COM_DIST;
+		double d2 = Constants.LOWER_ARM_COM_DIST;
+		double l1 = Constants.LOWER_ARM_LENGTH;
+
+		double alpha = Math.toRadians(getShoulderAngle());
+		double beta = Math.toRadians(getElbowAngle());
+
+		double comX = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
+		double comY = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
+
+		return -Constants.SHOULDER_KG * Math.cos(Math.atan(comY / comX));
+	}
 
 	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
 	public void setMotorLimits() {
@@ -163,7 +182,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) - 57;
+		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 51;
 
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
@@ -222,9 +241,9 @@ public class Arm {
 		// System.out.println(
 		// 	shoulderFeedforward.calculate(alpha, 0, 0)
 		// );
-		// System.out.println(
-		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
-		// );
+		System.out.println(
+			shoulderPID.calculate(getShoulderAngle(), alpha)
+		);
 		shoulderMotor.setVoltage(
 			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
 			shoulderFeedforward.calculate(alpha, 0, 0)
@@ -238,34 +257,34 @@ public class Arm {
 	 */
 	private void setElbow(double beta) {
 		elbowMotor.setVoltage(
-			-elbowPID.calculate(getElbowAngle(), beta) + 
+			elbowPID.calculate(getElbowAngle(), beta) + 
 			elbowFeedforward.calculate(beta, 0, 0)
 		);
 	}
 
 	// TODO: copilot just spat this out but like maybe they just do the control loops for you??? goateedd
 	// TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
-	private void setShoulderVelocity(double velocity) {
-		shoulderMotor.set(ControlMode.Velocity, velocity);
-	}
+	// private void setShoulderVelocity(double velocity) {
+	// 	shoulderMotor.set(ControlMode.Velocity, velocity);
+	// }
 	
-	private void setElbowVelocity(double velocity) {
-		elbowMotor.set(ControlMode.Velocity, velocity);
-	}
+	// private void setElbowVelocity(double velocity) {
+	// 	elbowMotor.set(ControlMode.Velocity, velocity);
+	// }
 
 	// Uses custom PID/Feedforward control loops - using the useless input so I can use overload and make it easier to switch between the two when testing
 	//TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
 	private void setShoulderVelocity(double velocity, double useless) {
 		shoulderMotor.setVoltage(
 			shoulderVelocityPID.calculate(getShoulderAngularVelocity(), velocity) +
-			shoulderVelocityFeedforward.calculate(0, velocity, 0) // this really seems like it wont work but idk
+			getShoulderFeedforward() // this really seems like it wont work but idk
 		);
 	}
 	
 	private void setElbowVelocity(double velocity, double useless) {
 		elbowMotor.setVoltage(
 			elbowVelocityPID.calculate(getElbowAngularVelocity(), velocity) +
-			elbowVelocityFeedforward.calculate(0, velocity, 0) // this really seems like it wont work but idk
+			getElbowFeedforward() // this really seems like it wont work but idk
 		);
 	}
 
@@ -283,7 +302,7 @@ public class Arm {
 		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 
 		// TODO: fix units - should be change encoder ticks per 100ms
-		setShoulderVelocity(combinedSpeeds[0]);
-		setElbowVelocity(combinedSpeeds[1]);
+		setShoulderVelocity(combinedSpeeds[0], 0);
+		setElbowVelocity(combinedSpeeds[1], 0);
 	}
 }
