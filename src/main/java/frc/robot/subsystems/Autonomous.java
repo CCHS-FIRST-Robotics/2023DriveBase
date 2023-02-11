@@ -63,40 +63,38 @@ public class Autonomous {
 		ChassisSpeeds currentChassisSpeeds = getChassisSpeeds(m_drive);
 		
 		// linearize speed is needed because the mecanum cartesian drive takes arguments (velocities) actually as ratios, from 1 to -1. See MecaDrive.drive
-		m_drive.drive(linearizeSpeed(currentChassisSpeeds.vxMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeSpeed(currentChassisSpeeds.vyMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeSpeed(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
-	}
-
-	
+		m_drive.drive(linearizeVelocity(currentChassisSpeeds.vxMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeVelocity(currentChassisSpeeds.vyMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeVelocity(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
+	}	
 
 	/**
 	 * @brief "linearized" in this case means a value that has been turned into a number from -1 to 1, relative to the given "max," which decides what value is associated with a linearized magnitude of 1.
 	 * 
 	 * TODO: check that this function is working correctly (double-check math)
 	 * 
-	 * @param speed double meters/second
+	 * @param velocity double meters/second
 	 * @param maxSpeed double meters/second
 	 * @return
 	 */
-	private double linearizeSpeed(double speed, double maxSpeed)	{
-		// Speed is a scalar, which means that it has no direction, and thus a negative value in this case is meaningless, and would imply a incorrect usage for maxSpeed.
-		boolean maxSpeedIsPositive = maxSpeed > 0;
-		assert(maxSpeedIsPositive);
-
-		boolean speedIsZero = speed == 0;
-		if (speedIsZero)	{
-			return 0;
+	private double linearizeVelocity(double velocity, double maxSpeed)	{
+		// Speed is a scalar, (velocity is not scalar, negative matters) which means that maxSpeed has no direction, and thus a negative value in this case would imply a incorrect usage for maxSpeed.
+		if (maxSpeed <= 0){
+			throw new IllegalArgumentException("maxSpeed must be positive and greater than 0");
 		}
 
-		double linearizedSpeed; // from 1 to -1
-		
-		boolean speedIsNegative = speed < 0;
-		if (speedIsNegative)	{
-			linearizedSpeed = Math.max(-1, speed / maxSpeed);
+		double linearizedVelocity; // from 1 to -1
+
+		if (velocity == 0)	{
+			linearizedVelocity = 0;
+		} 
+		else if (velocity < 0)	{
+			// if velocity is in greater magnitude than maxSpeed, divide it by maxspeed so that it is in the range [0, 1]
+			linearizedVelocity = Math.max(-1, velocity / maxSpeed);
 		}
 		else {
-			linearizedSpeed = Math.min(1, speed / maxSpeed);
+			linearizedVelocity = Math.min(1, velocity / maxSpeed);
 		}
-		return linearizedSpeed; 
+	
+		return linearizedVelocity; 
 	}
 }
 
