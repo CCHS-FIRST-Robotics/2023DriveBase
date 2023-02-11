@@ -11,14 +11,14 @@ import frc.robot.Constants;
 /**
  * @brief Contains functions for moving in autonomous mode, such as setting the robots trajectory, and getting speeds to set motors
  * 
- * todo: Untested
+ * TODO: Untested
  * 
  * @author xoth42
  */
 public class Autonomous {
 
 	/**
-	 * @brief Generate a trajectory (line/spline) and apply it to robot, with the endpoint given, "target," which reaches every point in interiorWaypoints. Drive base needed for start and config. All "points" are on the cartesian plane created with odometry.
+	 * @brief Generate a 2d cartesian trajectory (line/spline) and apply it to robot, with the endpoint given, "target," which reaches every point in interiorWaypoints, all relative to the drive base odometry.
 	 * 
 	 *  For reference, see link
 	 *  https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/trajectory-generation.html
@@ -44,8 +44,8 @@ public class Autonomous {
 	 * @param m_drive (MecaDrive) drivebase, to get the trajectory, time, and pose 
 	 * @return ChassisSpeeds - https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/kinematics/ChassisSpeeds.html
 	 */
-	public ChassisSpeeds getChassisSpeeds(MecaDrive m_drive) {
-		// get a state of the trajectory at "trajectoryTime" seconds relative to the beginning of the trajectory
+	private ChassisSpeeds getChassisSpeeds(MecaDrive m_drive) {
+		// get a (pose on spline) of the trajectory at "trajectoryTime" seconds relative to the beginning of the trajectory
 		Trajectory.State goal = m_drive.getCurrentTrajectory().sample(m_drive.getCurrentTrajectoryTime()); 
 
 		// return the chassis speeds (controller compares current pose of robot and goal to find the adequate speeds)
@@ -55,40 +55,21 @@ public class Autonomous {
 	/**
 	 * @brief using the chassis speeds from the trajectory specified by the robot, drive the robot
 	 * 
-	 * Todo: verify functionality and test
+	 * TODO: verify functionality and test
 	 * 
 	 * @param m_drive MecaDrive drive base
 	 */
 	public void applyChassisSpeeds(MecaDrive m_drive)	{
 		ChassisSpeeds currentChassisSpeeds = getChassisSpeeds(m_drive);
 		
-		m_drive.drive(linearizeSpeed(currentChassisSpeeds.vxMetersPerSecond), linearizeSpeed(currentChassisSpeeds.vyMetersPerSecond), linearizeSpeed(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
+		// linearize speed is needed because the mecanum cartesian drive takes arguments (velocities) actually as ratios, from 1 to -1. See MecaDrive.drive
+		m_drive.drive(linearizeSpeed(currentChassisSpeeds.vxMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeSpeed(currentChassisSpeeds.vyMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeSpeed(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
 	}
 
-	/**
-	 * @brief given input speed (double), return, if greater than the max speed, 1 or -1. Else, return a value between 1 and -1 equal to the given speed divided by the maximum speed of the robot (Constants.maxVelocityMetersPerSecond)
-	 * 
-	 * TODO: add a value for maxVelocityMetersPerSecond to Constants.java
-	 * TODO: check that this function is working correctly (double-check math)
-	 * 
-	 * @param speed double meters/second
-	 * @return
-	 */
-	private double linearizeSpeed(double speed)	{
-		double speedIsNegative = speed < 0 ? 1d : 0d; // if negative, value is a double, 1 else 0
-		double absSpeed = Math.abs(speed);
-
-		// set speed to max if past max (just in case, also if equal) or set val to speed / max speed (from 0 to 1)
-		double newSpeed = absSpeed >= Constants.maxVelocityMetersPerSecond ? Constants.maxVelocityMetersPerSecond : absSpeed / Constants.maxVelocityMetersPerSecond;
-
-		// (apply if the speed was negative to begin with)
-		// if speedIsNegative, newSpeed will be multiplied by -1^1=-1, else by -1^0=1
-		return Math.pow(-1, speedIsNegative) * newSpeed; // between -1 and 1
-	}
+	
 
 	/**
-	 * Overloaded version of linearizeSpeed(double speed) that adds a param for max speed when Constants.maxVelocityMetersPerSecond is not what should be used (when using rotational velocity)
-	 * @brief given input speed (double), return, if greater than the maxSpeed, 1 or -1. Else, return a value between 1 and -1 equal to the given speed divided by the maximum speed (maxSpeed)
+	 * @brief "linearized" in this case means a value that has been turned into a number from -1 to 1, relative to the given "max," which decides what value is associated with a linearized magnitude of 1.
 	 * 
 	 * TODO: check that this function is working correctly (double-check math)
 	 * 
@@ -97,15 +78,25 @@ public class Autonomous {
 	 * @return
 	 */
 	private double linearizeSpeed(double speed, double maxSpeed)	{
-		double speedIsNegative = speed < 0 ? 1d : 0d; // if negative, value is a double, 1 else 0
-		double absSpeed = Math.abs(speed);
+		// Speed is a scalar, which means that it has no direction, and thus a negative value in this case is meaningless, and would imply a incorrect usage for maxSpeed.
+		boolean maxSpeedIsPositive = maxSpeed > 0;
+		assert(maxSpeedIsPositive);
 
-		// set speed to max if past max (just in case, also if equal) or set val to speed / max speed (from 0 to 1)
-		double newSpeed = absSpeed >= maxSpeed ? maxSpeed : absSpeed / maxSpeed;
+		boolean speedIsZero = speed == 0;
+		if (speedIsZero)	{
+			return 0;
+		}
 
-		// (apply if the speed was negative to begin with)
-		// if speedIsNegative, newSpeed will be multiplied by -1^1=-1, else by -1^0=1
-		return Math.pow(-1, speedIsNegative) * newSpeed; // between -1 and 1
+		double linearizedSpeed; // from 1 to -1
+		
+		boolean speedIsNegative = speed < 0;
+		if (speedIsNegative)	{
+			linearizedSpeed = Math.max(-1, speed / maxSpeed);
+		}
+		else {
+			linearizedSpeed = Math.min(1, speed / maxSpeed);
+		}
+		return linearizedSpeed; 
 	}
 }
 
