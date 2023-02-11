@@ -87,7 +87,7 @@ public class BetterShuffleboard {
 
         SmartDashboard.putNumber("NavXVel", imu.getVelocityX());
 		SmartDashboard.putNumber("NavYVel", imu.getVelocityY());
-
+        
         SmartDashboard.putNumber("NavXAccel", imu.getRawAccelX());
 		SmartDashboard.putNumber("NavYAccel", imu.getRawAccelY());
 		SmartDashboard.putNumber("NavZAccel", imu.getRawAccelZ());
