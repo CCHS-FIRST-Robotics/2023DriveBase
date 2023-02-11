@@ -131,13 +131,16 @@ public class Robot extends TimedRobot {
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
 
-
+      limelight.changePipeline(1);
       // TO TEST VALS FIRST
       double d1 = limelight.getForwardDist(Constants.SHORT_PIPE_NUM);
       double d2 = limelight.getForwardDist(Constants.TALL_PIPE_NUM);
       double h = Constants.TARGETS_DISTANCE;
+      System.out.println(d1);
+      System.out.println(d2);
 
-      double l2 = d2*d2 - d1*d1 - h*h;
+      double l2 = (d2*d2 - d1*d1 - h*h) / (2*h);
+      System.out.println(l2);
       double l1 = Math.sqrt( d1*d1 - l2*l2 );
       System.out.println(Math.toDegrees(
         limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +

@@ -28,9 +28,10 @@ public class Limelight {
 
         double limelightLensHeight        = Constants.LIME_HIEGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
-        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
+        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0);
 
         double angleToGoal = limelightMountAngle + targetOffsetAngle_Vertical;
+        angleToGoal = Math.toRadians(angleToGoal);
 
         forwardDist = (goalHeightInches - limelightLensHeight)/Math.tan(angleToGoal);
 
