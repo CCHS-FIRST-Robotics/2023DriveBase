@@ -53,12 +53,12 @@ public class Constants {
 	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
 	//previous speed is divided by this factor (higher = slow down faster)
 
-	//height from floor to center of limelight lense in inches
-	public static final double LIME_HIEGHT    = 16.5;
+	//height from floor to center of limelight lense in meters
+	public static final double LIME_HIEGHT    = .42;
 	//number of degrees from perfectly vertical
 	public static final double LIME_ANGLE     = 0; 
 
-	//height from floor to target in inches
+	//height from floor to target in meters
 	public static final double SHORT_TARGET_HEIGHT  = .56;
 	public static final double TALL_TARGET_HEIGHT = 1.05;
 
