@@ -51,7 +51,7 @@ public class BetterShuffleboard {
         SmartDashboard.putBoolean(key, x);
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu){
+    public void pushDashboard(Limelight limelight, IMU imu, ZED zed){
         pushLimelight(limelight);
         pushIMU(imu);
         pushZED(zed);
