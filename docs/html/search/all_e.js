@@ -1,8 +1,21 @@
 var searchData=
 [
-  ['slow_5fdown_5fcutoff_0',['SLOW_DOWN_CUTOFF',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a70b830d44706c08bc0e4c58e2c2c5ac3',1,'frc::robot::Constants']]],
-  ['slow_5fdown_5ffactor_1',['SLOW_DOWN_FACTOR',['../d2/da2/classfrc_1_1robot_1_1_constants.html#af0d5426b2415f6f21a59557ffa06377f',1,'frc::robot::Constants']]],
-  ['slowdown_2',['slowDown',['../d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a3c1c70c54057eda834ba2f1adc580fe0',1,'frc.robot.subsystems.MecaDrive.slowDown()'],['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#add169688b9161a4d1e518b26bf4a5131',1,'frc.robot.subsystems.TankDrive.slowDown()']]],
-  ['spark_5fmax_5fconversion_5ffactor_3',['SPARK_MAX_CONVERSION_FACTOR',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a9dfdf53bad54804a9b393b0a2bc41227',1,'frc::robot::Constants']]],
-  ['spark_5fmax_5fid_4',['SPARK_MAX_ID',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a5aead21bed4cadff90aa9958665e3ae0',1,'frc::robot::Constants']]]
+  ['ramsete_5fb_0',['RAMSETE_B',['../d0/d00/classfrc_1_1robot_1_1Constants.html#ad98084797abd4568dd06faca039f03b6',1,'frc::robot::Constants']]],
+  ['ramsete_5fzeta_1',['RAMSETE_ZETA',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a7c66cae4cdfe51cc3618b1b54a4e1643',1,'frc::robot::Constants']]],
+  ['readme_2emd_2',['Readme.md',['../d7/dab/Readme_8md.html',1,'']]],
+  ['resetodometry_3',['resetOdometry',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#a058e436ff644a3a586b6fc9b7160e644',1,'frc::robot::subsystems::MecaDrive']]],
+  ['resetposition_4',['resetPosition',['../d4/d81/classfrc_1_1robot_1_1subsystems_1_1TankDrive.html#a4ae39c2932c554e2af22c6fa8eb28508',1,'frc::robot::subsystems::TankDrive']]],
+  ['right_5fvictor_5fid_5',['RIGHT_VICTOR_ID',['../d0/d00/classfrc_1_1robot_1_1Constants.html#ab6e09f1f27c102e82e6633925b66f9eb',1,'frc::robot::Constants']]],
+  ['right_5fx_5fexponent_6',['RIGHT_X_EXPONENT',['../d0/d00/classfrc_1_1robot_1_1Constants.html#af2d6b796933dad5f5ec05ba26f039c2f',1,'frc::robot::Constants']]],
+  ['right_5fy_5fexponent_7',['RIGHT_Y_EXPONENT',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a2e97394dc67b01a3ca96e51e8b374808',1,'frc::robot::Constants']]],
+  ['rightbumperpressed_8',['rightBumperPressed',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a3794af9328823c2ae7a49dd1423c7a59',1,'frc.robot.subsystems.DriveBase.rightBumperPressed()'],['../d4/d81/classfrc_1_1robot_1_1subsystems_1_1TankDrive.html#aa91ad591069b0d9161b9656d595df632',1,'frc.robot.subsystems.TankDrive.rightBumperPressed()']]],
+  ['rl_5ftalon_5fid_9',['RL_TALON_ID',['../d0/d00/classfrc_1_1robot_1_1Constants.html#ac70c4e93aaa81e07757acb03d9097ec8',1,'frc::robot::Constants']]],
+  ['rl_5fwheel_5fpos_10',['RL_WHEEL_POS',['../d0/d00/classfrc_1_1robot_1_1Constants.html#abf8708b77b584eab5c5f49411aff824f',1,'frc::robot::Constants']]],
+  ['robot_11',['Robot',['../d2/d70/classfrc_1_1robot_1_1Robot.html',1,'frc::robot']]],
+  ['robot_2ejava_12',['Robot.java',['../d8/dc1/Robot_8java.html',1,'']]],
+  ['robot_5fwidth_13',['ROBOT_WIDTH',['../d0/d00/classfrc_1_1robot_1_1Constants.html#ad25bf0682129853a7f60811200b7bc4b',1,'frc::robot::Constants']]],
+  ['robotinit_14',['robotInit',['../d2/d70/classfrc_1_1robot_1_1Robot.html#a1d28582cf3dc31568c3581f631c92f13',1,'frc::robot::Robot']]],
+  ['robotperiodic_15',['robotPeriodic',['../d2/d70/classfrc_1_1robot_1_1Robot.html#a7e63e32ebe8ad3d33bbc3b09092a9f1f',1,'frc::robot::Robot']]],
+  ['rr_5ftalon_5fid_16',['RR_TALON_ID',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a7aedac6e93db91227926a719248f5205',1,'frc::robot::Constants']]],
+  ['rr_5fwheel_5fpos_17',['RR_WHEEL_POS',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a8480ec998ae06f8bb9f3bfba89424139',1,'frc::robot::Constants']]]
 ];

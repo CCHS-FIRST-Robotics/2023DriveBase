@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['drive_5fmax_5fangular_5fvelocity_0',['DRIVE_MAX_ANGULAR_VELOCITY',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a0ca14a34cc24e73a37b57879978d0307',1,'frc::robot::Constants']]],
-  ['drivebase_1',['driveBase',['../dd/d54/classfrc_1_1robot_1_1_robot.html#aabb2f82e41b101b19281f03d8797b726',1,'frc::robot::Robot']]],
-  ['dt_2',['dt',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a5b9af06b7d487448348ad1d0920c4eef',1,'frc::robot::Constants']]]
+  ['chassiscontroller_0',['chassisController',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a7b6d8059dad42f9e9c47404d5c11340c',1,'frc::robot::subsystems::DriveBase']]],
+  ['currenttrajectory_1',['currentTrajectory',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a806b4c51db77afd9f3cdea7fb021bd60',1,'frc::robot::subsystems::DriveBase']]],
+  ['currenttrajectorytime_2',['currentTrajectoryTime',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#ada1e411bd22f2ad5aafdec59133a18a5',1,'frc::robot::subsystems::DriveBase']]]
 ];

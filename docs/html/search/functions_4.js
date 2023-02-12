@@ -1,4 +1,26 @@
 var searchData=
 [
-  ['getposition_0',['getPosition',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a99e8f62affb6b9785a60aaa764840995',1,'frc::robot::subsystems::TankDrive']]]
+  ['getapriltagx_0',['getAprilTagX',['../d5/dd5/classfrc_1_1robot_1_1subsystems_1_1ZED.html#a3fcde411acdfcc519e48ae5a840e5252',1,'frc::robot::subsystems::ZED']]],
+  ['getapriltagy_1',['getAprilTagY',['../d5/dd5/classfrc_1_1robot_1_1subsystems_1_1ZED.html#a09ef02dbc6554e12498527919093e139',1,'frc::robot::subsystems::ZED']]],
+  ['getapriltagz_2',['getAprilTagZ',['../d5/dd5/classfrc_1_1robot_1_1subsystems_1_1ZED.html#a44d39935e8c7bbef14ece48563e66a01',1,'frc::robot::subsystems::ZED']]],
+  ['getarea_3',['getArea',['../d7/d46/classfrc_1_1robot_1_1subsystems_1_1Limelight.html#abb2c7633ac0ecc8afdc8f0572c0e52cc',1,'frc::robot::subsystems::Limelight']]],
+  ['getchassiscontroller_4',['getChassisController',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a56114177e1b8ada6d7a9b842ea143f0f',1,'frc::robot::subsystems::DriveBase']]],
+  ['getchassisspeeds_5',['getChassisSpeeds',['../de/d9a/classfrc_1_1robot_1_1subsystems_1_1Autonomous.html#a56791618aab09b936a3c6bd5a5410f1a',1,'frc::robot::subsystems::Autonomous']]],
+  ['getcurrentmode_6',['getCurrentMode',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a0c13ab822e1e45262004c053a6697e0e',1,'frc::robot::subsystems::DriveBase']]],
+  ['getcurrenttrajectory_7',['getCurrentTrajectory',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a0b78d44bce0f349181b6928b5c78b9e5',1,'frc::robot::subsystems::DriveBase']]],
+  ['getcurrenttrajectorytime_8',['getCurrentTrajectoryTime',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a0c38393bcbfaed818112bab7f370673d',1,'frc::robot::subsystems::DriveBase']]],
+  ['getdebugenabledmotor_9',['getDebugEnabledMotor',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a2946b96eddf83c9a5a012e8f397c46ac',1,'frc::robot::subsystems::DriveBase']]],
+  ['getheading_10',['getHeading',['../dc/da1/classfrc_1_1robot_1_1subsystems_1_1IMU.html#af576e9b796d6d507a7e435b87f15bece',1,'frc::robot::subsystems::IMU']]],
+  ['getleftx_11',['getLeftX',['../d4/dd1/classfrc_1_1robot_1_1subsystems_1_1Controller.html#a52c80f1f7235465a23c4b8f127100c6a',1,'frc::robot::subsystems::Controller']]],
+  ['getlefty_12',['getLeftY',['../d4/dd1/classfrc_1_1robot_1_1subsystems_1_1Controller.html#a01c09f4044aaf659a4ba403b9930023a',1,'frc::robot::subsystems::Controller']]],
+  ['getodomheading_13',['getOdomHeading',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#a306f941c1aecec3c6ddffe70c3afe8fe',1,'frc::robot::subsystems::MecaDrive']]],
+  ['getodomx_14',['getOdomX',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#ac0c209a40cf6cec364b21a755d632602',1,'frc::robot::subsystems::MecaDrive']]],
+  ['getodomy_15',['getOdomY',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#a51ed43eb8db1590aa4fbe7685c3c4337',1,'frc::robot::subsystems::MecaDrive']]],
+  ['getpose_16',['getPose',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#a7a15d52d98f1efe96b94a515dc7d8fdb',1,'frc::robot::subsystems::MecaDrive']]],
+  ['getposition_17',['getPosition',['../d4/d81/classfrc_1_1robot_1_1subsystems_1_1TankDrive.html#a99e8f62affb6b9785a60aaa764840995',1,'frc::robot::subsystems::TankDrive']]],
+  ['getrightx_18',['getRightX',['../d4/dd1/classfrc_1_1robot_1_1subsystems_1_1Controller.html#a7f959455fa8bd8e3b069ba0a13424e1e',1,'frc::robot::subsystems::Controller']]],
+  ['getrighty_19',['getRightY',['../d4/dd1/classfrc_1_1robot_1_1subsystems_1_1Controller.html#a272396fea13a1f726eccf9f9cfabe171',1,'frc::robot::subsystems::Controller']]],
+  ['gettrajectoryconfig_20',['getTrajectoryConfig',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a5e3e667e834071e1684b536ddf94b83c',1,'frc::robot::subsystems::DriveBase']]],
+  ['getx_21',['getX',['../d7/d46/classfrc_1_1robot_1_1subsystems_1_1Limelight.html#ac5c3b2835a3dd3aea88012f21bd18ca3',1,'frc::robot::subsystems::Limelight']]],
+  ['gety_22',['getY',['../d7/d46/classfrc_1_1robot_1_1subsystems_1_1Limelight.html#a4ad607fdf8e24fa7ab9852ce344d4ac2',1,'frc::robot::subsystems::Limelight']]]
 ];

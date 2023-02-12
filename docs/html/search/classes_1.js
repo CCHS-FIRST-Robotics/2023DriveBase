@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['drivebase_0',['DriveBase',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html',1,'frc::robot::subsystems']]]
+  ['bettershuffleboard_0',['BetterShuffleboard',['../d7/d99/classfrc_1_1robot_1_1subsystems_1_1BetterShuffleboard.html',1,'frc::robot::subsystems']]]
 ];

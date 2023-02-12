@@ -1,21 +1,12 @@
 var searchData=
 [
-  ['talon_5fconversion_5ffactor_0',['TALON_CONVERSION_FACTOR',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a0cb16b98df4832961bff6d677e67947b',1,'frc::robot::Constants']]],
-  ['talon_5fid_1',['TALON_ID',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a204ca7168b6bd06af3442aee506b165e',1,'frc::robot::Constants']]],
-  ['tank_5fwheel_5fradius_2',['TANK_WHEEL_RADIUS',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a622ec78eed37b1e4844b420eff555e44',1,'frc::robot::Constants']]],
-  ['tankdrive_3',['TankDrive',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html',1,'frc.robot.subsystems.TankDrive'],['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ac7440f52ab2917dc577343e048396223',1,'frc.robot.subsystems.TankDrive.TankDrive()']]],
-  ['tankdrive_2ejava_4',['TankDrive.java',['../db/de9/_tank_drive_8java.html',1,'']]],
-  ['teleopinit_5',['teleopInit',['../dd/d54/classfrc_1_1robot_1_1_robot.html#a209dbf07bfec75d73fa53126a8e31b88',1,'frc::robot::Robot']]],
-  ['teleopperiodic_6',['teleopPeriodic',['../dd/d54/classfrc_1_1robot_1_1_robot.html#ae807171661cbc29081bc10f06d6831e7',1,'frc::robot::Robot']]],
-  ['testinit_7',['testInit',['../dd/d54/classfrc_1_1robot_1_1_robot.html#acdebc9c7e7e31ffccb3c2496b8d33944',1,'frc::robot::Robot']]],
-  ['testperiodic_8',['testPeriodic',['../dd/d54/classfrc_1_1robot_1_1_robot.html#abd152f34b9f33d5cdf835aa61331f33e',1,'frc::robot::Robot']]],
-<<<<<<< HEAD
-  ['toggledecreasingpidincrement_9',['toggleDecreasingPIDIncrement',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc::robot::subsystems::TankDrive']]],
-=======
-  ['toggledecreasingpidincrement_9',['toggleDecreasingPIDIncrement',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc.robot.subsystems.TankDrive.toggleDecreasingPIDIncrement()'],['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce',1,'frc.robot.subsystems.TankDrive.toggleDecreasingPIDIncrement()']]],
->>>>>>> ee51188 (rebase)
-  ['turnondebugmode_10',['turnOnDebugMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#af54ad3d7bec7bfa3dfccf01134f432de',1,'frc::robot::subsystems::DriveBase']]],
-  ['turnondefaultmode_11',['turnOnDefaultMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a52ad0ed4423eb1822e8fc0b3ce504886',1,'frc::robot::subsystems::DriveBase']]],
-  ['turnonpidtuningmode_12',['turnONPIDTuningMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a5106f46d8dccf769d2ba4c408a6a3355',1,'frc::robot::subsystems::DriveBase']]],
-  ['turnonstopmode_13',['turnOnStopMode',['../da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a4cb5f3623af8bb9ad9fc252cd51ea84c',1,'frc.robot.subsystems.DriveBase.turnOnStopMode()'],['../d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#ae0c5f7e7754a51af6f40686d7194fed6',1,'frc.robot.subsystems.MecaDrive.turnOnStopMode()'],['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ad7f6cfb9f2f764610daf7f1d9724ba63',1,'frc.robot.subsystems.TankDrive.turnOnStopMode()']]]
+  ['setcurrentmode_0',['setCurrentMode',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a6def0c0d5e3663fbe44f7d58ebc82312',1,'frc::robot::subsystems::DriveBase']]],
+  ['setcurrenttrajectory_1',['setCurrentTrajectory',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#ab33483d82563be3cd8d6c9cbd1c211f0',1,'frc::robot::subsystems::DriveBase']]],
+  ['setcurrenttrajectorytime_2',['setCurrentTrajectoryTime',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a8c605ed8f48a0bbd07a2d5ef985439d6',1,'frc::robot::subsystems::DriveBase']]],
+  ['setdebugenabledmotor_3',['setDebugEnabledMotor',['../d1/d25/classfrc_1_1robot_1_1subsystems_1_1DriveBase.html#a944d7995be82072b6f1d70d78e2e30c6',1,'frc::robot::subsystems::DriveBase']]],
+  ['slow_5fdown_5fcutoff_4',['SLOW_DOWN_CUTOFF',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a70b830d44706c08bc0e4c58e2c2c5ac3',1,'frc::robot::Constants']]],
+  ['slow_5fdown_5ffactor_5',['SLOW_DOWN_FACTOR',['../d0/d00/classfrc_1_1robot_1_1Constants.html#af0d5426b2415f6f21a59557ffa06377f',1,'frc::robot::Constants']]],
+  ['slowdown_6',['slowDown',['../d4/d0a/classfrc_1_1robot_1_1subsystems_1_1MecaDrive.html#a87212fcba7282a2a1186e8b7093aa078',1,'frc.robot.subsystems.MecaDrive.slowDown()'],['../d4/d81/classfrc_1_1robot_1_1subsystems_1_1TankDrive.html#add169688b9161a4d1e518b26bf4a5131',1,'frc.robot.subsystems.TankDrive.slowDown()']]],
+  ['spark_5fmax_5fconversion_5ffactor_7',['SPARK_MAX_CONVERSION_FACTOR',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a9dfdf53bad54804a9b393b0a2bc41227',1,'frc::robot::Constants']]],
+  ['spark_5fmax_5fid_8',['SPARK_MAX_ID',['../d0/d00/classfrc_1_1robot_1_1Constants.html#a5aead21bed4cadff90aa9958665e3ae0',1,'frc::robot::Constants']]]
 ];
