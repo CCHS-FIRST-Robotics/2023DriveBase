@@ -11,34 +11,86 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class BetterShuffleboard {
 
     // shuffleboard tabs
-    ShuffleboardTab tuningTab; // used for adjusting things like controller exponent
+    ShuffleboardTab xboxControllerTuningTab; // used for adjusting things like controller exponent
     GenericEntry leftXExp, leftYExp, rightXExp, rightYExp;
+
+    ShuffleboardTab ArmPIDTab; // used for arm PID tuning
+    GenericEntry shoulderP, shoulderI, shoulderD;
+    GenericEntry elbowP, elbowI, elbowD;
+
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
 
     public BetterShuffleboard() {
-        tuningTab = Shuffleboard.getTab("Tuning");
-        // create widgets for tuning tab
-        leftXExp = tuningTab.add("LeftXExp", Constants.LEFT_X_EXPONENT)
+        /*
+         * Xbox Controller tuning
+         */
+        xboxControllerTuningTab = Shuffleboard.getTab("Tuning");
+        // Create widgets for tuning tab
+        leftXExp = xboxControllerTuningTab.add("LeftXExp", Constants.LEFT_X_EXPONENT)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 1, "max", 5))
             .getEntry();
         leftXExp.setDouble(Constants.LEFT_X_EXPONENT);
-        leftYExp = tuningTab.add("LeftYExp", Constants.LEFT_Y_EXPONENT)
+        leftYExp = xboxControllerTuningTab.add("LeftYExp", Constants.LEFT_Y_EXPONENT)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 1, "max", 5))
             .getEntry();
         leftYExp.setDouble(Constants.LEFT_Y_EXPONENT);
-        rightXExp = tuningTab.add("RightXExp", Constants.RIGHT_X_EXPONENT)
+        rightXExp = xboxControllerTuningTab.add("RightXExp", Constants.RIGHT_X_EXPONENT)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 1, "max", 5))
             .getEntry();
         rightXExp.setDouble(Constants.RIGHT_X_EXPONENT);
-        rightYExp = tuningTab.add("RightYExp", Constants.RIGHT_Y_EXPONENT)
+        rightYExp = xboxControllerTuningTab.add("RightYExp", Constants.RIGHT_Y_EXPONENT)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 1, "max", 5))
             .getEntry();
         rightYExp.setDouble(Constants.RIGHT_Y_EXPONENT);
+
+        /*
+         * PID tuning
+         */
+
+        ArmPIDTab = Shuffleboard.getTab("ArmPID");
+
+        // Create widgets for shoulder PID tab
+        shoulderP = ArmPIDTab.add("ShoulderP", Constants.SHOULDER_KP)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderP.setDouble(Constants.SHOULDER_KP);
+        shoulderI = ArmPIDTab.add("ShoulderI", Constants.SHOULDER_KI)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderI.setDouble(Constants.SHOULDER_KI);
+        shoulderD = ArmPIDTab.add("ShoulderD", Constants.SHOULDER_KD)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderD.setDouble(Constants.SHOULDER_KD);
+
+        // Create widgets for elbow PID tab
+        elbowP = ArmPIDTab.add("ElbowP", Constants.ELBOW_KP)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowP.setDouble(Constants.ELBOW_KP);
+        elbowI = ArmPIDTab.add("ElbowI", Constants.ELBOW_KI)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowI.setDouble(Constants.ELBOW_KI);
+        elbowD = ArmPIDTab.add("ElbowD", Constants.ELBOW_KD)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowD.setDouble(Constants.ELBOW_KD);
+
+        /*
+         * Others
+         */
 
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
@@ -62,6 +114,16 @@ public class BetterShuffleboard {
         Constants.LEFT_Y_EXPONENT = leftYExp.getDouble(2);
         Constants.RIGHT_X_EXPONENT = rightXExp.getDouble(2);
         Constants.RIGHT_Y_EXPONENT = rightYExp.getDouble(2);
+    }
+
+    public void updatePIDConstants(Arm arm) {
+        arm.shoulderP = shoulderP.getDouble(0);
+        arm.shoulderI = shoulderI.getDouble(0);
+        arm.shoulderD = shoulderD.getDouble(0);
+
+        arm.elbowP = elbowP.getDouble(0);
+        arm.elbowI = elbowI.getDouble(0);
+        arm.elbowD = elbowD.getDouble(0);
     }
 
     public void pushLimelight(Limelight limelight) {

@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import frc.robot.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -6,9 +7,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
-
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,17 +24,18 @@ public class Arm {
 
 
 	//TODO: add claw encoder and PID constants
-	PIDController shoulderPID, elbowPID;
+	ProfiledPIDController shoulderPID, elbowPID;
 	ArmFeedforward shoulderFeedforward, elbowFeedforward;
 
 	PIDController shoulderVelocityPID, elbowVelocityPID;
-	ArmFeedforward shoulderVelocityFeedforward, elbowVelocityFeedforward;
 
-    // current constant to be tuned
-	int currentPIDConstant = 0; 
+	// Define the previous angles to calculate velocities
+	private double lastShoulderAngle, lastElbowAngle;
+	private double shoulderAngularVelocity, elbowAngularVelocity;
 
-	// during PID Tuning Mode, either increasing or decreasing the constants by the increment
-	boolean increasingPIDConstant = true;
+	// PID constants when tuning - TESTING ONLY
+	public double shoulderP, shoulderI, shoulderD;
+	public double elbowP, elbowI, elbowD;
 
 	public boolean motorLimits = true;
 
@@ -75,18 +77,39 @@ public class Arm {
 		//shoulderFalconSensor = new TalonFXSensorCollection(shoulderMotor);
 		//elbowFalconSensor = new TalonFXSensorCollection(elbowMotor);
 
+		initControllers(false);
+    }
 
+	private void initControllers() {
 		// Positional PID Controllers
-        shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
-        elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
+        shoulderPID = new ProfiledPIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD,
+			new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
+		);
+        elbowPID = new ProfiledPIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD,
+			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
+		);
 		// Velocity PID Controllers
 		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
         elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
+	}
 
-		// Positional Feedforward Controllers
-		shoulderFeedforward = new ArmFeedforward(Constants.SHOULDER_KS, Constants.SHOULDER_KG, Constants.SHOULDER_KV, Constants.SHOULDER_KA);
-		elbowFeedforward = new ArmFeedforward(Constants.ELBOW_KS, Constants.ELBOW_KG, Constants.ELBOW_KV, Constants.ELBOW_KA);
-    }
+	private void initControllers(boolean debug) {
+		if (debug) {
+			initControllers();
+			return;
+		}
+
+		// Positional PID Controllers
+        shoulderPID = new ProfiledPIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD,
+			new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
+		);
+        elbowPID = new ProfiledPIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD,
+			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
+		);
+		// Velocity PID Controllers
+		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
+        elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
+	}
 
 	/**
 	 * toggles whether motor limits are activated - called when X and Y are pressed simultaneously on the xbox controller
@@ -129,19 +152,26 @@ public class Arm {
 		// System.out.println(getElbowFeedforward());
 		// System.out.println(getShoulderFeedforward());
 		shoulderMotor.setVoltage(getShoulderFeedforward());
-		elbowMotor.setVoltage(getElbowFeedforward());
-
-		System.out.println("code is working");
-		
+		elbowMotor.setVoltage(getElbowFeedforward());		
 
 		shoulderMotor.setNeutralMode(NeutralMode.Brake);
 		elbowMotor.setNeutralMode(NeutralMode.Brake);
 	}
 
+	/**
+	 * Returns the voltage needed to counteract gravity
+	 * 
+	 * @return u (double) motor control input
+	 */
 	public double getElbowFeedforward() {
 		return Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
 	}
 
+	/**
+	 * Calculates the COM of the arm and returns the voltage needed to counteract gravity
+	 * 
+	 * @return u (double) motor control input 
+	 */
 	public double getShoulderFeedforward() {
 		double d1 = Constants.UPPER_ARM_COM_DIST;
 		double d2 = Constants.LOWER_ARM_COM_DIST;
@@ -187,19 +217,34 @@ public class Arm {
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
-	// TODO probably gotta fix units and maybe just calculate it manually tbh - havent tested yet
 	/**
 	 * @return angle (double) angular velocity of the shoulder joint
 	 */
 	public double getShoulderAngularVelocity() {
-		return shoulderMotor.getSelectedSensorVelocity(1) * 360/4096;
+		return shoulderAngularVelocity;
 	}
 
 	/**
 	 * @return angle (double) angular velocity of the elbow joint
 	 */
 	public double getElbowAngularVelocity() {
-		return elbowMotor.getSelectedSensorVelocity(1) * 360/4096;
+		return elbowAngularVelocity;
+	}
+
+	/**
+	 * Updates the angular velocity of the shoulder -- must be called every 1ms
+	 */
+	public void updateShoulderAngularVelocity() {
+		shoulderAngularVelocity = (lastShoulderAngle - getShoulderAngle()) / .001;
+		lastShoulderAngle = getShoulderAngle();
+	}
+
+	/**
+	 * Updates the angular velocity of the elbow -- must be called every 1ms
+	 */
+	public void updateElbowAngularVelocity() {
+		elbowAngularVelocity = (lastElbowAngle - getElbowAngle()) / .001;
+		lastElbowAngle = getElbowAngle();
 	}
 
 
@@ -246,7 +291,7 @@ public class Arm {
 		);
 		shoulderMotor.setVoltage(
 			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
-			shoulderFeedforward.calculate(alpha, 0, 0)
+			getShoulderFeedforward()
 		);
 	}
 
@@ -258,7 +303,7 @@ public class Arm {
 	private void setElbow(double beta) {
 		elbowMotor.setVoltage(
 			elbowPID.calculate(getElbowAngle(), beta) + 
-			elbowFeedforward.calculate(beta, 0, 0)
+			getElbowFeedforward()
 		);
 	}
 
@@ -277,14 +322,14 @@ public class Arm {
 	private void setShoulderVelocity(double velocity, double useless) {
 		shoulderMotor.setVoltage(
 			shoulderVelocityPID.calculate(getShoulderAngularVelocity(), velocity) +
-			getShoulderFeedforward() // this really seems like it wont work but idk
+			getShoulderFeedforward()
 		);
 	}
 	
 	private void setElbowVelocity(double velocity, double useless) {
 		elbowMotor.setVoltage(
 			elbowVelocityPID.calculate(getElbowAngularVelocity(), velocity) +
-			getElbowFeedforward() // this really seems like it wont work but idk
+			getElbowFeedforward()
 		);
 	}
 
@@ -302,7 +347,7 @@ public class Arm {
 		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 
 		// TODO: fix units - should be change encoder ticks per 100ms
-		setShoulderVelocity(combinedSpeeds[0], 0);
-		setElbowVelocity(combinedSpeeds[1], 0);
+		setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
+		setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
 	}
 }

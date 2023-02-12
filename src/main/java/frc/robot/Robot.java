@@ -39,6 +39,15 @@ public class Robot extends TimedRobot {
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
+  public Robot() {
+    addPeriodic(() -> updateArmVelocities(), .001);
+  }
+
+  public void updateArmVelocities() {
+    arm.updateShoulderAngularVelocity();
+    arm.updateElbowAngularVelocity();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -139,9 +148,9 @@ public class Robot extends TimedRobot {
       arm.stopMotors();
       System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
     } else {
-      // arm.testMoveShoulder(xboxController.getRightX());
-      // arm.testMoveElbow(xboxController.getRightY());
-      arm.stopMotors();
+      arm.testMoveShoulder(xboxController.getRightX());
+      arm.testMoveElbow(xboxController.getRightY());
+      // arm.stopMotors();
       // arm.setEndEffector(1, 1);
       // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
     }
@@ -155,6 +164,7 @@ public class Robot extends TimedRobot {
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
+      smartdash.updatePIDConstants(arm);
     }
     counter++;
   }

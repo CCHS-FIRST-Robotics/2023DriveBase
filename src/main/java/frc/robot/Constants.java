@@ -57,18 +57,20 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	// arm lengths in meters
-	//TODO: UPDATE ARM VALUES
 	public static final double UPPER_ARM_LENGTH = 0.97; 
 	public static final double LOWER_ARM_LENGTH = 0.72;
 	public static final double WRIST_LENGTH = 0;
 
+	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .6; // meters
 	public static final double LOWER_ARM_COM_DIST = .36; // meters
 
+	// Mass of each arm segment in kg
 	public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
 	public static final double LOWER_ARM_WEIGHT = 4.5; // kg
 
-	public static final double SHOULDER_JOINT_HEIGHT = .59; // shoulder joint is .59m from the floor
+	//Height of the shoulder joint from the floor in meters
+	public static final double SHOULDER_JOINT_HEIGHT = .59;
 
 	// Shoulder PID and Feedfoward gains for positional control
 	public static final double SHOULDER_KP = .6;
@@ -100,6 +102,12 @@ public class Constants {
 	public static final double ELBOW_VELOCITY_KI = 0;
 	public static final double ELBOW_VELOCITY_KD = 0;
 
+	// Max velocity and acceleration for the arm
+	public static final double SHOULDER_MAX_VELOCITY = 5; // deg per second
+	public static final double SHOULDER_MAX_ACCELERATION = 10; // deg per second^2
+
+	public static final double ELBOW_MAX_VELOCITY = 5; // deg per second
+	public static final double ELBOW_MAX_ACCELERATION = 10; // deg per second^2
 
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.05;
