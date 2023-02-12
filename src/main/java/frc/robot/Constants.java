@@ -103,16 +103,16 @@ public class Constants {
 	public static final double ELBOW_VELOCITY_KD = 0;
 
 	// Max velocity and acceleration for the arm
-	public static final double SHOULDER_MAX_VELOCITY = 5; // deg per second
-	public static final double SHOULDER_MAX_ACCELERATION = 10; // deg per second^2
+	public static final double SHOULDER_MAX_VELOCITY = 45; // deg per second
+	public static final double SHOULDER_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ELBOW_MAX_VELOCITY = 5; // deg per second
-	public static final double ELBOW_MAX_ACCELERATION = 10; // deg per second^2
+	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
+	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.05;
 	public static final double maxX = 100;
-	public static final double minY = 0.05	;
+	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 
 	public static boolean isInFrameX(double x) {

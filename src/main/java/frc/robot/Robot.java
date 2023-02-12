@@ -40,13 +40,12 @@ public class Robot extends TimedRobot {
   long counter = 0; // for calling functions every n loops
 
   public Robot() {
-    addPeriodic(() -> updateArmVelocities(), .001);
+    // addPeriodic(() -> updateArmVelocities(), .001);
   }
 
-  public void updateArmVelocities() {
-    arm.updateShoulderAngularVelocity();
-    arm.updateElbowAngularVelocity();
-  }
+  // public void updateArmVelocities() {
+    
+  // }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -136,8 +135,6 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     // drive();
-
-    
     
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
     // System.out.println("Alpha:" + arm.getShoulderAngle());

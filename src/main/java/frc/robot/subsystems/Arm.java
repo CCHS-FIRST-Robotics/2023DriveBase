@@ -29,10 +29,6 @@ public class Arm {
 
 	PIDController shoulderVelocityPID, elbowVelocityPID;
 
-	// Define the previous angles to calculate velocities
-	private double lastShoulderAngle, lastElbowAngle;
-	private double shoulderAngularVelocity, elbowAngularVelocity;
-
 	// PID constants when tuning - TESTING ONLY
 	public double shoulderP, shoulderI, shoulderD;
 	public double elbowP, elbowI, elbowD;
@@ -72,10 +68,6 @@ public class Arm {
 		// initialize Falcon motors (USE LATER)
         // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
         // elbowMotor = new WPI_TalonFX(elbowTalonPort);
-
-		// Initializing Falcon sensors (USE LATER)
-		//shoulderFalconSensor = new TalonFXSensorCollection(shoulderMotor);
-		//elbowFalconSensor = new TalonFXSensorCollection(elbowMotor);
 
 		initControllers(false);
     }
@@ -124,25 +116,27 @@ public class Arm {
 	public boolean shouldMotorStop() {
 		double alpha = getShoulderAngle();
 		double beta = getElbowAngle();
-		double x = Kinematics.forwardKinematics(alpha, beta)[0];
-		double y = Kinematics.forwardKinematics(alpha, beta)[1];
+
+		double[] pos = Kinematics.forwardKinematics(alpha, beta);
+		double x = pos[0];
+		double y = pos[1];
 
 		return (
-			alpha < Constants.minAlpha |
-			alpha > Constants.maxAlpha |
+			alpha < Constants.minAlpha ||
+			alpha > Constants.maxAlpha ||
 
-			beta < Constants.minBeta | 
-			beta > Constants.maxBeta |
+			beta < Constants.minBeta ||
+			beta > Constants.maxBeta ||
 
-			x < Constants.minX |
-			x > Constants.maxX |
+			x < Constants.minX ||
+			x > Constants.maxX ||
 
-			y < Constants.minY |
-			y > Constants.maxY |
+			y < Constants.minY ||
+			y > Constants.maxY ||
 
-			(Constants.isInFrameX(x) & Constants.isBelowFrame(y)) |
-			(Constants.isInFrameX(x) & Constants.isBelowElectricalBoard(y) & x < 0)
-		) & motorLimits;
+			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
+			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
+		) && motorLimits;
 	}
 
 	/**
@@ -152,7 +146,7 @@ public class Arm {
 		// System.out.println(getElbowFeedforward());
 		// System.out.println(getShoulderFeedforward());
 		shoulderMotor.setVoltage(getShoulderFeedforward());
-		elbowMotor.setVoltage(getElbowFeedforward());		
+		elbowMotor.setVoltage(getElbowFeedforward());
 
 		shoulderMotor.setNeutralMode(NeutralMode.Brake);
 		elbowMotor.setNeutralMode(NeutralMode.Brake);
@@ -221,31 +215,31 @@ public class Arm {
 	 * @return angle (double) angular velocity of the shoulder joint
 	 */
 	public double getShoulderAngularVelocity() {
-		return shoulderAngularVelocity;
+		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
 	}
 
 	/**
 	 * @return angle (double) angular velocity of the elbow joint
 	 */
 	public double getElbowAngularVelocity() {
-		return elbowAngularVelocity;
+		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
 	}
 
-	/**
-	 * Updates the angular velocity of the shoulder -- must be called every 1ms
-	 */
-	public void updateShoulderAngularVelocity() {
-		shoulderAngularVelocity = (lastShoulderAngle - getShoulderAngle()) / .001;
-		lastShoulderAngle = getShoulderAngle();
-	}
+	// /**
+	//  * Updates the angular velocity of the shoulder -- must be called every 1ms
+	//  */
+	// public void updateShoulderAngularVelocity() {
+	// 	shoulderAngularVelocity = (lastShoulderAngle - getShoulderAngle()) / .001;
+	// 	lastShoulderAngle = getShoulderAngle();
+	// }
 
-	/**
-	 * Updates the angular velocity of the elbow -- must be called every 1ms
-	 */
-	public void updateElbowAngularVelocity() {
-		elbowAngularVelocity = (lastElbowAngle - getElbowAngle()) / .001;
-		lastElbowAngle = getElbowAngle();
-	}
+	// /**
+	//  * Updates the angular velocity of the elbow -- must be called every 1ms
+	//  */
+	// public void updateElbowAngularVelocity() {
+	// 	elbowAngularVelocity = (lastElbowAngle - getElbowAngle()) / .001;
+	// 	lastElbowAngle = getElbowAngle();
+	// }
 
 
 	public void testMoveShoulder(double analogX) {
@@ -289,6 +283,7 @@ public class Arm {
 		System.out.println(
 			shoulderPID.calculate(getShoulderAngle(), alpha)
 		);
+		// neg sign because shoulder moves in the opposite direction
 		shoulderMotor.setVoltage(
 			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
 			getShoulderFeedforward()
