@@ -117,9 +117,10 @@ public class BetterShuffleboard {
             .getEntry();
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu, MecaDrive drive){
+    public void pushDashboard(Limelight limelight, IMU imu, MecaDrive drive, ZED zed){
         pushLimelight(limelight);
         pushIMU(imu);
+        pushZED(zed);
         pushOdom(drive);
     }
 
@@ -164,5 +165,12 @@ public class BetterShuffleboard {
 
         NavRotationRateZ.setDouble(imu.getRate());
         NavConnected.setBoolean(imu.isConnected());
+    }
+
+
+    public void pushZED(ZED zed) {
+        SmartDashboard.putNumber("AprilTagX", zed.getAprilTagX());
+        SmartDashboard.putNumber("AprilTagY", zed.getAprilTagY());
+        SmartDashboard.putNumber("AprilTagZ", zed.getAprilTagZ());
     }
 }

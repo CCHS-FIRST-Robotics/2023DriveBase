@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
 
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
+  ZED zed = new ZED();
   BetterShuffleboard smartdash = new BetterShuffleboard();
 
   private Controller xboxController = new Controller();
@@ -128,6 +129,11 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     drive();
+
+    if (counter % 10 == 0) {
+      smartdash.pushDashboard(limelight, imu, zed);
+    }
+    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
