@@ -9,7 +9,7 @@ import frc.robot.Constants;
 
 public abstract class DriveBase extends SubsystemBase {
 	// used to scale speeds - 1 would be max speed, 0.5 would be half speed, etc.
-	double speedMultiplier = 0.6;
+	double speedMultiplier = Constants.DRIVE_STARTING_MULTIPLIER;
 
 	// different modes
 	enum Mode {

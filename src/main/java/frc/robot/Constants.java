@@ -53,6 +53,8 @@ public class Constants {
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
 
+	public static final double DRIVE_STARTING_MULTIPLIER = 0.1;
+
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
@@ -85,8 +87,8 @@ public class Constants {
 
 	// for: https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
 	// todo get values
-	public static final double maxAccelerationMetersPerSecond = 0;
-	public static final double maxVelocityMetersPerSecond = 0;
+	public static final double maxAccelerationMetersPerSecond = 1.2;
+	public static final double maxVelocityMetersPerSecond = 0.5;
 
 	/*
 	 * SENSORS 
