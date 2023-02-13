@@ -135,6 +135,8 @@ public class Robot extends TimedRobot {
       double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
       double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
       double h = Constants.TARGETS_DISTANCE;
+      System.out.println(d1);
+      System.out.println(d2);
 
       double l2 = d2 * d2 - d1 * d1 - h * h;
       double l1 = Math.sqrt(d1 * d1 - l2 * l2);

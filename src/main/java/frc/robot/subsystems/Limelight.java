@@ -18,14 +18,15 @@ public class Limelight {
     public double getForwardDistance(int pipeChoice) {
         changePipeline(pipeChoice);
 
-        double goalHeightInches = 0;
+        double goalHeight = 0;
 
         if (pipeChoice == 0) {
-            goalHeightInches = Constants.SHORT_TARGET_HEIGHT;
+            goalHeight = Constants.SHORT_TARGET_HEIGHT;
         } else if (pipeChoice == 1) {
-            goalHeightInches = Constants.TALL_TARGET_HEIGHT;
+            goalHeight = Constants.TALL_TARGET_HEIGHT;
         }
 
+        double limelightLensHeight        = Constants.LIME_HEIGHT;
         double limelightLensHeight        = Constants.LIME_HEIGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
         double targetOffsetAngleVertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
