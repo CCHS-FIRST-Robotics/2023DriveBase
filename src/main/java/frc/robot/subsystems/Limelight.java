@@ -1,21 +1,21 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import java.lang.Math;
 
+import javax.lang.model.util.ElementScanner14;
+
 public class Limelight {
 
-    private double x, y, area, forwardDist;
+    private double x, y, area, forwardDistance;
     private int pipeNum;
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 
-    public double getForwardDist(int pipeChoice){
+    public double getForwardDistance(int pipeChoice) {
         changePipeline(pipeChoice);
 
         double goalHeightInches = 0;
@@ -26,15 +26,15 @@ public class Limelight {
             goalHeightInches = Constants.TALL_TARGET_HEIGHT;
         }
 
-        double limelightLensHeight        = Constants.LIME_HIEGHT;
+        double limelightLensHeight        = Constants.LIME_HEIGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
-        double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
+        double targetOffsetAngleVertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
-        double angleToGoal = limelightMountAngle + targetOffsetAngle_Vertical;
+        double angleToGoal = limelightMountAngle + targetOffsetAngleVertical;
 
-        forwardDist = (goalHeightInches - limelightLensHeight)/Math.tan(angleToGoal);
+        forwardDistance = (goalHeightInches - limelightLensHeight)/Math.tan(angleToGoal);
 
-        return forwardDist;
+        return forwardDistance;
     }
     
     public double getHeadingDisplacement(int pipeChoice) {
@@ -62,7 +62,20 @@ public class Limelight {
     }
 
     public void changePipeline(int newPipeNum){
-        table.getEntry("pipeline").setInteger(newPipeNum);
+        if (!table.getEntry("pipeline").setInteger(newPipeNum))
+        {
+            System.out.println("Failed to set pipline");
+        }
+        else{
+            pipeNum = newPipeNum;
+            
+            System.out.println(pipeNum);
+            System.out.println(newPipeNum);
+
+        }
+
+        System.out.println(getPipeline());
+        //table.getEntry("pipeline").setInteger(newPipeNum);
 
         pipeNum = newPipeNum;
     }
