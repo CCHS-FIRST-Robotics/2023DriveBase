@@ -308,6 +308,18 @@ public class Arm {
 	// 	elbowMotor.set(ControlMode.Velocity, velocity);
 	// }
 
+	private void setShoulderVelocity(double voltage) {
+		shoulderMotor.setVoltage(
+			voltage + getShoulderFeedforward()
+		);
+	}
+	
+	private void setElbowVelocity(double voltage) {
+		elbowMotor.setVoltage(
+			voltage + getShoulderFeedforward()
+		);
+	}
+
 	// Uses custom PID/Feedforward control loops - using the useless input so I can use overload and make it easier to switch between the two when testing
 	//TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
 	private void setShoulderVelocity(double velocity, double useless) {
@@ -338,7 +350,10 @@ public class Arm {
 		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
 
 		// TODO: fix units - should be change encoder ticks per 100ms
-		setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
-		setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
+		// setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
+		// setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
+
+		setShoulderVelocity(combinedSpeeds[0] * 12);
+		setElbowVelocity(combinedSpeeds[0] * 12);
 	}
 }
