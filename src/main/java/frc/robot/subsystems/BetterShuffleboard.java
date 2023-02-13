@@ -18,7 +18,8 @@ public class BetterShuffleboard {
     ShuffleboardTab odomTab; // used for odometry data
 
     ShuffleboardTab limelightTab; // used for limelight data
-    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading;
+    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
+                 highForwardDistance, lowForwardDistance;
 
     public BetterShuffleboard() {
         tuningTab = Shuffleboard.getTab("Tuning");
@@ -53,6 +54,8 @@ public class BetterShuffleboard {
         highPostY = limelightTab.add("highPostY", 0).getEntry();
         highPostHeading = limelightTab.add("highPostHeading", 0).getEntry();
         lowPostHeading = limelightTab.add("lowPostHeading", 0).getEntry();
+        highForwardDistance = limelightTab.add("highForwardDistance", 0).getEntry();
+        lowForwardDistance = limelightTab.add("lowForwardDistance", 0).getEntry();
 
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
@@ -74,10 +77,12 @@ public class BetterShuffleboard {
         highPostX.setDouble(limelight.getX(Constants.TALL_PIPE_NUM));
         highPostY.setDouble(limelight.getY(Constants.TALL_PIPE_NUM));
         highPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.TALL_PIPE_NUM));
+        highForwardDistance.setDouble(limelight.getForwardDist(Constants.TALL_PIPE_NUM));
         
         lowPostX.setDouble(limelight.getX(Constants.SHORT_PIPE_NUM));
         lowPostY.setDouble(limelight.getY(Constants.SHORT_PIPE_NUM));
         lowPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM));
+        lowForwardDistance.setDouble(limelight.getForwardDist(Constants.SHORT_PIPE_NUM));
     }
 
     public void pushIMU(IMU imu) {
