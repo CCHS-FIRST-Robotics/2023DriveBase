@@ -62,9 +62,14 @@ public class Limelight {
     }
 
     public void changePipeline(int newPipeNum){
-        table.getEntry("pipeline").setInteger(newPipeNum);
-
-        pipeNum = newPipeNum;
+        if (!table.getEntry("pipeline").setInteger(newPipeNum))
+        {
+            System.out.println("Failed to set pipeline ");
+        }
+        else
+        {
+            pipeNum = newPipeNum;
+        }
     }
 
     public int getPipeline(){
