@@ -243,15 +243,11 @@ public class Arm {
 
 
 	public void testMoveShoulder(double analogX) {
-		if (Math.abs(analogX) < Constants.ANALOG_DEAD_ZONE) analogX = 0;
-
-		shoulderMotor.set(ControlMode.PercentOutput, -0.3 * analogX);
+		shoulderMotor.setVoltage(-0.3 * analogX + getShoulderFeedforward());
 	}
 
 	public void testMoveElbow(double analogY) {
-		if (Math.abs(analogY) < Constants.ANALOG_DEAD_ZONE) analogY = 0;
-
-		elbowMotor.set(ControlMode.PercentOutput, 0.3 * analogY);
+		elbowMotor.setVoltage(0.3 * analogY + getElbowFeedforward());
 	}
 
 	/**
