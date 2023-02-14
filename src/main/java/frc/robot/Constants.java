@@ -115,8 +115,8 @@ public class Constants {
 	public static final double MAX_FORWARD_Y = .3; // meters
 
 	// hard min/max x and y values for the arm
-	public static final double minX = 0.05;
-	public static final double maxX = 100;
+	public static final double minX = -1.6; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.6; 
 	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 

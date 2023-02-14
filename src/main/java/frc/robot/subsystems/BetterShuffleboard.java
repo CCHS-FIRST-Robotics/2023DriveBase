@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
+import frc.robot.*;
 
-import frc.robot.Constants;
 import java.util.Map;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -124,6 +124,8 @@ public class BetterShuffleboard {
         arm.elbowP = elbowP.getDouble(0);
         arm.elbowI = elbowI.getDouble(0);
         arm.elbowD = elbowD.getDouble(0);
+
+        arm.initControllers();
     }
 
     public void pushLimelight(Limelight limelight) {

@@ -22,8 +22,6 @@ public class Arm {
 	WPI_TalonSRX shoulderMotor, elbowMotor;
 	// TalonFXSensorCollection shoulderFalconSensor, elbowFalconSensor;
 
-
-	//TODO: add claw encoder and PID constants
 	ProfiledPIDController shoulderPID, elbowPID;
 	ArmFeedforward shoulderFeedforward, elbowFeedforward;
 
@@ -33,10 +31,14 @@ public class Arm {
 	public double shoulderP, shoulderI, shoulderD;
 	public double elbowP, elbowI, elbowD;
 
+	// Toggles whether motor limits are active - displayed on shuffleboard
 	public boolean motorLimits = true;
 
+	// Toggles whether the motors should stop - controlled manually
+	public boolean manualMotorStop = false;
+
     /**
-	 * Constructor for Arm Class -- setup as tankdrive until I figure out what motors we're using 
+	 * Constructor for Arm Class
 	 * 
 	 * @param shoulderTalonPort
 	 * @param elbowTalonPort
@@ -72,19 +74,28 @@ public class Arm {
 		initControllers(false);
     }
 
-	private void initControllers() {
+	/**
+	 * initalizes controllers in debug mode - uses PID constants from shuffleboard
+	 */
+	public void initControllers() {
 		// Positional PID Controllers
-        shoulderPID = new ProfiledPIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD,
+        shoulderPID = new ProfiledPIDController(shoulderP, shoulderI, shoulderD,
 			new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
 		);
-        elbowPID = new ProfiledPIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD,
+        elbowPID = new ProfiledPIDController(elbowP, elbowI, elbowD,
 			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
 		);
+		
 		// Velocity PID Controllers
 		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
         elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
 	}
 
+	/**
+	 * Initializes PID controllers
+	 * 
+	 * @param debug (boolean) - whether or not we're in "debug" mode for tuning PID constants
+	 */
 	private void initControllers(boolean debug) {
 		if (debug) {
 			initControllers();
@@ -111,6 +122,13 @@ public class Arm {
 	}
 
 	/**
+	 * Toggles whether the motors are manually stopped - called when B is pressed on the xbox controller
+	 */
+	public void toggleManualMotorStop() {
+		manualMotorStop = !manualMotorStop;
+	}
+
+	/**
 	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits - ignores the limits if motorLimits is false
 	 */
 	public boolean shouldMotorStop() {
@@ -122,25 +140,30 @@ public class Arm {
 		double y = pos[1];
 
 		return (
+			// check if the shoulder is too far forward/backward
 			alpha < Constants.minAlpha ||
 			alpha > Constants.maxAlpha ||
 
+			// check if the elbow is too far forward/backward
 			beta < Constants.minBeta ||
 			beta > Constants.maxBeta ||
 
+			// check if the arm is fully extended -- dont want it to lock/lose a DOF
 			x < Constants.minX ||
 			x > Constants.maxX ||
 
+			// check if the arm is too close to the ground or above the height limit
 			y < Constants.minY ||
 			y > Constants.maxY ||
 
+			// check to make sure the arm isn't hitting the frame or the electrical board
 			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
 			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
-		) && motorLimits;
+		) && (motorLimits || manualMotorStop); // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
-	 * Sets the motor output to 0 and sets the motor to brake mode
+	 * Sets the motor outputs to resist gravity and sets the motors to brake mode
 	 */
 	public void stopMotors() {
 		// System.out.println(getElbowFeedforward());
@@ -155,7 +178,7 @@ public class Arm {
 	/**
 	 * Returns the voltage needed to counteract gravity
 	 * 
-	 * @return u (double) motor control input
+	 * @return controlInput (double) voltage to send to motors
 	 */
 	public double getElbowFeedforward() {
 		return Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
@@ -165,7 +188,7 @@ public class Arm {
 	 * Calculates the COM of the arm and returns the voltage needed to counteract gravity
 	 * Diagram: https://raw.githubusercontent.com/CCHS-FIRST-Robotics/2023DriveBase/main/images/B6D091A1-433E-4F3A-8475-E74F224E33DC.png
 	 * 
-	 * @return u (double) motor control input 
+	 * @return controlInput (double) voltage to send to motors 
 	 */
 	public double getShoulderFeedforward() {
 		double d1 = Constants.UPPER_ARM_COM_DIST;
@@ -213,14 +236,14 @@ public class Arm {
 	}
 
 	/**
-	 * @return angle (double) angular velocity of the shoulder joint
+	 * @return angle (double) angular velocity of the shoulder joint - deg/s
 	 */
 	public double getShoulderAngularVelocity() {
 		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
 	}
 
 	/**
-	 * @return angle (double) angular velocity of the elbow joint
+	 * @return angle (double) angular velocity of the elbow joint - deg/s
 	 */
 	public double getElbowAngularVelocity() {
 		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
@@ -276,9 +299,10 @@ public class Arm {
 		// System.out.println(
 		// 	shoulderFeedforward.calculate(alpha, 0, 0)
 		// );
-		System.out.println(
-			shoulderPID.calculate(getShoulderAngle(), alpha)
-		);
+		// System.out.println(
+		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
+		// );
+
 		// neg sign because shoulder moves in the opposite direction
 		shoulderMotor.setVoltage(
 			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
@@ -353,8 +377,8 @@ public class Arm {
 		// setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
 		// setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
 
-		setShoulderVelocity(combinedSpeeds[0] * 12);
-		setElbowVelocity(combinedSpeeds[0] * 12);
+		setShoulderVelocity(combinedSpeeds[0] * 11);
+		setElbowVelocity(combinedSpeeds[0] * 11);
 
 		// Uses PID loop to control arm with controller rather than setting a speed
 		// setEndEffector(

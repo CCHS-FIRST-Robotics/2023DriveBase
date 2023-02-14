@@ -122,6 +122,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     smartdash.updateControllerExponents();
+    smartdash.updatePIDConstants(arm);
   }
 
   /** This function is called periodically during operator control. */
@@ -161,7 +162,6 @@ public class Robot extends TimedRobot {
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
-      smartdash.updatePIDConstants(arm);
     }
     counter++;
   }
@@ -206,7 +206,7 @@ public class Robot extends TimedRobot {
     }
     if (xboxController.getBButtonPressed()) {
       // driveBase.printActiveMotorDebugMode();
-      arm.stopMotors();
+      arm.toggleManualMotorStop();
     }
     if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
       arm.toggleMotorCheck();
