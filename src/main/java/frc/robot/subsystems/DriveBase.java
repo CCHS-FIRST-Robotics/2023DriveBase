@@ -163,7 +163,10 @@ public abstract class DriveBase extends SubsystemBase {
 	public double getCurrentTrajectoryTime()	{
 		return currentTrajectoryTime;
 	}
-	public void setCurrentTrajectoryTime(double newTrajectoryTime)	{
-		currentTrajectoryTime = newTrajectoryTime;
+	public void resetCurrentTrajectoryTime()	{
+		currentTrajectoryTime = 0;
+	}
+	public void incrementCurrentTrajectoryTime()	{
+		currentTrajectoryTime += Constants.SECONDS_BETWEEN_CODE_PERIODS;
 	}
 }

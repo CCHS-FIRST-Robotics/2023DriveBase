@@ -90,6 +90,8 @@ public class Constants {
 	public static final double maxAccelerationMetersPerSecond = 1.2;
 	public static final double maxVelocityMetersPerSecond = 0.5;
 
+	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;  
+
 	/*
 	 * SENSORS 
 	 */

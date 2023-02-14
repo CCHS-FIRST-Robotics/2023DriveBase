@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import frc.robot.subsystems.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -95,6 +99,8 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
+	driveBase.resetCurrentTrajectoryTime();
   }
 
   /** This function is called periodically during autonomous. */
@@ -106,8 +112,17 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
-        break;
+		// Default code
+
+		autonomousCheckForButtonPresses();
+
+		// increase the current time, because autonomous trajectories need a time (each period takes the same time)
+		driveBase.incrementCurrentTrajectoryTime(); // so add it up
+		
+		// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
+		Autonomous.applyChassisSpeeds(driveBase);
+		
+		break;
     }
   }
 
@@ -180,6 +195,17 @@ public class Robot extends TimedRobot {
     }
   }
 
+  private void autonomousCheckForButtonPresses()	{
+	if (xboxController.getBButtonPressed())	{
+		// create an example trajectory		
+		Pose2d current = driveBase.getPose();
+		
+		// start with a small displacement ( + 1)
+		Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
+		Autonomous.updateTrajectory(driveBase, target, null);
+		driveBase.resetCurrentTrajectoryTime();
+	}
+  }
   /** 
    * Powers motors based on the analog inputs
    */

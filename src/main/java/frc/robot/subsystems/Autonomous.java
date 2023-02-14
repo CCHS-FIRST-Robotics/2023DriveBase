@@ -29,7 +29,7 @@ public class Autonomous {
 	 * @param target ending location (Pose2d)
 	 * @param interiorWaypoints the points that the trajectory must reach (ArrayList<Translation2d>)
 	 */
-	public void updateTrajectory(MecaDrive m_drive, Pose2d target, ArrayList<Translation2d> interiorWaypoints)	{		
+	public static void updateTrajectory(MecaDrive m_drive, Pose2d target, ArrayList<Translation2d> interiorWaypoints)	{		
 		// https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryGenerator.html
 		// interior waypoints to-be-used, refrence https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/trajectory-generation.html
 		Trajectory trajectory = TrajectoryGenerator.generateTrajectory(m_drive.getPose(), interiorWaypoints, target, m_drive.getTrajectoryConfig());
@@ -44,7 +44,7 @@ public class Autonomous {
 	 * @param m_drive (MecaDrive) drivebase, to get the trajectory, time, and pose 
 	 * @return ChassisSpeeds - https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/kinematics/ChassisSpeeds.html
 	 */
-	private ChassisSpeeds getChassisSpeeds(MecaDrive m_drive) {
+	private static ChassisSpeeds getChassisSpeeds(MecaDrive m_drive) {
 		// get a (pose on spline) of the trajectory at "trajectoryTime" seconds relative to the beginning of the trajectory
 		Trajectory.State goal = m_drive.getCurrentTrajectory().sample(m_drive.getCurrentTrajectoryTime()); 
 
@@ -59,7 +59,7 @@ public class Autonomous {
 	 * 
 	 * @param m_drive MecaDrive drive base
 	 */
-	public void applyChassisSpeeds(MecaDrive m_drive)	{
+	public static void applyChassisSpeeds(MecaDrive m_drive)	{
 		ChassisSpeeds currentChassisSpeeds = getChassisSpeeds(m_drive);
 		
 		// linearize speed is needed because the mecanum cartesian drive takes arguments (velocities) actually as ratios, from 1 to -1. See MecaDrive.drive
@@ -75,7 +75,7 @@ public class Autonomous {
 	 * @param maxSpeed double meters/second
 	 * @return
 	 */
-	private double linearizeVelocity(double velocity, double maxSpeed)	{
+	private static double linearizeVelocity(double velocity, double maxSpeed)	{
 		// Speed is a scalar, (velocity is not scalar, negative matters) which means that maxSpeed has no direction, and thus a negative value in this case would imply a incorrect usage for maxSpeed.
 		if (maxSpeed <= 0){
 			throw new IllegalArgumentException("maxSpeed must be positive and greater than 0");

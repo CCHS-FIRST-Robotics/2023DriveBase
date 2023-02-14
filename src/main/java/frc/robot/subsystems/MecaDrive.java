@@ -63,7 +63,6 @@ public class MecaDrive extends DriveBase {
 	
 		// see declaration in DriveBase
 		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
-		trajectoryConfig.setReversed(true);
 	}
 	
 	@Override
