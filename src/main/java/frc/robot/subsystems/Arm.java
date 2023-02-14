@@ -163,6 +163,7 @@ public class Arm {
 
 	/**
 	 * Calculates the COM of the arm and returns the voltage needed to counteract gravity
+	 * Diagram: https://raw.githubusercontent.com/CCHS-FIRST-Robotics/2023DriveBase/main/images/B6D091A1-433E-4F3A-8475-E74F224E33DC.png
 	 * 
 	 * @return u (double) motor control input 
 	 */
