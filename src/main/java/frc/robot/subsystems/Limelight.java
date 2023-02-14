@@ -61,25 +61,36 @@ public class Limelight {
         return area;
     }
 
-    public void changePipeline(int newPipeNum){
-        if (!table.getEntry("pipeline").setInteger(newPipeNum))
+    public void changePipeline(int newPipeNum) {
+
+        double test = table.getEntry("getipe").getDouble(0);
+        System.out.println("Current pipeline: " + test);
+
+        System.out.println("Setting new pipeline...");
+        if (!table.getEntry("pipeline").setNumber(newPipeNum))
+            System.out.println("Failed to set pipeline");
+        else
         {
-            System.out.println("Failed to set pipline");
-            System.out.println("pipenum" + pipeNum);
-        }
-        else{
+            test = table.getEntry("getipe").getDouble(0);
+            System.out.println("Successfully set pipeline to " + test);
             pipeNum = newPipeNum;
-            
-            System.out.println("pipenum" + pipeNum);
-            System.out.println("new pipeNum" + newPipeNum);
-            //System.out.println()
-
         }
 
-        System.out.println(getPipeline());
-        //table.getEntry("pipeline").setInteger(newPipeNum);
 
-        pipeNum = newPipeNum;
+        // if (!table.getEntry("pipeline").setInteger(newPipeNum))
+        // {
+        //     System.out.println("Failed to set pipline");
+        //     System.out.println("pipenum" + pipeNum);
+        // }
+        // else{
+        //     pipeNum = newPipeNum;
+        //     System.out.println("pipenum" + pipeNum);
+        //     System.out.println("new pipeNum" + newPipeNum);
+        //     //System.out.println()
+        // }
+        // System.out.println(getPipeline());
+        //table.getEntry("pipeline").setInteger(newPipeNum);
+        //pipeNum = newPipeNum;
     }
 
     public int getPipeline(){
