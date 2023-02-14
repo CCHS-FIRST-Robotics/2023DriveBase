@@ -47,6 +47,7 @@ public class Autonomous {
 	private static ChassisSpeeds getChassisSpeeds(MecaDrive m_drive) {
 		// get a (pose on spline) of the trajectory at "trajectoryTime" seconds relative to the beginning of the trajectory
 		Trajectory.State goal = m_drive.getCurrentTrajectory().sample(m_drive.getCurrentTrajectoryTime()); 
+		
 
 		// return the chassis speeds (controller compares current pose of robot and goal to find the adequate speeds)
 		return m_drive.getChassisController().calculate(m_drive.getPose(), goal);

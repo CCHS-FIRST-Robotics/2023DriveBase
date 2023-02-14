@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
   private Controller xboxController = new Controller();
   private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
   
+boolean autonomousIsMoving = false;
+
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
@@ -116,11 +118,15 @@ public class Robot extends TimedRobot {
 
 		autonomousCheckForButtonPresses();
 
-		// increase the current time, because autonomous trajectories need a time (each period takes the same time)
-		driveBase.incrementCurrentTrajectoryTime(); // so add it up
 		
-		// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
-		Autonomous.applyChassisSpeeds(driveBase);
+		
+		if (autonomousIsMoving){
+			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
+			driveBase.incrementCurrentTrajectoryTime(); // so add it up
+			
+			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
+			Autonomous.applyChassisSpeeds(driveBase);
+		}
 		
 		break;
     }
@@ -204,6 +210,10 @@ public class Robot extends TimedRobot {
 		Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
 		Autonomous.updateTrajectory(driveBase, target, null);
 		driveBase.resetCurrentTrajectoryTime();
+	}
+	if (xboxController.getAButtonPressed()){
+		// toggle autonomous is moving
+		autonomousIsMoving = !autonomousIsMoving;
 	}
   }
   /** 
