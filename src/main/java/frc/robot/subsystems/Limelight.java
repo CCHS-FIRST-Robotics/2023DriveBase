@@ -27,13 +27,12 @@ public class Limelight {
         }
 
         double limelightLensHeight        = Constants.LIME_HEIGHT;
-        double limelightLensHeight        = Constants.LIME_HEIGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
         double targetOffsetAngleVertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
         double angleToGoal = limelightMountAngle + targetOffsetAngleVertical;
 
-        forwardDistance = (goalHeightInches - limelightLensHeight)/Math.tan(angleToGoal);
+        forwardDistance = (goalHeight - limelightLensHeight)/Math.tan(angleToGoal);
 
         return forwardDistance;
     }
@@ -66,12 +65,14 @@ public class Limelight {
         if (!table.getEntry("pipeline").setInteger(newPipeNum))
         {
             System.out.println("Failed to set pipline");
+            System.out.println("pipenum" + pipeNum);
         }
         else{
             pipeNum = newPipeNum;
             
-            System.out.println(pipeNum);
-            System.out.println(newPipeNum);
+            System.out.println("pipenum" + pipeNum);
+            System.out.println("new pipeNum" + newPipeNum);
+            //System.out.println()
 
         }
 
