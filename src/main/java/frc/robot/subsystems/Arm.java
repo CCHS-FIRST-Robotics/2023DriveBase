@@ -252,11 +252,12 @@ public class Arm {
 	}
 
 	/**
+	 * Sets the end effector at the given (x, y) position using a control loop
+	 * 
 	 * @param xPos (double) x position of the end effector - METERS
 	 * @param yPos (double) y position of the end effector - METERS
-	 * @return angles (double[2]) array of angles for each arm length
 	 */
-	public double setEndEffector(double xPos, double yPos) {
+	public void setEndEffector(double xPos, double yPos) {
 		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos);
 		
 		double alpha = Math.toDegrees(angles[0]);
@@ -264,8 +265,6 @@ public class Arm {
 
 		setShoulder(alpha);
 		setElbow(beta);
-		
-		return angles[0];
 	}
 
 	/**
@@ -356,5 +355,11 @@ public class Arm {
 
 		setShoulderVelocity(combinedSpeeds[0] * 12);
 		setElbowVelocity(combinedSpeeds[0] * 12);
+
+		// Uses PID loop to control arm with controller rather than setting a speed
+		// setEndEffector(
+		// 	Constants.MAX_FORWARD_X * leftAnalogX,
+		// 	Constants.MAX_FORWARD_Y * leftAnalogY
+		// );
 	}
 }
