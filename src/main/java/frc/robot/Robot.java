@@ -136,7 +136,6 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     // drive();
-    
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
     // System.out.println("Alpha:" + arm.getShoulderAngle());
     // System.out.println("Beta:" + arm.getElbowAngle());
@@ -144,22 +143,37 @@ public class Robot extends TimedRobot {
 
     if (arm.shouldMotorStop()) {
       arm.stopMotors();
-      System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+      
     } else {
       arm.testMoveShoulder(xboxController.getRightX());
       arm.testMoveElbow(xboxController.getRightY());
       // arm.stopMotors();
-      // arm.setEndEffector(1, 1);
+      arm.setEndEffector(.3, .4);
       // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
     }
 
 
     if (counter % 10 == 0) {
+
+      if (arm.shouldMotorStop()) {
+        System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+      }
+
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
+
+      // System.out.println(arm.getShoulderFeedforward());
+
+      // System.out.println("SHOULDER ENCODER: " + arm.getShoulderAngle());
+      // System.out.println("ELBOW ENCODER: " + arm.getElbowAngle());
+      // System.out.println("END EFFECTOR X " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      // System.out.println("END EFFECTOR Y " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      
+
       smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
+      smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
     }
@@ -202,7 +216,8 @@ public class Robot extends TimedRobot {
    */
   private void checkForButtonPresses() {
     if (xboxController.getAButtonPressed()) {
-      driveBase.cycleMotor();
+      // driveBase.cycleMotor();
+      arm.setEndEffector(1.6, 1);
     }
     if (xboxController.getBButtonPressed()) {
       // driveBase.printActiveMotorDebugMode();
@@ -212,10 +227,11 @@ public class Robot extends TimedRobot {
       arm.toggleMotorCheck();
     }
     if (xboxController.getLeftBumperPressed()) {
-      driveBase.decreaseSpeedBracket();
+      // driveBase.decreaseSpeedBracket();
     }
     if (xboxController.getRightBumperPressed()) {
-      driveBase.increaseSpeedBracket();
+      // driveBase.increaseSpeedBracket();
+      arm.setEndEffector(1.55, 1.2);
     }
   }
 

@@ -57,12 +57,12 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	// arm lengths in meters
-	public static final double UPPER_ARM_LENGTH = 0.97; 
+	public static final double UPPER_ARM_LENGTH = 1.05; 
 	public static final double LOWER_ARM_LENGTH = 0.72;
 	public static final double WRIST_LENGTH = 0;
 
 	// Distance from each arm joint to the linkage's center of mass
-	public static final double UPPER_ARM_COM_DIST = .6; // meters
+	public static final double UPPER_ARM_COM_DIST = .7; // meters
 	public static final double LOWER_ARM_COM_DIST = .36; // meters
 
 	// Mass of each arm segment in kg
@@ -73,12 +73,12 @@ public class Constants {
 	public static final double SHOULDER_JOINT_HEIGHT = .59;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = .6;
+	public static final double SHOULDER_KP = .4;
 	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = 1;
+	public static final double SHOULDER_KD = 0.01;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.8;
+	public static final double SHOULDER_KG = 1.4;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
@@ -88,7 +88,7 @@ public class Constants {
 	public static final double ELBOW_KD = 0;
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = 1.6;
+	public static final double ELBOW_KG = 1.5;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
@@ -115,8 +115,8 @@ public class Constants {
 	public static final double MAX_FORWARD_Y = .3; // meters
 
 	// hard min/max x and y values for the arm
-	public static final double minX = -1.6; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.6; 
+	public static final double minX = -1.8; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.8; 
 	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 
@@ -138,7 +138,7 @@ public class Constants {
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -75;
+	public static final double minBeta = -85;
 	public static final double maxBeta = 240;
 
 	Constants() {

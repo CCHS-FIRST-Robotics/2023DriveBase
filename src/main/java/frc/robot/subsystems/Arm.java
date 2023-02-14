@@ -22,7 +22,8 @@ public class Arm {
 	WPI_TalonSRX shoulderMotor, elbowMotor;
 	// TalonFXSensorCollection shoulderFalconSensor, elbowFalconSensor;
 
-	ProfiledPIDController shoulderPID, elbowPID;
+	ProfiledPIDController elbowPID;
+	PIDController shoulderPID;
 	ArmFeedforward shoulderFeedforward, elbowFeedforward;
 
 	PIDController shoulderVelocityPID, elbowVelocityPID;
@@ -49,6 +50,7 @@ public class Arm {
 		// initialize motors
         shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
         elbowMotor = new WPI_TalonSRX(elbowTalonPort);
+		
 
 		// set the config to default in case there's something else I'm missing
 		shoulderMotor.configFactoryDefault();
@@ -72,6 +74,9 @@ public class Arm {
         // elbowMotor = new WPI_TalonFX(elbowTalonPort);
 
 		initControllers(false);
+
+		// shoulderMotor.setNeutralMode(NeutralMode.Brake);
+		// elbowMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 	/**
@@ -79,9 +84,9 @@ public class Arm {
 	 */
 	public void initControllers() {
 		// Positional PID Controllers
-        shoulderPID = new ProfiledPIDController(shoulderP, shoulderI, shoulderD,
-			new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
-		);
+        // shoulderPID = new ProfiledPIDController(shoulderP, shoulderI, shoulderD,
+		// 	new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
+		// );
         elbowPID = new ProfiledPIDController(elbowP, elbowI, elbowD,
 			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
 		);
@@ -103,8 +108,8 @@ public class Arm {
 		}
 
 		// Positional PID Controllers
-        shoulderPID = new ProfiledPIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD,
-			new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
+        shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD
+			// new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
 		);
         elbowPID = new ProfiledPIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD,
 			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
@@ -139,7 +144,7 @@ public class Arm {
 		double x = pos[0];
 		double y = pos[1];
 
-		return (
+		return ((
 			// check if the shoulder is too far forward/backward
 			alpha < Constants.minAlpha ||
 			alpha > Constants.maxAlpha ||
@@ -159,7 +164,7 @@ public class Arm {
 			// check to make sure the arm isn't hitting the frame or the electrical board
 			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
 			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
-		) && (motorLimits || manualMotorStop); // check if the motor limits are activated or if driver is trying to stop them manually
+		) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
@@ -167,7 +172,7 @@ public class Arm {
 	 */
 	public void stopMotors() {
 		// System.out.println(getElbowFeedforward());
-		// System.out.println(getShoulderFeedforward());
+		
 		shoulderMotor.setVoltage(getShoulderFeedforward());
 		elbowMotor.setVoltage(getElbowFeedforward());
 
@@ -201,7 +206,12 @@ public class Arm {
 		double comX = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
 		double comY = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
 
-		return -Constants.SHOULDER_KG * Math.cos(Math.atan(comY / comX));
+		double controlInput = -Constants.SHOULDER_KG * Math.cos(Math.atan(comY / comX));
+		if (alpha > Math.PI / 2) {
+			return -controlInput;
+		} else {
+			return controlInput;
+		}
 	}
 
 	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
@@ -219,7 +229,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 95; // prints the position of the selected sensor
+		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 170; // prints the position of the selected sensor
 
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
@@ -230,7 +240,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 51;
+		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 17;
 
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
@@ -267,11 +277,14 @@ public class Arm {
 
 
 	public void testMoveShoulder(double analogX) {
-		shoulderMotor.setVoltage(-0.3 * analogX + getShoulderFeedforward());
+		double speedX = 12 * analogX; // 12V conversion
+		// System.out.println(-0.3 * speedX + getShoulderFeedforward());
+		shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
 	}
 
 	public void testMoveElbow(double analogY) {
-		elbowMotor.setVoltage(0.3 * analogY + getElbowFeedforward());
+		double speedY = 12 * analogY; // 12V conversion
+		elbowMotor.setVoltage(0.3 * speedY + getElbowFeedforward());
 	}
 
 	/**
@@ -280,7 +293,7 @@ public class Arm {
 	 * @param xPos (double) x position of the end effector - METERS
 	 * @param yPos (double) y position of the end effector - METERS
 	 */
-	public void setEndEffector(double xPos, double yPos) {
+	public double setEndEffector(double xPos, double yPos) {
 		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos);
 		
 		double alpha = Math.toDegrees(angles[0]);
@@ -288,6 +301,8 @@ public class Arm {
 
 		setShoulder(alpha);
 		setElbow(beta);
+
+		return angles[0];
 	}
 
 	/**
