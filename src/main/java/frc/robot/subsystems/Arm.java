@@ -189,6 +189,8 @@ public class Arm {
 		return Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
 	}
 
+
+	//TODO: FUNCTION RETURNS A CONSTANTS VALUE LOL SOMEONE NEEDS TO FIX THAT
 	/**
 	 * Calculates the COM of the arm and returns the voltage needed to counteract gravity
 	 * Diagram: https://raw.githubusercontent.com/CCHS-FIRST-Robotics/2023DriveBase/main/images/B6D091A1-433E-4F3A-8475-E74F224E33DC.png
@@ -205,8 +207,10 @@ public class Arm {
 
 		double comX = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
 		double comY = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
-
+		
+		// TODO: using atan2 might fix the sign error, have to test
 		double controlInput = -Constants.SHOULDER_KG * Math.cos(Math.atan(comY / comX));
+		// atan returns between -pi/2 and pi/2, but cos only returns pos values on that interval, so we have to check the sign manually
 		if (alpha > Math.PI / 2) {
 			return -controlInput;
 		} else {
@@ -305,6 +309,8 @@ public class Arm {
 		return angles[0];
 	}
 
+
+	//TODO: maybe use pid.setTolerance() to reduce oscillations from the chain?
 	/**
 	 * Uses the PID and feedforward control loops to set the shoulder at given setpoint
 	 * 
