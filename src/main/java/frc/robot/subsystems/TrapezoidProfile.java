@@ -59,7 +59,7 @@ public class TrapezoidProfile {
      */
     public State calculate(State state, State goal, double dt) {
         DenseMatrix x;
-        
+
         double q = state.position;
         double qRef = goal.position;
 
@@ -103,7 +103,7 @@ public class TrapezoidProfile {
         ) {
             // Enforce qdot maximum
             if (qdot < constraints.maxVelocity) {
-                DenseMatrix x = new DenseMatrix(
+                x = new DenseMatrix(
                     new double[][] {
                         {q},
                         {qdot},
@@ -111,7 +111,7 @@ public class TrapezoidProfile {
                     }
                 );
             } else {
-                DenseMatrix x = new DenseMatrix(
+                x = new DenseMatrix(
                     new double[][] {
                         {q},
                         {qdot},
@@ -123,7 +123,7 @@ public class TrapezoidProfile {
         } else {
             // Enforce qdot minimum
             if (qdot > -constraints.maxVelocity) {
-                DenseMatrix x = new DenseMatrix(
+                x = new DenseMatrix(
                     new double[][] {
                         {q},
                         {qdot},
@@ -131,7 +131,7 @@ public class TrapezoidProfile {
                     }
                 );
             } else {
-                DenseMatrix x = new DenseMatrix(
+                x = new DenseMatrix(
                     new double[][] {
                         {q},
                         {qdot},
