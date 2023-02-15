@@ -1,0 +1,3 @@
+hello colin
+im very tired and did not get the library to work but i have a folder for the libs (lib/) and it should be reliatively straight forward (editing build.gradle and settings.gradle) to get it into usable condition with the code. Look at the file changes, and I left some links, and remants of what I tried. if nothing works, you can do git reset head~ (let go of the last commit and now you are looking at staged files) then git stash;git stash drop (stashes changes, gets rid of them) or git reset --hard head (deletes the current changes of this branch). I also commented out code and stuff, I recommend you do git reset --soft head~ to go back a commit (before mine) then do` git diff | less` to view the differences that I made
+

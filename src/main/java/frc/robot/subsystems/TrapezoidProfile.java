@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
-
+import jeigen.Shortcuts.*;
+//import static jeigen.Shortcuts.*;
+//import jeigen.
 /**
  * A time optimal controller for a double integrator.
  * 
@@ -57,6 +59,7 @@ public class TrapezoidProfile {
      * @param goal (State) - the goal state of the profile (pos/vel)
      * @param dt (double) - timestep duration (seconds)
      */
+	/* 
     public State calculate(State state, State goal, double dt) {
         DenseMatrix x;
 
@@ -152,4 +155,5 @@ public class TrapezoidProfile {
         DenseMatrix xNext = M.mmul(x);
         return TrapezoidProfile.State(xNext.get(0, 0), xNext.get(1, 0));
     }
+*/
 }
