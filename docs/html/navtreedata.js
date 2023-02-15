@@ -25,20 +25,20 @@
 var NAVTREE =
 [
   [ "2023 Drive base", "index.html", [
-    [ "2023 Drive Base", "d4/d71/md_Projects_2023DriveBase_Readme.html", [
-      [ "Contributing", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md1", [
-        [ "The enviroment", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md2", null ],
-        [ "How to add your amazing changes!", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md3", null ]
+    [ "2023 Drive Base", "da/d2e/md_robotics_2023_drive_base__readme.html", [
+      [ "Contributing", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md1", [
+        [ "The enviroment", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md2", null ],
+        [ "How to add your amazing changes!", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md3", null ]
       ] ],
-      [ "Documentation", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md4", [
-        [ "Adding documentation", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md5", null ],
-        [ "How the drive base works", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md6", null ],
-        [ "How the arm works", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md7", null ],
-        [ "Motors and components", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md8", null ]
+      [ "Documentation", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md4", [
+        [ "Adding documentation", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md5", null ],
+        [ "How the drive base works", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md6", null ],
+        [ "How the arm works", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md7", null ],
+        [ "Motors and components", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md8", null ]
       ] ],
-      [ "Relevant Articles", "d4/d71/md_Projects_2023DriveBase_Readme.html#autotoc_md9", null ]
+      [ "Relevant Articles", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md9", null ]
     ] ],
-    [ "WPILib-License", "dc/db1/md_Projects_2023DriveBase_WPILib_License.html", null ],
+    [ "WPILib-License", "db/d81/md_robotics_2023_drive_base__w_p_i_lib__license.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Package List", "namespaces.html", null ]
     ] ],

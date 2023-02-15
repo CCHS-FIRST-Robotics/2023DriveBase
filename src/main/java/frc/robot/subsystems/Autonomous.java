@@ -64,7 +64,7 @@ public class Autonomous {
 		ChassisSpeeds currentChassisSpeeds = getChassisSpeeds(m_drive);
 		
 		// linearize speed is needed because the mecanum cartesian drive takes arguments (velocities) actually as ratios, from 1 to -1. See MecaDrive.drive
-		m_drive.drive(linearizeVelocity(currentChassisSpeeds.vxMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeVelocity(currentChassisSpeeds.vyMetersPerSecond, Constants.maxVelocityMetersPerSecond), linearizeVelocity(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
+		m_drive.drive(linearizeVelocity(currentChassisSpeeds.vxMetersPerSecond), linearizeVelocity(currentChassisSpeeds.vyMetersPerSecond), linearizeVelocity(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
 	}	
 
 	/**
@@ -96,6 +96,15 @@ public class Autonomous {
 		}
 	
 		return linearizedVelocity; 
+	}
+
+	/**
+	 * @brief linearize velocity using the max velocity of the robot, overloaded (from Constants)
+	 * @param velocity meters/second
+	 * @return velocity from -1 to 1
+	 */
+	private static double linearizeVelocity(double velocity)	{
+		return linearizeVelocity(velocity, Constants.maxVelocityMetersPerSecond);
 	}
 }
 

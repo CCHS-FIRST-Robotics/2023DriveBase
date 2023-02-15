@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['imu_0',['IMU',['../dc/da1/classfrc_1_1robot_1_1subsystems_1_1IMU.html',1,'frc::robot::subsystems']]]
+  ['imu_0',['IMU',['../db/d41/classfrc_1_1robot_1_1subsystems_1_1_i_m_u.html',1,'frc::robot::subsystems']]]
 ];

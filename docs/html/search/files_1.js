@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bettershuffleboard_2ejava_0',['BetterShuffleboard.java',['../d2/d83/BetterShuffleboard_8java.html',1,'']]]
+  ['bettershuffleboard_2ejava_0',['BetterShuffleboard.java',['../d1/d86/_better_shuffleboard_8java.html',1,'']]]
 ];
