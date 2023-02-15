@@ -39,7 +39,7 @@ public class Autonomous {
 	/**
 	 * @brief return chassis speeds (to be then scaled and applied to driving the robot) retrived from the trajectory of the robot and the time within the trajectory
 	 * 
-	 * TODO: have mecadrive deal with setting trajectorytime (setTrajectoryTime) within autonomous (eg. knowing where to go, relative to robot's odometry). Probably best to be set within a periodic function.
+	 * (done in robot auton periodic) have mecadrive deal with setting trajectorytime (setTrajectoryTime) within autonomous (eg. knowing where to go, relative to robot's odometry). Probably best to be set within a periodic function.
 	 * 
 	 * @param m_drive (MecaDrive) drivebase, to get the trajectory, time, and pose 
 	 * @return ChassisSpeeds - https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/kinematics/ChassisSpeeds.html

@@ -94,8 +94,11 @@ public class TankDrive extends DriveBase{
 		resetPosition();
 
 		// see declaration in DriveBase
+		/* 
+		This trajecotry config needs a look over, because it has not been tested or planned for tank drive. TankDrive functions should fail if used in autonomous
 		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
 		trajectoryConfig.setReversed(true);
+		*/
 	}
 	
 	

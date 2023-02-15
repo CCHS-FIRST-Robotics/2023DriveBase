@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
 
 import java.lang.Math;
 
@@ -62,7 +63,13 @@ public class MecaDrive extends DriveBase {
 		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
 	
 		// see declaration in DriveBase
+		// set up the config for autonomous trajectories
+		// see another team's implementation https://github.com/FRC5254/FRC-5254-2020/blob/master/src/main/java/frc/robot/commands/auto/Path.java
+		// relevant info! https://www.chiefdelphi.com/t/poll-why-didnt-you-use-the-wpilib-trajectory-generator-this-year/384611/37
 		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
+		trajectoryConfig.setKinematics(Constants.MECANUM_KINEMATICS);
+		trajectoryConfig.addConstraint( // this may be unnessesary, hmm unsure
+			new MecanumDriveKinematicsConstraint(Constants.MECANUM_KINEMATICS, Constants.maxVelocityMetersPerSecond));
 	}
 	
 	@Override
