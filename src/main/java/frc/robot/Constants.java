@@ -21,7 +21,7 @@ public class Constants {
 	public static final int ENCODER_CPR = 4096;
 
 	// the amount of time (in seconds) between calls of the periodic function
-	public static final double dt = 0.02;
+	public static final double PERIOD = 0.02;
 
 	// for tank drive
 	public static final int LEFT_VICTOR_ID = 7;
@@ -108,6 +108,9 @@ public class Constants {
 
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
+
+	public static final double ARM_MAX_VELOCITY = 1; // meters per second
+	public static final double ARM_MAX_ACCELERATION = 1; // meters per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
