@@ -21,8 +21,8 @@ public class Arm {
 	WPI_TalonSRX shoulderMotor, elbowMotor;
 	// TalonFXSensorCollection shoulderFalconSensor, elbowFalconSensor;
 
-	ProfiledPIDController elbowPID;
-	PIDController shoulderPID;
+	// ProfiledPIDController shoulderPID, elbowPID;
+	PIDController shoulderPID, elbowPID;
 	ArmFeedforward shoulderFeedforward, elbowFeedforward;
 
 	PIDController shoulderVelocityPID, elbowVelocityPID;
@@ -86,9 +86,9 @@ public class Arm {
         // shoulderPID = new ProfiledPIDController(shoulderP, shoulderI, shoulderD,
 		// 	new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
 		// );
-        elbowPID = new ProfiledPIDController(elbowP, elbowI, elbowD,
-			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
-		);
+        // elbowPID = new ProfiledPIDController(elbowP, elbowI, elbowD,
+		// 	new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
+		// );
 		
 		// Velocity PID Controllers
 		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
@@ -110,8 +110,8 @@ public class Arm {
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD
 			// new TrapezoidProfile.Constraints(Constants.SHOULDER_MAX_VELOCITY, Constants.SHOULDER_MAX_ACCELERATION)
 		);
-        elbowPID = new ProfiledPIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD,
-			new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
+        elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD
+			// new TrapezoidProfile.Constraints(Constants.ELBOW_MAX_VELOCITY, Constants.ELBOW_MAX_ACCELERATION)
 		);
 		// Velocity PID Controllers
 		shoulderVelocityPID = new PIDController(Constants.SHOULDER_VELOCITY_KP, Constants.SHOULDER_VELOCITY_KI, Constants.SHOULDER_VELOCITY_KD);
@@ -232,7 +232,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 170; // prints the position of the selected sensor
+		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 222; // prints the position of the selected sensor
 
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
@@ -243,7 +243,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 17;
+		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 140;
 
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}

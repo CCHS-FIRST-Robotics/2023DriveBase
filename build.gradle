@@ -9,14 +9,14 @@ plugins {
 // 	}
 // }
 
-pluginManagement {
-	repositories {
-		maven {
-			file "lib/jna-4.1.0.jar"
-			file "lib/Jeigen-onefat.jar"
-		}
-	}
-}
+// pluginManagement {
+// 	repositories {
+// 		maven {
+// 			file "lib/jna-4.1.0.jar"
+// 			file "lib/Jeigen-onefat.jar"
+// 		}
+// 	}
+// }
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11

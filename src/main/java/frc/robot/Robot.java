@@ -148,7 +148,19 @@ public class Robot extends TimedRobot {
       arm.testMoveShoulder(xboxController.getRightX());
       arm.testMoveElbow(xboxController.getRightY());
       // arm.stopMotors();
-      arm.setEndEffector(.3, .4);
+
+      // if (xboxController.getRightBumperPressed()) {
+      //   // driveBase.increaseSpeedBracket();
+        
+      // } else if (xboxController.getAButtonPressed()) {
+      //   // driveBase.cycleMotor();
+      //   arm.setEndEffector(1.6, 1);
+      // } else {
+      //   arm.setEndEffector(.3, .4);
+      // }
+
+      // arm.setEndEffector(1.55, 1.2);
+      
       // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
     }
 
@@ -215,10 +227,6 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
-    if (xboxController.getAButtonPressed()) {
-      // driveBase.cycleMotor();
-      arm.setEndEffector(1.6, 1);
-    }
     if (xboxController.getBButtonPressed()) {
       // driveBase.printActiveMotorDebugMode();
       arm.toggleManualMotorStop();
@@ -229,10 +237,7 @@ public class Robot extends TimedRobot {
     if (xboxController.getLeftBumperPressed()) {
       // driveBase.decreaseSpeedBracket();
     }
-    if (xboxController.getRightBumperPressed()) {
-      // driveBase.increaseSpeedBracket();
-      arm.setEndEffector(1.55, 1.2);
-    }
+    
   }
 
   /** 
