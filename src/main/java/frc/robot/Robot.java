@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
+  Grabber claw = new Grabber(0, 1, 2, 3);
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -128,23 +129,26 @@ public class Robot extends TimedRobot {
 
     // limelightTestDrive();
 
+    claw.wristForward();
+    claw.clawForward();
+
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
 
       // TO TEST VALS FIRST
-      double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
-      double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-      double h = Constants.TARGETS_DISTANCE;
-      System.out.println(d1);
-      System.out.println(d2);
+      // double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
+      // double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
+      // double h = Constants.TARGETS_DISTANCE;
+      // System.out.println(d1);
+      // System.out.println(d2);
 
-      double l2 = d2 * d2 - d1 * d1 - h * h;
-      double l1 = Math.sqrt(d1 * d1 - l2 * l2);
+      // double l2 = d2 * d2 - d1 * d1 - h * h;
+      // double l1 = Math.sqrt(d1 * d1 - l2 * l2);
 
-      System.out.println(Math.toDegrees(
-        limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
-         Math.atan(l2 / l1)
-      ));
+      // System.out.println(Math.toDegrees(
+      //   limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
+      //    Math.atan(l2 / l1)
+      // ));
     }
     counter++;
   }
