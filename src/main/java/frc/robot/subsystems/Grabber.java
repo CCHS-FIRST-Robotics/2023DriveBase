@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 
 public class Grabber {
@@ -24,7 +24,7 @@ Compressor pcmCompressor;
         solenoidPCMClaw  = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, clawForwardChannelNum,  clawReverseChannelNum);
         solenoidPCMWrist = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, wristForwardChannelNum, wristReverseChannelNum);
 
-        pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+        pcmCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
         
         // This if statment to make sure the compressor runs, if it is not running
         if(!compIsEnabled())
@@ -36,27 +36,27 @@ Compressor pcmCompressor;
 
     // For the next six functions set() is used to accordingly make the pnuematic go forward, go backward, or stop
     public void wristForward(){
-        solenoidPCMWrist.set(Value.kForward);
+        solenoidPCMWrist.set(kForward);
     }
 
     public void wristBack(){
-        solenoidPCMWrist.set(Value.kReverse);
+        solenoidPCMWrist.set(kReverse);
     }
 
     public void wristStop(){
-        solenoidPCMWrist.set(Value.kOff);
+        solenoidPCMWrist.set(kOff);
     }
 
     public void clawForward(){
-        solenoidPCMClaw.set(Value.kForward);
+        solenoidPCMClaw.set(kForward);
     }
 
     public void clawBack(){
-        solenoidPCMClaw.set(Value.kReverse);
+        solenoidPCMClaw.set(kReverse);
     }
 
     public void clawStop(){
-        solenoidPCMClaw.set(Value.kOff);
+        solenoidPCMClaw.set(kOff);
     }
 
     // just for you colin, this function (in case you didn't guess it) passes back whether the compressor is enabled

@@ -65,6 +65,11 @@ public class Constants {
 	public static final int SHORT_PIPE_NUM = 0;
 	public static final int TALL_PIPE_NUM  = 1;
 
+	public static final int CLAW_FORWARD_NUM = 0;
+	public static final int CLAW_BACKWARD_NUM = 1;
+	public static final int WRIST_FORWARD_NUM = 2;
+	public static final int WRIST_BACKWARD_NUM = 3;
+
 	// make sure its in the same units as the limelight vals
 	public static final double TARGETS_DISTANCE = .42; // pipes are ~.42 meters away from each other in the lateral direction
 

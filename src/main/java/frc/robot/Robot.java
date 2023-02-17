@@ -32,7 +32,8 @@ public class Robot extends TimedRobot {
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
-  Grabber claw = new Grabber(0, 1, 2, 3);
+  Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
+                             Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -129,9 +130,6 @@ public class Robot extends TimedRobot {
 
     // limelightTestDrive();
 
-    claw.wristForward();
-    claw.clawForward();
-
     if (counter % 10 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
 
@@ -212,16 +210,25 @@ public class Robot extends TimedRobot {
    */
   private void checkForButtonPresses() {
     if (xboxController.getAButtonPressed()) {
-      driveBase.cycleMotor();
+      // driveBase.cycleMotor();
+      System.out.println("THING");
+      // claw.wristForward();
+      claw.clawForward();
+    }
+    if (xboxController.getYButtonPressed()) {
+      // claw.wristBack();
+      claw.clawBack();
     }
     if (xboxController.getBButtonPressed()) {
-      driveBase.printActiveMotorDebugMode();
+      // driveBase.printActiveMotorDebugMode();
+      claw.wristBack();
     }
     if (xboxController.getLeftBumperPressed()) {
       driveBase.decreaseSpeedBracket();
     }
     if (xboxController.getRightBumperPressed()) {
-      driveBase.increaseSpeedBracket();
+      // driveBase.increaseSpeedBracket();
+      claw.wristForward();
     }
   }
 
