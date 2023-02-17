@@ -13,6 +13,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import java.util.ArrayList;
 import frc.robot.subsystems.*;
 
 
@@ -38,7 +40,7 @@ public class Robot extends TimedRobot {
   private Controller xboxController = new Controller();
   private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
   
-boolean autonomousIsMoving = false;
+  boolean autonomousIsMoving = true;
 
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -102,7 +104,15 @@ boolean autonomousIsMoving = false;
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
 
-	driveBase.resetCurrentTrajectoryTime();
+	  driveBase.resetCurrentTrajectoryTime();
+
+    // create an example trajectory		
+    Pose2d current = driveBase.getPose();
+    // start with a small displacement ( + 1)
+    Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation().plus(new Rotation2d(0)));
+    ArrayList<Translation2d> interiorPoints = new ArrayList<>();
+    Autonomous.updateTrajectory(driveBase, target, interiorPoints);
+    driveBase.resetCurrentTrajectoryTime();
   }
 
   /** This function is called periodically during autonomous. */
@@ -119,16 +129,17 @@ boolean autonomousIsMoving = false;
     // }
 
 		autonomousCheckForButtonPresses();
+    // System.out.println("thfsigeiuhg");
 
 		
 		if (autonomousIsMoving){
 			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
 			driveBase.incrementCurrentTrajectoryTime(); // so add it up
-			System.out.println("Moving");
 			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
 			Autonomous.applyChassisSpeeds(driveBase);
 		}
     else {
+      // System.out.println("Not moving");
       driveBase.drive(0, 0, 0);
     }
 		
@@ -194,6 +205,7 @@ boolean autonomousIsMoving = false;
     }
     if (xboxController.getBButtonPressed()) {
       driveBase.printActiveMotorDebugMode();
+      System.out.println("gfhighfdi");
     }
     if (xboxController.getLeftBumperPressed()) {
       driveBase.decreaseSpeedBracket();
@@ -204,19 +216,22 @@ boolean autonomousIsMoving = false;
   }
 
   private void autonomousCheckForButtonPresses()	{
-	if (xboxController.getBButtonPressed())	{
-		// create an example trajectory		
-		Pose2d current = driveBase.getPose();
-		
-		// start with a small displacement ( + 1)
-		Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
-		Autonomous.updateTrajectory(driveBase, target, null);
-		driveBase.resetCurrentTrajectoryTime();
-	}
-	if (xboxController.getAButtonPressed()){
-		// toggle autonomous is moving
-		autonomousIsMoving = !autonomousIsMoving;
-	}
+    
+    if (xboxController.getBButtonPressed())	{
+      System.out.println("gfhigfi");
+      // create an example trajectory		
+      Pose2d current = driveBase.getPose();
+      
+      // start with a small displacement ( + 1)
+      Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
+      Autonomous.updateTrajectory(driveBase, target, null);
+      driveBase.resetCurrentTrajectoryTime();
+    }
+    if (xboxController.getAButtonPressed()){
+      // toggle autonomous is moving
+      System.out.println("thing1");
+      autonomousIsMoving = !autonomousIsMoving;
+    }
   }
   /** 
    * Powers motors based on the analog inputs

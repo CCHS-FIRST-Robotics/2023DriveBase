@@ -62,7 +62,7 @@ public class Autonomous {
 	 */
 	public static void applyChassisSpeeds(MecaDrive m_drive)	{
 		ChassisSpeeds currentChassisSpeeds = getChassisSpeeds(m_drive);
-		
+		System.out.println(currentChassisSpeeds.vxMetersPerSecond + " " + currentChassisSpeeds.vyMetersPerSecond);
 		// linearize speed is needed because the mecanum cartesian drive takes arguments (velocities) actually as ratios, from 1 to -1. See MecaDrive.drive
 		m_drive.drive(linearizeVelocity(currentChassisSpeeds.vxMetersPerSecond), linearizeVelocity(currentChassisSpeeds.vyMetersPerSecond), linearizeVelocity(currentChassisSpeeds.omegaRadiansPerSecond, Constants.DRIVE_MAX_ANGULAR_VELOCITY));
 	}	

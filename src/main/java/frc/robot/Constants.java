@@ -88,7 +88,7 @@ public class Constants {
 	// for: https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
 	// todo get values
 	public static final double maxAccelerationMetersPerSecond = 1.2;
-	public static final double maxVelocityMetersPerSecond = 0.5;
+	public static final double maxVelocityMetersPerSecond = 2;
 
 	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;  
 
