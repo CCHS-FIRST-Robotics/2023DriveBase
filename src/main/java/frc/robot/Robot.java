@@ -123,8 +123,8 @@ boolean autonomousIsMoving = false;
 		
 		if (autonomousIsMoving){
 			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
-			driveBase.incrementCurrentTrajectoryTime(); // so add it up
 			System.out.println("Moving");
+			driveBase.incrementCurrentTrajectoryTime(); // so add it up
 			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
 			Autonomous.applyChassisSpeeds(driveBase);
 		}
@@ -216,6 +216,8 @@ boolean autonomousIsMoving = false;
 	if (xboxController.getAButtonPressed()){
 		// toggle autonomous is moving
 		autonomousIsMoving = !autonomousIsMoving;
+    if (autonomousIsMoving) System.out.println("Now moving");
+    else System.out.println("No longer moving");
 	}
   }
   /** 
