@@ -216,22 +216,21 @@ public class Robot extends TimedRobot {
   }
 
   private void autonomousCheckForButtonPresses()	{
-    
-    if (xboxController.getBButtonPressed())	{
-      System.out.println("gfhigfi");
-      // create an example trajectory		
-      Pose2d current = driveBase.getPose();
-      
-      // start with a small displacement ( + 1)
-      Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
-      Autonomous.updateTrajectory(driveBase, target, null);
-      driveBase.resetCurrentTrajectoryTime();
-    }
-    if (xboxController.getAButtonPressed()){
-      // toggle autonomous is moving
-      System.out.println("thing1");
-      autonomousIsMoving = !autonomousIsMoving;
-    }
+	if (xboxController.getBButtonPressed())	{
+		// create an example trajectory		
+		Pose2d current = driveBase.getPose();
+		
+		// start with a small displacement ( + 1)
+		Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
+		Autonomous.updateTrajectory(driveBase, target, null);
+		driveBase.resetCurrentTrajectoryTime();
+	}
+	if (xboxController.getAButtonPressed()){
+		// toggle autonomous is moving
+		autonomousIsMoving = !autonomousIsMoving;
+    if (autonomousIsMoving) System.out.println("Now moving");
+    else System.out.println("No longer moving");
+	}
   }
   /** 
    * Powers motors based on the analog inputs

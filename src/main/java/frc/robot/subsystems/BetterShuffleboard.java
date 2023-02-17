@@ -112,9 +112,9 @@ public class BetterShuffleboard {
             .withWidget(BuiltInWidgets.kDial)
             .withProperties(Map.of("min", -180, "max", 180))
             .getEntry();
-        NavConnected = odomTab.add("NavConnected", 0)
-            .withWidget(BuiltInWidgets.kBooleanBox)
-            .getEntry();
+        // NavConnected = odomTab.add("NavConnected", 0)
+        //     .withWidget(BuiltInWidgets.kBooleanBox)
+        //     .getEntry();
     }
 
     public void pushDashboard(Limelight limelight, IMU imu, MecaDrive drive, ZED zed){
@@ -164,7 +164,7 @@ public class BetterShuffleboard {
         NavHeading.setDouble(imu.getHeading());
 
         NavRotationRateZ.setDouble(imu.getRate());
-        NavConnected.setBoolean(imu.isConnected());
+        // NavConnected.setBoolean(imu.isConnected());
     }
 
 
