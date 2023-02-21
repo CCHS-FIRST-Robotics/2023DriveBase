@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
+import frc.robot.utils.Kinematics;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

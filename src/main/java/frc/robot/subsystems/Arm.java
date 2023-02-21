@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.*;
+import frc.robot.utils.Kinematics;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
