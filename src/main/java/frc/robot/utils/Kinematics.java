@@ -55,7 +55,7 @@ public class Kinematics {
      * @param yPos (double)
 	 * @return angles (double[2]) degrees
 	 */
-    public static double[] positionInverseKinematics(double xPos, double yPos) {
+    public static double[] positionInverseKinematicsOld(double xPos, double yPos) {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 
@@ -77,6 +77,95 @@ public class Kinematics {
 		double[] angles = {alpha, beta};
         return angles;
     }
+
+	/**
+	 * This will return the desired angle of each arm length using IK
+	 * Calculated by finding the (x, y) coords of the center joint
+	 * 
+	 * Previous method had limitations in that I didn't fully implement the second angle
+	 * and the use of asin restricted the possible solutions.
+	 * 
+	 * Solution derived using MATLAB, I'm using short/unclear variable names 
+	 * because they are MASSIVE equations.
+	 * 
+	 * Refer to https://www.mathworks.com/help/symbolic/derive-and-apply-inverse-kinematics-to-robot-arm.html
+	 * for more details.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param clawDown (boolean) - whether or not to choose the angle pair that reults in the claw pointing down
+	 * 								if the desired position is not possible, it will be ignored
+	 * @return angles (double[2]) - angle measurements of each joint in degrees, shoulder first
+	 */
+	public static double[] positionInverseKinematics(double x, double y, boolean clawDown) {
+		double l1 = Constants.LOWER_ARM_LENGTH;
+		double l2 = Constants.UPPER_ARM_LENGTH;
+		y -= Constants.SHOULDER_JOINT_HEIGHT; // calculations assume the bottom joint is at (0, 0)
+
+		double sigma1 = Math.sqrt(
+			-pow(l1,4) 
+			+ 2*pow(l1,2)*pow(l2,2) 
+			+ 2*pow(l1,2)*pow(x,2)
+			+ 2*pow(l1,2)*pow(y,2)
+			- pow(l2,4)
+			+ 2*pow(l2,2)*pow(x,2)
+			+ 2*pow(l2,2)*pow(y,2)
+			- pow(x,4)
+			- 2*pow(x,2)*pow(y,2)
+			- pow(y,4)
+		);
+
+		double[] alphas = {
+        	2*Math.atan( (2*l1*y+sigma1) / (pow(l1,2) + 2*l1*x - pow(l2,2) + pow(x,2) + pow(y,2)) ),
+        	2*Math.atan( (2*l1*y-sigma1) / (pow(l1,2) + 2*l1*x - pow(l2,2) + pow(x,2) + pow(y,2)) )
+		};
+
+		double sigma2 = Math.sqrt( 
+			(pow(l1,2) + 2*l1*l2 + pow(l2,2) - pow(x,2) - pow(y,2))
+		);
+
+		//TODO: make sure I'm not supposed to add on the alphas later/does doing it now fuck with it
+		//		(verify using the python sim - plot_workspace())
+		double[] betas = {
+			-2*Math.atan(sigma2) + alphas[0],
+			2*Math.atan(sigma2) + alphas[1]
+		};
+
+		// get rid of the two junk angle pairs
+		double[][] pairs = new double[2][2];
+		int i, j;
+		int k = 0;
+		double[] pos = {x, y};
+
+		// check which angle pairs actually come out to the right (x, y) coords
+		for (i=0; i<2; i++) {
+			for (j=0; j<2; j++) {
+				 if (forwardKinematics(alphas[i], betas[j]) == pos) {
+					double[] pair = {alphas[i], betas[j]};
+					pairs[k] = pair;
+					k++;
+				 }
+			}
+		}
+
+		// check if either pair violates a motor limit
+		for (i=0; i<2; i++) {
+			double alpha = pairs[i][0];
+			double beta = pairs[i][1];
+
+			if (shouldMotorStop(alpha, beta)) {
+				return pairs[1-i];
+			}
+		}
+
+		// if both pairs are left, prioritize based on (clawDown) param
+		
+	}
+
+	public static double[] positionInverseKinematics(double x, double y) {
+		// If none is specified, choose the position that typically works
+		return positionInverseKinematics(x, y, true);
+	}
 
 	/**
 	 * This will return the desired speed of each motor using IK
@@ -131,4 +220,46 @@ public class Kinematics {
 
         return combinedSpeeds;
     }
+
+	/**
+	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits - ignores the limits if motorLimits is false
+	 */
+	public static boolean shouldMotorStop(double alpha, double beta) {
+		double[] pos = Kinematics.forwardKinematics(alpha, beta);
+		double x = pos[0];
+		double y = pos[1];
+
+		return ((
+			// check if the shoulder is too far forward/backward
+			alpha < Constants.minAlpha ||
+			alpha > Constants.maxAlpha ||
+
+			// check if the elbow is too far forward/backward
+			beta < Constants.minBeta ||
+			beta > Constants.maxBeta ||
+
+			// check if the arm is fully extended -- dont want it to lock/lose a DOF
+			x < Constants.minX ||
+			x > Constants.maxX ||
+
+			// check if the arm is too close to the ground or above the height limit
+			y < Constants.minY ||
+			y > Constants.maxY ||
+
+			// check to make sure the arm isn't hitting the frame or the electrical board
+			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
+			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
+		) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+	}
+
+	/**
+	 * Literally just shorthand for Math.pow since I couldn't figure out how to import it directly lol
+	 * 
+	 * @param x (double) - base
+	 * @param degree (double) - exponent
+	 * @return x^(degree)
+	 */
+	public static double pow(double x, double degree) {
+		return Math.pow(x, degree);
+	}
 }

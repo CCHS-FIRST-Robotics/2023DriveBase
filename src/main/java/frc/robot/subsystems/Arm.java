@@ -133,39 +133,6 @@ public class Arm {
 		manualMotorStop = !manualMotorStop;
 	}
 
-	/**
-	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits - ignores the limits if motorLimits is false
-	 */
-	public boolean shouldMotorStop() {
-		double alpha = getShoulderAngle();
-		double beta = getElbowAngle();
-
-		double[] pos = Kinematics.forwardKinematics(alpha, beta);
-		double x = pos[0];
-		double y = pos[1];
-
-		return ((
-			// check if the shoulder is too far forward/backward
-			alpha < Constants.minAlpha ||
-			alpha > Constants.maxAlpha ||
-
-			// check if the elbow is too far forward/backward
-			beta < Constants.minBeta ||
-			beta > Constants.maxBeta ||
-
-			// check if the arm is fully extended -- dont want it to lock/lose a DOF
-			x < Constants.minX ||
-			x > Constants.maxX ||
-
-			// check if the arm is too close to the ground or above the height limit
-			y < Constants.minY ||
-			y > Constants.maxY ||
-
-			// check to make sure the arm isn't hitting the frame or the electrical board
-			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
-			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
-		) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
-	}
 
 	/**
 	 * Sets the motor outputs to resist gravity and sets the motors to brake mode
