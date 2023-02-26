@@ -60,7 +60,7 @@ public class Autonomous {
 	 * 
 	 * @param m_drive MecaDrive drive base
 	 */
-	public static void applyChassisSpeeds(MecaDrive m_drive)	{
+	public static void applyChassisSpeeds(MecaDrive m_drive) {
 		m_drive.drive(getChassisSpeeds(m_drive));
 	}	
 

@@ -87,10 +87,28 @@ public class Constants {
 
 	// for: https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
 	// todo get values
-	public static final double maxAccelerationMetersPerSecond = 1.2;
-	public static final double maxVelocityMetersPerSecond = 2;
+	public static final double maxAccelerationMetersPerSecond = 1;
+	public static final double maxVelocityMetersPerSecond = 1.3;
 
-	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;  
+	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;
+	
+	// max value for the falcon is 1023
+	// velocity at 0.3 is around 6000
+	// velocity at .25 is around 4850
+	public static final double FALCON_KF = (0.3 * 1023.0) / 6000;
+	// error with just kF is about +500, 0.02 is kinda arbitrary
+	// significant oscillation at .1
+	public static final double FALCON_KP = (0.02 * 1023.0) / 500;
+
+	public static final double FALCON_KD = 10 * FALCON_KP;
+
+	// kinda arbitrary
+	public static final double FALCON_KI = 0.001;
+	// without integral term it was within about 400 of the desired value
+	public static final double FALCON_INTEGRAL_ZONE = 400;
+
+	public static final int FALCON_PID_IDX = 0;
+	public static final int FALCON_TIMEOUT_MS = 30;
 
 	/*
 	 * SENSORS 

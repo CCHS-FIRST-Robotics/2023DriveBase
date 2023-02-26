@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -31,10 +32,10 @@ public class MecaDrive extends DriveBase {
 	final MecanumDriveOdometry mOdom;
 
 	// Drive Object
-	MecanumDrive mDrive;
+	public MecanumDrive mDrive;
 
 	// Motor Controller Objects
-	WPI_TalonFX frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor;
+	public WPI_TalonFX frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor;
 
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
@@ -56,6 +57,11 @@ public class MecaDrive extends DriveBase {
 		frontRightMotor.setSelectedSensorPosition(0);
 		rearLeftMotor.setSelectedSensorPosition(0);
 		rearRightMotor.setSelectedSensorPosition(0);
+
+		configTalonFX(frontLeftMotor);
+		configTalonFX(frontRightMotor);
+		configTalonFX(rearLeftMotor);
+		configTalonFX(rearRightMotor);
 
 		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 
@@ -129,8 +135,13 @@ public class MecaDrive extends DriveBase {
 	 */
 	@Override
 	public void drive(ChassisSpeeds chassisSpeeds) {
+		// System.out.println(chassisSpeeds.vxMetersPerSecond + ", " + chassisSpeeds.vyMetersPerSecond);
 		// convert to mecanum speeds (in m/s)
 		MecanumDriveWheelSpeeds speeds = Constants.MECANUM_KINEMATICS.toWheelSpeeds(chassisSpeeds);
+		// System.out.println(speeds.frontLeftMetersPerSecond + ", "
+		// 				   + speeds.frontRightMetersPerSecond + ", "
+		// 				   + speeds.rearLeftMetersPerSecond + ", "
+		// 				   + speeds.rearRightMetersPerSecond);
 
 		// convert to motor native units (clicks/100ms)
 		double conversionFactor = (Constants.FALCON_GEARBOX_RATIO * Constants.TALON_FX_CPR) / (10 * Math.PI * Constants.MECANUM_WHEEL_DIAMETER);
@@ -138,6 +149,11 @@ public class MecaDrive extends DriveBase {
 		double FRSpeed = speeds.frontRightMetersPerSecond * conversionFactor;
 		double RLSpeed = speeds.rearLeftMetersPerSecond * conversionFactor;
 		double RRSpeed = speeds.rearRightMetersPerSecond * conversionFactor;
+
+		// System.out.println(FLSpeed + ", "
+		// 				   + FRSpeed + ", "
+		// 				   + RLSpeed + ", "
+		// 				   + RRSpeed);
 
 		// set the motor speeds
 		frontLeftMotor.set(ControlMode.Velocity, FLSpeed);
@@ -163,6 +179,26 @@ public class MecaDrive extends DriveBase {
 		}
 	
 		return newVelocity;
+	}
+
+	public void configTalonFX(WPI_TalonFX talon) {
+		talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+										   Constants.FALCON_PID_IDX, 
+										   Constants.FALCON_TIMEOUT_MS);
+		
+		talon.configNominalOutputForward(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configNominalOutputReverse(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputForward(1, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputReverse(-1, Constants.FALCON_TIMEOUT_MS);
+
+		talon.config_kF(Constants.FALCON_PID_IDX, Constants.FALCON_KF, Constants.FALCON_TIMEOUT_MS);
+		talon.config_kP(Constants.FALCON_PID_IDX, Constants.FALCON_KP);
+		talon.config_kD(Constants.FALCON_PID_IDX, Constants.FALCON_KD);
+
+		talon.config_kI(Constants.FALCON_PID_IDX, Constants.FALCON_KI);
+		talon.config_IntegralZone(Constants.FALCON_PID_IDX, Constants.FALCON_INTEGRAL_ZONE);
+
+		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.4);
 	}
 
 	public void printControlsOfCurrentMode() {
@@ -310,6 +346,13 @@ public class MecaDrive extends DriveBase {
 		//resetEncoders();
 		mOdom.resetPosition(
 			new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), pose);
+	}
+
+	public void printVelocity() {
+		System.out.println(frontLeftMotor.getSelectedSensorVelocity() + ", " + 
+						   frontRightMotor.getSelectedSensorVelocity() + ", " + 
+						   rearLeftMotor.getSelectedSensorVelocity() + ", " +
+						   rearRightMotor.getSelectedSensorVelocity());
 	}
 
 	// TODO: create structure for odometry
