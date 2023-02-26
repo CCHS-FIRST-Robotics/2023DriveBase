@@ -104,14 +104,11 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
 
-	  driveBase.resetCurrentTrajectoryTime();
-
     // create an example trajectory		
     Pose2d current = driveBase.getPose();
     // start with a small displacement ( + 1)
     Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation().plus(new Rotation2d(0)));
-    ArrayList<Translation2d> interiorPoints = new ArrayList<>();
-    Autonomous.updateTrajectory(driveBase, target, interiorPoints);
+    Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
     driveBase.resetCurrentTrajectoryTime();
   }
 
@@ -128,10 +125,8 @@ public class Robot extends TimedRobot {
 		// // Default code
     // }
 
-		autonomousCheckForButtonPresses();
-    // System.out.println("thfsigeiuhg");
-
-		
+		// this if statement is kind of irrelevant because we have no way to change this bool
+    // because all controller input is ignored during autonomous
 		if (autonomousIsMoving){
 			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
 			driveBase.incrementCurrentTrajectoryTime(); // so add it up
@@ -215,23 +210,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-  private void autonomousCheckForButtonPresses()	{
-	if (xboxController.getBButtonPressed())	{
-		// create an example trajectory		
-		Pose2d current = driveBase.getPose();
-		
-		// start with a small displacement ( + 1)
-		Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation());
-		Autonomous.updateTrajectory(driveBase, target, null);
-		driveBase.resetCurrentTrajectoryTime();
-	}
-	if (xboxController.getAButtonPressed()){
-		// toggle autonomous is moving
-		autonomousIsMoving = !autonomousIsMoving;
-    if (autonomousIsMoving) System.out.println("Now moving");
-    else System.out.println("No longer moving");
-	}
-  }
   /** 
    * Powers motors based on the analog inputs
    */
