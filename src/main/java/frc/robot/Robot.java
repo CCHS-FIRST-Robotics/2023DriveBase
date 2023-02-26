@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private MecaDrive driveBase;
 
 
-  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID);
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID);
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   ZED zed = new ZED();
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
 
-    if (Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle())) {
+    if (arm.shouldMotorStop()) {
       arm.stopMotors();
       
     } else {
@@ -167,8 +167,9 @@ public class Robot extends TimedRobot {
 
 
     if (counter % 10 == 0) {
+      // System.out.println(arm.getShoulderRawAngle());
 
-      if (Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle())) {
+      if (arm.shouldMotorStop()) {
         System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
       }
 
@@ -186,7 +187,7 @@ public class Robot extends TimedRobot {
       smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
-      smartdash.putBoolean("isMOTOR STOPPED", Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle()));
+      smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
     }
@@ -234,6 +235,7 @@ public class Robot extends TimedRobot {
     }
     if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
       arm.toggleMotorCheck();
+      System.out.println("fhuhdushf");
     }
     if (xboxController.getLeftBumperPressed()) {
       // driveBase.decreaseSpeedBracket();

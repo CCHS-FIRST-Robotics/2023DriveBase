@@ -46,7 +46,7 @@ public class Arm {
 	 * @param shoulderTalonPort
 	 * @param elbowTalonPort
 	 */
-	public Arm(int shoulderTalonPort, int elbowTalonPort) {
+	public Arm(int shoulderTalonPort, int elbowTalonPort, int elbowFalconPort) {
 		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
 		
 		// initialize motors
@@ -55,7 +55,7 @@ public class Arm {
 
 		// initialize Falcon motors (USE LATER)
         // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
-        elbowMotor = new WPI_TalonFX(elbowTalonPort);
+        elbowMotor = new WPI_TalonFX(elbowFalconPort);
 		
 
 		// set the config to default in case there's something else I'm missing
@@ -136,7 +136,7 @@ public class Arm {
 		manualMotorStop = !manualMotorStop;
 	}
 
-	public boolean shoulderMotorStop() {
+	public boolean shouldMotorStop() {
 		return (Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle()) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
@@ -149,8 +149,8 @@ public class Arm {
 		shoulderMotor.setVoltage(getShoulderFeedforward());
 		elbowMotor.setVoltage(getElbowFeedforward());
 
-		shoulderMotor.setNeutralMode(NeutralMode.Brake);
-		elbowMotor.setNeutralMode(NeutralMode.Brake);
+		shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		elbowMotor.setNeutralMode(NeutralMode.Coast);
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class Arm {
 	 * @return controlInput (double) voltage to send to motors
 	 */
 	public double getElbowFeedforward() {
-		return Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
+		return -Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
 	}
 
 
@@ -201,13 +201,17 @@ public class Arm {
 		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
 	}
 
+	public double getShoulderRawAngle() { 
+		return shoulderMotor.getSelectedSensorPosition();
+	}
+
 	/**
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 222; // prints the position of the selected sensor
-
+		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 207; // prints the position of the selected sensor
+		
 		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
@@ -217,7 +221,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 140;
+		return getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 120;
 
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
@@ -261,7 +265,7 @@ public class Arm {
 
 	public void testMoveElbow(double analogY) {
 		double speedY = 12 * analogY; // 12V conversion
-		elbowMotor.setVoltage(0.3 * speedY + getElbowFeedforward());
+		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}
 
 	/**
@@ -311,7 +315,7 @@ public class Arm {
 	 */
 	private void setElbow(double beta) {
 		elbowMotor.setVoltage(
-			elbowPID.calculate(getElbowAngle(), beta) + 
+			-elbowPID.calculate(getElbowAngle(), beta) + 
 			getElbowFeedforward()
 		);
 	}

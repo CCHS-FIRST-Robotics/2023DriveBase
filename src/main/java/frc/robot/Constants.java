@@ -35,8 +35,10 @@ public class Constants {
 	public static final int RR_TALON_ID = 10; // 3
 	public static final int RL_TALON_ID = 4; // 4 
 
-	public static final int SHOULDER_TALON_ID = 0;
+	public static final int SHOULDER_TALON_ID = 3;
 	public static final int ELBOW_TALON_ID = 5;
+	public static final int ELBOW_FALCON_ID = 9;
+
 
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM

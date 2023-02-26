@@ -48,7 +48,6 @@ public class LinearProfile {
         
         // ∆t = ∆x/∆v
         double timeToEnd = displacement.mag() / Constants.ARM_MAX_SPEED;
-        double angle = displacement.dir(); // radians
 
         /* The number of setpoints we need - one setpoint every timestep (default 20ms)
                                              for however long the movement takes */
@@ -57,11 +56,12 @@ public class LinearProfile {
 
         // Calculate the new setpoint for each timestep
         for (int stepsTaken = 0; stepsTaken < numberOfSteps; stepsTaken++) {
-            // xf = xi + v∆t in 1D -> convert to 2d based on the angle we're traveling
+            double proportion = stepsTaken / numberOfSteps;
             Vector pos = new Vector(
-                stepsTaken * this.period * Constants.ARM_MAX_SPEED * Math.cos(angle),
-                stepsTaken * this.period * Constants.ARM_MAX_SPEED * Math.sin(angle)
+                proportion * displacement.x,
+                proportion * displacement.y
             ).add(initialPosition);
+
             setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y);
         }
         
