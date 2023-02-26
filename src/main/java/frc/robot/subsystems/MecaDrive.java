@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -7,6 +8,7 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
@@ -118,6 +120,30 @@ public class MecaDrive extends DriveBase {
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
 		// https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-drive-subsystem.html
 		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+	}
+
+	/**
+	 * Drive with ChassisSpeeds object (useful for autonomous)
+	 * 
+	 * TODO: Tune velocity control? https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html
+	 */
+	@Override
+	public void drive(ChassisSpeeds chassisSpeeds) {
+		// convert to mecanum speeds (in m/s)
+		MecanumDriveWheelSpeeds speeds = Constants.MECANUM_KINEMATICS.toWheelSpeeds(chassisSpeeds);
+
+		// convert to motor native units (clicks/100ms)
+		double conversionFactor = (Constants.FALCON_GEARBOX_RATIO * Constants.TALON_FX_CPR) / (10 * Math.PI * Constants.MECANUM_WHEEL_DIAMETER);
+		double FLSpeed = speeds.frontLeftMetersPerSecond * conversionFactor;
+		double FRSpeed = speeds.frontRightMetersPerSecond * conversionFactor;
+		double RLSpeed = speeds.rearLeftMetersPerSecond * conversionFactor;
+		double RRSpeed = speeds.rearRightMetersPerSecond * conversionFactor;
+
+		// set the motor speeds
+		frontLeftMotor.set(ControlMode.Velocity, FLSpeed);
+		frontRightMotor.set(ControlMode.Velocity, FRSpeed);
+		rearLeftMotor.set(ControlMode.Velocity, RLSpeed);
+		rearRightMotor.set(ControlMode.Velocity, RRSpeed);
 	}
 
 	/**

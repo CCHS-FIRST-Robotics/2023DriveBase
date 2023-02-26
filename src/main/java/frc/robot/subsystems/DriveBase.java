@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import java.lang.Math;
 
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,7 +54,7 @@ public abstract class DriveBase extends SubsystemBase {
 	public void drive(double leftAnalogX, double leftAnalogY,
 					  double rightAnalogX){};
 
-
+	public void drive(ChassisSpeeds chassisSpeeds){};
 	/**
 	 * Prints the controls of the current driving mode
 	 */
