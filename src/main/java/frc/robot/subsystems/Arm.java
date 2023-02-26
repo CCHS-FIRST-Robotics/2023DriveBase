@@ -4,6 +4,7 @@ import frc.robot.utils.Kinematics;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -19,7 +20,8 @@ import edu.wpi.first.math.MathUtil;
 public class Arm {
 
     // define motor and encoder objects
-	WPI_TalonSRX shoulderMotor, elbowMotor;
+	WPI_TalonSRX shoulderMotor, elbowMotorEncoder;
+	WPI_TalonFX elbowMotor;
 	// TalonFXSensorCollection shoulderFalconSensor, elbowFalconSensor;
 
 	// ProfiledPIDController shoulderPID, elbowPID;
@@ -49,7 +51,11 @@ public class Arm {
 		
 		// initialize motors
         shoulderMotor = new WPI_TalonSRX(shoulderTalonPort);
-        elbowMotor = new WPI_TalonSRX(elbowTalonPort);
+        elbowMotorEncoder = new WPI_TalonSRX(elbowTalonPort);
+
+		// initialize Falcon motors (USE LATER)
+        // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
+        elbowMotor = new WPI_TalonFX(elbowTalonPort);
 		
 
 		// set the config to default in case there's something else I'm missing
@@ -62,16 +68,13 @@ public class Arm {
 		config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
 		config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
 		shoulderMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
-		elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+		// TODO: this isnt wokring with falcons
+		// elbowMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
 
 		// https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
 		shoulderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-
-		// initialize Falcon motors (USE LATER)
-        // shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
-        // elbowMotor = new WPI_TalonFX(elbowTalonPort);
 
 		initControllers(false);
 
@@ -133,6 +136,9 @@ public class Arm {
 		manualMotorStop = !manualMotorStop;
 	}
 
+	public boolean shoulderMotorStop() {
+		return (Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle()) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+	}
 
 	/**
 	 * Sets the motor outputs to resist gravity and sets the motors to brake mode
@@ -211,7 +217,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotor.getSelectedSensorPosition(1) + 1300) * 360/4096) + 140;
+		return getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 140;
 
 		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
 	}

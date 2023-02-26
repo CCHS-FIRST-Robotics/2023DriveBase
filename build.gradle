@@ -3,11 +3,11 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2023.2.1"
 }
 
-// repositories {
-// 	flatDir {
-// 		dirs 'lib'
-// 	}
-// }
+repositories {
+	flatDir {
+		dirs 'lib'
+	}
+}
 
 // pluginManagement {
 // 	repositories {

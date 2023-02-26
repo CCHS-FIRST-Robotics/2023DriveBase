@@ -159,7 +159,8 @@ public class Kinematics {
 		}
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		
+		// TODO: REMOVE, just so it doesnt throw an error:
+		return alphas;
 	}
 
 	public static double[] positionInverseKinematics(double x, double y) {
@@ -222,14 +223,14 @@ public class Kinematics {
     }
 
 	/**
-	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits - ignores the limits if motorLimits is false
+	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits
 	 */
 	public static boolean shouldMotorStop(double alpha, double beta) {
 		double[] pos = Kinematics.forwardKinematics(alpha, beta);
 		double x = pos[0];
 		double y = pos[1];
 
-		return ((
+		return (
 			// check if the shoulder is too far forward/backward
 			alpha < Constants.minAlpha ||
 			alpha > Constants.maxAlpha ||
@@ -249,7 +250,7 @@ public class Kinematics {
 			// check to make sure the arm isn't hitting the frame or the electrical board
 			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
 			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
-		) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+		);
 	}
 
 	/**

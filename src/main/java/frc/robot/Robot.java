@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.*;
-import frc.robot.utils.Kinematics;
+import frc.robot.utils.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
 
-    if (arm.shouldMotorStop()) {
+    if (Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle())) {
       arm.stopMotors();
       
     } else {
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
 
     if (counter % 10 == 0) {
 
-      if (arm.shouldMotorStop()) {
+      if (Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle())) {
         System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
       }
 
@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
       smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
-      smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
+      smartdash.putBoolean("isMOTOR STOPPED", Kinematics.shouldMotorStop(arm.getShoulderAngle(), arm.getElbowAngle()));
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, zed);
     }
