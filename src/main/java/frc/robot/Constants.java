@@ -59,9 +59,9 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	// arm lengths in meters
-	public static final double UPPER_ARM_LENGTH = 1.05; 
-	public static final double LOWER_ARM_LENGTH = 0.72;
-	public static final double WRIST_LENGTH = 0;
+	public static final double UPPER_ARM_LENGTH = .68; 
+	public static final double LOWER_ARM_LENGTH = 0.71;
+	public static final double WRIST_LENGTH = .26;
 
 	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .7; // meters

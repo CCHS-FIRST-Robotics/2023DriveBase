@@ -137,7 +137,7 @@ public class Arm {
 	}
 
 	public boolean shouldMotorStop() {
-		return (Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle()) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+		return (Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle()) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
@@ -211,8 +211,6 @@ public class Arm {
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
 		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 207; // prints the position of the selected sensor
-		
-		// return shoulderFalconSensor.getIntegratedSensorAbsolutePosition();
 	}
 
 	/**
@@ -222,8 +220,19 @@ public class Arm {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
 		return getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 120;
+	}
 
-		// return elbowFalconSensor.getIntegratedSensorAbsolutePosition();
+	/**
+	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
+	 */
+	public double getWristAngle() {
+		int wristActuated = (isWristActuated()) ? (1):(0);
+		return getElbowAngle() + wristActuated * 90;
+	}
+
+	// TODO: write method
+	public boolean isWristActuated() {
+		return false;
 	}
 
 	/**
@@ -273,9 +282,11 @@ public class Arm {
 	 * 
 	 * @param xPos (double) x position of the end effector - METERS
 	 * @param yPos (double) y position of the end effector - METERS
+	 * @param theta (double) angle of the claw from the horizontal - DEGREES
 	 */
-	public double setEndEffector(double xPos, double yPos) {
-		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos);
+	public double setEndEffector(double xPos, double yPos, double theta) {
+		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
+		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, theta);
 		
 		double alpha = Math.toDegrees(angles[0]);
 		double beta = Math.toDegrees(angles[1]);

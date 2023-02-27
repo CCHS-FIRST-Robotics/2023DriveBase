@@ -93,11 +93,12 @@ public class Kinematics {
 	 * 
 	 * @param x
 	 * @param y
+	 * @param theta (double) - the angle of the claw relative to the horizontal
 	 * @param clawDown (boolean) - whether or not to choose the angle pair that reults in the claw pointing down
 	 * 								if the desired position is not possible, it will be ignored
 	 * @return angles (double[2]) - angle measurements of each joint in degrees, shoulder first
 	 */
-	public static double[] positionInverseKinematics(double x, double y, boolean clawDown) {
+	public static double[] positionInverseKinematics(double x, double y, double theta, boolean clawDown) {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 		y -= Constants.SHOULDER_JOINT_HEIGHT; // calculations assume the bottom joint is at (0, 0)
@@ -140,7 +141,7 @@ public class Kinematics {
 		// check which angle pairs actually come out to the right (x, y) coords
 		for (i=0; i<2; i++) {
 			for (j=0; j<2; j++) {
-				 if (forwardKinematics(alphas[i], betas[j]) == pos) {
+				 if (forwardKinematics(alphas[i], betas[j], theta) == pos) {
 					double[] pair = {alphas[i], betas[j]};
 					pairs[k] = pair;
 					k++;
@@ -153,19 +154,19 @@ public class Kinematics {
 			double alpha = pairs[i][0];
 			double beta = pairs[i][1];
 
-			if (shouldMotorStop(alpha, beta)) {
+			if (shouldMotorStop(alpha, beta, theta)) {
 				return pairs[1-i];
 			}
 		}
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		// TODO: REMOVE, just so it doesnt throw an error:
+		// TODO: REMOVE/FINISH METHOD - it's just so it doesnt throw an error:
 		return alphas;
 	}
 
-	public static double[] positionInverseKinematics(double x, double y) {
+	public static double[] positionInverseKinematics(double x, double y, double theta) {
 		// If none is specified, choose the position that typically works
-		return positionInverseKinematics(x, y, true);
+		return positionInverseKinematics(x, y, theta, true);
 	}
 
 	/**
@@ -225,8 +226,8 @@ public class Kinematics {
 	/**
 	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits
 	 */
-	public static boolean shouldMotorStop(double alpha, double beta) {
-		double[] pos = Kinematics.forwardKinematics(alpha, beta);
+	public static boolean shouldMotorStop(double alpha, double beta, double theta) {
+		double[] pos = Kinematics.forwardKinematics(alpha, beta, theta);
 		double x = pos[0];
 		double y = pos[1];
 

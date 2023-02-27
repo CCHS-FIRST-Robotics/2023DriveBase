@@ -43,7 +43,7 @@ public class LinearProfile {
      * @return setpoints (double[][]) - 2D array of angular setpoints. 
      *                                  setpoints[i] gives an array of the angle for each joint
      */
-    public double[][] getSetPoints(Vector initialPosition, Vector goal) {
+    public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta) {
         Vector displacement = goal.sub(initialPosition);
         
         // ∆t = ∆x/∆v
@@ -62,14 +62,14 @@ public class LinearProfile {
                 proportion * displacement.y
             ).add(initialPosition);
 
-            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y);
+            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y, theta);
         }
         
         return setpoints;
     }
 
     // same as above but uses desired time rather than a max velocity
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double timeToEnd) {
+    public double[][] getSetPoints(Vector initialPosition, Vector goal, double timeToEnd, double theta) {
         Vector displacement = goal.sub(initialPosition);
         
         double velocity = displacement.mag() / timeToEnd;
@@ -83,7 +83,7 @@ public class LinearProfile {
                 stepsTaken * this.period * velocity * Math.cos(angle),
                 stepsTaken * this.period * velocity * Math.sin(angle)
             ).add(initialPosition);
-            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y);
+            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y, theta);
         }
         
         return setpoints;
