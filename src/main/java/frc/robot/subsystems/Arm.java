@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 import frc.robot.*;
 import frc.robot.utils.Kinematics;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -30,6 +32,10 @@ public class Arm {
 
 	PIDController shoulderVelocityPID, elbowVelocityPID;
 
+	DigitalInput limitSwitch;
+
+	double lastShoulderAngle, lastElbowAngle;
+
 	// PID constants when tuning - TESTING ONLY
 	public double shoulderP, shoulderI, shoulderD;
 	public double elbowP, elbowI, elbowD;
@@ -46,7 +52,7 @@ public class Arm {
 	 * @param shoulderTalonPort
 	 * @param elbowTalonPort
 	 */
-	public Arm(int shoulderTalonPort, int elbowTalonPort, int elbowFalconPort) {
+	public Arm(int shoulderTalonPort, int elbowTalonPort, int elbowFalconPort, DigitalInput limitSwitch) {
 		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
 		
 		// initialize motors
@@ -75,6 +81,7 @@ public class Arm {
 		shoulderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
+		this.limitSwitch = limitSwitch;
 
 		initControllers(false);
 
@@ -137,7 +144,13 @@ public class Arm {
 	}
 
 	public boolean shouldMotorStop() {
-		return (Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle()) && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+		double alpha = getShoulderAngle();
+		double beta = getElbowAngle();
+		double theta = getWristAngle();
+
+		boolean motorStop = Kinematics.shouldMotorStop(alpha, beta, theta);
+
+		return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
@@ -210,7 +223,16 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		return 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 207; // prints the position of the selected sensor
+		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 101; // prints the position of the selected sensor
+		return angle;
+	}
+
+	public double updatePrevAngles() {
+		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
+			lastShoulderAngle = getShoulderAngle();
+			lastElbowAngle = getElbowAngle();
+		}
+		return 0;
 	}
 
 	/**
@@ -219,14 +241,15 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		return getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 120;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 52;
+		return angle;
 	}
 
 	/**
 	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
 	 */
 	public double getWristAngle() {
-		int wristActuated = (isWristActuated()) ? (1):(0);
+		int wristActuated = isWristActuated() ? 1:0;
 		return getElbowAngle() + wristActuated * 90;
 	}
 
@@ -297,6 +320,9 @@ public class Arm {
 		return angles[0];
 	}
 
+	public double executeTrajectory(double[][] trajectory) {
+		return 0;
+	}
 
 	//TODO: maybe use pid.setTolerance() to reduce oscillations from the chain?
 	/**
@@ -304,7 +330,7 @@ public class Arm {
 	 * 
 	 * @param alpha (double) setpoint for the shoulder angle, in degrees
 	 */
-	private void setShoulder(double alpha) {
+	public void setShoulder(double alpha) {
 		// System.out.println(
 		// 	shoulderFeedforward.calculate(alpha, 0, 0)
 		// );
@@ -324,7 +350,7 @@ public class Arm {
 	 * 
 	 * @param beta (double) setpoint for the elbow angle, in degrees
 	 */
-	private void setElbow(double beta) {
+	public void setElbow(double beta) {
 		elbowMotor.setVoltage(
 			-elbowPID.calculate(getElbowAngle(), beta) + 
 			getElbowFeedforward()

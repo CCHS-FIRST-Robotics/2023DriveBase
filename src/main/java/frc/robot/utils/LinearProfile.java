@@ -20,11 +20,11 @@ public class LinearProfile {
      * @param period (double) - the time between each setpoint/controller call 
      *                          (default 20ms for the periodic loops of the RIO)
      */
-    LinearProfile(double period) {
+    public LinearProfile(double period) {
         this.period = period;
     }
 
-    LinearProfile() {
+    public LinearProfile() {
         this(Constants.PERIOD);
     }
 
@@ -41,7 +41,7 @@ public class LinearProfile {
      * @param goal (Vector) - the final (desired) position of the end effector
      * 
      * @return setpoints (double[][]) - 2D array of angular setpoints. 
-     *                                  setpoints[i] gives an array of the angle for each joint
+     *                                  setpoints[i] gives an array of the angle for each joint - RADIANS
      */
     public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta) {
         Vector displacement = goal.sub(initialPosition);
@@ -55,14 +55,14 @@ public class LinearProfile {
         double[][] setpoints = new double[numberOfSteps][2];
 
         // Calculate the new setpoint for each timestep
-        for (int stepsTaken = 0; stepsTaken < numberOfSteps; stepsTaken++) {
-            double proportion = stepsTaken / numberOfSteps;
+        for (int i = 0; i < numberOfSteps; i++) {
+            double proportion = (double) i / (double) numberOfSteps;
             Vector pos = new Vector(
                 proportion * displacement.x,
                 proportion * displacement.y
             ).add(initialPosition);
 
-            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y, theta);
+            setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, theta);
         }
         
         return setpoints;

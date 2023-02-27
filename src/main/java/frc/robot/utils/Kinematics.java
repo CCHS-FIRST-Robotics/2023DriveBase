@@ -39,7 +39,23 @@ public class Kinematics {
 					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta)) +
 					Constants.WRIST_LENGTH * Math.sin(Math.toRadians(theta));
 
-		double[] pos = {x, y};
+		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
+		return pos;
+	}
+
+	/**
+	 * This will return the desired x, y pos for the given angle of each length 
+	 * 
+	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
+     * @param beta (double) - angle of elbow from horizontal, in degrees
+	 * @param theta (double) - angle of wrist from horizontal, in degrees
+	 * @return position (double[]) - (x, y) position of the end effector, in meters
+	 */
+	public static double[] forwardKinematicsElbow(double alpha) {
+		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha));
+		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha));
+
+		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
 		return pos;
 	}
 
@@ -132,36 +148,27 @@ public class Kinematics {
 			2*Math.atan(sigma2) + alphas[1]
 		};
 
-		// get rid of the two junk angle pairs
-		double[][] pairs = new double[2][2];
-		int i, j;
-		int k = 0;
-		double[] pos = {x, y};
-
-		// check which angle pairs actually come out to the right (x, y) coords
-		for (i=0; i<2; i++) {
-			for (j=0; j<2; j++) {
-				 if (forwardKinematics(alphas[i], betas[j], theta) == pos) {
-					double[] pair = {alphas[i], betas[j]};
-					pairs[k] = pair;
-					k++;
-				 }
-			}
-		}
-
+		int i;
 		// check if either pair violates a motor limit
-		for (i=0; i<2; i++) {
-			double alpha = pairs[i][0];
-			double beta = pairs[i][1];
+		// for (i=0; i<2; i++) {
+		// 	double alpha = alphas[i];
+		// 	double beta = betas[i];
 
-			if (shouldMotorStop(alpha, beta, theta)) {
-				return pairs[1-i];
-			}
-		}
+		// 	if (shouldMotorStop(alpha, beta, theta)) {
+		// 		double[] pair = {alphas[1-i], betas[1-i]};
+		// 		return pair;
+		// 	}
+		// }
+		// System.out.println("Angles1: " + Math.toDegrees(alphas[0]) + "\n" + Math.toDegrees(betas[0]));
+		// System.out.println("Angles2: " + Math.toDegrees(alphas[1]) + "\n" + Math.toDegrees(betas[1]));
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		// TODO: REMOVE/FINISH METHOD - it's just so it doesnt throw an error:
-		return alphas;
+		if (forwardKinematicsElbow(alphas[0])[1] < forwardKinematicsElbow(alphas[1])[1]) {
+			double[] pair = {alphas[1], betas[1]};
+			return pair;
+		}
+		double[] pair = {alphas[0], betas[0]};
+		return pair;
 	}
 
 	public static double[] positionInverseKinematics(double x, double y, double theta) {

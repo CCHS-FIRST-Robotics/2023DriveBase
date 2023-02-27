@@ -39,6 +39,7 @@ public class Constants {
 	public static final int ELBOW_TALON_ID = 5;
 	public static final int ELBOW_FALCON_ID = 9;
 
+	public static final int LIMIT_SWITCH_ID = 4; // DIO port num
 
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
@@ -75,12 +76,12 @@ public class Constants {
 	public static final double SHOULDER_JOINT_HEIGHT = .59;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = .4;
+	public static final double SHOULDER_KP = .6;
 	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = 0.01;
+	public static final double SHOULDER_KD = .02;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.4;
+	public static final double SHOULDER_KG = 1.55;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
@@ -90,7 +91,7 @@ public class Constants {
 	public static final double ELBOW_KD = 0;
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = 1.5;
+	public static final double ELBOW_KG = .7;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
@@ -111,8 +112,8 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = 1; // meters per second
-	public static final double ARM_MAX_ACCELERATION = 1; // meters per second
+	public static final double ARM_MAX_SPEED = .1; // meters per second
+	public static final double ARM_MAX_ACCELERATION = .1; // meters per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
@@ -120,8 +121,8 @@ public class Constants {
 	public static final double MAX_FORWARD_Y = .3; // meters
 
 	// hard min/max x and y values for the arm
-	public static final double minX = -1.8; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.8; 
+	public static final double minX = -1.45; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.45; 
 	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 
@@ -143,7 +144,7 @@ public class Constants {
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -85;
+	public static final double minBeta = -120;
 	public static final double maxBeta = 240;
 
 	Constants() {

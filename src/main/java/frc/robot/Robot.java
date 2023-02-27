@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,12 +31,19 @@ public class Robot extends TimedRobot {
   private Controller xboxController = new Controller();
   private MecaDrive driveBase;
 
+  DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
 
-  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID);
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID, limitSwitch);
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   ZED zed = new ZED();
   BetterShuffleboard smartdash = new BetterShuffleboard();
+
+  boolean trajStarted = false;
+  double pidTuningAlpha;
+  double pidTuningBeta;
+  double[][] trajectory;
+  int trajectoryCounter;
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -143,12 +151,29 @@ public class Robot extends TimedRobot {
     // System.out.println("\n\n");
 
     if (arm.shouldMotorStop()) {
+
       arm.stopMotors();
       
     } else {
       arm.testMoveShoulder(xboxController.getRightX());
       arm.testMoveElbow(xboxController.getRightY());
-      // arm.stopMotors();
+      // // arm.stopMotors();
+      // arm.setShoulder(0);
+      // arm.setElbow(pidTuningAngle);
+      // arm.setEndEffector(1, 1, arm.getWristAngle());
+      if (trajStarted) {
+        if (trajectoryCounter >= trajectory.length) {
+          trajectoryCounter = trajectory.length - 1;
+        } 
+        double[] angles = trajectory[trajectoryCounter];
+        pidTuningAlpha = Math.toDegrees(angles[0]);
+        pidTuningBeta = Math.toDegrees(angles[1]);
+        trajectoryCounter++;
+
+        arm.setElbow(pidTuningBeta);
+        arm.setShoulder(pidTuningAlpha);
+      }
+      // System.out.println("Angles:");
 
       // if (xboxController.getRightBumperPressed()) {
       //   // driveBase.increaseSpeedBracket();
@@ -168,13 +193,22 @@ public class Robot extends TimedRobot {
 
     if (counter % 10 == 0) {
       // System.out.println(arm.getShoulderRawAngle());
+      // Kinematics.positionInverseKinematics(1, 1, arm.getWristAngle());
 
       if (arm.shouldMotorStop()) {
         System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
       }
 
+      // System.out.println(limitSwitch.get());
+      // System.out.println("test working");
+
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
+
+      smartdash.putNumber("DESIRED ALPHA", pidTuningAlpha);
+      smartdash.putNumber("DESIRED BETA", pidTuningBeta);
+
+      smartdash.putNumber("Count:", trajectoryCounter);
 
       // System.out.println(arm.getShoulderFeedforward());
 
@@ -184,8 +218,8 @@ public class Robot extends TimedRobot {
       // System.out.println("END EFFECTOR Y " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       
 
-      smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
-      smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[0]);
+      smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[1]);
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
       // System.out.println(xboxController.getRightY());
@@ -237,8 +271,27 @@ public class Robot extends TimedRobot {
       arm.toggleMotorCheck();
       System.out.println("fhuhdushf");
     }
-    if (xboxController.getLeftBumperPressed()) {
+    if (xboxController.getAButtonPressed()) {
+      trajStarted = true;
+      // pidTuningAngle = 10;
+      double[] current_pos = Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle());
+      trajectory = new LinearProfile().getSetPoints(
+        new Vector(current_pos[0], current_pos[1]), 
+        new Vector(1, 2),
+        arm.getWristAngle()
+      );
+
+      // System.out.println(trajectory.length);
+
+      for (int i=0; i<50; i++) {
+        double[] angles = trajectory[i];
+        System.out.println("Angles: " + Math.toDegrees(angles[0]) + " next " + Math.toDegrees(angles[1]));
+      }
+    }
+    if (xboxController.getRightBumperPressed()) {
       // driveBase.decreaseSpeedBracket();
+      System.out.println("fdhsujfhdsufdsufhdusi");
+      // pidTuningAngle = 0;
     }
     
   }
