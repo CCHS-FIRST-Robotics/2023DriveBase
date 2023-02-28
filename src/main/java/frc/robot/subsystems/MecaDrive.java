@@ -357,5 +357,15 @@ public class MecaDrive extends DriveBase {
 
 	// TODO: create structure for odometry
 
+
+	public void clearOdom() {
+		frontLeftMotor.setSelectedSensorPosition(0);
+		frontRightMotor.setSelectedSensorPosition(0);
+		rearLeftMotor.setSelectedSensorPosition(0);
+		rearRightMotor.setSelectedSensorPosition(0);
+		imu.reset();
+		imu.resetDisplacement();
+		mOdom.resetPosition(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), getPose());
+	}
 }
 

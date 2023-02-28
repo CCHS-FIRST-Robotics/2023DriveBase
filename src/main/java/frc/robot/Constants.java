@@ -73,10 +73,15 @@ public class Constants {
 	public static final double WHEEL_ABSOLUTE_X_METERS = 0.2794;
 	public static final double WHEEL_ABSOLUTE_Y_METERS = 0.31115;
 	
-	public static final Translation2d FL_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_Y_METERS, WHEEL_ABSOLUTE_X_METERS);
-	public static final Translation2d FR_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_Y_METERS, WHEEL_ABSOLUTE_X_METERS);
-	public static final Translation2d RL_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_Y_METERS, -WHEEL_ABSOLUTE_X_METERS);
-	public static final Translation2d RR_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_Y_METERS, -WHEEL_ABSOLUTE_X_METERS);
+	// public static final Translation2d FL_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_Y_METERS, WHEEL_ABSOLUTE_X_METERS);
+	// public static final Translation2d FR_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_Y_METERS, WHEEL_ABSOLUTE_X_METERS);
+	// public static final Translation2d RL_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_Y_METERS, -WHEEL_ABSOLUTE_X_METERS);
+	// public static final Translation2d RR_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_Y_METERS, -WHEEL_ABSOLUTE_X_METERS);
+
+	public static final Translation2d FL_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_X_METERS, WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d FR_WHEEL_POS = new Translation2d(WHEEL_ABSOLUTE_X_METERS, -WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d RL_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_X_METERS, WHEEL_ABSOLUTE_Y_METERS);
+	public static final Translation2d RR_WHEEL_POS = new Translation2d(-WHEEL_ABSOLUTE_X_METERS, -WHEEL_ABSOLUTE_Y_METERS);
 
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
@@ -92,15 +97,16 @@ public class Constants {
 
 	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;
 	
+	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023
 	// velocity at 0.3 is around 6000
 	// velocity at .25 is around 4850
 	public static final double FALCON_KF = (0.3 * 1023.0) / 6000;
 	// error with just kF is about +500, 0.02 is kinda arbitrary
 	// significant oscillation at .1
-	public static final double FALCON_KP = (0.02 * 1023.0) / 500;
+	public static final double FALCON_KP = (0.03 * 1023.0) / 500;
 
-	public static final double FALCON_KD = 10 * FALCON_KP;
+	public static final double FALCON_KD = 28 * FALCON_KP;
 
 	// kinda arbitrary
 	public static final double FALCON_KI = 0.001;

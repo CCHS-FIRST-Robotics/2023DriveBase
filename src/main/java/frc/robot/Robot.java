@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 import java.util.ArrayList;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -110,10 +112,12 @@ public class Robot extends TimedRobot {
     // disable safety because we are not driving with this in autonomous
     driveBase.mDrive.setSafetyEnabled(false);
 
+    driveBase.clearOdom();
+
     // create an example trajectory		
     Pose2d current = driveBase.getPose();
     // start with a small displacement ( + 1)
-    Pose2d target = new Pose2d(current.getX() + 1, current.getY(), current.getRotation().plus(new Rotation2d(0)));
+    Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
     Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
     driveBase.resetCurrentTrajectoryTime();
     System.out.println("zeroing counter");
@@ -133,23 +137,28 @@ public class Robot extends TimedRobot {
 		// // Default code
     // }
     // stop the robot after a while
-    // if (auton_counter > 500) autonomousIsMoving = false;
+    // if (auton_counter > 200) autonomousIsMoving = false;
 		// this if statement is kind of irrelevant because we have no way to change this bool
     // because all controller input is ignored during autonomous
 		if (autonomousIsMoving){
 			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
-			// driveBase.incrementCurrentTrajectoryTime(); // so add it up
+			driveBase.incrementCurrentTrajectoryTime(); // so add it up
 			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
-      // Autonomous.applyChassisSpeeds(driveBase);
+      Autonomous.applyChassisSpeeds(driveBase);
 
-      // driveBase.mDrive.driveCartesian(0.25, 0, 0);
+      // +x is forward, +y is right, +z is clockwise as viewed from above
+      // driveBase.mDrive.driveCartesian(0, 0, -Math.PI/16);
+      
+      // +x is forward, +y is left
+      // driveBase.drive(new ChassisSpeeds(.25, 0, 0));
 
       // it seems to be driving about 500 click/100ms too fast??
-      driveBase.frontLeftMotor.set(ControlMode.Position, 20000); // should be about 25%
-      driveBase.frontRightMotor.set(ControlMode.Position, 20000); // should be about 25%
-      driveBase.rearLeftMotor.set(ControlMode.Position, 20000); // should be about 25%
-      driveBase.rearRightMotor.set(ControlMode.Position, 20000); // should be about 25%
-      // driveBase.printVelocity();
+      // driveBase.frontLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.frontRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.rearLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.rearRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      driveBase.printVelocity();
+      System.out.println(driveBase.getOdomHeading());
 		}
     else {
       // System.out.println("Not moving");
