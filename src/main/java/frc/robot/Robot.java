@@ -94,6 +94,8 @@ public class Robot extends TimedRobot {
     // System.out.println("hello wo5rld");
 
     // test += 1;
+
+    arm.updatePrevAngles();
   }
 
   /**
@@ -171,8 +173,8 @@ public class Robot extends TimedRobot {
         pidTuningBeta = angles[1];
         trajectoryCounter++;
 
-        // arm.setElbow(pidTuningBeta);
-        // arm.setShoulder(pidTuningAlpha);
+        arm.setElbow(pidTuningBeta);
+        arm.setShoulder(pidTuningAlpha);
       }
 
 
@@ -218,9 +220,12 @@ public class Robot extends TimedRobot {
       // System.out.println("END EFFECTOR X " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
       // System.out.println("END EFFECTOR Y " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       
-
       smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[1]);
+      
+      // smartdash.putNumber("WRIST X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      // smartdash.putNumber("WRIST Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
       // System.out.println(xboxController.getRightY());
@@ -275,19 +280,20 @@ public class Robot extends TimedRobot {
     if (xboxController.getAButtonPressed()) {
       trajStarted = true;
       // pidTuningAngle = 10;
-      trajectory = Kinematics.degrees(arm.getTrajectory(1, 2));
+      trajectory = Kinematics.degrees(arm.getTrajectory(1, 1.5));
 
       System.out.println(trajectory.length);
 
-      for (int i=0; i<50; i++) {
+      for (int i=0; i<trajectory.length; i++) {
         double[] angles = trajectory[i];
         System.out.println("Angles: " + angles[0] + " next " + angles[1]);
       }
+      double[] angles = trajectory[trajectory.length - 1];
+      System.out.println("LAST: " + angles[0] + " next " + angles[1]);
     }
     if (xboxController.getRightBumperPressed()) {
       // pidTuningAngle = 0;
     }
-    
   }
 
   /** 

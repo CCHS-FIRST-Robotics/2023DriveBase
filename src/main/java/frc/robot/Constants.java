@@ -112,12 +112,12 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .1; // meters per second
-	public static final double ARM_MAX_ACCELERATION = .1; // meters per second
+	public static final double ARM_MAX_SPEED = .5; // meters per second
+	public static final double ARM_MAX_ACCELERATION = 1; // meters per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
-	public static final double MAX_FORWARD_X = .5; // meters
+	public static final double MAX_FORWARD_X = 1; // meters
 	public static final double MAX_FORWARD_Y = .3; // meters
 
 	// hard min/max x and y values for the arm

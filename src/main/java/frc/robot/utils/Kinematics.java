@@ -48,8 +48,24 @@ public class Kinematics {
 	 * 
 	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
      * @param beta (double) - angle of elbow from horizontal, in degrees
-	 * @param theta (double) - angle of wrist from horizontal, in degrees
-	 * @return position (double[]) - (x, y) position of the end effector, in meters
+	 * @return position (double[]) - (x, y) position of the wrist joint, in meters
+	 */
+	public static double[] forwardKinematicsWrist(double alpha, double beta) {
+		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
+		
+		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
+					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
+
+		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
+		return pos;
+	}
+
+	/**
+	 * This will return the desired x, y pos for the given angle of each length 
+	 * 
+	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
+	 * @return position (double[]) - (x, y) position of the elbow joint, in meters
 	 */
 	public static double[] forwardKinematicsElbow(double alpha) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha));
@@ -141,33 +157,35 @@ public class Kinematics {
 		};
 
 		double sigma2 = Math.sqrt( 
+			(-pow(l1, 2) + 2*l1*l2 - pow(l2, 2) + pow(x, 2) + pow(y, 2)) *
 			(pow(l1,2) + 2*l1*l2 + pow(l2,2) - pow(x,2) - pow(y,2))
-		);
+		) / (-pow(l1, 2) + 2*l1*l2 - pow(l2, 2) + pow(x, 2) + pow(y, 2));
 
 		//TODO: make sure I'm not supposed to add on the alphas later/does doing it now fuck with it
 		//		(verify using the python sim - plot_workspace())
 		double[] betas = {
-			-2*Math.atan(sigma2) + alphas[0],
-			2*Math.atan(sigma2) + alphas[1]
+			(-2*Math.atan(sigma2) + alphas[0]),
+			(2*Math.atan(sigma2) + alphas[1])
 		};
 
 		int i;
 		// check if either pair violates a motor limit
-		for (i=0; i<2; i++) {
-			double alpha = degrees(alphas[i]);
-			double beta = degrees(betas[i]);
+		// for (i=0; i<2; i++) {
+		// 	double alpha = degrees(alphas[i]);
+		// 	double beta = degrees(betas[i]);
 
-			if (shouldMotorStop(alpha, beta, theta)) {
-				double[] pair = {alphas[1-i], betas[1-i]};
-				return pair;
-			}
-		}
+		// 	if (shouldMotorStop(alpha, beta, theta)) {
+		// 		double[] pair = {alphas[1-i], betas[1-i]};
+		// 		return pair;
+		// 	}
+		// }
 		// System.out.println("Angles1: " + degrees(alphas[0]) + "\n" + degrees(betas[0]));
 		// System.out.println("Angles2: " + degrees(alphas[1]) + "\n" + degrees(betas[1]));
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		if ((forwardKinematicsElbow(degrees(alphas[0]))[1] < forwardKinematicsElbow(degrees(alphas[1]))[1]) == (clawDown)) {
+		if ((Math.sin(alphas[0]) < Math.sin(alphas[1])) == (clawDown)) {
 			double[] pair = {alphas[1], betas[1]};
+			// System.out.println(0);
 			return pair;
 		}
 		double[] pair = {alphas[0], betas[0]};

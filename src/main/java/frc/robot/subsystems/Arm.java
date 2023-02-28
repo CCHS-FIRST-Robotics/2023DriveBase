@@ -215,7 +215,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 101; // prints the position of the selected sensor
+		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 86; // prints the position of the selected sensor
 		return angle;
 	}
 
@@ -225,7 +225,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 52;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 47;
 		return angle;
 	}
 
@@ -312,7 +312,8 @@ public class Arm {
 	}
 
 	public double[][] getTrajectory(double x, double y) {
-		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
+		double[] current_pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
 
 		double [][] trajectory = new LinearProfile().getSetPoints(
 			new Vector(current_pos[0], current_pos[1]), 
