@@ -44,6 +44,8 @@ public class Robot extends TimedRobot {
   double pidTuningBeta;
   double[][] trajectory;
   int trajectoryCounter;
+  Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
+                             Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -234,6 +236,29 @@ public class Robot extends TimedRobot {
     counter++;
   }
 
+  public void limelightTestDrive() {
+    double kP = .1;
+
+    double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
+    double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
+    double h = Constants.TARGETS_DISTANCE; 
+
+    double l2 = d2 * d2 - d1 * d1 - h * h;
+    double l1 = Math.sqrt(d1 * d1 - l2 * l2);
+
+    double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
+    double beta = Math.atan(l2 / l1);
+
+    double Fx = kP * Math.abs(l1) * Math.sin(
+      beta + alpha
+    );
+    double Fy = kP * Math.abs(l1) * Math.cos(
+      beta + alpha
+    );
+
+    driveBase.drive(Fx, Fy, 1 * limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
+  }
+
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
@@ -269,13 +294,24 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
+    if (xboxController.getAButtonPressed()) {
+      // driveBase.cycleMotor();
+      System.out.println("THING");
+      // claw.wristForward();
+      claw.clawForward();
+    }
+    if (xboxController.getYButtonPressed()) {
+      // claw.wristBack();
+      claw.clawBack();
+    }
     if (xboxController.getBButtonPressed()) {
-      // driveBase.printActiveMotorDebugMode();
+      // // driveBase.printActiveMotorDebugMode();
       arm.toggleManualMotorStop();
     }
     if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
       arm.toggleMotorCheck();
       System.out.println("fhuhdushf");
+      claw.wristBack();
     }
     if (xboxController.getAButtonPressed()) {
       trajStarted = true;
@@ -292,7 +328,8 @@ public class Robot extends TimedRobot {
       System.out.println("LAST: " + angles[0] + " next " + angles[1]);
     }
     if (xboxController.getRightBumperPressed()) {
-      // pidTuningAngle = 0;
+      // driveBase.increaseSpeedBracket();
+      claw.wristForward();
     }
   }
 

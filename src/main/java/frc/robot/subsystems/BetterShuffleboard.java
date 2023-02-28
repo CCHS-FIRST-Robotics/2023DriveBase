@@ -18,8 +18,13 @@ public class BetterShuffleboard {
     GenericEntry shoulderP, shoulderI, shoulderD;
     GenericEntry elbowP, elbowI, elbowD;
 
+
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
+
+    ShuffleboardTab limelightTab; // used for limelight data
+    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
+                 highForwardDistance, lowForwardDistance;
 
     public BetterShuffleboard() {
         /*
@@ -48,49 +53,17 @@ public class BetterShuffleboard {
             .getEntry();
         rightYExp.setDouble(Constants.RIGHT_Y_EXPONENT);
 
-        /*
-         * PID tuning
-         */
-
-        ArmPIDTab = Shuffleboard.getTab("ArmPID");
-
-        // Create widgets for shoulder PID tab
-        shoulderP = ArmPIDTab.add("ShoulderP", Constants.SHOULDER_KP)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        shoulderP.setDouble(Constants.SHOULDER_KP);
-        shoulderI = ArmPIDTab.add("ShoulderI", Constants.SHOULDER_KI)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        shoulderI.setDouble(Constants.SHOULDER_KI);
-        shoulderD = ArmPIDTab.add("ShoulderD", Constants.SHOULDER_KD)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        shoulderD.setDouble(Constants.SHOULDER_KD);
-
-        // Create widgets for elbow PID tab
-        elbowP = ArmPIDTab.add("ElbowP", Constants.ELBOW_KP)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        elbowP.setDouble(Constants.ELBOW_KP);
-        elbowI = ArmPIDTab.add("ElbowI", Constants.ELBOW_KI)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        elbowI.setDouble(Constants.ELBOW_KI);
-        elbowD = ArmPIDTab.add("ElbowD", Constants.ELBOW_KD)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 3))
-            .getEntry();
-        elbowD.setDouble(Constants.ELBOW_KD);
-
-        /*
-         * Others
-         */
+        // LIMELIGHT
+        limelightTab = Shuffleboard.getTab("Limelight");
+        
+        highPostX = limelightTab.add("highPostX", 0).getEntry();
+        lowPostX = limelightTab.add("lowPostX", 0).getEntry();
+        lowPostY = limelightTab.add("lowPostY", 0).getEntry();
+        highPostY = limelightTab.add("highPostY", 0).getEntry();
+        highPostHeading = limelightTab.add("highPostHeading", 0).getEntry();
+        lowPostHeading = limelightTab.add("lowPostHeading", 0).getEntry();
+        highForwardDistance = limelightTab.add("highForwardDist", 0).getEntry();
+        lowForwardDistance = limelightTab.add("lowForwardDist", 0).getEntry();
 
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
@@ -129,9 +102,15 @@ public class BetterShuffleboard {
     }
 
     public void pushLimelight(Limelight limelight) {
-        SmartDashboard.putNumber("LimelightX", limelight.getX());
-        SmartDashboard.putNumber("LimelightY", limelight.getY());
-        SmartDashboard.putNumber("LimelightArea", limelight.getArea());
+        highPostX.setDouble(limelight.getX(Constants.TALL_PIPE_NUM));
+        highPostY.setDouble(limelight.getY(Constants.TALL_PIPE_NUM));
+        highPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.TALL_PIPE_NUM));
+        highForwardDistance.setDouble(limelight.getForwardDistance(Constants.TALL_PIPE_NUM));
+        
+        lowPostX.setDouble(limelight.getX(Constants.SHORT_PIPE_NUM));
+        lowPostY.setDouble(limelight.getY(Constants.SHORT_PIPE_NUM));
+        lowPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM));
+        lowForwardDistance.setDouble(limelight.getForwardDistance(Constants.SHORT_PIPE_NUM));
     }
     
     public void pushIMU(IMU imu) {
@@ -141,7 +120,7 @@ public class BetterShuffleboard {
 
         SmartDashboard.putNumber("NavXVel", imu.getVelocityX());
 		SmartDashboard.putNumber("NavYVel", imu.getVelocityY());
-
+        
         SmartDashboard.putNumber("NavXAccel", imu.getRawAccelX());
 		SmartDashboard.putNumber("NavYAccel", imu.getRawAccelY());
 		SmartDashboard.putNumber("NavZAccel", imu.getRawAccelZ());
