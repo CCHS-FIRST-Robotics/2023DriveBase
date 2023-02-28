@@ -144,13 +144,15 @@ public class Arm {
 	}
 
 	public boolean shouldMotorStop() {
-		double alpha = getShoulderAngle();
-		double beta = getElbowAngle();
-		double theta = getWristAngle();
+		return false;
 
-		boolean motorStop = Kinematics.shouldMotorStop(alpha, beta, theta);
+		// double alpha = getShoulderAngle();
+		// double beta = getElbowAngle();
+		// double theta = getWristAngle();
 
-		return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+		// boolean motorStop = Kinematics.shouldMotorStop(alpha, beta, theta);
+
+		// return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
@@ -416,8 +418,8 @@ public class Arm {
 		// setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
 		// setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
 
-		setShoulderVelocity(combinedSpeeds[0] * 11);
-		setElbowVelocity(combinedSpeeds[0] * 11);
+		// setShoulderVelocity(combinedSpeeds[0] * 11);
+		// setElbowVelocity(combinedSpeeds[0] * 11);
 
 		// Uses PID loop to control arm with controller rather than setting a speed
 		// setEndEffector(

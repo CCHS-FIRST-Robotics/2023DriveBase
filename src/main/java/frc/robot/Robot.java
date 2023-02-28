@@ -28,7 +28,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Controller xboxController = new Controller();
+  private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT);
+  private Controller xboxControllerAlternate = new Controller(Constants.XBOX_CONTROLLER_ALTERNATE_PORT);
   private MecaDrive driveBase;
 
   DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
@@ -148,7 +149,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    // drive();
+    drive();
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
     // System.out.println("Alpha:" + arm.getShoulderAngle());
     // System.out.println("Beta:" + arm.getElbowAngle());
@@ -167,6 +168,8 @@ public class Robot extends TimedRobot {
       // arm.setEndEffector(1, 1, arm.getWristAngle());
 
       if (trajStarted) {
+        if (counter % 10 == 0) System.out.println(pidTuningBeta);
+
         if (trajectoryCounter >= trajectory.length) {
           trajectoryCounter = trajectory.length - 1;
         } 
@@ -197,6 +200,12 @@ public class Robot extends TimedRobot {
 
 
     if (counter % 10 == 0) {
+      double angles[] = Kinematics.positionInverseKinematics(1.49, 1.17, 0);
+      System.out.println("SATRT OF THIGN");
+      System.out.println(angles[0]);
+      System.out.println(angles[1]);
+      System.out.println("END OF THIGN");
+
       // System.out.println(arm.getShoulderRawAngle());
       // Kinematics.positionInverseKinematics(1, 1, arm.getWristAngle());
 
@@ -225,8 +234,8 @@ public class Robot extends TimedRobot {
       smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[0]);
       smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle())[1]);
       
-      // smartdash.putNumber("WRIST X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
-      // smartdash.putNumber("WRIST Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      smartdash.putNumber("WRIST X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      smartdash.putNumber("WRIST Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
       
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
@@ -234,29 +243,6 @@ public class Robot extends TimedRobot {
       smartdash.pushDashboard(limelight, imu, zed);
     }
     counter++;
-  }
-
-  public void limelightTestDrive() {
-    double kP = .1;
-
-    double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
-    double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-    double h = Constants.TARGETS_DISTANCE; 
-
-    double l2 = d2 * d2 - d1 * d1 - h * h;
-    double l1 = Math.sqrt(d1 * d1 - l2 * l2);
-
-    double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
-    double beta = Math.atan(l2 / l1);
-
-    double Fx = kP * Math.abs(l1) * Math.sin(
-      beta + alpha
-    );
-    double Fy = kP * Math.abs(l1) * Math.cos(
-      beta + alpha
-    );
-
-    driveBase.drive(Fx, Fy, 1 * limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
   }
 
   /** This function is called once when the robot is disabled. */
@@ -294,41 +280,57 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
-    if (xboxController.getAButtonPressed()) {
-      // driveBase.cycleMotor();
-      System.out.println("THING");
-      // claw.wristForward();
-      claw.clawForward();
-    }
-    if (xboxController.getYButtonPressed()) {
-      // claw.wristBack();
-      claw.clawBack();
-    }
     if (xboxController.getBButtonPressed()) {
       // // driveBase.printActiveMotorDebugMode();
-      arm.toggleManualMotorStop();
+      // arm.toggleManualMotorStop();
+
+      trajStarted = true;
+      trajectory = Kinematics.degrees(arm.getTrajectory(0.76, 0.94));
     }
-    if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
-      arm.toggleMotorCheck();
-      System.out.println("fhuhdushf");
-      claw.wristBack();
+
+    if (xboxController.getYButtonPressed()) {
+      trajStarted = true;
+      trajectory = Kinematics.degrees(arm.getTrajectory(1.15, 1.29));
     }
+
+    if (xboxController.getXButtonPressed()) {
+      trajStarted = true;
+      trajectory = Kinematics.degrees(arm.getTrajectory(1.23, 1.05));
+      // System.out.println(trajectory.length);
+
+      // for (int i=0; i<trajectory.length; i++) {
+      //   double[] angles = trajectory[i];
+      //   System.out.println("Angles: " + angles[0] + " next " + angles[1]);
+      // }
+      // double[] angles = trajectory[trajectory.length - 1];
+      // System.out.println("LAST: " + angles[0] + " next " + angles[1]);
+    }
+
     if (xboxController.getAButtonPressed()) {
       trajStarted = true;
       // pidTuningAngle = 10;
-      trajectory = Kinematics.degrees(arm.getTrajectory(1, 1.5));
+      trajectory = Kinematics.degrees(arm.getTrajectory(0.84, 1.1));
+    }
 
-      System.out.println(trajectory.length);
-
-      for (int i=0; i<trajectory.length; i++) {
-        double[] angles = trajectory[i];
-        System.out.println("Angles: " + angles[0] + " next " + angles[1]);
-      }
-      double[] angles = trajectory[trajectory.length - 1];
-      System.out.println("LAST: " + angles[0] + " next " + angles[1]);
+    if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
+      arm.toggleMotorCheck();
+      System.out.println("fhuhdushf");
     }
     if (xboxController.getRightBumperPressed()) {
       // driveBase.increaseSpeedBracket();
+      trajStarted = false;
+    }
+
+    if (xboxControllerAlternate.getAButtonPressed()) {
+      claw.clawBack();
+    }
+    if (xboxControllerAlternate.getYButtonPressed()) {
+      claw.clawForward();
+    }
+    if (xboxControllerAlternate.getBButtonPressed()) {
+      claw.wristBack();
+    }
+    if (xboxControllerAlternate.getXButtonPressed()) {
       claw.wristForward();
     }
   }
@@ -340,7 +342,7 @@ public class Robot extends TimedRobot {
 
 
     // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), 0, xboxController.getRightY());
     // System.out.println(xboxController.getLeftY());
   }
 

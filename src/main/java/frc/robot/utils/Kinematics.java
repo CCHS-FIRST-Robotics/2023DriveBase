@@ -256,31 +256,33 @@ public class Kinematics {
 	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits
 	 */
 	public static boolean shouldMotorStop(double alpha, double beta, double theta) {
-		double[] pos = Kinematics.forwardKinematics(alpha, beta, theta);
-		double x = pos[0];
-		double y = pos[1];
+		return false;
 
-		return (
-			// check if the shoulder is too far forward/backward
-			alpha < Constants.minAlpha ||
-			alpha > Constants.maxAlpha ||
+		// double[] pos = Kinematics.forwardKinematics(alpha, beta, theta);
+		// double x = pos[0];
+		// double y = pos[1];
 
-			// check if the elbow is too far forward/backward
-			beta < Constants.minBeta ||
-			beta > Constants.maxBeta ||
+		// return (
+		// 	// check if the shoulder is too far forward/backward
+		// 	alpha < Constants.minAlpha ||
+		// 	alpha > Constants.maxAlpha ||
 
-			// check if the arm is fully extended -- dont want it to lock/lose a DOF
-			x < Constants.minX ||
-			x > Constants.maxX ||
+		// 	// check if the elbow is too far forward/backward
+		// 	beta < Constants.minBeta ||
+		// 	beta > Constants.maxBeta ||
 
-			// check if the arm is too close to the ground or above the height limit
-			y < Constants.minY ||
-			y > Constants.maxY ||
+		// 	// check if the arm is fully extended -- dont want it to lock/lose a DOF
+		// 	x < Constants.minX ||
+		// 	x > Constants.maxX ||
 
-			// check to make sure the arm isn't hitting the frame or the electrical board
-			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
-			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
-		);
+		// 	// check if the arm is too close to the ground or above the height limit
+		// 	y < Constants.minY ||
+		// 	y > Constants.maxY ||
+
+		// 	// check to make sure the arm isn't hitting the frame or the electrical board
+		// 	(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
+		// 	(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
+		// );
 	}
 
 	/**

@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.SPI;
 public class Constants {
 
 	// the port for the xbox controller
-	public static final int XBOX_CONTROLLER_PORT 			= 0; 
+	public static final int XBOX_CONTROLLER_PORT 			= 0;
+	public static final int XBOX_CONTROLLER_ALTERNATE_PORT 			= 1; 
 
 	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
 	
@@ -59,6 +60,16 @@ public class Constants {
 	public static final double SLOW_DOWN_FACTOR = 2; // when slowing down, the 
 	//previous speed is divided by this factor (higher = slow down faster)
 
+	// LIMELIGHT //
+	public static final double SHORT_TARGET_HEIGHT  = .56 + .0508;
+	public static final double TALL_TARGET_HEIGHT  = 1.05 + .0508;
+
+	public static final int SHORT_PIPE_NUM = 0;
+	public static final int TALL_PIPE_NUM = 1;
+
+	public static final double LIME_HEIGHT = .42;
+	public static final double LIME_ANGLE = 0;
+
 	// arm lengths in meters
 	public static final double UPPER_ARM_LENGTH = .68; 
 	public static final double LOWER_ARM_LENGTH = 0.71;
@@ -74,6 +85,11 @@ public class Constants {
 
 	//Height of the shoulder joint from the floor in meters
 	public static final double SHOULDER_JOINT_HEIGHT = .59;
+
+	public static final int CLAW_FORWARD_NUM = 0;
+	public static final int CLAW_BACKWARD_NUM = 1;
+	public static final int WRIST_FORWARD_NUM = 2;
+	public static final int WRIST_BACKWARD_NUM = 3;
 
 	// Shoulder PID and Feedfoward gains for positional control
 	public static final double SHOULDER_KP = .6;

@@ -65,6 +65,50 @@ public class BetterShuffleboard {
         highForwardDistance = limelightTab.add("highForwardDist", 0).getEntry();
         lowForwardDistance = limelightTab.add("lowForwardDist", 0).getEntry();
 
+        /*
+         * PID tuning
+         */
+
+        ArmPIDTab = Shuffleboard.getTab("ArmPID");
+
+        // Create widgets for shoulder PID tab
+        shoulderP = ArmPIDTab.add("ShoulderP", Constants.SHOULDER_KP)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderP.setDouble(Constants.SHOULDER_KP);
+        shoulderI = ArmPIDTab.add("ShoulderI", Constants.SHOULDER_KI)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderI.setDouble(Constants.SHOULDER_KI);
+        shoulderD = ArmPIDTab.add("ShoulderD", Constants.SHOULDER_KD)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        shoulderD.setDouble(Constants.SHOULDER_KD);
+
+        // Create widgets for elbow PID tab
+        elbowP = ArmPIDTab.add("ElbowP", Constants.ELBOW_KP)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowP.setDouble(Constants.ELBOW_KP);
+        elbowI = ArmPIDTab.add("ElbowI", Constants.ELBOW_KI)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowI.setDouble(Constants.ELBOW_KI);
+        elbowD = ArmPIDTab.add("ElbowD", Constants.ELBOW_KD)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 3))
+            .getEntry();
+        elbowD.setDouble(Constants.ELBOW_KD);
+
+        /*
+        * Others
+        */
+
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
     }

@@ -5,8 +5,8 @@ import frc.robot.Constants;
 
 public class Controller extends XboxController{
     
-    public Controller() {
-        super(Constants.XBOX_CONTROLLER_PORT);
+    public Controller(int port) {
+        super(port);
     }
 
     // TODO: maybe implement it in a way that each joystick/direction has its own exponent
