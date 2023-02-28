@@ -87,8 +87,8 @@ public class Kinematics {
 		double alpha = Math.asin(y1/l1);
     	double beta = -Math.PI/2 + alpha - Math.asin((l1*l1 + l2*l2 - dist*dist)/(2*l1*l2));
 		
-		SmartDashboard.putNumber("DESIRED ALPHA", Math.toDegrees(alpha));
-		SmartDashboard.putNumber("DESIRED BETA", Math.toDegrees(beta));
+		SmartDashboard.putNumber("DESIRED ALPHA", degrees(alpha));
+		SmartDashboard.putNumber("DESIRED BETA", degrees(beta));
 
 		double[] angles = {alpha, beta};
         return angles;
@@ -118,6 +118,9 @@ public class Kinematics {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 		y -= Constants.SHOULDER_JOINT_HEIGHT; // calculations assume the bottom joint is at (0, 0)
+
+		// TODO: adjust for the wrist:
+		
 
 		double sigma1 = Math.sqrt(
 			-pow(l1,4) 
@@ -150,20 +153,20 @@ public class Kinematics {
 
 		int i;
 		// check if either pair violates a motor limit
-		// for (i=0; i<2; i++) {
-		// 	double alpha = alphas[i];
-		// 	double beta = betas[i];
+		for (i=0; i<2; i++) {
+			double alpha = degrees(alphas[i]);
+			double beta = degrees(betas[i]);
 
-		// 	if (shouldMotorStop(alpha, beta, theta)) {
-		// 		double[] pair = {alphas[1-i], betas[1-i]};
-		// 		return pair;
-		// 	}
-		// }
-		// System.out.println("Angles1: " + Math.toDegrees(alphas[0]) + "\n" + Math.toDegrees(betas[0]));
-		// System.out.println("Angles2: " + Math.toDegrees(alphas[1]) + "\n" + Math.toDegrees(betas[1]));
+			if (shouldMotorStop(alpha, beta, theta)) {
+				double[] pair = {alphas[1-i], betas[1-i]};
+				return pair;
+			}
+		}
+		// System.out.println("Angles1: " + degrees(alphas[0]) + "\n" + degrees(betas[0]));
+		// System.out.println("Angles2: " + degrees(alphas[1]) + "\n" + degrees(betas[1]));
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		if (forwardKinematicsElbow(alphas[0])[1] < forwardKinematicsElbow(alphas[1])[1]) {
+		if ((forwardKinematicsElbow(degrees(alphas[0]))[1] < forwardKinematicsElbow(degrees(alphas[1]))[1]) == (clawDown)) {
 			double[] pair = {alphas[1], betas[1]};
 			return pair;
 		}
@@ -231,6 +234,7 @@ public class Kinematics {
     }
 
 	/**
+	 * args in deg
 	 * @return shouldMotorStop (boolean) returns true if the motor is past any of the limits
 	 */
 	public static boolean shouldMotorStop(double alpha, double beta, double theta) {
@@ -270,5 +274,43 @@ public class Kinematics {
 	 */
 	public static double pow(double x, double degree) {
 		return Math.pow(x, degree);
+	}
+
+	/**
+	 * Literally just shorthand for Math.toDegrees since I couldn't figure out how to import it directly lol
+	 * 
+	 * @param angle (double) - angle is radians
+	 * @return angle (double) - angle in degrees
+	 */
+	public static double degrees(double angle) {
+		return Math.toDegrees(angle);
+	}
+
+	/**
+	 * Applies degrees() to an array - why can't I just have numpy ;(
+	 * 
+	 * @param angles (double[]) - angles in radians
+	 * @return newAngles (double[]) - angles in degrees
+	 */
+	public static double[] degrees(double[] angles) {
+		double[] newAngles = new double[angles.length];
+		for (int i=0; i < angles.length; i++) {
+			newAngles[i] = degrees(angles[i]);
+		}
+		return newAngles;
+	}
+
+	/**
+	 * Applies degrees() to a 2D array - why can't I just have numpy ;(
+	 * 
+	 * @param angles (double[][]) - angles in radians
+	 * @return newAngles (double[][]) - angles in degrees
+	 */
+	public static double[][] degrees(double[][] angles) {
+		double[][] newAngles = new double[angles.length][angles[0].length];
+		for (int i=0; i < angles.length; i++) {
+			newAngles[i] = degrees(angles[i]);
+		}
+		return newAngles;
 	}
 }

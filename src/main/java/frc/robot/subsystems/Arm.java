@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.*;
-import frc.robot.utils.Kinematics;
+import frc.robot.utils.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -159,8 +159,10 @@ public class Arm {
 	public void stopMotors() {
 		// System.out.println(getElbowFeedforward());
 		
-		shoulderMotor.setVoltage(getShoulderFeedforward());
-		elbowMotor.setVoltage(getElbowFeedforward());
+		// shoulderMotor.setVoltage(getShoulderFeedforward());
+		// elbowMotor.setVoltage(getElbowFeedforward());
+		setShoulder(lastShoulderAngle);
+		setElbow(lastElbowAngle);
 
 		shoulderMotor.setNeutralMode(NeutralMode.Coast);
 		elbowMotor.setNeutralMode(NeutralMode.Coast);
@@ -204,16 +206,6 @@ public class Arm {
 		}
 	}
 
-	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
-	public void setMotorLimits() {
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minAlpha + 2048);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
-		
-
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minBeta);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
-	}
-
 	public double getShoulderRawAngle() { 
 		return shoulderMotor.getSelectedSensorPosition();
 	}
@@ -227,14 +219,6 @@ public class Arm {
 		return angle;
 	}
 
-	public double updatePrevAngles() {
-		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
-			lastShoulderAngle = getShoulderAngle();
-			lastElbowAngle = getElbowAngle();
-		}
-		return 0;
-	}
-
 	/**
 	 * @return angle (double) degrees of the second linkage from the horizontal
 	 */
@@ -243,6 +227,13 @@ public class Arm {
 		// offset  by shoulder angle so that the angle is relative to the horizotal
 		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 52;
 		return angle;
+	}
+
+	public void updatePrevAngles() {
+		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
+			lastShoulderAngle = getShoulderAngle();
+			lastElbowAngle = getElbowAngle();
+		}
 	}
 
 	/**
@@ -318,6 +309,18 @@ public class Arm {
 		setElbow(beta);
 
 		return angles[0];
+	}
+
+	public double[][] getTrajectory(double x, double y) {
+		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+
+		double [][] trajectory = new LinearProfile().getSetPoints(
+			new Vector(current_pos[0], current_pos[1]), 
+			new Vector(x, y),
+			getWristAngle()
+		);
+
+		return trajectory;
 	}
 
 	public double executeTrajectory(double[][] trajectory) {
@@ -420,5 +423,15 @@ public class Arm {
 		// 	Constants.MAX_FORWARD_X * leftAnalogX,
 		// 	Constants.MAX_FORWARD_Y * leftAnalogY
 		// );
+	}
+
+	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
+	public void setMotorLimits() {
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minAlpha + 2048);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
+		
+
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minBeta);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
 	}
 }

@@ -161,19 +161,20 @@ public class Robot extends TimedRobot {
       // arm.setShoulder(0);
       // arm.setElbow(pidTuningAngle);
       // arm.setEndEffector(1, 1, arm.getWristAngle());
+
       if (trajStarted) {
         if (trajectoryCounter >= trajectory.length) {
           trajectoryCounter = trajectory.length - 1;
         } 
         double[] angles = trajectory[trajectoryCounter];
-        pidTuningAlpha = Math.toDegrees(angles[0]);
-        pidTuningBeta = Math.toDegrees(angles[1]);
+        pidTuningAlpha = angles[0];
+        pidTuningBeta = angles[1];
         trajectoryCounter++;
 
-        arm.setElbow(pidTuningBeta);
-        arm.setShoulder(pidTuningAlpha);
+        // arm.setElbow(pidTuningBeta);
+        // arm.setShoulder(pidTuningAlpha);
       }
-      // System.out.println("Angles:");
+
 
       // if (xboxController.getRightBumperPressed()) {
       //   // driveBase.increaseSpeedBracket();
@@ -274,23 +275,16 @@ public class Robot extends TimedRobot {
     if (xboxController.getAButtonPressed()) {
       trajStarted = true;
       // pidTuningAngle = 10;
-      double[] current_pos = Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle(), arm.getWristAngle());
-      trajectory = new LinearProfile().getSetPoints(
-        new Vector(current_pos[0], current_pos[1]), 
-        new Vector(1, 2),
-        arm.getWristAngle()
-      );
+      trajectory = Kinematics.degrees(arm.getTrajectory(1, 2));
 
-      // System.out.println(trajectory.length);
+      System.out.println(trajectory.length);
 
       for (int i=0; i<50; i++) {
         double[] angles = trajectory[i];
-        System.out.println("Angles: " + Math.toDegrees(angles[0]) + " next " + Math.toDegrees(angles[1]));
+        System.out.println("Angles: " + angles[0] + " next " + angles[1]);
       }
     }
     if (xboxController.getRightBumperPressed()) {
-      // driveBase.decreaseSpeedBracket();
-      System.out.println("fdhsujfhdsufdsufhdusi");
       // pidTuningAngle = 0;
     }
     
