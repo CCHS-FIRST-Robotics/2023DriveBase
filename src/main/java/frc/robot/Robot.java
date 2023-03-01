@@ -152,8 +152,9 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
-    // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
+    // drive();
+    // arm.setEndEffector(1, 1, 0);
+    
     // System.out.println("Alpha:" + arm.getShoulderAngle());
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
@@ -165,13 +166,16 @@ public class Robot extends TimedRobot {
     } else {
       arm.testMoveShoulder(xboxController.getRightX());
       arm.testMoveElbow(xboxController.getRightY());
+
+      // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
+      // arm.setShoulder(60);
       // // arm.stopMotors();
       // arm.setShoulder(0);
       // arm.setElbow(pidTuningAngle);
       // arm.setEndEffector(1, 1, arm.getWristAngle());
 
       if (trajStarted) {
-        if (counter % 10 == 0) System.out.println(pidTuningBeta);
+        // if (counter % 10 == 0) System.out.println(pidTuningBeta);
 
         if (trajectoryCounter >= trajectory.length) {
           trajectoryCounter = trajectory.length - 1;
@@ -203,11 +207,11 @@ public class Robot extends TimedRobot {
 
 
     if (counter % 10 == 0) {
-      double angles[] = Kinematics.positionInverseKinematics(1.49, 1.17, 0);
-      System.out.println("SATRT OF THIGN");
-      System.out.println(angles[0]);
-      System.out.println(angles[1]);
-      System.out.println("END OF THIGN");
+      // double angles[] = Kinematics.positionInverseKinematics(1, 1, 0);
+      // System.out.println("SATRT OF THIGN");
+      // System.out.println(Math.toDegrees(angles[0]));
+      // System.out.println(Math.toDegrees(angles[1]));
+      // System.out.println("END OF THIGN");
 
       // System.out.println(arm.getShoulderRawAngle());
       // Kinematics.positionInverseKinematics(1, 1, arm.getWristAngle());
@@ -283,57 +287,74 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
-    if (xboxController.getBButtonPressed()) {
+    boolean A = xboxController.getAButtonPressed();
+    boolean B = xboxController.getBButtonPressed();
+    boolean X = xboxController.getXButtonPressed();
+    boolean Y = xboxController.getYButtonPressed();
+    boolean RB = xboxController.getRightBumperPressed();
+    boolean LB = xboxController.getLeftBumperPressed();
+
+    boolean A2 = xboxControllerAlternate.getAButtonPressed();
+    boolean B2 = xboxControllerAlternate.getBButtonPressed();
+    boolean X2 = xboxControllerAlternate.getXButtonPressed();
+    boolean Y2 = xboxControllerAlternate.getYButtonPressed();
+    boolean RB2 = xboxControllerAlternate.getRightBumperPressed();
+    boolean LB2 = xboxControllerAlternate.getLeftBumperPressed();
+
+
+    if (B) {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
 
       trajStarted = true;
       trajectory = Kinematics.degrees(arm.getTrajectory(0.76, 0.94));
+
+      System.out.println(trajectory.length);
+
+      for (int i=0; i<trajectory.length; i++) {
+        double[] angles = trajectory[i];
+        System.out.println("Angles: " + angles[0] + " next " + angles[1]);
+      }
+      double[] angles = trajectory[trajectory.length - 1];
+      System.out.println("LAST: " + angles[0] + " next " + angles[1]);
     }
 
-    if (xboxController.getYButtonPressed()) {
+    if (Y) {
       trajStarted = true;
       trajectory = Kinematics.degrees(arm.getTrajectory(1.15, 1.29));
     }
 
-    if (xboxController.getXButtonPressed()) {
+    if (X) {
       trajStarted = true;
       trajectory = Kinematics.degrees(arm.getTrajectory(1.23, 1.05));
-      // System.out.println(trajectory.length);
-
-      // for (int i=0; i<trajectory.length; i++) {
-      //   double[] angles = trajectory[i];
-      //   System.out.println("Angles: " + angles[0] + " next " + angles[1]);
-      // }
-      // double[] angles = trajectory[trajectory.length - 1];
-      // System.out.println("LAST: " + angles[0] + " next " + angles[1]);
     }
 
-    if (xboxController.getAButtonPressed()) {
+    if (A) {
       trajStarted = true;
       // pidTuningAngle = 10;
       trajectory = Kinematics.degrees(arm.getTrajectory(0.84, 1.1));
     }
 
-    if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
+    if (RB && LB) {
       arm.toggleMotorCheck();
       System.out.println("fhuhdushf");
     }
-    if (xboxController.getRightBumperPressed()) {
+
+    if (RB) {
       // driveBase.increaseSpeedBracket();
       trajStarted = false;
     }
 
-    if (xboxControllerAlternate.getAButtonPressed()) {
+    if (A2) {
       claw.clawBack();
     }
-    if (xboxControllerAlternate.getYButtonPressed()) {
+    if (Y2) {
       claw.clawForward();
     }
-    if (xboxControllerAlternate.getBButtonPressed()) {
+    if (B2) {
       claw.wristBack();
     }
-    if (xboxControllerAlternate.getXButtonPressed()) {
+    if (X2) {
       claw.wristForward();
     }
   }

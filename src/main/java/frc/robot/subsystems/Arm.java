@@ -3,6 +3,7 @@ import frc.robot.*;
 import frc.robot.utils.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -36,6 +37,7 @@ public class Arm {
 	Grabber grabber;
 
 	double lastShoulderAngle, lastElbowAngle;
+	double[] prevControllerPos;
 
 	// PID constants when tuning - TESTING ONLY
 	public double shoulderP, shoulderI, shoulderD;
@@ -85,11 +87,19 @@ public class Arm {
 		this.limitSwitch = limitSwitch;
 		this.grabber = grabber;
 
+		shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		elbowMotor.setNeutralMode(NeutralMode.Coast);
+
 		initControllers(false);
+		init();
 
 		// shoulderMotor.setNeutralMode(NeutralMode.Brake);
 		// elbowMotor.setNeutralMode(NeutralMode.Brake);
     }
+
+	public void init() {
+		prevControllerPos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getWristAngle());
+	}
 
 	/**
 	 * initalizes controllers in debug mode - uses PID constants from shuffleboard
@@ -189,7 +199,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 86; // prints the position of the selected sensor
+		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 227; // prints the position of the selected sensor
 		return angle;
 	}
 
@@ -199,7 +209,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 47;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 278;
 		return angle;
 	}
 
@@ -216,6 +226,8 @@ public class Arm {
 			lastShoulderAngle = getShoulderAngle();
 			lastElbowAngle = getElbowAngle();
 		}
+		SmartDashboard.putNumber("LAST SHOULDER", lastShoulderAngle);
+		SmartDashboard.putNumber("LAST ELBOW", lastElbowAngle);
 	}
 
 
@@ -313,6 +325,11 @@ public class Arm {
 		double alpha = Math.toDegrees(angles[0]);
 		double beta = Math.toDegrees(angles[1]);
 
+		SmartDashboard.putNumber("DESIRED ALPHA", alpha);
+		SmartDashboard.putNumber("DESIRED BETA", beta);
+		SmartDashboard.putNumber("DESIRED X", xPos);
+		SmartDashboard.putNumber("DESIRED Y", yPos);
+
 		setShoulder(alpha);
 		setElbow(beta);
 
@@ -331,7 +348,7 @@ public class Arm {
 	 */
 	public void setShoulder(double alpha) {
 		// System.out.println(
-		// 	shoulderFeedforward.calculate(alpha, 0, 0)
+		// 	getShoulderFeedforward()
 		// );
 		// System.out.println(
 		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
@@ -377,12 +394,24 @@ public class Arm {
 		// setElbowVelocity(combinedSpeeds[0] * 11);
 
 		// Uses PID loop to control arm with controller rather than setting a speed
-		double speedX = Constants.MAX_FORWARD_X * leftAnalogX;
+		double speedX = Constants.MAX_FORWARD_X * -leftAnalogX;
 		double speedY = Constants.MAX_FORWARD_Y * leftAnalogY;
 		double[] pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
+
+		// If we're moving, keep updating the position, otherwise keep what we started at
+		// Prevents the y pos from increasing when youre only trying to move in the x
+		if (speedX != 0) {
+			prevControllerPos[0] = pos[0];
+		}
+		if (speedY != 0) {
+			prevControllerPos[1] = pos[1];
+		}
+
+		// System.out.println("DESIRED X: " + Math.min(prevControllerPos[0] + speedX, Constants.maxX - .05));
+		// System.out.println("DESIRED Y: " + Math.min(prevControllerPos[1] + speedY, Constants.maxY - .05));
 		setEndEffector(
-			Math.min(pos[0] + speedX, Constants.maxX - .05),
-			Math.min(pos[1] + speedY, Constants.maxY - .05),
+			Math.min(prevControllerPos[0] + speedX, Constants.maxX - .05),
+			Math.min(prevControllerPos[1] + speedY, Constants.maxY - .05),
 			getWristAngle()
 		);
 	}

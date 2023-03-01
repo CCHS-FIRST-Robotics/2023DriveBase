@@ -77,7 +77,7 @@ public class Constants {
 
 	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .7; // meters
-	public static final double LOWER_ARM_COM_DIST = .36; // meters
+	public static final double LOWER_ARM_COM_DIST = .3; // meters
 
 	// Mass of each arm segment in kg
 	public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
@@ -97,7 +97,7 @@ public class Constants {
 	public static final double SHOULDER_KD = .02;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.55;
+	public static final double SHOULDER_KG = 1.7;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
@@ -107,7 +107,7 @@ public class Constants {
 	public static final double ELBOW_KD = 0;
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = .7;
+	public static final double ELBOW_KG = .8;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
@@ -128,7 +128,7 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .5; // meters per second
+	public static final double ARM_MAX_SPEED = .1; // meters per second
 	public static final double ARM_MAX_ACCELERATION = 1; // meters per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
