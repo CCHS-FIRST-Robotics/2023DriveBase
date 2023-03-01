@@ -61,21 +61,24 @@ public class Limelight {
         return area;
     }
 
+    // double testPipe = 0;
     public void changePipeline(int newPipeNum) {
 
-        double test = table.getEntry("getpipe").getDouble(0);
-        System.out.println("Current pipeline: " + test);
-
-        System.out.println("Setting new pipeline...");
         table.getEntry("pipeline").setNumber(newPipeNum);
         
-        test = table.getEntry("getpipe").getDouble(0);
-        System.out.println("Current pipeline: " + test);
+        double test = table.getEntry("getpipe").getDouble(0);
 
-        System.out.println("Expected pipeline: " + newPipeNum);
-
-        System.out.println("-----------------");
-
+        if (test != newPipe)
+        {
+            System.out.println("Current pipeline: " + test);
+            System.out.println("Expected pipeline: " + newPipeNum);
+            System.out.println("-----------------");
+        }
+        else
+            pipeNum = newPipeNum;
+            // testPipe = (testPipe + 1) % 2;
+            //colin says: oui oui baguette is yummy
+        
     }
 
     public int getPipeline(){

@@ -19,7 +19,6 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-
   
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -32,10 +31,13 @@ public class Robot extends TimedRobot {
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
-  
+   
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
+  public Robot(){
+    addPeriodic(() -> limelight.updatePipeline(), .001);
+  }
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -134,7 +136,7 @@ public class Robot extends TimedRobot {
       // TO TEST VALS FIRST
       double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
       double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-      double h = Constants.TARGETS_DISTANCE;
+      double h  = Constants.TARGETS_DISTANCE;
       System.out.println(d1);
       System.out.println(d2);
 
@@ -145,6 +147,7 @@ public class Robot extends TimedRobot {
         limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
          Math.atan(l2 / l1)
       ));
+
     }
     counter++;
   }
