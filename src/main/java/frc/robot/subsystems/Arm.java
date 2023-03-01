@@ -33,6 +33,7 @@ public class Arm {
 	PIDController shoulderVelocityPID, elbowVelocityPID;
 
 	DigitalInput limitSwitch;
+	Grabber grabber;
 
 	double lastShoulderAngle, lastElbowAngle;
 
@@ -52,7 +53,7 @@ public class Arm {
 	 * @param shoulderTalonPort
 	 * @param elbowTalonPort
 	 */
-	public Arm(int shoulderTalonPort, int elbowTalonPort, int elbowFalconPort, DigitalInput limitSwitch) {
+	public Arm(int shoulderTalonPort, int elbowTalonPort, int elbowFalconPort, DigitalInput limitSwitch, Grabber grabber) {
 		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
 		
 		// initialize motors
@@ -82,6 +83,7 @@ public class Arm {
 		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
 		this.limitSwitch = limitSwitch;
+		this.grabber = grabber;
 
 		initControllers(false);
 
@@ -129,6 +131,10 @@ public class Arm {
         elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
 	}
 
+	//////////////////////
+	// VARIABLE TOGGLES //
+	//////////////////////
+	
 	/**
 	 * toggles whether motor limits are activated - called when X and Y are pressed simultaneously on the xbox controller
 	 */
@@ -144,15 +150,13 @@ public class Arm {
 	}
 
 	public boolean shouldMotorStop() {
-		return false;
+		double alpha = getShoulderAngle();
+		double beta = getElbowAngle();
+		double theta = getWristAngle();
 
-		// double alpha = getShoulderAngle();
-		// double beta = getElbowAngle();
-		// double theta = getWristAngle();
+		boolean motorStop = Kinematics.shouldMotorStop(alpha, beta, theta);
 
-		// boolean motorStop = Kinematics.shouldMotorStop(alpha, beta, theta);
-
-		// return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
+		return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
 
 	/**
@@ -170,7 +174,66 @@ public class Arm {
 		elbowMotor.setNeutralMode(NeutralMode.Coast);
 	}
 
+
+	/////////////
+	// GETTERS //
+	/////////////
+
+
+	public double getShoulderRawAngle() { 
+		return shoulderMotor.getSelectedSensorPosition();
+	}
+
 	/**
+	 * @return angle (double) degrees of the first linkage from the horizontal
+	 */
+	public double getShoulderAngle() {
+		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
+		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 86; // prints the position of the selected sensor
+		return angle;
+	}
+
+	/**
+	 * @return angle (double) degrees of the second linkage from the horizontal
+	 */
+	public double getElbowAngle() {
+		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
+		// offset  by shoulder angle so that the angle is relative to the horizotal
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 47;
+		return angle;
+	}
+
+	/**
+	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
+	 */
+	public double getWristAngle() {
+		int wristActuated = grabber.isWristActuated() ? 0:1;
+		return getElbowAngle() + wristActuated * 90;
+	}
+
+	public void updatePrevAngles() {
+		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
+			lastShoulderAngle = getShoulderAngle();
+			lastElbowAngle = getElbowAngle();
+		}
+	}
+
+
+	/**
+	 * @return angle (double) angular velocity of the shoulder joint - deg/s
+	 */
+	public double getShoulderAngularVelocity() {
+		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
+	}
+
+	/**
+	 * @return angle (double) angular velocity of the elbow joint - deg/s
+	 */
+	public double getElbowAngularVelocity() {
+		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
+	}
+
+		/**
 	 * Returns the voltage needed to counteract gravity
 	 * 
 	 * @return controlInput (double) voltage to send to motors
@@ -208,79 +271,22 @@ public class Arm {
 		}
 	}
 
-	public double getShoulderRawAngle() { 
-		return shoulderMotor.getSelectedSensorPosition();
+	public double[][] getTrajectory(double x, double y) {
+		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
+		double[] current_pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
+
+		double [][] trajectory = new LinearProfile().getSetPoints(
+			new Vector(current_pos[0], current_pos[1]), 
+			new Vector(x, y),
+			getWristAngle()
+		);
+
+		return trajectory;
 	}
 
-	/**
-	 * @return angle (double) degrees of the first linkage from the horizontal
-	 */
-	public double getShoulderAngle() {
-		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 86; // prints the position of the selected sensor
-		return angle;
-	}
-
-	/**
-	 * @return angle (double) degrees of the second linkage from the horizontal
-	 */
-	public double getElbowAngle() {
-		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
-		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) - 47;
-		return angle;
-	}
-
-	public void updatePrevAngles() {
-		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
-			lastShoulderAngle = getShoulderAngle();
-			lastElbowAngle = getElbowAngle();
-		}
-	}
-
-	/**
-	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
-	 */
-	public double getWristAngle() {
-		int wristActuated = isWristActuated() ? 1:0;
-		return getElbowAngle() + wristActuated * 90;
-	}
-
-	// TODO: write method
-	public boolean isWristActuated() {
-		return false;
-	}
-
-	/**
-	 * @return angle (double) angular velocity of the shoulder joint - deg/s
-	 */
-	public double getShoulderAngularVelocity() {
-		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
-	}
-
-	/**
-	 * @return angle (double) angular velocity of the elbow joint - deg/s
-	 */
-	public double getElbowAngularVelocity() {
-		return shoulderMotor.getSelectedSensorVelocity() * 360/4096 * 10;
-	}
-
-	// /**
-	//  * Updates the angular velocity of the shoulder -- must be called every 1ms
-	//  */
-	// public void updateShoulderAngularVelocity() {
-	// 	shoulderAngularVelocity = (lastShoulderAngle - getShoulderAngle()) / .001;
-	// 	lastShoulderAngle = getShoulderAngle();
-	// }
-
-	// /**
-	//  * Updates the angular velocity of the elbow -- must be called every 1ms
-	//  */
-	// public void updateElbowAngularVelocity() {
-	// 	elbowAngularVelocity = (lastElbowAngle - getElbowAngle()) / .001;
-	// 	lastElbowAngle = getElbowAngle();
-	// }
-
+	//////////////////////
+	// SETTERS/MOVEMENT //
+	//////////////////////
 
 	public void testMoveShoulder(double analogX) {
 		double speedX = 12 * analogX; // 12V conversion
@@ -311,19 +317,6 @@ public class Arm {
 		setElbow(beta);
 
 		return angles[0];
-	}
-
-	public double[][] getTrajectory(double x, double y) {
-		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
-		double[] current_pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
-
-		double [][] trajectory = new LinearProfile().getSetPoints(
-			new Vector(current_pos[0], current_pos[1]), 
-			new Vector(x, y),
-			getWristAngle()
-		);
-
-		return trajectory;
 	}
 
 	public double executeTrajectory(double[][] trajectory) {
@@ -363,6 +356,68 @@ public class Arm {
 		);
 	}
 
+	/**
+	 * This moves the arm at the given input speed in the horizontal and vertical directions
+	 * 
+	 * @param leftAnalogX (double) - [0, 1] controller X linear velocity input
+	 * @param leftAnalogY (double) - [0, 1] controller Y linear velocity input
+	 */
+	public void moveArm(double leftAnalogX, double leftAnalogY) {
+		// double[] combinedSpeeds = Kinematics.speedInverseKinematics(leftAnalogX, leftAnalogY, getShoulderAngle(), getElbowAngle());
+
+		// set the motor speeds as a percent 0-1 (normal) - leaving it commented out so I can test the velocity control
+		// shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
+		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+
+		// TODO: fix units - should be change encoder ticks per 100ms
+		// setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
+		// setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
+
+		// setShoulderVelocity(combinedSpeeds[0] * 11);
+		// setElbowVelocity(combinedSpeeds[0] * 11);
+
+		// Uses PID loop to control arm with controller rather than setting a speed
+		double speedX = Constants.MAX_FORWARD_X * leftAnalogX;
+		double speedY = Constants.MAX_FORWARD_Y * leftAnalogY;
+		double[] pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
+		setEndEffector(
+			Math.min(pos[0] + speedX, Constants.maxX - .05),
+			Math.min(pos[1] + speedY, Constants.maxY - .05),
+			getWristAngle()
+		);
+	}
+
+
+	////////////////
+	// UNUSED ATM //
+	////////////////
+
+	// /**
+	//  * Updates the angular velocity of the shoulder -- must be called every 1ms
+	//  */
+	// public void updateShoulderAngularVelocity() {
+	// 	shoulderAngularVelocity = (lastShoulderAngle - getShoulderAngle()) / .001;
+	// 	lastShoulderAngle = getShoulderAngle();
+	// }
+
+	// /**
+	//  * Updates the angular velocity of the elbow -- must be called every 1ms
+	//  */
+	// public void updateElbowAngularVelocity() {
+	// 	elbowAngularVelocity = (lastElbowAngle - getElbowAngle()) / .001;
+	// 	lastElbowAngle = getElbowAngle();
+	// }
+
+	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
+	public void setMotorLimits() {
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minAlpha + 2048);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
+		
+
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minBeta);
+		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
+	}
+
 	// TODO: copilot just spat this out but like maybe they just do the control loops for you??? goateedd
 	// TODO: check units match with getShoulderAngularVelocity() and getElbowAngularVelocity()
 	// private void setShoulderVelocity(double velocity) {
@@ -399,42 +454,5 @@ public class Arm {
 			elbowVelocityPID.calculate(getElbowAngularVelocity(), velocity) +
 			getElbowFeedforward()
 		);
-	}
-
-	/**
-	 * This moves the arm at the given input speed in the horizontal and vertical directions
-	 * 
-	 * @param leftAnalogX (double) - [0, 1] controller X linear velocity input
-	 * @param leftAnalogY (double) - [0, 1] controller Y linear velocity input
-	 */
-	public void moveArm(double leftAnalogX, double leftAnalogY) {
-		double[] combinedSpeeds = Kinematics.speedInverseKinematics(leftAnalogX, leftAnalogY, getShoulderAngle(), getElbowAngle());
-
-		// set the motor speeds as a percent 0-1 (normal) - leaving it commented out so I can test the velocity control
-		// shoulderMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
-		// elbowMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-
-		// TODO: fix units - should be change encoder ticks per 100ms
-		// setShoulderVelocity(combinedSpeeds[0] * Constants.SHOULDER_MAX_VELOCITY, 0);
-		// setElbowVelocity(combinedSpeeds[1] * Constants.ELBOW_MAX_VELOCITY, 0);
-
-		// setShoulderVelocity(combinedSpeeds[0] * 11);
-		// setElbowVelocity(combinedSpeeds[0] * 11);
-
-		// Uses PID loop to control arm with controller rather than setting a speed
-		// setEndEffector(
-		// 	Constants.MAX_FORWARD_X * leftAnalogX,
-		// 	Constants.MAX_FORWARD_Y * leftAnalogY
-		// );
-	}
-
-	// dont think we actually need this tbh but ill leave it in here in case we decide to use it
-	public void setMotorLimits() {
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minAlpha + 2048);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxAlpha + 2048);
-		
-
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.minBeta);
-		shoulderMotor.configForwardSoftLimitThreshold(4096/360 * Constants.maxBeta);
 	}
 }

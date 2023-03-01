@@ -34,10 +34,15 @@ public class Robot extends TimedRobot {
 
   DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
 
-  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID, limitSwitch);
+  Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
+                             Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID, limitSwitch, claw);
+
   Limelight limelight = new Limelight();
-  IMU imu = new IMU();
   ZED zed = new ZED();
+
+  IMU imu = new IMU();
+  
   BetterShuffleboard smartdash = new BetterShuffleboard();
 
   boolean trajStarted = false;
@@ -45,8 +50,6 @@ public class Robot extends TimedRobot {
   double pidTuningBeta;
   double[][] trajectory;
   int trajectoryCounter;
-  Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
-                             Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
   
   double test = 0;
   long counter = 0; // for calling functions every n loops

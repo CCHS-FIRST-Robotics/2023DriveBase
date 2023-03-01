@@ -133,8 +133,8 @@ public class Constants {
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
-	public static final double MAX_FORWARD_X = 1; // meters
-	public static final double MAX_FORWARD_Y = .3; // meters
+	public static final double MAX_FORWARD_X = .5; // meters
+	public static final double MAX_FORWARD_Y = .2; // meters
 
 	// hard min/max x and y values for the arm
 	public static final double minX = -1.45; // slightly less than the furthest possible distance to make sure we don't lose a DOF

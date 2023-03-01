@@ -6,8 +6,11 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 
 public class Grabber {
+
 DoubleSolenoid solenoidPCMClaw, solenoidPCMWrist;
 Compressor pcmCompressor;
+
+boolean clawForward, wristForward;
 
     /**
     * Constructor for Grabber Class
@@ -25,6 +28,9 @@ Compressor pcmCompressor;
         solenoidPCMWrist = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, wristForwardChannelNum, wristReverseChannelNum);
 
         pcmCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
+        clawForward = true;
+        wristForward = true;
         
         // This if statment to make sure the compressor runs, if it is not running
         if(!compIsEnabled())
@@ -34,12 +40,22 @@ Compressor pcmCompressor;
             //used in this case because a switch (modulated by the CTRE Pneumatics Control Module) regulates the compressor
     }
 
-    // For the next six functions set() is used to accordingly make the pnuematic go forward, go backward, or stop
+    /*
+     * WRIST CONTROL
+     */
+
+    public void toggleWrist() {
+        wristForward = !wristForward;
+        solenoidPCMWrist.toggle();
+    }
+
     public void wristForward(){
+        wristForward = true;
         solenoidPCMWrist.set(kForward);
     }
 
     public void wristBack(){
+        wristForward = false;
         solenoidPCMWrist.set(kReverse);
     }
 
@@ -47,11 +63,22 @@ Compressor pcmCompressor;
         solenoidPCMWrist.set(kOff);
     }
 
+    /*
+     * CLAW CONTROL
+     */
+
+    public void toggleClaw() {
+        clawForward = !clawForward;
+        solenoidPCMClaw.toggle();
+    }
+
     public void clawForward(){
+        clawForward = true;
         solenoidPCMClaw.set(kForward);
     }
 
     public void clawBack(){
+        clawForward = false;
         solenoidPCMClaw.set(kReverse);
     }
 
@@ -59,8 +86,18 @@ Compressor pcmCompressor;
         solenoidPCMClaw.set(kOff);
     }
 
+	// TODO: write method
+	public boolean isWristActuated() {
+		return wristForward;
+	}
+
+    public boolean isClawActuated() {
+        return clawForward;
+    }
+
     // just for you colin, this function (in case you didn't guess it) passes back whether the compressor is enabled
     // this is for conveincice, so we can call the function from anywhere in the program witout needing the compressor object
+    // wow im so honored <3
     public boolean compIsEnabled() {
         return pcmCompressor.isEnabled();
     }
