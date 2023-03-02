@@ -97,7 +97,7 @@ public class Constants {
 	public static final double SHOULDER_KD = .02;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.7;
+	public static final double SHOULDER_KG = 1.2;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
