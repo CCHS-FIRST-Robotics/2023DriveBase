@@ -309,7 +309,10 @@ public class Robot extends TimedRobot {
       // arm.toggleManualMotorStop();
 
       trajStarted = true;
-      trajectory = Kinematics.degrees(arm.getTrajectory(0.76, 0.94));
+      double x = 0.76;
+      double y = 0.94;
+      trajectory = Kinematics.degrees(arm.getTrajectory(x, y));
+      
 
       System.out.println(trajectory.length);
 
@@ -319,6 +322,12 @@ public class Robot extends TimedRobot {
       }
       double[] angles = trajectory[trajectory.length - 1];
       System.out.println("LAST: " + angles[0] + " next " + angles[1]);
+
+      System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
+      System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
+
+      System.out.println("FK TEST X: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [0]);
+      System.out.println("FK TEST Y: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [1]);
     }
 
     if (Y) {

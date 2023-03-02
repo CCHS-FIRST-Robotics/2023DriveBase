@@ -55,25 +55,40 @@ public class QuadraticProfile {
     //     return setpoints;
     // }
 
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta) {
-        // The max linea speed and acceleration we want the arm to travel at
-        double speed = Constants.ARM_MAX_SPEED;
-        double acceleration = Constants.ARM_MAX_ACCELERATION;
-
+    public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta, double speed, double acceleration) {
+        Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
+        
         // displacement from the initial (x, y) to goal 
         Vector displacement = goal.sub(initialPosition);
         double angleDisplacement = displacement.dir(); // radians
 
         double timeToAccelerate = speed / acceleration;
-        Vector[] accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
-        Vector[] stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
 
-        Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
-        Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
-        double timeConstantSpeed = constantSpeedDisplacement.mag() / Constants.ARM_MAX_SPEED;
-        Vector[] constantSpeedSetpoints = getConstantSpeedSetpoints(timeConstantSpeed, angleDisplacement);
+        // check if we'll go past the setpoint/can't achieve max velocity and slow down in time
+        if (0.5 * acceleration * Math.pow(timeToAccelerate, 2) > 0.5 * displacement.mag()) {
+            // calculate time to go halfway
+            timeToAccelerate = Math.sqrt(displacement.mag() / acceleration);
 
-        System.out.println("ASUHDUHSUH" + accelSetpoints[45].x);
+            accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
+            stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
+            
+            // never reach max velocity so there should be no setpoints at a constant velocity
+            Vector[] temp = {new Vector(0, 0)};
+            constantSpeedSetpoints = temp;
+        } else {
+            accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
+            stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
+    
+            Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
+            Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
+            double timeConstantSpeed = constantSpeedDisplacement.mag() / Constants.ARM_MAX_SPEED;
+            constantSpeedSetpoints = getConstantSpeedSetpoints(timeConstantSpeed, angleDisplacement);
+        }
+
+        // System.out.println("ASUHDUHSUH" + accelSetpoints[45].x);
+        System.out.println("#Accel: " + accelSetpoints.length);
+        System.out.println("#Speed: " + constantSpeedSetpoints.length);
+        System.out.println("#Stop: " + stoppingSetpoints.length);
 
         Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
 
@@ -93,8 +108,8 @@ public class QuadraticProfile {
 
         for (int i=0; i < numSteps; i++) {
             angles[i] = new Vector(
-                1/2*Math.cos(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2),
-                1/2*Math.sin(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2)
+                0.5*Math.cos(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2),
+                0.5*Math.sin(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2)
             );
         }
         return angles;
@@ -106,8 +121,8 @@ public class QuadraticProfile {
 
         for (int i=0; i < numSteps; i++) {
             angles[i] = new Vector(
-                (Constants.ARM_MAX_SPEED - 1/2*Constants.ARM_MAX_ACCELERATION* i*period) * Math.cos(angle)*i*period,
-                (Constants.ARM_MAX_SPEED - 1/2*Constants.ARM_MAX_ACCELERATION* i*period) * Math.sin(angle)*i*period
+                (Constants.ARM_MAX_SPEED - 0.5*Constants.ARM_MAX_ACCELERATION* i*period) * Math.cos(angle)*i*period,
+                (Constants.ARM_MAX_SPEED - 0.5*Constants.ARM_MAX_ACCELERATION* i*period) * Math.sin(angle)*i*period
             );
         }
         return angles;

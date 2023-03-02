@@ -209,7 +209,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 35;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 33;
 		return angle;
 	}
 
@@ -288,10 +288,12 @@ public class Arm {
 		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
 		double[] current_pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
 
-		double [][] trajectory = new LinearProfile().getSetPoints(
+		double [][] trajectory = new QuadraticProfile().getSetPoints(
 			new Vector(current_pos[0], current_pos[1]), 
 			new Vector(x, y),
-			getWristAngle()
+			getWristAngle(),
+			Constants.ARM_MAX_SPEED,
+			Constants.ARM_MAX_ACCELERATION
 		);
 
 		return trajectory;
