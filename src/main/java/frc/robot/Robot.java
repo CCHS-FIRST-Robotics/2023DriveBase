@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
   double test = 0;
   long counter = 0; // for calling functions every n loops
   long auton_counter = 0;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -120,8 +122,13 @@ public class Robot extends TimedRobot {
     Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
     Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
     driveBase.resetCurrentTrajectoryTime();
+    
     System.out.println("zeroing counter");
     auton_counter = 0;
+
+    // set up timer for autonomous
+    driveBase.autonTimer = new Timer();
+    driveBase.autonTimer.start();
   }
 
   /** This function is called periodically during autonomous. */

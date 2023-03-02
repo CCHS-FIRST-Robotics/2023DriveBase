@@ -50,6 +50,7 @@ public class Constants {
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
 	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
+	public static final double METERS_TO_FALCON_CLICKS = TALON_FX_CPR * FALCON_GEARBOX_RATIO / (Math.PI * MECANUM_WHEEL_DIAMETER);
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
 

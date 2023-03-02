@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.Constants;
 
@@ -39,6 +40,9 @@ public class MecaDrive extends DriveBase {
 
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
+	
+	// timer for autonomous
+	public Timer autonTimer;
 
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
