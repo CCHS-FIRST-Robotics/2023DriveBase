@@ -37,6 +37,7 @@ public class Arm {
 	Grabber grabber;
 
 	double lastShoulderAngle, lastElbowAngle;
+	double beforeStopShoulderAngle, beforeStopElbowAngle;
 	double[] prevControllerPos;
 
 	// PID constants when tuning - TESTING ONLY
@@ -99,6 +100,11 @@ public class Arm {
 
 	public void init() {
 		prevControllerPos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getWristAngle());
+		lastShoulderAngle = getShoulderAngle(); 
+		lastElbowAngle = getElbowAngle();
+
+		beforeStopShoulderAngle = getShoulderAngle(); 
+		beforeStopElbowAngle = getElbowAngle();
 	}
 
 	/**
@@ -177,8 +183,8 @@ public class Arm {
 		
 		// shoulderMotor.setVoltage(getShoulderFeedforward());
 		// elbowMotor.setVoltage(getElbowFeedforward());
-		setShoulder(lastShoulderAngle);
-		setElbow(lastElbowAngle);
+		setShoulder(beforeStopShoulderAngle);
+		setElbow(beforeStopElbowAngle);
 
 		shoulderMotor.setNeutralMode(NeutralMode.Coast);
 		elbowMotor.setNeutralMode(NeutralMode.Coast);
@@ -209,7 +215,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 33;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 37;
 		return angle;
 	}
 
@@ -223,11 +229,11 @@ public class Arm {
 
 	public void updatePrevAngles() {
 		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
-			lastShoulderAngle = getShoulderAngle();
-			lastElbowAngle = getElbowAngle();
+			beforeStopShoulderAngle = getShoulderAngle();
+			beforeStopElbowAngle = getElbowAngle();
 		}
-		SmartDashboard.putNumber("LAST SHOULDER", lastShoulderAngle);
-		SmartDashboard.putNumber("LAST ELBOW", lastElbowAngle);
+		SmartDashboard.putNumber("LAST SHOULDER", beforeStopShoulderAngle);
+		SmartDashboard.putNumber("LAST ELBOW", beforeStopElbowAngle);
 	}
 
 
@@ -251,7 +257,9 @@ public class Arm {
 	 * @return controlInput (double) voltage to send to motors
 	 */
 	public double getElbowFeedforward() {
-		return -Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
+		double gravity = Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
+		double velocity = Constants.ELBOW_KV * getElbowAngularVelocity();
+		return - (gravity);
 	}
 
 
@@ -304,12 +312,22 @@ public class Arm {
 	//////////////////////
 
 	public void testMoveShoulder(double analogX) {
+		if (analogX == 0) {
+			// setShoulder(lastShoulderAngle);
+			// return;
+		}
+		lastShoulderAngle = getShoulderAngle();
 		double speedX = 12 * analogX; // 12V conversion
 		// System.out.println(-0.3 * speedX + getShoulderFeedforward());
 		shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
 	}
 
 	public void testMoveElbow(double analogY) {
+		if (analogY == 0) {
+			// setElbow(lastElbowAngle);
+			// return;
+		}
+		lastElbowAngle = getElbowAngle();
 		double speedY = 12 * analogY; // 12V conversion
 		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}

@@ -164,8 +164,10 @@ public class Robot extends TimedRobot {
       arm.stopMotors();
       
     } else {
-      // arm.testMoveShoulder(xboxController.getRightX());
-      // arm.testMoveElbow(xboxController.getRightY());
+      arm.testMoveShoulder(xboxController.getRightX());
+      arm.testMoveElbow(xboxController.getRightY());
+
+      // arm.setShoulder(103);
 
       // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
       // arm.setShoulder(60);
@@ -185,8 +187,8 @@ public class Robot extends TimedRobot {
         pidTuningBeta = angles[1];
         trajectoryCounter++;
 
-        // arm.setElbow(pidTuningBeta);
-        // arm.setShoulder(pidTuningAlpha);
+        arm.setElbow(pidTuningBeta);
+        arm.setShoulder(pidTuningAlpha);
       }
 
 
@@ -309,39 +311,31 @@ public class Robot extends TimedRobot {
       // arm.toggleManualMotorStop();
 
       trajStarted = true;
+      trajectoryCounter = 0;
       double x = 0.76;
       double y = 0.94;
       trajectory = Kinematics.degrees(arm.getTrajectory(x, y));
-      
-
-      System.out.println(trajectory.length);
-
-      for (int i=0; i<trajectory.length; i++) {
-        double[] angles = trajectory[i];
-        System.out.println("Angles: " + angles[0] + " next " + angles[1]);
-      }
-      double[] angles = trajectory[trajectory.length - 1];
-      System.out.println("LAST: " + angles[0] + " next " + angles[1]);
-
-      System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
-      System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
-
-      System.out.println("FK TEST X: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [0]);
-      System.out.println("FK TEST Y: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [1]);
     }
 
     if (Y) {
+      double x = 1.15;
+      double y = 1.29;
       trajStarted = true;
+      trajectoryCounter = 0;
       trajectory = Kinematics.degrees(arm.getTrajectory(1.15, 1.29));
+
+      printTrajInfo(trajectory, x, y);
     }
 
     if (X) {
       trajStarted = true;
+      trajectoryCounter = 0;
       trajectory = Kinematics.degrees(arm.getTrajectory(1.23, 1.05));
     }
 
     if (A) {
       trajStarted = true;
+      trajectoryCounter = 0;
       // pidTuningAngle = 10;
       trajectory = Kinematics.degrees(arm.getTrajectory(0.84, 1.1));
     }
@@ -354,6 +348,7 @@ public class Robot extends TimedRobot {
     if (RB) {
       // driveBase.increaseSpeedBracket();
       trajStarted = false;
+      trajectoryCounter = 0;
     }
 
     if (A2) {
@@ -368,6 +363,23 @@ public class Robot extends TimedRobot {
     if (X2) {
       claw.wristForward();
     }
+  }
+
+  public void printTrajInfo(double[][] trajectory, double x, double y) {
+    System.out.println(trajectory.length);
+
+    for (int i=0; i<trajectory.length; i++) {
+      double[] angles = trajectory[i];
+      System.out.println("Angles: " + angles[0] + " next " + angles[1]);
+    }
+    double[] angles = trajectory[trajectory.length - 1];
+    System.out.println("LAST: " + angles[0] + " next " + angles[1]);
+
+    System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
+    System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
+
+    System.out.println("FK TEST X: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [0]);
+    System.out.println("FK TEST Y: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [1]);
   }
 
   /** 

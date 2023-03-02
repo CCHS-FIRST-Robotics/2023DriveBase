@@ -97,7 +97,7 @@ public class Constants {
 	public static final double SHOULDER_KD = .02;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.2;
+	public static final double SHOULDER_KG = 2.3;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
@@ -108,7 +108,7 @@ public class Constants {
 
 	public static final double ELBOW_KS = 0;
 	public static final double ELBOW_KG = .8;
-	public static final double ELBOW_KV = 0;
+	public static final double ELBOW_KV = 0.3;
 	public static final double ELBOW_KA = 0;
 
 	// Shoulder PID and Feedfoward gains for velocity control
