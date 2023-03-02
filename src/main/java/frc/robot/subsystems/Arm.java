@@ -199,7 +199,7 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 227; // prints the position of the selected sensor
+		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 197; // prints the position of the selected sensor
 		return angle;
 	}
 
@@ -209,7 +209,7 @@ public class Arm {
 	public double getElbowAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 278;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 35;
 		return angle;
 	}
 
@@ -271,10 +271,11 @@ public class Arm {
 		double beta = Math.toRadians(getElbowAngle());
 
 		double comX = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
-		double comY = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
+		double comY = (d1*Math.sin(alpha) + l1*Math.sin(alpha) + d2*Math.sin(beta)) / 2;
 		
 		// TODO: using atan2 might fix the sign error, have to test
 		double controlInput = -Constants.SHOULDER_KG * Math.cos(Math.atan(comY / comX));
+
 		// atan returns between -pi/2 and pi/2, but cos only returns pos values on that interval, so we have to check the sign manually
 		if (alpha > Math.PI / 2) {
 			return -controlInput;

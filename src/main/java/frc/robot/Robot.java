@@ -164,8 +164,8 @@ public class Robot extends TimedRobot {
       arm.stopMotors();
       
     } else {
-      arm.testMoveShoulder(xboxController.getRightX());
-      arm.testMoveElbow(xboxController.getRightY());
+      // arm.testMoveShoulder(xboxController.getRightX());
+      // arm.testMoveElbow(xboxController.getRightY());
 
       // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
       // arm.setShoulder(60);
@@ -185,8 +185,8 @@ public class Robot extends TimedRobot {
         pidTuningBeta = angles[1];
         trajectoryCounter++;
 
-        arm.setElbow(pidTuningBeta);
-        arm.setShoulder(pidTuningAlpha);
+        // arm.setElbow(pidTuningBeta);
+        // arm.setShoulder(pidTuningAlpha);
       }
 
 
@@ -207,6 +207,8 @@ public class Robot extends TimedRobot {
 
 
     if (counter % 10 == 0) {
+      // System.out.println(arm.getShoulderFeedforward());
+
       // double angles[] = Kinematics.positionInverseKinematics(1, 1, 0);
       // System.out.println("SATRT OF THIGN");
       // System.out.println(Math.toDegrees(angles[0]));
