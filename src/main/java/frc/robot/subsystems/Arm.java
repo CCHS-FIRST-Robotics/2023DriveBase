@@ -38,7 +38,11 @@ public class Arm {
 
 	double lastShoulderAngle, lastElbowAngle;
 	double beforeStopShoulderAngle, beforeStopElbowAngle;
+	double[] beforeStopJointAngles;
 	double[] prevControllerPos;
+
+	Vector linearVelocity = new Vector();
+	Vector prevPosition = new Vector();
 
 	// PID constants when tuning - TESTING ONLY
 	public double shoulderP, shoulderI, shoulderD;
@@ -50,7 +54,17 @@ public class Arm {
 	// Toggles whether the motors should stop - controlled manually
 	public boolean manualMotorStop = false;
 
-    /**
+	int trajectoryCounter;
+	double[][] trajectory;
+
+	double[] targetAngles = new double[2];
+
+	enum Mode {
+		MANUAL, HOLDING, TRAJECTORY
+	}
+	Mode currentMode = Mode.MANUAL;
+
+	/**
 	 * Constructor for Arm Class
 	 * 
 	 * @param shoulderTalonPort
@@ -99,12 +113,15 @@ public class Arm {
     }
 
 	public void init() {
-		prevControllerPos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getWristAngle());
+		prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getWristAngle());
 		lastShoulderAngle = getShoulderAngle(); 
 		lastElbowAngle = getElbowAngle();
 
 		beforeStopShoulderAngle = getShoulderAngle(); 
 		beforeStopElbowAngle = getElbowAngle();
+
+		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+		prevPosition = new Vector(pos[0], pos[1]);
 	}
 
 	/**
@@ -147,6 +164,44 @@ public class Arm {
         elbowVelocityPID = new PIDController(Constants.ELBOW_VELOCITY_KP, Constants.ELBOW_VELOCITY_KI, Constants.ELBOW_VELOCITY_KD);
 	}
 
+	///////////////
+	// MAIN LOOP //
+	///////////////
+
+	/**
+	 * Basically just does everything the arm needs to do on its own every 20ms loop
+	 */
+	public void mainLoop(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
+		switch(currentMode) {
+			
+			case MANUAL:
+				if (shouldMotorStop()) {
+					stopMotors();
+					break;
+				}
+				if (leftAnalogX == 0 && leftAnalogY == 0) {
+					moveShoulder(rightAnalogX);
+					moveElbow(rightAnalogY);
+				} else {
+					// TODO: add controls for linear movement
+				}
+
+			case HOLDING:
+				double alpha = targetAngles[0];
+				double beta = targetAngles[1];
+
+				setShoulder(alpha);
+				setElbow(beta);
+
+			case TRAJECTORY:
+				executeTrajectory();
+		}
+	}
+
+	public void armLoop() {
+		mainLoop(0, 0, 0, 0);
+	}
+
 	//////////////////////
 	// VARIABLE TOGGLES //
 	//////////////////////
@@ -165,6 +220,33 @@ public class Arm {
 		manualMotorStop = !manualMotorStop;
 	}
 
+	/////////////
+	// UPDATES //
+	/////////////
+
+	public double[] updateBeforeStopAngles() {
+		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
+			beforeStopShoulderAngle = getShoulderAngle();
+			beforeStopElbowAngle = getElbowAngle();
+			beforeStopJointAngles = getJointAngles(); 
+		}
+		SmartDashboard.putNumber("LAST SHOULDER", beforeStopShoulderAngle);
+		SmartDashboard.putNumber("LAST ELBOW", beforeStopElbowAngle);
+
+		return beforeStopJointAngles;
+	}
+
+	public Vector updateLinearVelocity() {
+		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+		Vector currentPosition = new Vector(pos[0], pos[1]);
+		linearVelocity = currentPosition.sub(prevPosition).multiply(1.0 / 0.02); 
+		return linearVelocity;
+	}
+
+	/////////////
+	// GETTERS //
+	/////////////
+
 	public boolean shouldMotorStop() {
 		double alpha = getShoulderAngle();
 		double beta = getElbowAngle();
@@ -174,27 +256,6 @@ public class Arm {
 
 		return (motorStop && motorLimits) || manualMotorStop; // check if the motor limits are activated or if driver is trying to stop them manually
 	}
-
-	/**
-	 * Sets the motor outputs to resist gravity and sets the motors to brake mode
-	 */
-	public void stopMotors() {
-		// System.out.println(getElbowFeedforward());
-		
-		// shoulderMotor.setVoltage(getShoulderFeedforward());
-		// elbowMotor.setVoltage(getElbowFeedforward());
-		setShoulder(beforeStopShoulderAngle);
-		setElbow(beforeStopElbowAngle);
-
-		shoulderMotor.setNeutralMode(NeutralMode.Coast);
-		elbowMotor.setNeutralMode(NeutralMode.Coast);
-	}
-
-
-	/////////////
-	// GETTERS //
-	/////////////
-
 
 	public double getShoulderRawAngle() { 
 		return shoulderMotor.getSelectedSensorPosition();
@@ -209,6 +270,10 @@ public class Arm {
 		return angle;
 	}
 
+	public double getElbowRawAngle() {
+		return elbowMotor.getSelectedSensorPosition();
+	}
+
 	/**
 	 * @return angle (double) degrees of the second linkage from the horizontal
 	 */
@@ -219,6 +284,10 @@ public class Arm {
 		return angle;
 	}
 
+	public double[] getJointAngles() {
+		return new double[] {getShoulderAngle(), getElbowAngle()};
+	}
+
 	/**
 	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
 	 */
@@ -226,16 +295,6 @@ public class Arm {
 		int wristActuated = grabber.isWristActuated() ? 0:1;
 		return getElbowAngle() + wristActuated * 90;
 	}
-
-	public void updatePrevAngles() {
-		if (!Kinematics.shouldMotorStop(getShoulderAngle(), getElbowAngle(), getWristAngle())) { 
-			beforeStopShoulderAngle = getShoulderAngle();
-			beforeStopElbowAngle = getElbowAngle();
-		}
-		SmartDashboard.putNumber("LAST SHOULDER", beforeStopShoulderAngle);
-		SmartDashboard.putNumber("LAST ELBOW", beforeStopElbowAngle);
-	}
-
 
 	/**
 	 * @return angle (double) angular velocity of the shoulder joint - deg/s
@@ -292,9 +351,13 @@ public class Arm {
 		}
 	}
 
+	public Mode getCurrentMode() {
+		return currentMode;
+	}
+
 	public double[][] getTrajectory(double x, double y) {
 		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
-		double[] current_pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
+		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
 		double [][] trajectory = new QuadraticProfile().getSetPoints(
 			new Vector(current_pos[0], current_pos[1]), 
@@ -311,7 +374,29 @@ public class Arm {
 	// SETTERS/MOVEMENT //
 	//////////////////////
 
-	public void testMoveShoulder(double analogX) {
+	/**
+	 * Sets the motor outputs to resist gravity and sets the motors to brake mode
+	 */
+	public void stopMotors() {
+		// System.out.println(getElbowFeedforward());
+		
+		// shoulderMotor.setVoltage(getShoulderFeedforward());
+		// elbowMotor.setVoltage(getElbowFeedforward());
+		switch(currentMode) {
+			case HOLDING:
+				return;
+			case TRAJECTORY:
+				return;
+		}
+
+		setShoulder(beforeStopShoulderAngle);
+		setElbow(beforeStopElbowAngle);
+
+		shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		elbowMotor.setNeutralMode(NeutralMode.Coast);
+	}
+
+	public void moveShoulder(double analogX) {
 		if (analogX == 0) {
 			// setShoulder(lastShoulderAngle);
 			// return;
@@ -322,7 +407,7 @@ public class Arm {
 		shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
 	}
 
-	public void testMoveElbow(double analogY) {
+	public void moveElbow(double analogY) {
 		if (analogY == 0) {
 			// setElbow(lastElbowAngle);
 			// return;
@@ -332,6 +417,10 @@ public class Arm {
 		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}
 
+	public void setEndEffector(double xPos, double yPos, double theta) {
+		setEndEffector(xPos, yPos, theta, false);
+	}
+
 	/**
 	 * Sets the end effector at the given (x, y) position using a control loop
 	 * 
@@ -339,27 +428,51 @@ public class Arm {
 	 * @param yPos (double) y position of the end effector - METERS
 	 * @param theta (double) angle of the claw from the horizontal - DEGREES
 	 */
-	public double setEndEffector(double xPos, double yPos, double theta) {
+	public void setEndEffector(double xPos, double yPos, double theta, boolean debug) {
 		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
 		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, theta);
-		
-		double alpha = Math.toDegrees(angles[0]);
-		double beta = Math.toDegrees(angles[1]);
 
-		SmartDashboard.putNumber("DESIRED ALPHA", alpha);
-		SmartDashboard.putNumber("DESIRED BETA", beta);
-		SmartDashboard.putNumber("DESIRED X", xPos);
-		SmartDashboard.putNumber("DESIRED Y", yPos);
+		trajectory = Kinematics.degrees(getTrajectory(xPos, yPos));
+		currentMode = Mode.TRAJECTORY;
+		trajectoryCounter = 0;
+		executeTrajectory();
 
-		setShoulder(alpha);
-		setElbow(beta);
-
-		return angles[0];
+		if (debug) printTrajInfo(trajectory, xPos, yPos);
 	}
 
-	public double executeTrajectory(double[][] trajectory) {
-		return 0;
+	public void executeTrajectory() {
+		targetAngles = trajectory[trajectoryCounter];
+		trajectoryCounter++;
+
+		setElbow(targetAngles[0]);
+		setShoulder(targetAngles[1]);
+
+		if (trajectoryCounter >= trajectory.length) {
+			stopTrajectory();
+		} 
 	}
+
+	public void stopTrajectory() {
+		trajectoryCounter = 0;
+		currentMode = Mode.HOLDING;
+	}
+
+	public void printTrajInfo(double[][] trajectory, double x, double y) {
+		System.out.println(trajectory.length);
+	
+		for (int i=0; i<trajectory.length; i++) {
+		  double[] angles = trajectory[i];
+		  System.out.println("Angles: " + angles[0] + " next " + angles[1]);
+		}
+		double[] angles = trajectory[trajectory.length - 1];
+		System.out.println("LAST: " + angles[0] + " next " + angles[1]);
+	
+		System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
+		System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
+	
+		System.out.println("FK TEST X: " + Kinematics.forwardKinematics(angles[0], angles[1]) [0]);
+		System.out.println("FK TEST Y: " + Kinematics.forwardKinematics(angles[0], angles[1]) [1]);
+	  }
 
 	//TODO: maybe use pid.setTolerance() to reduce oscillations from the chain?
 	/**
@@ -417,7 +530,7 @@ public class Arm {
 		// Uses PID loop to control arm with controller rather than setting a speed
 		double speedX = Constants.MAX_FORWARD_X * -leftAnalogX;
 		double speedY = Constants.MAX_FORWARD_Y * leftAnalogY;
-		double[] pos = Kinematics.forwardKinematicsWrist(getShoulderAngle(), getElbowAngle());
+		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
 		// If we're moving, keep updating the position, otherwise keep what we started at
 		// Prevents the y pos from increasing when youre only trying to move in the x

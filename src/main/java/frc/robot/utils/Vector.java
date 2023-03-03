@@ -8,6 +8,10 @@ public class Vector {
         this.y = y;
     }
 
+    public Vector() {
+        this(0, 0);
+    }
+
     public double mag() {
         return Math.sqrt(x*x + y*y);
     }

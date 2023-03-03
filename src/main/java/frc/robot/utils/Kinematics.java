@@ -2,24 +2,7 @@ package frc.robot.utils;
 import frc.robot.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Kinematics {
-    /**
-	 * This will return the desired x, y pos for the given angle of each length
-	 * 
-	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
-     * @param beta (double) - angle of elbow from horizontal, in degrees
-	 * @return position (double[]) - (x, y) position of the end effector, in meters
-	 */
-    public static double[] forwardKinematics(double alpha, double beta) {
-		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
-
-		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
-
-		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT}; // shoulder joint is ~.59 meters off the ground
-		return pos;
-    }
+public final class Kinematics {
 
 	/**
 	 * This will return the desired x, y pos for the given angle of each length - includes wrist
@@ -50,7 +33,7 @@ public class Kinematics {
      * @param beta (double) - angle of elbow from horizontal, in degrees
 	 * @return position (double[]) - (x, y) position of the wrist joint, in meters
 	 */
-	public static double[] forwardKinematicsWrist(double alpha, double beta) {
+	public static double[] forwardKinematics(double alpha, double beta) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
 					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
 		
@@ -67,14 +50,13 @@ public class Kinematics {
 	 * @param alpha (double) - angle of shoulder from horizontal, in degrees
 	 * @return position (double[]) - (x, y) position of the elbow joint, in meters
 	 */
-	public static double[] forwardKinematicsElbow(double alpha) {
+	public static double[] forwardKinematics(double alpha) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha));
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha));
 
 		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
 		return pos;
 	}
-
 
     /**
 	 * This will return the desired angle of each arm length using IK

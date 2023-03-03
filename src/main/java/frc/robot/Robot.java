@@ -6,11 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
+
 import frc.robot.subsystems.*;
 import frc.robot.utils.*;
 
@@ -28,8 +28,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT);
-  private Controller xboxControllerAlternate = new Controller(Constants.XBOX_CONTROLLER_ALTERNATE_PORT);
+  private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT, 5);
+  private Controller xboxControllerAlternate = new Controller(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
   private MecaDrive driveBase;
 
   DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
@@ -45,11 +45,8 @@ public class Robot extends TimedRobot {
   
   BetterShuffleboard smartdash = new BetterShuffleboard();
 
-  boolean trajStarted = false;
   double pidTuningAlpha;
   double pidTuningBeta;
-  double[][] trajectory;
-  int trajectoryCounter;
   
   double test = 0;
   long counter = 0; // for calling functions every n loops
@@ -100,8 +97,6 @@ public class Robot extends TimedRobot {
     // System.out.println("hello wo5rld");
 
     // test += 1;
-
-    arm.updatePrevAngles();
   }
 
   /**
@@ -159,53 +154,31 @@ public class Robot extends TimedRobot {
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
 
-    if (arm.shouldMotorStop()) {
+    arm.mainLoop(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
 
-      arm.stopMotors();
+    // arm.setShoulder(103);
+
+    // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
+    // arm.setShoulder(60);
+    // // arm.stopMotors();
+    // arm.setShoulder(0);
+    // arm.setElbow(pidTuningAngle);
+    // arm.setEndEffector(1, 1, arm.getWristAngle());
+
+
+    // if (xboxController.getRightBumperPressed()) {
+    //   // driveBase.increaseSpeedBracket();
       
-    } else {
-      arm.testMoveShoulder(xboxController.getRightX());
-      arm.testMoveElbow(xboxController.getRightY());
+    // } else if (xboxController.getAButtonPressed()) {
+    //   // driveBase.cycleMotor();
+    //   arm.setEndEffector(1.6, 1);
+    // } else {
+    //   arm.setEndEffector(.3, .4);
+    // }
 
-      // arm.setShoulder(103);
-
-      // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
-      // arm.setShoulder(60);
-      // // arm.stopMotors();
-      // arm.setShoulder(0);
-      // arm.setElbow(pidTuningAngle);
-      // arm.setEndEffector(1, 1, arm.getWristAngle());
-
-      if (trajStarted) {
-        // if (counter % 10 == 0) System.out.println(pidTuningBeta);
-
-        if (trajectoryCounter >= trajectory.length) {
-          trajectoryCounter = trajectory.length - 1;
-        } 
-        double[] angles = trajectory[trajectoryCounter];
-        pidTuningAlpha = angles[0];
-        pidTuningBeta = angles[1];
-        trajectoryCounter++;
-
-        arm.setElbow(pidTuningBeta);
-        arm.setShoulder(pidTuningAlpha);
-      }
-
-
-      // if (xboxController.getRightBumperPressed()) {
-      //   // driveBase.increaseSpeedBracket();
-        
-      // } else if (xboxController.getAButtonPressed()) {
-      //   // driveBase.cycleMotor();
-      //   arm.setEndEffector(1.6, 1);
-      // } else {
-      //   arm.setEndEffector(.3, .4);
-      // }
-
-      // arm.setEndEffector(1.55, 1.2);
-      
-      // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
-    }
+    // arm.setEndEffector(1.55, 1.2);
+    
+    // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
 
     if (counter % 10 == 0) {
@@ -232,8 +205,6 @@ public class Robot extends TimedRobot {
 
       smartdash.putNumber("DESIRED ALPHA", pidTuningAlpha);
       smartdash.putNumber("DESIRED BETA", pidTuningBeta);
-
-      smartdash.putNumber("Count:", trajectoryCounter);
 
       // System.out.println(arm.getShoulderFeedforward());
 
@@ -274,17 +245,18 @@ public class Robot extends TimedRobot {
 
   /**
    * Switches between different driving modes
-   * For the DPad, 0 is up, and angles go clockwise, so 90 is right
+   * DPad (POV) uses cardinal directions: 0 is up, and angles go clockwise, so 90 is right
    */
   private void checkForModeSwitches() {
-    // up
-    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
-    // right
-    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
-    // left
-    if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
-    // down
-    if (xboxController.getPOV() == 180) driveBase.turnONPIDTuningMode();
+    boolean up = xboxController.getPOV() == 0;
+    boolean right = xboxController.getPOV() == 90;
+    boolean down = xboxController.getPOV() == 180;
+    boolean left = xboxController.getPOV() == 270;
+
+    if (up) driveBase.turnOnDefaultMode();
+    if (down) driveBase.turnONPIDTuningMode();
+    if (left) driveBase.turnOnDebugMode();
+    if (right) driveBase.turnOnStopMode();
   }
 
   /**
@@ -305,41 +277,28 @@ public class Robot extends TimedRobot {
     boolean RB2 = xboxControllerAlternate.getRightBumperPressed();
     boolean LB2 = xboxControllerAlternate.getLeftBumperPressed();
 
-
+    // ARM SETPOINTS:
     if (B) {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
-
-      trajStarted = true;
-      trajectoryCounter = 0;
-      double x = 0.76;
-      double y = 0.94;
-      trajectory = Kinematics.degrees(arm.getTrajectory(x, y));
+      arm.setEndEffector(0.76, 0.94, 0);
     }
 
     if (Y) {
-      double x = 1.15;
-      double y = 1.29;
-      trajStarted = true;
-      trajectoryCounter = 0;
-      trajectory = Kinematics.degrees(arm.getTrajectory(1.15, 1.29));
-
-      printTrajInfo(trajectory, x, y);
+      arm.setEndEffector(1.15, 1.29, 0);
     }
 
     if (X) {
-      trajStarted = true;
-      trajectoryCounter = 0;
-      trajectory = Kinematics.degrees(arm.getTrajectory(1.23, 1.05));
+      arm.setEndEffector(1.23, 1.05, 0);
     }
 
     if (A) {
-      trajStarted = true;
-      trajectoryCounter = 0;
-      // pidTuningAngle = 10;
-      trajectory = Kinematics.degrees(arm.getTrajectory(0.84, 1.1));
+      arm.setEndEffector(0.84, 1.1, 0);
     }
 
+    // MOTOR LIMITS/STOPS:
+
+    // Good thing about using this config is RB also resets any trajectory running
     if (RB && LB) {
       arm.toggleMotorCheck();
       System.out.println("fhuhdushf");
@@ -347,10 +306,10 @@ public class Robot extends TimedRobot {
 
     if (RB) {
       // driveBase.increaseSpeedBracket();
-      trajStarted = false;
-      trajectoryCounter = 0;
+      arm.stopTrajectory();
     }
 
+    // CLAW/WRIST CONTROLS:
     if (A2) {
       claw.clawBack();
     }
@@ -363,23 +322,6 @@ public class Robot extends TimedRobot {
     if (X2) {
       claw.wristForward();
     }
-  }
-
-  public void printTrajInfo(double[][] trajectory, double x, double y) {
-    System.out.println(trajectory.length);
-
-    for (int i=0; i<trajectory.length; i++) {
-      double[] angles = trajectory[i];
-      System.out.println("Angles: " + angles[0] + " next " + angles[1]);
-    }
-    double[] angles = trajectory[trajectory.length - 1];
-    System.out.println("LAST: " + angles[0] + " next " + angles[1]);
-
-    System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
-    System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
-
-    System.out.println("FK TEST X: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [0]);
-    System.out.println("FK TEST Y: " + Kinematics.forwardKinematicsWrist(angles[0], angles[1]) [1]);
   }
 
   /** 
