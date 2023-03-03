@@ -14,46 +14,57 @@ public class QuadraticProfile {
         this(.02);
     }
     
-    // public double[][] getSetPoints(Vector initialPosition, Vector goal, Vector initialVelocity) {
-    //     // The max linea speed and acceleration we want the arm to travel at
-    //     double speed = Constants.ARM_MAX_SPEED;
-    //     double acceleration = Constants.ARM_MAX_ACCELERATION;
-
-    //     // displacement from the initial (x, y) to goal 
-    //     Vector displacement = goal.sub(initialPosition);
-    //     double angleDisplacement = displacement.dir(); // radians
-
-    //     // velocity vector at the max speed in the desired direction
-    //     Vector maxVelocity = new Vector(
-    //         speed*Math.cos(angleDisplacement), 
-    //         speed*Math.sin(angleDisplacement)
-    //     );
-
-    //     Vector changeInVelocity = maxVelocity.sub(initialVelocity);
-    //     double angleAcceleration = changeInVelocity.dir();
-
-    //     double timeToAccelerate = changeInVelocity.mag() / acceleration;
-    //     double distanceAccelerating = (initialVelocity.mag() + 1/2 * acceleration * timeToAccelerate) * timeToAccelerate;
-    //     double distanceStopping = (speed )
-
-    //     double timeToStop = maxVelocity.mag() / Constants.ARM_MAX_ACCELERATION;
+    public double[][] getSetPoints(Vector initialPosition, Vector initialVelocity, Vector goal, double theta, double speed, double acceleration) {
+        Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
-    //     double timeConstant = (displacement.mag() -  ) / Constants.ARM_MAX_SPEED;
-        
+        // displacement from the initial (x, y) to goal 
+        Vector displacement = goal.sub(initialPosition);
+        double angleDisplacement = displacement.dir(); // radians
 
-    //     int numberOfSteps = (int) (Math.ceil(timeToEnd / Constants.PERIOD));
-    //     double[][] setpoints = new double[numberOfSteps][2];
+        Vector maxVelocity = new Vector(speed * Math.cos(angleDisplacement), speed * Math.sin(angleDisplacement));
+        Vector changeInVelocity = maxVelocity.sub(initialVelocity);
 
-    //     for (int i = 0; i < numberOfSteps; i++) {
-    //         Vector pos = new Vector(
-    //             i * Constants.PERIOD * Constants.ARM_MAX_SPEED * Math.cos(angle),
-    //             i * Constants.PERIOD * Constants.ARM_MAX_SPEED * Math.sin(angle)
-    //         ).add(initialPosition);
-    //         setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y);
-    //     }
-        
-    //     return setpoints;
-    // }
+        double timeToAccelerate = changeInVelocity.mag() / acceleration;
+        double accelerationAngle = changeInVelocity.dir();
+        double timeToStop = maxVelocity.mag() / acceleration;
+
+        // check if we'll go past the setpoint/can't achieve max velocity and slow down in time
+        if (0.5 * acceleration * Math.pow(timeToAccelerate, 2) > 0.5 * displacement.mag()) {
+            // calculate time to go halfway
+            timeToAccelerate = Math.sqrt(displacement.mag() / acceleration);
+
+            accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
+            stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
+            
+            // never reach max velocity so there should be no setpoints at a constant velocity
+            Vector[] temp = {new Vector(0, 0)};
+            constantSpeedSetpoints = temp;
+        } else {
+            accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
+            stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
+    
+            Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
+            Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
+            double timeConstantSpeed = constantSpeedDisplacement.mag() / Constants.ARM_MAX_SPEED;
+            constantSpeedSetpoints = getConstantSpeedSetpoints(timeConstantSpeed, angleDisplacement);
+        }
+
+        // System.out.println("ASUHDUHSUH" + accelSetpoints[45].x);
+        System.out.println("#Accel: " + accelSetpoints.length);
+        System.out.println("#Speed: " + constantSpeedSetpoints.length);
+        System.out.println("#Stop: " + stoppingSetpoints.length);
+
+        Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
+
+        double[][] setpoints = new double[combined.length][2];
+        for (int i = 0; i < combined.length; i++) {
+            double[] angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, theta);
+            setpoints[i][0] = angles[0];
+            setpoints[i][1] = angles[1];
+        }
+
+        return setpoints;
+    }
 
     public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta, double speed, double acceleration) {
         Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
