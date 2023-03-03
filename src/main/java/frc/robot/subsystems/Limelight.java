@@ -10,7 +10,7 @@ import javax.lang.model.util.ElementScanner14;
 public class Limelight {
 
     private double x, y, area, forwardDistance;
-    private int pipeNum;
+    private double pipeNum;
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -26,8 +26,8 @@ public class Limelight {
             goalHeight = Constants.TALL_TARGET_HEIGHT;
         }
 
-        double limelightLensHeight        = Constants.LIME_HEIGHT;
-        double limelightMountAngle        = Constants.LIME_ANGLE;
+        double limelightLensHeight       = Constants.LIME_HEIGHT;
+        double limelightMountAngle       = Constants.LIME_ANGLE;
         double targetOffsetAngleVertical  = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
         double angleToGoal = limelightMountAngle + targetOffsetAngleVertical;
@@ -64,7 +64,7 @@ public class Limelight {
     }
 
     // double testPipe = 0;
-    public void changePipeline(int newPipeNum) {
+    public void changePipeline(double newPipeNum) {
 
         table.getEntry("pipeline").setNumber(newPipeNum);
         
@@ -78,8 +78,6 @@ public class Limelight {
         }
         else
             pipeNum = newPipeNum;
-            // testPipe = (testPipe + 1) % 2;
-            //colin says: oui oui baguette is yummy
         
     }
 

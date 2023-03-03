@@ -32,8 +32,8 @@ public class Robot extends TimedRobot {
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
-  public Robot(){
-    //addPeriodic(() -> limelight.updatePipeline(), .001);
+  public Robot() {
+    addPeriodic(() -> limelight.updatePipeline(), 0.01, 0.005);
   }
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -54,12 +54,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    
-    // SmartDashboard.putNumber("test", test);
-    // limelight.test();
-    // System.out.println("hello wo5rld");
-
-    // test += 1;
   }
 
   /**
