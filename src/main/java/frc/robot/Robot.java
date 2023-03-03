@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   long counter = 0; // for calling functions every n loops
 
   public Robot() {
-    addPeriodic(() -> limelight.changePipeline(), 0.01, 0.005);
+    // addPeriodic(() -> limelight.changePipeline(), 0.01, 0.005);
   }
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    checkForButtonPresses();
+
     // limelightTestDrive();
   }
 
@@ -140,6 +142,11 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
+    if (xboxController.getAButtonPressed())
+      limelight.updatePipeline(0);
+
+    if (xboxController.getBButtonPressed())
+      limelight.updatePipeline(1);
   }
 
   /** 
