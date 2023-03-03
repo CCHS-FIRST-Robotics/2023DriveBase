@@ -51,7 +51,7 @@ public class Constants {
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
-	public static double RIGHT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 1.5;
 	public static double RIGHT_Y_EXPONENT = 2;
 
 	public static final double ROBOT_WIDTH = 0.40;
