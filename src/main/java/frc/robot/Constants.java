@@ -8,7 +8,7 @@ package frc.robot;
  * Naming convention is all caps, spaces are underscores LIKE_THIS
  */
 public class Constants {
-
+	public static final int XBOX_CONTROLLER_PORT = 0;
 	//height from floor to center of limelight lense in meters
 	public static final double LIME_HEIGHT    = .42;
 	//number of degrees from perfectly vertical

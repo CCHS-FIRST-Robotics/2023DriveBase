@@ -26,14 +26,13 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   Limelight limelight = new Limelight();
-  IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
    
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
   public Robot() {
-    addPeriodic(() -> limelight.updatePipeline(), 0.01, 0.005);
+    addPeriodic(() -> limelight.changePipeline(), 0.01, 0.005);
   }
   /**
    * This function is run when the robot is first started up and should be used for any

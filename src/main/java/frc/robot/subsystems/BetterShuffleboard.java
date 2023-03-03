@@ -29,7 +29,7 @@ public class BetterShuffleboard {
         lowForwardDistance = limelightTab.add("lowForwardDist", 0).getEntry();
     }
 
-    public void pushDashboard(Limelight limelight, IMU imu){
+    public void pushDashboard(Limelight limelight){
         pushLimelight(limelight);
     }
 
