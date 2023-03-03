@@ -25,9 +25,6 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Controller xboxController = new Controller();
-  private MecaDrive driveBase;
-
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   BetterShuffleboard smartdash = new BetterShuffleboard();
@@ -36,7 +33,7 @@ public class Robot extends TimedRobot {
   long counter = 0; // for calling functions every n loops
 
   public Robot(){
-    addPeriodic(() -> limelight.updatePipeline(), .001);
+    //addPeriodic(() -> limelight.updatePipeline(), .001);
   }
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -44,20 +41,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    // CameraServer.startAutomaticCapture(0);
-    // CameraServer.startAutomaticCapture(1);
 
-    //limelight.printVal();
-    //limelight.smartDash();
-
-    // tank drive initialization
-    // driveBase = createTankDrive();
-
-    // mecanum drive initialization
-    driveBase = createMecanumDrive();
   }
 
   /**
@@ -90,9 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    
   }
 
   /** This function is called periodically during autonomous. */
@@ -112,68 +94,37 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    smartdash.updateControllerExponents();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
-    // switch between driving modes
-    checkForModeSwitches();
-
-    // check for button/bumper presses
-    checkForButtonPresses();
-
-    // powers motors based on the analog inputs
-    // drive();
-
     // limelightTestDrive();
-
-    if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
-
-      // TO TEST VALS FIRST
-      double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
-      double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-      double h  = Constants.TARGETS_DISTANCE;
-      System.out.println(d1);
-      System.out.println(d2);
-
-      double l2 = d2 * d2 - d1 * d1 - h * h;
-      double l1 = Math.sqrt(d1 * d1 - l2 * l2);
-
-      System.out.println(Math.toDegrees(
-        limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
-         Math.atan(l2 / l1)
-      ));
-
-    }
-    counter++;
   }
 
-  public void limelightTestDrive() {
-    double kP = .1;
+  // public void limelightTestDrive() {
+  //   double kP = .1;
 
-    double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
-    double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-    double h = Constants.TARGETS_DISTANCE; 
+  //   double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
+  //   double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
+  //   double h = Constants.TARGETS_DISTANCE; 
 
-    double l2 = d2 * d2 - d1 * d1 - h * h;
-    double l1 = Math.sqrt(d1 * d1 - l2 * l2);
+  //   double l2 = d2 * d2 - d1 * d1 - h * h;
+  //   double l1 = Math.sqrt(d1 * d1 - l2 * l2);
 
-    double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
-    double beta = Math.atan(l2 / l1);
+  //   double alpha = limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM);
+  //   double beta = Math.atan(l2 / l1);
 
-    double Fx = kP * Math.abs(l1) * Math.sin(
-      beta + alpha
-    );
-    double Fy = kP * Math.abs(l1) * Math.cos(
-      beta + alpha
-    );
+  //   double Fx = kP * Math.abs(l1) * Math.sin(
+  //     beta + alpha
+  //   );
+  //   double Fy = kP * Math.abs(l1) * Math.cos(
+  //     beta + alpha
+  //   );
 
-    driveBase.drive(Fx, Fy, 1 * limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
-  }
+  //   driveBase.drive(Fx, Fy, 1 * limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM), 0);
+  // }
 
   /** This function is called once when the robot is disabled. */
   @Override
@@ -191,57 +142,17 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  /**
-   * Switches between different driving modes
-   * For the DPad, 0 is up, and angles go clockwise, so 90 is right
-   */
-  private void checkForModeSwitches() {
-    // up
-    if (xboxController.getPOV() == 0) driveBase.turnOnDefaultMode();
-    // right
-    if (xboxController.getPOV() == 90) driveBase.turnOnStopMode();
-    // left
-    if (xboxController.getPOV() == 270) driveBase.turnOnDebugMode();
-    // down
-    if (xboxController.getPOV() == 180) driveBase.turnONPIDTuningMode();
-  }
 
   /**
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
-    if (xboxController.getAButtonPressed()) {
-      driveBase.cycleMotor();
-    }
-    if (xboxController.getBButtonPressed()) {
-      driveBase.printActiveMotorDebugMode();
-    }
-    if (xboxController.getLeftBumperPressed()) {
-      driveBase.decreaseSpeedBracket();
-    }
-    if (xboxController.getRightBumperPressed()) {
-      driveBase.increaseSpeedBracket();
-    }
   }
 
   /** 
    * Powers motors based on the analog inputs
    */
   private void drive() {
-
-    // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
-    // System.out.println(xboxController.getLeftY());
-  }
-
-  // private TankDrive createTankDrive() {
-  //   return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
-  //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
-  // }
-
-  private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
-                         Constants.RL_TALON_ID, Constants.RR_TALON_ID);
   }
 
 }

@@ -28,7 +28,7 @@ public class Limelight {
 
         double limelightLensHeight        = Constants.LIME_HEIGHT;
         double limelightMountAngle        = Constants.LIME_ANGLE;
-        double targetOffsetAngleVertical = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
+        double targetOffsetAngleVertical  = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
         double angleToGoal = limelightMountAngle + targetOffsetAngleVertical;
 
@@ -43,12 +43,14 @@ public class Limelight {
     }
 
     // TODO: include comments/documentation for what these vals actually are 
+    // gives x angle
     public double getX(int pipeChoice) {
         changePipeline(pipeChoice);
         x = table.getEntry("tx").getDouble(0);
         return x;
     }
     
+    // gives y angle
     public double getY(int pipeChoice) {
         changePipeline(pipeChoice);
         y = table.getEntry("ty").getDouble(0);
@@ -68,7 +70,7 @@ public class Limelight {
         
         double test = table.getEntry("getpipe").getDouble(0);
 
-        if (test != newPipe)
+        if (test != newPipeNum)
         {
             System.out.println("Current pipeline: " + test);
             System.out.println("Expected pipeline: " + newPipeNum);
