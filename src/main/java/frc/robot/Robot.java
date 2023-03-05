@@ -157,15 +157,11 @@ public class Robot extends TimedRobot {
     // System.out.println(arm.getCurrentMode());
     arm.mainLoop(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
-    // arm.setShoulder(103);
-
     // arm.getElbowRawAngle();
 
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
-    // arm.setShoulder(60);
-    // // arm.stopMotors();
-    // arm.setShoulder(0);
-    // arm.setElbow(pidTuningAngle);
+
+
     // arm.setEndEffector(1, 1, arm.getWristAngle());
 
 
@@ -197,7 +193,7 @@ public class Robot extends TimedRobot {
       // Kinematics.positionInverseKinematics(1, 1, arm.getWristAngle());
 
       // System.out.println("SHOULDER: " + arm.getShoulderAngle());
-      // System.out.println("ELBOW: " + arm.getElbowRawAngle());
+      // System.out.println("ELBOW: " + arm.getElbowAngle());
 
       if (arm.shouldMotorStop()) {
         // System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
@@ -283,12 +279,21 @@ public class Robot extends TimedRobot {
     boolean RB2 = xboxControllerAlternate.getRightBumperPressed();
     boolean LB2 = xboxControllerAlternate.getLeftBumperPressed();
 
+    // Angles: 154.66621451346478 next -134.35782879153317
+    // Angles: 25.400948812501113 next 134.36037392220788  
+
+    // FK TEST X: -0.03642498519719317
+    // FK TEST Y: 1.127034971613889
+
     // ARM SETPOINTS:
     if (B) {
+      double x = (Math.random() * (Constants.maxX - .2)) + .2;
+      double y = (Math.random() * (Constants.maxY - .2)) + .2;
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
-      arm.setEndEffector(0.76, 0.94, 0);
+      // arm.setEndEffector(0.76, 0.94, 0);
+      arm.setEndEffector(x, y, 0);
     }
 
     if (Y) {

@@ -104,8 +104,25 @@ public class QuadraticProfile {
         Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
 
         double[][] setpoints = new double[combined.length][2];
+        double[] angles;
         for (int i = 0; i < combined.length; i++) {
-            double[] angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, theta);
+            try {
+                angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, theta);
+                if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
+                    throw new Exception("angle is NaN");
+                }
+            } catch(Exception e) 
+            {
+                System.out.println("X: " + combined[i].x);
+                System.out.println("Y: " + combined[i].y);
+                System.out.println(e.getMessage());
+                if (i != 0) {
+                    setpoints[i][0] = setpoints[i-1][0];
+                    setpoints[i][1] = setpoints[i-1][1];
+                }
+                continue;
+            }
+            
             setpoints[i][0] = angles[0];
             setpoints[i][1] = angles[1];
         }

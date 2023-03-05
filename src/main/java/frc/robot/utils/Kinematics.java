@@ -15,11 +15,11 @@ public final class Kinematics {
 	 */
 	public static double[] forwardKinematics(double alpha, double beta, double theta) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta)) +
+					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(alpha + beta)) +
 					Constants.WRIST_LENGTH * Math.cos(Math.toRadians(theta));
 
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta)) +
+					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(alpha + beta)) +
 					Constants.WRIST_LENGTH * Math.sin(Math.toRadians(theta));
 
 		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
@@ -35,10 +35,10 @@ public final class Kinematics {
 	 */
 	public static double[] forwardKinematics(double alpha, double beta) {
 		double x = 	Constants.LOWER_ARM_LENGTH * Math.cos(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(beta));
+					Constants.UPPER_ARM_LENGTH * Math.cos(Math.toRadians(alpha + beta));
 		
 		double y = 	Constants.LOWER_ARM_LENGTH * Math.sin(Math.toRadians(alpha)) +
-					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(beta));
+					Constants.UPPER_ARM_LENGTH * Math.sin(Math.toRadians(alpha + beta));
 
 		double[] pos = {x, y + Constants.SHOULDER_JOINT_HEIGHT};
 		return pos;
@@ -146,11 +146,11 @@ public final class Kinematics {
 		//TODO: make sure I'm not supposed to add on the alphas later/does doing it now fuck with it
 		//		(verify using the python sim - plot_workspace())
 		double[] betas = {
-			(-2*Math.atan(sigma2) + alphas[0]),
-			(2*Math.atan(sigma2) + alphas[1])
+			(-2*Math.atan(sigma2)),
+			(2*Math.atan(sigma2))
 		};
 
-		int i;
+		int i; // TODO:
 		// check if either pair violates a motor limit
 		// for (i=0; i<2; i++) {
 		// 	double alpha = degrees(alphas[i]);

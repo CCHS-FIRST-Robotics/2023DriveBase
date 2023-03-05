@@ -278,7 +278,7 @@ public class Arm {
 	public double getElbowAngle() {
 		SmartDashboard.putNumber("FALCON ELBOW RAW: ", elbowMotor.getSelectedSensorPosition());
 		SmartDashboard.putNumber("FALCON ELBOW: ", elbowMotor.getIntegralAccumulator() * 360/4096 / 200);
-		return getShoulderAngle() - (elbowMotor.getSelectedSensorPosition() / 956 + 144);
+		return -(elbowMotor.getSelectedSensorPosition() / 956 + 144);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class Arm {
 	 */
 	public double getWristAngle() {
 		int wristActuated = grabber.isWristActuated() ? 0:1;
-		return getElbowAngle() + wristActuated * 90;
+		return getShoulderAngle() + getElbowAngle() + wristActuated * 90;
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class Arm {
 	 * @return controlInput (double) voltage to send to motors
 	 */
 	public double getElbowFeedforward() {
-		double gravity = Constants.ELBOW_KG * Math.cos(Math.toRadians(getElbowAngle()));
+		double gravity = Constants.ELBOW_KG * Math.cos(Math.toRadians(getShoulderAngle() + getElbowAngle()));
 		double velocity = Constants.ELBOW_KV * getElbowAngularVelocity();
 		return - (gravity);
 	}
@@ -342,7 +342,7 @@ public class Arm {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 
 		double alpha = Math.toRadians(getShoulderAngle());
-		double beta = Math.toRadians(getElbowAngle());
+		double beta = alpha - Math.toRadians(getElbowAngle());
 
 		double comX = (d1*Math.cos(alpha) + l1*Math.cos(alpha) + d2*Math.cos(beta)) / 2;
 		double comY = (d1*Math.sin(alpha) + l1*Math.sin(alpha) + d2*Math.sin(beta)) / 2;

@@ -72,7 +72,7 @@ public class Constants {
 
 	// arm lengths in meters
 	public static final double UPPER_ARM_LENGTH = .68; 
-	public static final double LOWER_ARM_LENGTH = 0.71;
+	public static final double LOWER_ARM_LENGTH = 0.705;
 	public static final double WRIST_LENGTH = .26;
 
 	// Distance from each arm joint to the linkage's center of mass
@@ -128,7 +128,7 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .1; // meters per second
+	public static final double ARM_MAX_SPEED = .2; // meters per second
 	public static final double ARM_MAX_ACCELERATION = .1; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
@@ -160,8 +160,8 @@ public class Constants {
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -120;
-	public static final double maxBeta = 240;
+	public static final double minBeta = -88;
+	public static final double maxBeta = 260;
 
 	Constants() {
 		
