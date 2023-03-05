@@ -3,7 +3,7 @@ import java.lang.Math;
 
 public abstract class DriveBase {
 	// used to scale speeds - 1 would be max speed, 0.5 would be half speed, etc.
-	double speedMultiplier = 0.6;
+	double speedMultiplier = 1;
 
 	// different modes
 	enum Mode {

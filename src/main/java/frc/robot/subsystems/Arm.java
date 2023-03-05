@@ -60,9 +60,9 @@ public class Arm {
 	double[] targetAngles = new double[2];
 
 	enum Mode {
-		MANUAL, HOLDING, TRAJECTORY
+		MANUAL, HOLDING, TRAJECTORY, IDLE
 	}
-	Mode currentMode = Mode.MANUAL;
+	Mode currentMode = Mode.IDLE;
 
 	/**
 	 * Constructor for Arm Class
@@ -97,7 +97,7 @@ public class Arm {
 
 		// https://github.com/GwhsRobotics3/Team-5507-2018/blob/b4d3e1d5e899132185e9f7b9711d5a92f322d659/src/org/usfirst/frc/team5507/robot/subsystems/DriveTrain.java#L112
 		shoulderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-		elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+		// elbowMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
 		this.limitSwitch = limitSwitch;
 		this.grabber = grabber;
@@ -173,7 +173,8 @@ public class Arm {
 	 */
 	public void mainLoop(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
 		switch(currentMode) {
-			
+			case IDLE:
+				break;
 			case MANUAL:
 				if (shouldMotorStop()) {
 					stopMotors();
@@ -185,16 +186,21 @@ public class Arm {
 				} else {
 					// TODO: add controls for linear movement
 				}
+				break;
 
 			case HOLDING:
+				// System.out.println("AH FUCK THATS NOT SUPPOSED TO HAPPEN");
 				double alpha = targetAngles[0];
 				double beta = targetAngles[1];
 
 				setShoulder(alpha);
 				setElbow(beta);
+				break;
 
 			case TRAJECTORY:
+				// System.out.println("AH FUCK THATS NOT SUPPOSED TO HAPPEN");
 				executeTrajectory();
+				break;
 		}
 	}
 
@@ -265,22 +271,23 @@ public class Arm {
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
-		// encoder reads in [-2048, 2048] god knows why it's not the same as the other
-		double angle = 360 - (shoulderMotor.getSelectedSensorPosition(1) + 2048) * 360/4096 - 197; // prints the position of the selected sensor
-		return angle;
+		// experimentally found ratio
+		return shoulderMotor.getSelectedSensorPosition(1) / 42 + 54;
 	}
 
-	public double getElbowRawAngle() {
-		return elbowMotor.getSelectedSensorPosition();
+	public double getElbowAngle() {
+		SmartDashboard.putNumber("FALCON ELBOW RAW: ", elbowMotor.getSelectedSensorPosition());
+		SmartDashboard.putNumber("FALCON ELBOW: ", elbowMotor.getIntegralAccumulator() * 360/4096 / 200);
+		return getShoulderAngle() - (elbowMotor.getSelectedSensorPosition() / 956 + 144);
 	}
 
 	/**
 	 * @return angle (double) degrees of the second linkage from the horizontal
 	 */
-	public double getElbowAngle() {
+	public double getElbowOldAngle() {
 		// encoder reads in [-4096, 0], and absolute position is off by 10 degrees 
 		// offset  by shoulder angle so that the angle is relative to the horizotal
-		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 37;
+		double angle = getShoulderAngle() - ((elbowMotorEncoder.getSelectedSensorPosition(1) + 1300) * 360/4096) + 14;
 		return angle;
 	}
 
@@ -418,7 +425,7 @@ public class Arm {
 	}
 
 	public void setEndEffector(double xPos, double yPos, double theta) {
-		setEndEffector(xPos, yPos, theta, false);
+		setEndEffector(xPos, yPos, theta, true);
 	}
 
 	/**
@@ -444,17 +451,18 @@ public class Arm {
 		targetAngles = trajectory[trajectoryCounter];
 		trajectoryCounter++;
 
-		setElbow(targetAngles[0]);
-		setShoulder(targetAngles[1]);
+		setElbow(targetAngles[1]);
+		setShoulder(targetAngles[0]);
 
 		if (trajectoryCounter >= trajectory.length) {
-			stopTrajectory();
+			trajectoryCounter = 0;
+			currentMode = Mode.HOLDING;
 		} 
 	}
 
 	public void stopTrajectory() {
 		trajectoryCounter = 0;
-		currentMode = Mode.HOLDING;
+		currentMode = Mode.MANUAL;
 	}
 
 	public void printTrajInfo(double[][] trajectory, double x, double y) {
@@ -488,6 +496,8 @@ public class Arm {
 		// 	shoulderPID.calculate(getShoulderAngle(), alpha)
 		// );
 
+		SmartDashboard.putNumber("DESIRED ALPHA", alpha);
+
 		// neg sign because shoulder moves in the opposite direction
 		shoulderMotor.setVoltage(
 			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
@@ -501,9 +511,13 @@ public class Arm {
 	 * @param beta (double) setpoint for the elbow angle, in degrees
 	 */
 	public void setElbow(double beta) {
+
+		SmartDashboard.putNumber("DESIRED BETA", beta);
+
 		elbowMotor.setVoltage(
 			-elbowPID.calculate(getElbowAngle(), beta) + 
-			getElbowFeedforward()
+			getElbowFeedforward() 
+			
 		);
 	}
 

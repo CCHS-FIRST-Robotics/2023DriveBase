@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // switch between driving modes
-    checkForModeSwitches();
+    // checkForModeSwitches();
 
     // check for button/bumper presses
     checkForButtonPresses();
@@ -154,9 +154,12 @@ public class Robot extends TimedRobot {
     // System.out.println("Beta:" + arm.getElbowAngle());
     // System.out.println("\n\n");
 
-    arm.mainLoop(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    // System.out.println(arm.getCurrentMode());
+    arm.mainLoop(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.setShoulder(103);
+
+    // arm.getElbowRawAngle();
 
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
     // arm.setShoulder(60);
@@ -193,8 +196,11 @@ public class Robot extends TimedRobot {
       // System.out.println(arm.getShoulderRawAngle());
       // Kinematics.positionInverseKinematics(1, 1, arm.getWristAngle());
 
+      // System.out.println("SHOULDER: " + arm.getShoulderAngle());
+      // System.out.println("ELBOW: " + arm.getElbowRawAngle());
+
       if (arm.shouldMotorStop()) {
-        System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+        // System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
       }
 
       // System.out.println(limitSwitch.get());
@@ -281,6 +287,7 @@ public class Robot extends TimedRobot {
     if (B) {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
+      System.out.println("B PRESSED");
       arm.setEndEffector(0.76, 0.94, 0);
     }
 
@@ -331,7 +338,7 @@ public class Robot extends TimedRobot {
 
 
     // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), 0, xboxController.getRightY());
+    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
     // System.out.println(xboxController.getLeftY());
   }
 
