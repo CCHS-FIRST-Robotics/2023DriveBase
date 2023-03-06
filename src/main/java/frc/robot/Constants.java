@@ -87,7 +87,7 @@ public class Constants {
 	static double falconMass = 1.33;
 	static double clawMass = 1.86;
 	public static final double UPPER_ARM_MASS = massOfMetalUpper + clawMass;
-	public static final double LOWER_ARM_MASS = massOfMetalLower + chainMass;
+	public static final double LOWER_ARM_MASS = massOfMetalLower + chainMass + falconMass;
 
 	// Mass of each arm segment in kg
 	// public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
