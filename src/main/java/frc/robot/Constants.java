@@ -31,12 +31,13 @@ public class Constants {
 	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_ID = 2; // 1
-	public static final int FL_TALON_ID = 8; // 2
-	public static final int RR_TALON_ID = 10; // 3
+	public static final int FR_TALON_ID = 1; // 2
+	public static final int FL_TALON_ID = 2; // 8
+	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
 	public static final int SHOULDER_TALON_ID = 3;
+	public static final int SHOULDER_FALCON_ID = ;
 	public static final int ELBOW_TALON_ID = 5;
 	public static final int ELBOW_FALCON_ID = 9;
 
@@ -77,11 +78,20 @@ public class Constants {
 
 	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .7; // meters
-	public static final double LOWER_ARM_COM_DIST = .3; // meters
+	public static final double LOWER_ARM_COM_DIST = .2; // meters
+	static double densityOfMetalLower = .347 / .405;
+	static double densityOfMetalUpper = .623 / 1.04;
+	static double massOfMetalLower = densityOfMetalLower * LOWER_ARM_LENGTH;
+	static double massOfMetalUpper = densityOfMetalUpper * UPPER_ARM_LENGTH;
+	static double chainMass = .85 * .53;
+	static double falconMass = 1.33;
+	static double clawMass = 1.86;
+	public static final double UPPER_ARM_MASS = massOfMetalUpper + clawMass;
+	public static final double LOWER_ARM_MASS = massOfMetalLower + chainMass;
 
 	// Mass of each arm segment in kg
-	public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
-	public static final double LOWER_ARM_WEIGHT = 4.5; // kg
+	// public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
+	// public static final double LOWER_ARM_WEIGHT = 4.5; // kg
 
 	//Height of the shoulder joint from the floor in meters
 	public static final double SHOULDER_JOINT_HEIGHT = .59;
@@ -92,23 +102,23 @@ public class Constants {
 	public static final int WRIST_BACKWARD_NUM = 3;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = .6;
+	public static final double SHOULDER_KP = 0;
 	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = .02;
+	public static final double SHOULDER_KD = 0;
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 2.3;
+	public static final double SHOULDER_KG = 0;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = .2;
+	public static final double ELBOW_KP = 0;
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0;
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = .8;
-	public static final double ELBOW_KV = 0.3;
+	public static final double ELBOW_KG = 0;
+	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
 	// Shoulder PID and Feedfoward gains for velocity control

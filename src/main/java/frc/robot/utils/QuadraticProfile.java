@@ -2,6 +2,9 @@ package frc.robot.utils;
 
 import frc.robot.*;
 
+import java.io.*;
+import java.util.*;
+
 public class QuadraticProfile {
 
     double period;
@@ -14,15 +17,15 @@ public class QuadraticProfile {
         this(.02);
     }
     
-    public double[][] getSetPoints(Vector initialPosition, Vector initialVelocity, Vector goal, double theta, double speed, double acceleration) {
-        Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector initialVelocity, R2Vector goal, double theta, double speed, double acceleration) {
+        R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
         // displacement from the initial (x, y) to goal 
-        Vector displacement = goal.sub(initialPosition);
+        R2Vector displacement = goal.sub(initialPosition);
         double angleDisplacement = displacement.dir(); // radians
 
-        Vector maxVelocity = new Vector(speed * Math.cos(angleDisplacement), speed * Math.sin(angleDisplacement));
-        Vector changeInVelocity = maxVelocity.sub(initialVelocity);
+        R2Vector maxVelocity = new R2Vector(speed * Math.cos(angleDisplacement), speed * Math.sin(angleDisplacement));
+        R2Vector changeInVelocity = maxVelocity.sub(initialVelocity);
 
         double timeToAccelerate = changeInVelocity.mag() / acceleration;
         double accelerationAngle = changeInVelocity.dir();
@@ -37,14 +40,14 @@ public class QuadraticProfile {
             stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
             
             // never reach max velocity so there should be no setpoints at a constant velocity
-            Vector[] temp = {new Vector(0, 0)};
+            R2Vector[] temp = {new R2Vector(0, 0)};
             constantSpeedSetpoints = temp;
         } else {
             accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
             stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
     
-            Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
-            Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
+            R2Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
+            R2Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
             double timeConstantSpeed = constantSpeedDisplacement.mag() / Constants.ARM_MAX_SPEED;
             constantSpeedSetpoints = getConstantSpeedSetpoints(timeConstantSpeed, angleDisplacement);
         }
@@ -54,7 +57,7 @@ public class QuadraticProfile {
         System.out.println("#Speed: " + constantSpeedSetpoints.length);
         System.out.println("#Stop: " + stoppingSetpoints.length);
 
-        Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
+        R2Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
 
         double[][] setpoints = new double[combined.length][2];
         for (int i = 0; i < combined.length; i++) {
@@ -66,11 +69,11 @@ public class QuadraticProfile {
         return setpoints;
     }
 
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta, double speed, double acceleration) {
-        Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration) {
+        R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
         // displacement from the initial (x, y) to goal 
-        Vector displacement = goal.sub(initialPosition);
+        R2Vector displacement = goal.sub(initialPosition);
         double angleDisplacement = displacement.dir(); // radians
 
         double timeToAccelerate = speed / acceleration;
@@ -84,14 +87,14 @@ public class QuadraticProfile {
             stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
             
             // never reach max velocity so there should be no setpoints at a constant velocity
-            Vector[] temp = {new Vector(0, 0)};
+           R2Vector[] temp = {new R2Vector(0, 0)};
             constantSpeedSetpoints = temp;
         } else {
             accelSetpoints = getAcceleratingSetPoints(timeToAccelerate, angleDisplacement);
             stoppingSetpoints = getStoppingSetpoints(timeToAccelerate, angleDisplacement);
     
-            Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
-            Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
+            R2Vector lastAccelPoint = accelSetpoints[accelSetpoints.length - 1];
+            R2Vector constantSpeedDisplacement = displacement.sub(lastAccelPoint.multiply(2));
             double timeConstantSpeed = constantSpeedDisplacement.mag() / Constants.ARM_MAX_SPEED;
             constantSpeedSetpoints = getConstantSpeedSetpoints(timeConstantSpeed, angleDisplacement);
         }
@@ -101,41 +104,53 @@ public class QuadraticProfile {
         System.out.println("#Speed: " + constantSpeedSetpoints.length);
         System.out.println("#Stop: " + stoppingSetpoints.length);
 
-        Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
+        R2Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
 
-        double[][] setpoints = new double[combined.length][2];
+        ArrayList<double[]> setpoints = new ArrayList<double[]>(combined.length);
         double[] angles;
         for (int i = 0; i < combined.length; i++) {
             try {
-                angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, theta);
+                double x = combined[i].x;
+                double y = combined[i].y;
+                angles = Kinematics.positionInverseKinematics(x, y, theta);
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
-                    throw new Exception("angle is NaN");
+                    throw new ArithmeticException("angle is NaN");
                 }
-            } catch(Exception e) 
+                if (Kinematics.shouldMotorStop(angles[0], angles[1], theta)) {
+                    throw new Exception("(x, y) = (" + x + ", " + y + ") goes past a motor limit");
+                }
+            } catch(ArithmeticException e) 
             {
                 System.out.println("X: " + combined[i].x);
                 System.out.println("Y: " + combined[i].y);
                 System.out.println(e.getMessage());
                 if (i != 0) {
-                    setpoints[i][0] = setpoints[i-1][0];
-                    setpoints[i][1] = setpoints[i-1][1];
+                    setpoints.get(i)[0] = setpoints.get(i-1)[0];
+                    setpoints.get(i)[1] = setpoints.get(i-1)[1];
                 }
                 continue;
+            } catch(Exception e) {
+                // If the motor is past a limit, stop the sequence
+                System.out.println("X: " + combined[i].x);
+                System.out.println("Y: " + combined[i].y);
+                System.out.println(e.getMessage());
+                
+                break;
             }
             
-            setpoints[i][0] = angles[0];
-            setpoints[i][1] = angles[1];
+            setpoints.get(i)[0] = angles[0];
+            setpoints.get(i)[1] = angles[1];
         }
 
         return setpoints;
     }
 
-    public Vector[] getAcceleratingSetPoints(double timeToEnd, double angle) {
+    public R2Vector[] getAcceleratingSetPoints(double timeToEnd, double angle) {
         int numSteps = (int) Math.ceil(timeToEnd / period);
-        Vector[] angles = new Vector[numSteps]; 
+        R2Vector[] angles = new R2Vector[numSteps]; 
 
         for (int i=0; i < numSteps; i++) {
-            angles[i] = new Vector(
+            angles[i] = new R2Vector(
                 0.5*Math.cos(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2),
                 0.5*Math.sin(angle)*Constants.ARM_MAX_ACCELERATION* Math.pow(i*period, 2)
             );
@@ -143,12 +158,12 @@ public class QuadraticProfile {
         return angles;
     }
 
-    public Vector[] getStoppingSetpoints(double timeToEnd, double angle) {
+    public R2Vector[] getStoppingSetpoints(double timeToEnd, double angle) {
         int numSteps = (int) Math.ceil(timeToEnd / period);
-        Vector[] angles = new Vector[numSteps];
+        R2Vector[] angles = new R2Vector[numSteps];
 
         for (int i=0; i < numSteps; i++) {
-            angles[i] = new Vector(
+            angles[i] = new R2Vector(
                 (Constants.ARM_MAX_SPEED - 0.5*Constants.ARM_MAX_ACCELERATION* i*period) * Math.cos(angle)*i*period,
                 (Constants.ARM_MAX_SPEED - 0.5*Constants.ARM_MAX_ACCELERATION* i*period) * Math.sin(angle)*i*period
             );
@@ -156,12 +171,12 @@ public class QuadraticProfile {
         return angles;
     }
 
-    public Vector[] getConstantSpeedSetpoints(double timeToEnd, double angle) {
+    public R2Vector[] getConstantSpeedSetpoints(double timeToEnd, double angle) {
         int numSteps = (int) Math.ceil(timeToEnd / period);
-        Vector[] angles = new Vector[numSteps]; 
+        R2Vector[] angles = new R2Vector[numSteps]; 
 
         for (int i=0; i < numSteps; i++) {
-            angles[i] = new Vector(
+            angles[i] = new R2Vector(
                 (Constants.ARM_MAX_SPEED * i*period) * Math.cos(angle),
                 (Constants.ARM_MAX_SPEED * i*period) * Math.sin(angle)
             );
@@ -169,8 +184,8 @@ public class QuadraticProfile {
         return angles;
     }
 
-    public Vector[] combineSetPoints(Vector[] accel, Vector[] constant, Vector[] stopping, Vector initialPosition) {
-        Vector[] combined = new Vector[accel.length + constant.length + stopping.length];
+    public R2Vector[] combineSetPoints(R2Vector[] accel, R2Vector[] constant, R2Vector[] stopping, R2Vector initialPosition) {
+        R2Vector[] combined = new R2Vector[accel.length + constant.length + stopping.length];
         
         for(int i = 0; i < accel.length; i++) {
             combined[i] = accel[i].add(initialPosition);

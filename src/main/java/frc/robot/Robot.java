@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
   Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
                              Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
-  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID, limitSwitch, claw);
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.SHOULDER_FALCON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID, limitSwitch, claw);
 
   Limelight limelight = new Limelight();
   ZED zed = new ZED();
@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    // drive();
+    drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -155,7 +155,8 @@ public class Robot extends TimedRobot {
     // System.out.println("\n\n");
 
     // System.out.println(arm.getCurrentMode());
-    arm.mainLoop(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
+
+    // arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.getElbowRawAngle();
 

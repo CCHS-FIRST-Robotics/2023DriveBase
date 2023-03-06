@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants;
 
@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import java.lang.Math;
 
 public class MecaDrive extends DriveBase {
-    WPI_TalonSRX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
+    WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
 	// Stop mode variables
 
@@ -35,10 +35,10 @@ public class MecaDrive extends DriveBase {
      */
     public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
                      int rearLeftMotorPort, int rearRightMotorPort) {
-        frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort);
-        frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
-        rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
-        rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
+        frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
+        frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
+        rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
+        rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
 		
 		// invert motors to make forward the right direction
 		frontRightMotor.setInverted(true);

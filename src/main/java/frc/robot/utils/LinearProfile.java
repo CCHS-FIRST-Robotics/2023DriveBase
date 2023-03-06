@@ -43,8 +43,8 @@ public class LinearProfile {
      * @return setpoints (double[][]) - 2D array of angular setpoints. 
      *                                  setpoints[i] gives an array of the angle for each joint - RADIANS
      */
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double theta) {
-        Vector displacement = goal.sub(initialPosition);
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double theta) {
+        R2Vector displacement = goal.sub(initialPosition);
         
         // ∆t = ∆x/∆v
         double timeToEnd = displacement.mag() / Constants.ARM_MAX_SPEED;
@@ -57,7 +57,7 @@ public class LinearProfile {
         // Calculate the new setpoint for each timestep
         for (int i = 0; i < numberOfSteps; i++) {
             double proportion = (double) i / (double) numberOfSteps;
-            Vector pos = new Vector(
+            R2Vector pos = new R2Vector(
                 proportion * displacement.x,
                 proportion * displacement.y
             ).add(initialPosition);
@@ -69,8 +69,8 @@ public class LinearProfile {
     }
 
     // same as above but uses desired time rather than a max velocity
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double timeToEnd, double theta) {
-        Vector displacement = goal.sub(initialPosition);
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double timeToEnd, double theta) {
+        R2Vector displacement = goal.sub(initialPosition);
         
         double velocity = displacement.mag() / timeToEnd;
         double angle = displacement.dir(); // radians
@@ -79,7 +79,7 @@ public class LinearProfile {
         double[][] setpoints = new double[numberOfSteps][2];
 
         for (int stepsTaken = 0; stepsTaken < numberOfSteps; stepsTaken++) {
-            Vector pos = new Vector(
+            R2Vector pos = new R2Vector(
                 stepsTaken * this.period * velocity * Math.cos(angle),
                 stepsTaken * this.period * velocity * Math.sin(angle)
             ).add(initialPosition);

@@ -2,6 +2,9 @@ package frc.robot.utils;
 import frc.robot.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.*;
+import java.util.*;
+
 public final class Kinematics {
 
 	/**
@@ -310,6 +313,20 @@ public final class Kinematics {
 		double[][] newAngles = new double[angles.length][angles[0].length];
 		for (int i=0; i < angles.length; i++) {
 			newAngles[i] = degrees(angles[i]);
+		}
+		return newAngles;
+	}
+
+	/**
+	 * Applies degrees() to a 2D ArrayList - why can't I just have numpy ;(
+	 * 
+	 * @param angles (ArrayList<double[]>) - angles in radians
+	 * @return newAngles (ArrayList<double[]>) - angles in degrees
+	 */
+	public static ArrayList<double[]> degrees(ArrayList<double[]> angles) {
+		ArrayList<double[]> newAngles = new ArrayList<double[]>(angles.size());
+		for (int i=0; i < angles.size(); i++) {
+			newAngles.add(degrees(angles.get(i)));
 		}
 		return newAngles;
 	}
