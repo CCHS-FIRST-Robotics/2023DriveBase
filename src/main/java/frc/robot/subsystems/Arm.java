@@ -37,6 +37,7 @@ public class Arm {
 
 	DigitalInput limitSwitch;
 	Grabber grabber;
+	boolean grabberForward = true;
 
 	double lastShoulderAngle, lastElbowAngle;
 	double beforeStopShoulderAngle, beforeStopElbowAngle;
@@ -80,7 +81,7 @@ public class Arm {
         // elbowMotorEncoder = new WPI_TalonSRX(elbowTalonPort);
 
 		// initialize Falcon motors (USE LATER)
-        shoulderMotor = new WPI_TalonFX(shoulderTalonPort);
+        shoulderMotor = new WPI_TalonFX(shoulderFalconPort);
         elbowMotor = new WPI_TalonFX(elbowFalconPort);
 		
 
@@ -125,6 +126,8 @@ public class Arm {
 
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
 		prevPosition = new R2Vector(pos[0], pos[1]);
+
+		// setNeutralPostion();
 	}
 
 	/**
@@ -177,6 +180,13 @@ public class Arm {
 	public void run(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
 		if (leftAnalogX !=0 || leftAnalogY != 0 || rightAnalogX != 0 || rightAnalogY != 0) {
 			stopTrajectory();
+		}
+
+		double y = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle())[1];
+		if (y < .5 && grabberForward) {
+			grabber.wristBack();
+		} else if (y > .7 && !grabberForward) {
+			grabber.wristForward();
 		}
 
 		switch(currentMode) {
@@ -278,13 +288,13 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// experimentally found ratio TODO: fix for falcons
-		return shoulderMotor.getSelectedSensorPosition(1) / 42 + 54;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7 + 105.7;
 	}
 
 	public double getElbowAngle() {
 		SmartDashboard.putNumber("FALCON ELBOW RAW: ", elbowMotor.getSelectedSensorPosition());
 		SmartDashboard.putNumber("FALCON ELBOW: ", elbowMotor.getIntegralAccumulator() * 360/4096 / 200);
-		return -(elbowMotor.getSelectedSensorPosition() / 956 + 144);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 161.5);
 	}
 
 	/**

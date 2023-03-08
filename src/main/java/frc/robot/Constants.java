@@ -36,10 +36,11 @@ public class Constants {
 	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
-	public static final int SHOULDER_TALON_ID = 3;
-	public static final int SHOULDER_FALCON_ID = ;
-	public static final int ELBOW_TALON_ID = 5;
-	public static final int ELBOW_FALCON_ID = 9;
+	public static final int SHOULDER_TALON_ID = 20;
+	public static final int ELBOW_TALON_ID = 10;
+
+	public static final int SHOULDER_FALCON_ID = 5;
+	public static final int ELBOW_FALCON_ID = 6;
 
 	public static final int LIMIT_SWITCH_ID = 4; // DIO port num
 
@@ -102,9 +103,9 @@ public class Constants {
 	public static final int WRIST_BACKWARD_NUM = 3;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = 0;
-	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = 0;
+	public static final double SHOULDER_KP = 1.4;
+	public static final double SHOULDER_KI = 0.05;
+	public static final double SHOULDER_KD = 0.01;
 
 	public static final double SHOULDER_KS = 0;
 	public static final double SHOULDER_KG = 0;
@@ -112,7 +113,7 @@ public class Constants {
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = 0;
+	public static final double ELBOW_KP = 1.4;
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0;
 

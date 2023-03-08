@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -159,6 +159,9 @@ public class Robot extends TimedRobot {
     // arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.getElbowRawAngle();
+
+    arm.setShoulder(pidTuningAlpha);
+    arm.setElbow(pidTuningBeta);
 
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
 
@@ -182,6 +185,8 @@ public class Robot extends TimedRobot {
 
 
     if (counter % 10 == 0) {
+      System.out.println(pidTuningAlpha);
+      System.out.println(arm.getShoulderAngle());
       // System.out.println(arm.getShoulderFeedforward());
 
       // double angles[] = Kinematics.positionInverseKinematics(1, 1, 0);
@@ -294,19 +299,23 @@ public class Robot extends TimedRobot {
       // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
       // arm.setEndEffector(0.76, 0.94, 0);
-      arm.setEndEffector(x, y, 0);
+      // arm.setEndEffector(x, y, 0);
+      pidTuningBeta = 10;
     }
 
     if (Y) {
-      arm.setEndEffector(1.15, 1.29, 0);
+      // arm.setEndEffector(1.15, 1.29, 0);
+      pidTuningBeta = 0;
     }
 
     if (X) {
-      arm.setEndEffector(1.23, 1.05, 0);
+      // arm.setEndEffector(1.23, 1.05, 0);
+      pidTuningAlpha = 10;
     }
 
     if (A) {
-      arm.setEndEffector(0.84, 1.1, 0);
+      // arm.setEndEffector(0.84, 1.1, 0);
+      pidTuningAlpha = 0;
     }
 
     // MOTOR LIMITS/STOPS:
