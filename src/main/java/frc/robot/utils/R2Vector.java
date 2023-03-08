@@ -31,4 +31,8 @@ public class R2Vector {
     public R2Vector multiply(double factor) {
         return new R2Vector(x * factor, y * factor);
     }
+
+    public R2Vector pow(double exp) {
+        return new R2Vector(Math.pow(x, exp), Math.pow(y, exp));
+    }
 }

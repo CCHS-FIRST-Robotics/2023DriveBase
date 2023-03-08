@@ -125,6 +125,8 @@ public class Arm {
 
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
 		prevPosition = new R2Vector(pos[0], pos[1]);
+
+		setNeutralPostion();
 	}
 
 	/**
@@ -375,9 +377,10 @@ public class Arm {
 		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
 		ArrayList<double[]> trajectory = new QuadraticProfile().getSetPoints(
-			new R2Vector(current_pos[0], current_pos[1]), 
-			new R2Vector(x, y),
-			getWristAngle(),
+			new R2Vector(current_pos[0], current_pos[1]),  // initial pos
+			getJointAngles(), // initial angles
+			new R2Vector(x, y), // goal pos
+			getWristAngle(), // wrist angle
 			Constants.ARM_MAX_SPEED,
 			Constants.ARM_MAX_ACCELERATION
 		);
@@ -432,6 +435,13 @@ public class Arm {
 		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}
 
+	public void setNeutralPostion() {
+		grabber.clawBack(); // open claw
+		grabber.wristForward(); // wrist in line with upper arm
+
+		setEndEffector(.25, .5, 0);
+	}
+
 	public void setEndEffector(double xPos, double yPos, double theta) {
 		setEndEffector(xPos, yPos, theta, true);
 	}
@@ -445,7 +455,7 @@ public class Arm {
 	 */
 	public void setEndEffector(double xPos, double yPos, double theta, boolean debug) {
 		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
-		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, theta);
+		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, getJointAngles());
 
 		trajectory = Kinematics.degrees(getTrajectory(xPos, yPos));
 		currentMode = Mode.RUNNING_TRAJECTORY;
@@ -483,8 +493,8 @@ public class Arm {
 		double[] angles = trajectory.get(trajectory.size() - 1);
 		System.out.println("LAST: " + angles[0] + " next " + angles[1]);
 	
-		System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [0]));
-		System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, 0) [1]));
+		System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, getJointAngles()) [0]));
+		System.out.println("IK SOLUTION Y: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, getJointAngles()) [1]));
 	
 		System.out.println("FK TEST X: " + Kinematics.forwardKinematics(angles[0], angles[1]) [0]);
 		System.out.println("FK TEST Y: " + Kinematics.forwardKinematics(angles[0], angles[1]) [1]);
@@ -527,13 +537,6 @@ public class Arm {
 			getElbowFeedforward() 
 			
 		);
-	}
-
-	public void setNeutralPostion() {
-		grabber.clawBack(); // open claw
-		grabber.wristForward(); // wrist in line with upper arm
-
-		setEndEffector(.25, .5, 0);
 	}
 
 	/**
