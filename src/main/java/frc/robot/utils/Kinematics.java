@@ -99,7 +99,7 @@ public final class Kinematics {
 	 * This will return the desired angle of each arm length using IK
 	 * Calculated by finding the (x, y) coords of the center joint
 	 * 
-	 * Previous method had limitations in that I didn't fully implement the second angle
+	 * Previous method had limitations in that I didn't fully implement the second solution
 	 * and the use of asin restricted the possible solutions.
 	 * 
 	 * Solution derived using MATLAB, I'm using short/unclear variable names 
@@ -110,12 +110,10 @@ public final class Kinematics {
 	 * 
 	 * @param x
 	 * @param y
-	 * @param theta (double) - the angle of the claw relative to the horizontal
-	 * @param clawDown (boolean) - whether or not to choose the angle pair that reults in the claw pointing down
 	 * 								if the desired position is not possible, it will be ignored
 	 * @return angles (double[2]) - angle measurements of each joint in degrees, shoulder first
 	 */
-	public static double[] positionInverseKinematics(double x, double y, double theta, boolean clawDown) {
+	public static double[][] positionInverseKinematics(double x, double y) {
 		double l1 = Constants.LOWER_ARM_LENGTH;
 		double l2 = Constants.UPPER_ARM_LENGTH;
 		y -= Constants.SHOULDER_JOINT_HEIGHT; // calculations assume the bottom joint is at (0, 0)
@@ -153,6 +151,29 @@ public final class Kinematics {
 			(2*Math.atan(sigma2))
 		};
 
+		return new double[][] {alphas, betas};
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @param clawDown (boolean) - whether or not to choose the angle pair that reults in the claw pointing down
+	 * @return
+	 */
+	public static double[] positionInverseKinematics(double x, double y, boolean clawDown) {
+		// If none is specified, choose the position that typically works
+		double[][] angles = positionInverseKinematics(x, y);
+		double[] alphas = angles[0];
+		double[] betas = angles[1];
+		return evaluateAngles(alphas, betas, clawDown);
+	}
+
+	public static double[] positionInverseKinematics(double x, double y, double[] initialAngles) {
+		double[][] angles = positionInverseKinematics(x, y);
+		return evaluateAngles(angles, initialAngles);
+	}
+
+	public static double[] evaluateAngles(double[] alphas, double[] betas, boolean clawDown) {
 		int i; // TODO:
 		// check if either pair violates a motor limit
 		// for (i=0; i<2; i++) {
@@ -177,9 +198,19 @@ public final class Kinematics {
 		return pair;
 	}
 
-	public static double[] positionInverseKinematics(double x, double y, double theta) {
-		// If none is specified, choose the position that typically works
-		return positionInverseKinematics(x, y, theta, true);
+	public static double[] evaluateAngles(double[][] angles, double[] initialAngles) {
+		double[] closestAngles = new double[2];
+		double leastError = Math.pow(10, 10);
+
+		for (int i=0; i<angles.length; i++) {
+			double error = angularError(angles[i], initialAngles);
+
+			if (error < leastError) {
+				closestAngles = angles[i];
+				leastError = error;
+			}
+		}
+		return closestAngles;
 	}
 
 	/**
@@ -329,5 +360,9 @@ public final class Kinematics {
 			newAngles.add(degrees(angles.get(i)));
 		}
 		return newAngles;
+	}
+
+	public static double angularError(double[] angles1, double[] angles2) {
+		return new R2Vector(angles1[0], angles1[1]).sub(new R2Vector(angles2[0], angles2[1])).mag();
 	}
 }

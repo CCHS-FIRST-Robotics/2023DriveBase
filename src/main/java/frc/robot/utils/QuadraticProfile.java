@@ -17,7 +17,7 @@ public class QuadraticProfile {
         this(.02);
     }
     
-    public double[][] getSetPoints(R2Vector initialPosition, R2Vector initialVelocity, R2Vector goal, double theta, double speed, double acceleration) {
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector initialVelocity, R2Vector goal, double[] initialAngles, double speed, double acceleration) {
         R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
         // displacement from the initial (x, y) to goal 
@@ -60,8 +60,14 @@ public class QuadraticProfile {
         R2Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
 
         double[][] setpoints = new double[combined.length][2];
+        double[] angles;
         for (int i = 0; i < combined.length; i++) {
-            double[] angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, theta);
+            if (i == 0) {
+                angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, initialAngles);
+            } else {
+                angles = Kinematics.positionInverseKinematics(combined[i].x, combined[i].y, setpoints[i-1]);
+            }
+            
             setpoints[i][0] = angles[0];
             setpoints[i][1] = angles[1];
         }
@@ -69,7 +75,7 @@ public class QuadraticProfile {
         return setpoints;
     }
 
-    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration) {
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed, double acceleration) {
         R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
         // displacement from the initial (x, y) to goal 
@@ -112,7 +118,13 @@ public class QuadraticProfile {
             try {
                 double x = combined[i].x;
                 double y = combined[i].y;
-                angles = Kinematics.positionInverseKinematics(x, y, theta);
+                if (i == 0) {
+                    angles = Kinematics.positionInverseKinematics(x, y, initialAngles);
+                } else {
+                    angles = Kinematics.positionInverseKinematics(x, y, setpoints.get(i-1));
+                }
+                
+
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("angle is NaN");
                 }
