@@ -35,7 +35,18 @@ import frc.robot.utils.*;
  */
 public class Robot extends TimedRobot {
 
+  enum AutonStates {
+    MoveArmToScore,
+    WaitForArm,
+    OpenGrabber,
+    WaitForGrabber,
+    FoldArm,
+    DriveInit,
+    Drive
+  };
   
+  AutonStates AutonState = AutonStates.MoveArmToScore;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -143,61 +154,78 @@ public class Robot extends TimedRobot {
     driveBase.clearOdom();
 
     // create an example trajectory		
-    Pose2d current = driveBase.getPose();
+    // Pose2d current = driveBase.getPose();
     // start with a small displacement ( + 1)
-    Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
-    Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
-    driveBase.resetCurrentTrajectoryTime();
+    // Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
+    // Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
+    // driveBase.resetCurrentTrajectoryTime();
     
-    System.out.println("zeroing counter");
+    // System.out.println("zeroing counter");
     auton_counter = 0;
 
     // set up timer for autonomous
-    driveBase.autonTimer = new Timer();
-    driveBase.autonTimer.start();
+    // driveBase.autonTimer = new Timer();
+    // driveBase.autonTimer.start();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // switch (m_autoSelected) {
-    //   case kCustomAuto:
-    //     // Put custom auto code here
-    //     break;
-    //   case kDefaultAuto:
-    //   default:
-    //     break;
-		// // Default code
-    // }
-    // stop the robot after a while
-    // if (auton_counter > 100) autonomousIsMoving = false;
-		// this if statement is kind of irrelevant because we have no way to change this bool
-    // because all controller input is ignored during autonomous
-		if (autonomousIsMoving){
-			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
-			// driveBase.incrementCurrentTrajectoryTime(); // so add it up
-			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
-      // Autonomous.applyChassisSpeeds(driveBase);
+    // // switch (m_autoSelected) {
+    // //   case kCustomAuto:
+    // //     // Put custom auto code here
+    // //     break;
+    // //   case kDefaultAuto:
+    // //   default:
+    // //     break;
+		// // // Default code
+    // // }
+    // // stop the robot after a while
+    // // if (auton_counter > 100) autonomousIsMoving = false;
+		// // this if statement is kind of irrelevant because we have no way to change this bool
+    // // because all controller input is ignored during autonomous
+		// if (autonomousIsMoving){
+		// 	// increase the current time, because autonomous trajectories need a time (each period takes the same time)
+		// 	// driveBase.incrementCurrentTrajectoryTime(); // so add it up
+		// 	// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
+    //   // Autonomous.applyChassisSpeeds(driveBase);
 
-      // +x is forward, +y is right, +z is clockwise as viewed from above
-      // driveBase.mDrive.driveCartesian(0, 0, -Math.PI/16);
+    //   // +x is forward, +y is right, +z is clockwise as viewed from above
+    //   // driveBase.mDrive.driveCartesian(0, 0, -Math.PI/16);
       
-      // +x is forward, +y is left
-      // driveBase.drive(new ChassisSpeeds(.25, 0, 0));
+    //   // +x is forward, +y is left
+    //   // driveBase.drive(new ChassisSpeeds(.25, 0, 0));
 
-      // it seems to be driving about 500 click/100ms too fast??
-      driveBase.frontLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
-      driveBase.frontRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
-      driveBase.rearLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
-      driveBase.rearRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
-      driveBase.printVelocity();
-      // System.out.println(driveBase.getOdomHeading());
-		}
-    else {
-      // System.out.println("Not moving");
-      driveBase.drive(0, 0, 0);
+    //   // it seems to be driving about 500 click/100ms too fast??
+    //   driveBase.frontLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+    //   driveBase.frontRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+    //   driveBase.rearLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+    //   driveBase.rearRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+    //   driveBase.printVelocity();
+    //   // System.out.println(driveBase.getOdomHeading());
+		// }
+    // else {
+    //   // System.out.println("Not moving");
+    //   driveBase.drive(0, 0, 0);
+    // }
+		// auton_counter++;
+
+    switch (AutonState) {
+      case MoveArmToScore:
+        break;
+      case WaitForArm:
+        break;
+      case OpenGrabber:
+        break;
+      case WaitForGrabber:
+        break;
+      case FoldArm:
+        break;
+      case DriveInit:
+        break;
+      case Drive:
+        break;
     }
-		auton_counter++;
   }
 
   /** This function is called once when teleop is enabled. */

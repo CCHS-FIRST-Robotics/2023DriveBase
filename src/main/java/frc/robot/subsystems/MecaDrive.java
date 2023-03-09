@@ -371,5 +371,27 @@ public class MecaDrive extends DriveBase {
 		imu.resetDisplacement();
 		mOdom.resetPosition(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), getPose());
 	}
+
+	/**
+	 * tells all motors to go to a certain position, in meters
+	 * will move straight to given position if motor encoders are zeroed first
+	 */
+	public void setPosition(int pos) {
+		frontLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
+		frontRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
+		rearLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
+		rearRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
+	}
+
+	/**
+	 * makes the robot hold its current position
+	 */
+	public void holdPosition() {
+		// takes raw units and getSelectedSensorPosition should give raw units
+		frontLeftMotor.set(ControlMode.Position, frontLeftMotor.getSelectedSensorPosition());
+		frontRightMotor.set(ControlMode.Position, frontRightMotor.getSelectedSensorPosition());
+		rearLeftMotor.set(ControlMode.Position, rearLeftMotor.getSelectedSensorPosition());
+		rearRightMotor.set(ControlMode.Position, rearRightMotor.getSelectedSensorPosition());
+	}
 }
 
