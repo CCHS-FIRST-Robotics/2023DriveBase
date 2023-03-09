@@ -1,9 +1,16 @@
 package frc.robot.subsystems;
 import java.lang.Math;
 
-public abstract class DriveBase {
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+public abstract class DriveBase extends SubsystemBase {
 	// used to scale speeds - 1 would be max speed, 0.5 would be half speed, etc.
-	double speedMultiplier = 0.6;
+	double speedMultiplier = Constants.DRIVE_STARTING_MULTIPLIER;
 
 	// different modes
 	enum Mode {
@@ -18,6 +25,21 @@ public abstract class DriveBase {
 	int debugEnabledMotor = 0;
 
 
+	/*
+	 * Autonomous variables and associated functions (trajectory & ramsete controller)
+	 */
+	private Trajectory currentTrajectory;
+	private double currentTrajectoryTime; // seconds
+
+	// https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/math/trajectory/TrajectoryConfig.html
+	// needed for the updateTrajectory method in Autonomous
+	protected TrajectoryConfig trajectoryConfig;
+	
+	// https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/ramsete.html
+	// manages the forward, sideways, and rotational velocity of the robot (chassis speeds)
+	private final RamseteController chassisController = new RamseteController(Constants.RAMSETE_B, Constants.RAMSETE_ZETA);
+
+
 	/**
 	 * Drive the robot with controller input
 	 * 
@@ -25,9 +47,14 @@ public abstract class DriveBase {
 	 * analog sticks
 	 * 
 	 */
-	public abstract void drive(double leftAnalogX, double leftAnalogY,
-					  double rightAnalogX, double rightAnalogY);
+	public void drive(double leftAnalogX, double leftAnalogY,
+					  double rightAnalogX, double rightAnalogY){};
 
+
+	public void drive(double leftAnalogX, double leftAnalogY,
+					  double rightAnalogX){};
+
+	public void drive(ChassisSpeeds chassisSpeeds){};
 	/**
 	 * Prints the controls of the current driving mode
 	 */
@@ -109,5 +136,40 @@ public abstract class DriveBase {
 
 	public void leftBumperPressed() {}
 
-	public void rightBumperPressed() {}	
+	public void rightBumperPressed() {}
+	
+	// Generated setters and getters (please use setters and getters)
+	public Mode getCurrentMode() {
+		return currentMode;
+	}
+	public void setCurrentMode(Mode currentMode) {
+		this.currentMode = currentMode;
+	}
+	public int getDebugEnabledMotor() {
+		return debugEnabledMotor;
+	}
+	public void setDebugEnabledMotor(int debugEnabledMotor) {
+		this.debugEnabledMotor = debugEnabledMotor;
+	}
+	public Trajectory getCurrentTrajectory() {
+		return currentTrajectory;
+	}
+	public void setCurrentTrajectory(Trajectory currentTrajectory) {
+		this.currentTrajectory = currentTrajectory;
+	}
+	public TrajectoryConfig getTrajectoryConfig() {
+		return trajectoryConfig;
+	}
+	public RamseteController getChassisController() {
+		return chassisController;
+	}	
+	public double getCurrentTrajectoryTime()	{
+		return currentTrajectoryTime;
+	}
+	public void resetCurrentTrajectoryTime()	{
+		currentTrajectoryTime = 0;
+	}
+	public void incrementCurrentTrajectoryTime()	{
+		currentTrajectoryTime += Constants.SECONDS_BETWEEN_CODE_PERIODS;
+	}
 }

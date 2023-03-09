@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['m_5fautoselected_0',['m_autoSelected',['../dd/d54/classfrc_1_1robot_1_1_robot.html#a1b21da051611678b4f9af38ce2125dfb',1,'frc::robot::Robot']]],
-  ['m_5fchooser_1',['m_chooser',['../dd/d54/classfrc_1_1robot_1_1_robot.html#aeba62b63304a71f0d8686fc38bfca704',1,'frc::robot::Robot']]],
-  ['maxvelocity_2',['maxVelocity',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a05129363da05bc040edc3ad3b3b81ae3',1,'frc::robot::Constants']]]
+  ['left_5fvictor_5fid_0',['LEFT_VICTOR_ID',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a0832d8035bdbd8e950894da741f045a6',1,'frc::robot::Constants']]],
+  ['left_5fx_5fexponent_1',['LEFT_X_EXPONENT',['../d2/da2/classfrc_1_1robot_1_1_constants.html#accddfc754a41197ce7125c9d25640ea5',1,'frc::robot::Constants']]],
+  ['left_5fy_5fexponent_2',['LEFT_Y_EXPONENT',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a1808cd467ba1cfcdb7d19c92ff5725d2',1,'frc::robot::Constants']]]
 ];

@@ -33,8 +33,10 @@ var NAVTREE =
       [ "Documentation", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md4", [
         [ "Adding documentation", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md5", null ],
         [ "How the drive base works", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md6", null ],
-        [ "Motors and components", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md7", null ]
-      ] ]
+        [ "How the arm works", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md7", null ],
+        [ "Motors and components", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md8", null ]
+      ] ],
+      [ "Relevant Articles", "da/d2e/md_robotics_2023_drive_base__readme.html#autotoc_md9", null ]
     ] ],
     [ "WPILib-License", "db/d81/md_robotics_2023_drive_base__w_p_i_lib__license.html", null ],
     [ "Packages", "namespaces.html", [

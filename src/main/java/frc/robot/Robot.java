@@ -10,7 +10,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
+import java.util.ArrayList;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import frc.robot.subsystems.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,16 +37,19 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Controller xboxController = new Controller();
-  private MecaDrive driveBase;
-
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   ZED zed = new ZED();
   BetterShuffleboard smartdash = new BetterShuffleboard();
+
+  private Controller xboxController = new Controller();
+  private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
   
+  boolean autonomousIsMoving = true;
+
   double test = 0;
   long counter = 0; // for calling functions every n loops
+  long auton_counter = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -54,9 +68,6 @@ public class Robot extends TimedRobot {
 
     // tank drive initialization
     // driveBase = createTankDrive();
-
-    // mecanum drive initialization
-    driveBase = createMecanumDrive();
   }
 
   /**
@@ -69,12 +80,18 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    
+    driveBase.updateOdometry();
+
     // SmartDashboard.putNumber("test", test);
     // limelight.test();
     // System.out.println("hello wo5rld");
 
     // test += 1;
+
+    if (counter % 10 == 0) {
+      smartdash.pushDashboard(limelight, imu, driveBase, zed);
+    }
+    counter++;
   }
 
   /**
@@ -92,20 +109,62 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    // disable safety because we are not driving with this in autonomous
+    driveBase.mDrive.setSafetyEnabled(false);
+
+    driveBase.clearOdom();
+
+    // create an example trajectory		
+    Pose2d current = driveBase.getPose();
+    // start with a small displacement ( + 1)
+    Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
+    Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
+    driveBase.resetCurrentTrajectoryTime();
+    System.out.println("zeroing counter");
+    auton_counter = 0;
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    // switch (m_autoSelected) {
+    //   case kCustomAuto:
+    //     // Put custom auto code here
+    //     break;
+    //   case kDefaultAuto:
+    //   default:
+    //     break;
+		// // Default code
+    // }
+    // stop the robot after a while
+    // if (auton_counter > 200) autonomousIsMoving = false;
+		// this if statement is kind of irrelevant because we have no way to change this bool
+    // because all controller input is ignored during autonomous
+		if (autonomousIsMoving){
+			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
+			driveBase.incrementCurrentTrajectoryTime(); // so add it up
+			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
+      Autonomous.applyChassisSpeeds(driveBase);
+
+      // +x is forward, +y is right, +z is clockwise as viewed from above
+      // driveBase.mDrive.driveCartesian(0, 0, -Math.PI/16);
+      
+      // +x is forward, +y is left
+      // driveBase.drive(new ChassisSpeeds(.25, 0, 0));
+
+      // it seems to be driving about 500 click/100ms too fast??
+      // driveBase.frontLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.frontRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.rearLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      // driveBase.rearRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      driveBase.printVelocity();
+      System.out.println(driveBase.getOdomHeading());
+		}
+    else {
+      // System.out.println("Not moving");
+      driveBase.drive(0, 0, 0);
     }
+		auton_counter++;
   }
 
   /** This function is called once when teleop is enabled. */
@@ -126,11 +185,6 @@ public class Robot extends TimedRobot {
 
     // powers motors based on the analog inputs
     drive();
-
-    if (counter % 10 == 0) {
-      smartdash.pushDashboard(limelight, imu, zed);
-    }
-    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -173,6 +227,7 @@ public class Robot extends TimedRobot {
     }
     if (xboxController.getBButtonPressed()) {
       driveBase.printActiveMotorDebugMode();
+      System.out.println("gfhighfdi");
     }
     if (xboxController.getLeftBumperPressed()) {
       driveBase.decreaseSpeedBracket();
@@ -186,20 +241,14 @@ public class Robot extends TimedRobot {
    * Powers motors based on the analog inputs
    */
   private void drive() {
-
     // process input (determine wheelspeeds)
-    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
-    // System.out.println(xboxController.getLeftY());
+    // driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
+    driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());
   }
 
   // private TankDrive createTankDrive() {
   //   return new TankDrive(Constants.SPARK_MAX_ID, Constants.LEFT_VICTOR_ID,
   //                        Constants.TALON_ID, Constants.RIGHT_VICTOR_ID);
   // }
-
-  private MecaDrive createMecanumDrive() {
-    return new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID,
-                         Constants.RL_TALON_ID, Constants.RR_TALON_ID);
-  }
 
 }

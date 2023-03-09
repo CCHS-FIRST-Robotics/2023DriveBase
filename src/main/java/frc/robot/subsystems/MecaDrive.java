@@ -1,121 +1,206 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.Constants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
 
 import java.lang.Math;
 
+
 public class MecaDrive extends DriveBase {
-    WPI_TalonFX frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor;
 
-	// Stop mode variables
+	// TODO: create better modules for teleop and autonomous driving / odometry
 
-	// to save the last velocities so the robot can slow down
-	double[] slowingDownSpeeds = new double[4];
+	IMU imu;
 
-	// this makes the left and right vel scope include the function that sets
-	// the slowing values so the function can use them
-	double[] combinedSpeeds = new double[4];
+	// the motor to be activated during debug mode
+	int debugEnabledMotor = 0;
 
-	// input curving for better fine control
-	public static double LEFT_Y_EXPONENT = 2;
-	public static double LEFT_X_EXPONENT = 2;
-	public static double RIGHT_X_EXPONENT = 2;
+	// Odometry class for tracking robot pose
+	final MecanumDriveOdometry mOdom;
 
-    /**
-     * Constructor for Mecanum Drive Class
-     * 
-     * @param frontLeftMotorPort
-     * @param rearLeftMotorPort
-     * @param frontRightMotorPort
-     * @param rearRightMotorPort
-     */
-    public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
-                     int rearLeftMotorPort, int rearRightMotorPort) {
-        frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
-        frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
-        rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
-        rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
-		
+	// Drive Object
+	public MecanumDrive mDrive;
+
+	// Motor Controller Objects
+	public WPI_TalonFX frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor;
+
+	// Motor positions Object
+	MecanumDriveWheelPositions wheelPositions;
+
+	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
+					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
+
+		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
+		frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
+		rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
+		rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+
 		// invert motors to make forward the right direction
 		frontRightMotor.setInverted(true);
 		rearRightMotor.setInverted(true);
-    } 
 
-    /**
-     * drive the robot using controller inputs
-     * 
-     * Left analog stick controls translation
-     * Right analog stick controls rotation (move it right -> rotate clockwise, move it left -> rotate counterclockwise)
-     * 
-     * positive is right/up
-     * 
-     * @param leftAnalogX the x position of the left analog stick; range: [-1, 1]
-     * @param leftAnalogY the y position of the left analog stick; range: [-1, 1]
-     * @param rightAnalogX the x position of the right analog stick; range: [-1, 1]
-     * @param rightAnalogY the y position of the right analog stick; range: [-1, 1]
-	 * 
-	 * In Debug Mode, the robot will only power one wheel at a time.
-	 * Toggle through these wheels by pressing A.
-	 * Wheel Order: FL -> FR -> BL -> BR -> FL -> ...
-	 * 
-     */
-    public void drive(double leftAnalogX, double leftAnalogY,
-					  double rightAnalogX, double rightAnalogY) {
-        
-        // left analog stick controls translation
-        // right analog stick controls rotation
+		// zero encoders
+		frontLeftMotor.setSelectedSensorPosition(0);
+		frontRightMotor.setSelectedSensorPosition(0);
+		rearLeftMotor.setSelectedSensorPosition(0);
+		rearRightMotor.setSelectedSensorPosition(0);
 
-		combinedSpeeds = combineSpeeds(leftAnalogX,  leftAnalogY, 
-									   rightAnalogX, rightAnalogY);
+		configTalonFX(frontLeftMotor);
+		configTalonFX(frontRightMotor);
+		configTalonFX(rearLeftMotor);
+		configTalonFX(rearRightMotor);
+
+		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+
+		this.imu = imu;
+
+		// Odometry: !!secondary constructor takes initialPose argument
+		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
+	
+		// see declaration in DriveBase
+		// set up the config for autonomous trajectories
+		// see another team's implementation https://github.com/FRC5254/FRC-5254-2020/blob/master/src/main/java/frc/robot/commands/auto/Path.java
+		// relevant info! https://www.chiefdelphi.com/t/poll-why-didnt-you-use-the-wpilib-trajectory-generator-this-year/384611/37
+		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
+		trajectoryConfig.setKinematics(Constants.MECANUM_KINEMATICS);
+		trajectoryConfig.addConstraint( // this may be unnessesary, hmm unsure
+			new MecanumDriveKinematicsConstraint(Constants.MECANUM_KINEMATICS, Constants.maxVelocityMetersPerSecond));
+	}
+	
+	@Override
+	public void drive(double speedX, double speedY, double rotateSpeed) {
+		speedX *= speedMultiplier;
+		speedY *= speedMultiplier;
+		rotateSpeed *= speedMultiplier;
+		// these speeds are linearized from 1 to -1
 
 		switch (currentMode){
-			case DEFAULT_MODE:
-				 // set the motor speeds as a percent 0-1 (normal)
-				frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
-				frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
-				rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
-				break;
 			case STOP_MODE:
 				// STOP!!!!! set motors to 0
 				// slower stop
-				slowingDownSpeeds = slowDown(slowingDownSpeeds);
-
-				frontLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[0]);
-				frontRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[1]);
-				rearLeftMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[2]);
-				rearRightMotor.set(ControlMode.PercentOutput, slowingDownSpeeds[3]);
+				speedX = slowDown(speedX);
+				speedY = slowDown(speedY);
+				rotateSpeed = slowDown(rotateSpeed);
 				break;
-			case DEBUG_MODE:
-				// Debug mode (toggle wheels with left stick button)
+
+			// TODO: figure out how to implement a debug mode
+			// case DEBUG_MODE:
+			// 	// Debug mode (toggle wheels with left stick button)
 				
-				switch (debugEnabledMotor){
-					case 0:
-						frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
-						break;
-					case 1:
-						frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
-						break;
-					case 2:
-						rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
-						break;
-					case 3:
-						rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
-						break;	
-        		}
+			// 	switch (debugEnabledMotor){
+			// 		case 0:
+			// 			frontLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[0]);
+			// 			break;
+			// 		case 1:
+			// 			frontRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[1]);
+			// 			break;
+			// 		case 2:
+			// 			rearLeftMotor.set(ControlMode.PercentOutput, combinedSpeeds[2]);
+			// 			break;
+			// 		case 3:
+			// 			rearRightMotor.set(ControlMode.PercentOutput, combinedSpeeds[3]);
+			// 			break;	
+			// 	}
 
-				break;
+			// 	break;
 			case PID_TUNING_MODE:
 				// nothing yet
 				break;
+			default:
+				break;
 		}
-    }
+		
+		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
+		// https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-drive-subsystem.html
+		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+	}
 
+	/**
+	 * Drive with ChassisSpeeds object (useful for autonomous)
+	 * 
+	 * TODO: Tune velocity control? https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html
+	 */
 	@Override
+	public void drive(ChassisSpeeds chassisSpeeds) {
+		// System.out.println(chassisSpeeds.vxMetersPerSecond + ", " + chassisSpeeds.vyMetersPerSecond);
+		// convert to mecanum speeds (in m/s)
+		MecanumDriveWheelSpeeds speeds = Constants.MECANUM_KINEMATICS.toWheelSpeeds(chassisSpeeds);
+		// System.out.println(speeds.frontLeftMetersPerSecond + ", "
+		// 				   + speeds.frontRightMetersPerSecond + ", "
+		// 				   + speeds.rearLeftMetersPerSecond + ", "
+		// 				   + speeds.rearRightMetersPerSecond);
+
+		// convert to motor native units (clicks/100ms)
+		double conversionFactor = (Constants.FALCON_GEARBOX_RATIO * Constants.TALON_FX_CPR) / (10 * Math.PI * Constants.MECANUM_WHEEL_DIAMETER);
+		double FLSpeed = speeds.frontLeftMetersPerSecond * conversionFactor;
+		double FRSpeed = speeds.frontRightMetersPerSecond * conversionFactor;
+		double RLSpeed = speeds.rearLeftMetersPerSecond * conversionFactor;
+		double RRSpeed = speeds.rearRightMetersPerSecond * conversionFactor;
+
+		// System.out.println(FLSpeed + ", "
+		// 				   + FRSpeed + ", "
+		// 				   + RLSpeed + ", "
+		// 				   + RRSpeed);
+
+		// set the motor speeds
+		frontLeftMotor.set(ControlMode.Velocity, FLSpeed);
+		frontRightMotor.set(ControlMode.Velocity, FRSpeed);
+		rearLeftMotor.set(ControlMode.Velocity, RLSpeed);
+		rearRightMotor.set(ControlMode.Velocity, RRSpeed);
+	}
+
+	/**
+	 * This will return a value lower than the input, and it is used to slow 
+	 * down the motors during stop mode
+	 * 
+	 * @param inputVelocity between -1 and 1 (double)
+	 * @return the new value (lower)
+	 */
+	private double slowDown(double inputVelocity){
+		// velocity needs to be reduced
+		double newVelocity = inputVelocity / Constants.SLOW_DOWN_FACTOR;
+
+		// input has reached cutoff, now returning 0 speed
+		if (Math.abs(inputVelocity) < Constants.SLOW_DOWN_CUTOFF){
+			newVelocity = 0;
+		}
+	
+		return newVelocity;
+	}
+
+	public void configTalonFX(WPI_TalonFX talon) {
+		talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+										   Constants.FALCON_PID_IDX, 
+										   Constants.FALCON_TIMEOUT_MS);
+		
+		talon.configNominalOutputForward(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configNominalOutputReverse(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputForward(1, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputReverse(-1, Constants.FALCON_TIMEOUT_MS);
+
+		talon.config_kF(Constants.FALCON_PID_IDX, Constants.FALCON_KF, Constants.FALCON_TIMEOUT_MS);
+		talon.config_kP(Constants.FALCON_PID_IDX, Constants.FALCON_KP);
+		talon.config_kD(Constants.FALCON_PID_IDX, Constants.FALCON_KD);
+
+		talon.config_kI(Constants.FALCON_PID_IDX, Constants.FALCON_KI);
+		talon.config_IntegralZone(Constants.FALCON_PID_IDX, Constants.FALCON_INTEGRAL_ZONE);
+
+		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.4);
+	}
+
 	public void printControlsOfCurrentMode() {
 		System.out.println("Controls:");
 		switch(currentMode) {
@@ -140,7 +225,6 @@ public class MecaDrive extends DriveBase {
 		}
 	}
 
-	
 	/**
 	 * Cycle between each motor during debug mode
 	 */
@@ -161,82 +245,127 @@ public class MecaDrive extends DriveBase {
 			System.out.println("Current Motor: " + debugEnabledMotor);
 		}
 	}
+	
 
-	/**
-	 * 
-	 * Process the controller input into speeds for mecanum wheels
-	 * 
-	 * @param leftAnalogX
-	 * @param leftAnalogY
-	 * @param rightAnalogX
-	 * @param rightAnalogY
-	 * @return array of all processed speeds {front left, front right, back left, back right}
-	 */
-	private double[] combineSpeeds(double leftAnalogX,  double leftAnalogY,
-								   double rightAnalogX, double rightAnalogY){       
-        // arrays for wheel speeds for each movement direction (percents)
-        // 1st is front left, 2nd is front right, 3rd is back left, 4th is back right
-        double[] verticalSpeeds = {leftAnalogY, leftAnalogY,
-                                   leftAnalogY, leftAnalogY};
-        
-        // negatives due to wheels going in opposite directions during left or right translation
-        double[] horizontalSpeeds = {leftAnalogX, -leftAnalogX,
-                                     -leftAnalogX, leftAnalogX};
-
-        // left and right wheels should go different directions to rotate the robot
-        double[] rotationSpeeds = {rightAnalogX, -rightAnalogX,
-                                   rightAnalogX, -rightAnalogX};
-		
-
-		double maxSpeed = Integer.MIN_VALUE;
-		/* combined speed could exceed 1 (not good; we cannot run the motors at over 100%)
-        we will use the maximum speed to scale all the other speeds to something below 1 */
-		for (int i = 0; i < 4; i++) {
-			combinedSpeeds[i] = verticalSpeeds[i] + horizontalSpeeds[i] + rotationSpeeds[i];
-			if (Math.abs(combinedSpeeds[i]) > maxSpeed) maxSpeed = Math.abs(combinedSpeeds[i]);
-		}
-
-		maxSpeed = Math.max(1, maxSpeed); // if the max is under 1, we can ignore (we don't have to do any scaling)
-
-        for (int i = 0; i < 4; i++) {
-            // nomralize the speeds and scale by speed multiplier
-            combinedSpeeds[i] = (speedMultiplier / maxSpeed) * combinedSpeeds[i];
-        }
-
-		return combinedSpeeds;
-	}
-
-	/**
-	 * This will return a value lower than the input, and it is used to slow 
-	 * down the motors during stop mode
-	 * 
-	 * @param inputVelocity between -1 and 1 (double)
-	 * @return the new value (lower)
-	 */
-	private double[] slowDown(double[] inputVelocity){
-		// input is between -1 and 1
-		double[] newVelocity = new double[4];
-
-		for (int i = 0; i < 4; i++){
-			// velocity needs to be reduced
-			newVelocity[i] = inputVelocity[i] / Constants.SLOW_DOWN_FACTOR;
-
-			// input has reached cutoff, now returning 0 speed
-			if (Math.abs(inputVelocity[i]) < Constants.SLOW_DOWN_CUTOFF){
-				newVelocity[i] = 0;
-			}
-		}
-		return newVelocity;
-	}
-
+	//TODO: remove since it's never called
 	@Override
-	public void turnOnStopMode() {
-		if(currentMode == Mode.STOP_MODE) return;
-		currentMode = Mode.STOP_MODE;
-		// Stop mode activated, so now the robot needs to slow down
-		// start by saving the last left and right velocities 
-		slowingDownSpeeds = combinedSpeeds;
-		System.out.println("STOP MODE");
+	public void periodic() {
+		// Update the odometry in the periodic block		
 	}
 
+	public void updateOdometry() {
+		mOdom.update(new Rotation2d(Math.toRadians(imu.getHeading())), getWheelPositions());
+	}
+
+	/**
+	 * Converts raw position units to meters
+	 * @param rawPosition the position from an encoder in raw sensor units
+	 * @return the position in meters
+	 */
+	private double convertPosition(double rawPosition) {
+		// raw units are "clicks," so divide by "clicks" per rotation to get rotations
+		// also account for gear ratio because the encoders measure motor output, not actual wheel
+		double position = rawPosition / (Constants.TALON_FX_CPR * Constants.FALCON_GEARBOX_RATIO);
+		// multiply by circumference to get linear distance
+		position *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
+		return position;
+	}
+
+	/**
+	 * Returns the total distances measured by each motor
+	 * 
+	 * @return wheel positions
+	 */
+	MecanumDriveWheelPositions getWheelPositions() {
+
+		// TODO: determine whether should use absolute position or just position
+
+		return new MecanumDriveWheelPositions(convertPosition(frontLeftMotor.getSelectedSensorPosition()), 
+											  convertPosition(frontRightMotor.getSelectedSensorPosition()),
+											  convertPosition(rearLeftMotor.getSelectedSensorPosition()),
+											  convertPosition(rearRightMotor.getSelectedSensorPosition()));
+	}
+
+	/**
+	 * Converts raw sensor velocity to meters/second
+	 * @param rawVelocity the velocity from an encoder in raw sensor units
+	 * @return velocity in m/s
+	 */
+	private double convertVelocity(double rawVelocity) {
+		// convert to rotations per second because raw units are "clicks" per 100ms
+		// also account for gear ratio because the encoders measure motor output, not actual wheel
+		double velocity = rawVelocity / (Constants.TALON_FX_CPR * Constants.FALCON_GEARBOX_RATIO) * 10;
+		// multiply by circumference to get linear velocity
+		velocity *= Math.PI * Constants.MECANUM_WHEEL_DIAMETER;
+		return velocity;
+	}
+
+	/**
+	 * Returns the current wheel speeds of each motor
+	 * 
+	 * @return wheel speeds
+	 */
+	MecanumDriveWheelSpeeds getWheelSpeeds() {
+		return new MecanumDriveWheelSpeeds(convertVelocity(frontLeftMotor.getSelectedSensorVelocity()),
+										   convertVelocity(frontRightMotor.getSelectedSensorVelocity()), 
+										   convertVelocity(rearLeftMotor.getSelectedSensorVelocity()),
+										   convertVelocity(rearRightMotor.getSelectedSensorVelocity()));
+	}
+
+	/**
+	 * Returns the currently-estimated pose of the robot.
+	 *
+	 * @return The pose.
+	 */
+	public Pose2d getPose() {
+		return mOdom.getPoseMeters();
+	}
+
+	public double getOdomX() {
+		return mOdom.getPoseMeters().getTranslation().getX();
+	}
+
+	public double getOdomY() {
+		return mOdom.getPoseMeters().getTranslation().getY();
+	}
+
+	public double getOdomHeading() {
+		return mOdom.getPoseMeters().getRotation().getDegrees();
+	}
+
+	// TODO: create method that returns wheel speeds of the robot
+	// TODO: create mthod that allows control of wheels with voltages
+	// TODO: method of averages of encoder distances
+
+	/**
+	 * Resets the odometry to the specified pose.
+	 *
+	 * @param pose The pose to which to set the odometry.
+	 */
+	public void resetOdometry(Pose2d pose) {
+		//resetEncoders();
+		mOdom.resetPosition(
+			new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), pose);
+	}
+
+	public void printVelocity() {
+		System.out.println(frontLeftMotor.getSelectedSensorVelocity() + ", " + 
+						   frontRightMotor.getSelectedSensorVelocity() + ", " + 
+						   rearLeftMotor.getSelectedSensorVelocity() + ", " +
+						   rearRightMotor.getSelectedSensorVelocity());
+	}
+
+	// TODO: create structure for odometry
+
+
+	public void clearOdom() {
+		frontLeftMotor.setSelectedSensorPosition(0);
+		frontRightMotor.setSelectedSensorPosition(0);
+		rearLeftMotor.setSelectedSensorPosition(0);
+		rearRightMotor.setSelectedSensorPosition(0);
+		imu.reset();
+		imu.resetDisplacement();
+		mOdom.resetPosition(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), getPose());
+	}
 }
+

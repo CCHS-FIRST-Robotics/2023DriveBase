@@ -9,13 +9,16 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.MathUtil;
+
+
 
 /**
  * Manages the tank drive base
@@ -87,8 +90,15 @@ public class TankDrive extends DriveBase{
 		rightPID = new PIDController(PIDConstants[0], PIDConstants[1], PIDConstants[2]);
 
 		navx = new AHRS(SPI.Port.kMXP);
-		odometer = new DifferentialDriveOdometry(new Rotation2d(), 0, 0);
+		//odometer = new DifferentialDriveOdometry(new Rotation2d());
 		resetPosition();
+
+		// see declaration in DriveBase
+		/* 
+		This trajecotry config needs a look over, because it has not been tested or planned for tank drive. TankDrive functions should fail if used in autonomous
+		trajectoryConfig = new TrajectoryConfig(Constants.maxVelocityMetersPerSecond, Constants.maxAccelerationMetersPerSecond);
+		trajectoryConfig.setReversed(true);
+		*/
 	}
 	
 	
@@ -465,7 +475,7 @@ public class TankDrive extends DriveBase{
 		navx.resetDisplacement();
 		sparkMaxEncoder.setPosition(0);
 		rightTalon.setSelectedSensorPosition(0);
-		odometer.resetPosition(new Rotation2d(), 0, 0, new Pose2d());
+	//	odometer.resetPosition(new Pose2d(), new Rotation2d());
 	}
 
 	public void printPosition()

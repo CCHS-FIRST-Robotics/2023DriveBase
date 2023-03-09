@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>2023 Drive base: Class Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">var page_layout=1;</script>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
@@ -16,9 +17,15 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<div id="side-nav" class="ui-resizable side-nav-resizable"><!-- do not remove this div, it is closed by doxygen! -->
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
@@ -29,6 +36,18 @@
    </div>
   </td>
  </tr>
+   <tr><td colspan="2">        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect"                onmouseover="return searchBox.OnSearchSelectShow()"                onmouseout="return searchBox.OnSearchSelectHide()">&#160;</span>
+          <input type="text" id="MSearchField" value="" placeholder="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td></tr>
  </tbody>
 </table>
 </div>
@@ -39,19 +58,7 @@
 var searchBox = new SearchBox("searchBox", "search/",'.html');
 /* @license-end */
 </script>
-<script type="text/javascript" src="menudata.js"></script>
-<script type="text/javascript" src="menu.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function() {
-  initMenu('',true,false,'search.php','Search');
-  $(document).ready(function() { init_search(); });
-});
-/* @license-end */
-</script>
-<div id="main-nav"></div>
 </div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
   <div id="nav-tree">
     <div id="nav-tree-contents">
       <div id="nav-sync" class="sync"></div>
@@ -93,7 +100,12 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
 <li>AButtonPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a7a1474cf4405224381673f1c42764d8a">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ab33ec4044a6bf16d9e6d7b926e77f451">frc.robot.subsystems.TankDrive</a></li>
+<li>ANALOG_CROSS_DEADZONE&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#aa0f1f4ccf24f907ee9911cfbd7c85ff7">frc.robot.Constants</a></li>
 <li>ANALOG_DEAD_ZONE&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a92624792178f55bda8e50ef9ee938777">frc.robot.Constants</a></li>
+<li>applyChassisSpeeds()&#160;:&#160;<a class="el" href="da/dc6/classfrc_1_1robot_1_1subsystems_1_1_autonomous.html#a67379f09f1c7bdcd0454d6a102d32221">frc.robot.subsystems.Autonomous</a></li>
+<li>applyPreferences()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#a5c3edd2258cbcfddf390963eada1c53c">frc.robot.subsystems.Controller</a></li>
+<li>area&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#a465de6b7f1d298b6232e51b003a806d5">frc.robot.subsystems.Limelight</a></li>
+<li>autonomousCheckForButtonPresses()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#aeac93588e9cb3f5e48a08c280afa5a5e">frc.robot.Robot</a></li>
 <li>autonomousInit()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a5b1c022cd3e2b9f6e5dde62571839173">frc.robot.Robot</a></li>
 <li>autonomousPeriodic()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a7dcfe7d0d65d1051eb095b8eb1aebd72">frc.robot.Robot</a></li>
 </ul>
@@ -101,14 +113,20 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_b" name="index_b"></a>- b -</h3><ul>
 <li>BButtonPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a8087088762188d309de5e7401e42f498">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a3264e574df7b3dc084e02d234c0320e6">frc.robot.subsystems.TankDrive</a></li>
+<li>BetterShuffleboard()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#acde9c923fc7fbf4b22edc1ad719be195">frc.robot.subsystems.BetterShuffleboard</a></li>
 </ul>
 
 
 <h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
-<li>combineSpeeds()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a85b9b0f0dab71815fd4f081af92e1aaa">frc.robot.subsystems.MecaDrive</a></li>
-<li>createMecanumDrive()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#ac41895f5c7f9886a789c69ddfc643409">frc.robot.Robot</a></li>
-<li>createTankDrive()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#ac62d85124791b5dfe048640be9f8b17a">frc.robot.Robot</a></li>
-<li>cycleMotorDebugMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a1aa46ec2e2d9964ee1fc919c3e641390">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#ae812128287b3254ddcaf1a9b3a793c74">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a931070ad8d67381a730d1c97bd4c5947">frc.robot.subsystems.TankDrive</a></li>
+<li>chassisController&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a7b6d8059dad42f9e9c47404d5c11340c">frc.robot.subsystems.DriveBase</a></li>
+<li>checkForButtonPresses()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a55a5c1cc9be9f81d3f18c470284141b3">frc.robot.Robot</a></li>
+<li>checkForModeSwitches()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a53ee38469a76babd73478a64e019e723">frc.robot.Robot</a></li>
+<li>Controller()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#aad2ea4a6c8fcc2754270c2f47d626708">frc.robot.subsystems.Controller</a></li>
+<li>convertPosition()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a0b49a03320f5b47f49204bb2d932f1f4">frc.robot.subsystems.MecaDrive</a></li>
+<li>convertVelocity()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a90f6c3a1249a1582cd5c808f25ff9a91">frc.robot.subsystems.MecaDrive</a></li>
+<li>currentTrajectory&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a806b4c51db77afd9f3cdea7fb021bd60">frc.robot.subsystems.DriveBase</a></li>
+<li>currentTrajectoryTime&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#ada1e411bd22f2ad5aafdec59133a18a5">frc.robot.subsystems.DriveBase</a></li>
+<li>cycleMotor()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#ae7326f813d4b926ced1ecb0093e78895">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a57cbf12bf1fc82561fe73553f2a34db6">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a539506943a6b118f68f7af64a544ee9e">frc.robot.subsystems.TankDrive</a></li>
 <li>cyclePIDConstant()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ae67e5adc3b73af025f759a38dd7f47c2">frc.robot.subsystems.TankDrive</a></li>
 </ul>
 
@@ -117,9 +135,10 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>decreaseSpeedBracket()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a5be34889c14ab7762918aa2b5f9add5a">frc.robot.subsystems.DriveBase</a></li>
 <li>disabledInit()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#ac19810fbf26efd4cd47cbd7568b4ad2a">frc.robot.Robot</a></li>
 <li>disabledPeriodic()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a2bc1b0ce100e4783ba3d549e6ac07ae3">frc.robot.Robot</a></li>
-<li>drive()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a329a00e5b85c880d53092d743384721f">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a4a63dfffbc472878244e3e7dec539f05">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a7ce62bf5173758eaf0ddeb2d926f0fef">frc.robot.subsystems.TankDrive</a></li>
+<li>drive()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a840035f7211b1bc10945c77e9d575cd1">frc.robot.Robot</a>, <a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a1a78e08e684b8050e2da09b6a6f907e0">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#aa3d2027b0a53db8458399bfca90f7c5b">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a7ce62bf5173758eaf0ddeb2d926f0fef">frc.robot.subsystems.TankDrive</a></li>
 <li>DRIVE_MAX_ANGULAR_VELOCITY&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a0ca14a34cc24e73a37b57879978d0307">frc.robot.Constants</a></li>
-<li>driveBase&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#aabb2f82e41b101b19281f03d8797b726">frc.robot.Robot</a></li>
+<li>DRIVE_STARTING_MULTIPLIER&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a2906910306250089d7ce0604732374ad">frc.robot.Constants</a></li>
+<li>driveBase&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#aae2146462ee089adc3ca54812ec8a600">frc.robot.Robot</a></li>
 <li>dt&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a5b9af06b7d487448348ad1d0920c4eef">frc.robot.Constants</a></li>
 </ul>
 
@@ -130,18 +149,45 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 
 <h3><a id="index_f" name="index_f"></a>- f -</h3><ul>
-<li>FL_TALON_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a67a148a95933c5bee3f14237fdb48980">frc.robot.Constants</a></li>
-<li>FR_TALON_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a1a0febc2ed67a2f10db6b8861348ad9b">frc.robot.Constants</a></li>
+<li>FALCON_GEARBOX_RATIO&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a6286a6ee936a79b8b1cacd326e567f81">frc.robot.Constants</a></li>
+<li>FL_TALON_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a57f5e0cae631338860e33e951a9644a3">frc.robot.Constants</a></li>
+<li>FL_WHEEL_POS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#addd483430e61fdd6d4d040903405b67b">frc.robot.Constants</a></li>
+<li>FR_TALON_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#aad5ced3d24cad417c595beb727139fad">frc.robot.Constants</a></li>
+<li>FR_WHEEL_POS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#affd5580b44c566334d18cf3bbd802147">frc.robot.Constants</a></li>
 </ul>
 
 
 <h3><a id="index_g" name="index_g"></a>- g -</h3><ul>
+<li>getAprilTagX()&#160;:&#160;<a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a3fcde411acdfcc519e48ae5a840e5252">frc.robot.subsystems.ZED</a></li>
+<li>getAprilTagY()&#160;:&#160;<a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a09ef02dbc6554e12498527919093e139">frc.robot.subsystems.ZED</a></li>
+<li>getAprilTagZ()&#160;:&#160;<a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a44d39935e8c7bbef14ece48563e66a01">frc.robot.subsystems.ZED</a></li>
+<li>getArea()&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#abb2c7633ac0ecc8afdc8f0572c0e52cc">frc.robot.subsystems.Limelight</a></li>
+<li>getChassisController()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a56114177e1b8ada6d7a9b842ea143f0f">frc.robot.subsystems.DriveBase</a></li>
+<li>getChassisSpeeds()&#160;:&#160;<a class="el" href="da/dc6/classfrc_1_1robot_1_1subsystems_1_1_autonomous.html#a7133847cdf9b5d4b3c2811eeefdbccc2">frc.robot.subsystems.Autonomous</a></li>
+<li>getCurrentMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a0c13ab822e1e45262004c053a6697e0e">frc.robot.subsystems.DriveBase</a></li>
+<li>getCurrentTrajectory()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a0b78d44bce0f349181b6928b5c78b9e5">frc.robot.subsystems.DriveBase</a></li>
+<li>getCurrentTrajectoryTime()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a0c38393bcbfaed818112bab7f370673d">frc.robot.subsystems.DriveBase</a></li>
+<li>getDebugEnabledMotor()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a2946b96eddf83c9a5a012e8f397c46ac">frc.robot.subsystems.DriveBase</a></li>
+<li>getHeading()&#160;:&#160;<a class="el" href="db/d41/classfrc_1_1robot_1_1subsystems_1_1_i_m_u.html#af576e9b796d6d507a7e435b87f15bece">frc.robot.subsystems.IMU</a></li>
+<li>getLeftX()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#a52c80f1f7235465a23c4b8f127100c6a">frc.robot.subsystems.Controller</a></li>
+<li>getLeftY()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#a01c09f4044aaf659a4ba403b9930023a">frc.robot.subsystems.Controller</a></li>
+<li>getOdomHeading()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a306f941c1aecec3c6ddffe70c3afe8fe">frc.robot.subsystems.MecaDrive</a></li>
+<li>getOdomX()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#ac0c209a40cf6cec364b21a755d632602">frc.robot.subsystems.MecaDrive</a></li>
+<li>getOdomY()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a51ed43eb8db1590aa4fbe7685c3c4337">frc.robot.subsystems.MecaDrive</a></li>
+<li>getPose()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a7a15d52d98f1efe96b94a515dc7d8fdb">frc.robot.subsystems.MecaDrive</a></li>
 <li>getPosition()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a99e8f62affb6b9785a60aaa764840995">frc.robot.subsystems.TankDrive</a></li>
+<li>getRightX()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#a7f959455fa8bd8e3b069ba0a13424e1e">frc.robot.subsystems.Controller</a></li>
+<li>getRightY()&#160;:&#160;<a class="el" href="d2/d33/classfrc_1_1robot_1_1subsystems_1_1_controller.html#a272396fea13a1f726eccf9f9cfabe171">frc.robot.subsystems.Controller</a></li>
+<li>getTrajectoryConfig()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a5e3e667e834071e1684b536ddf94b83c">frc.robot.subsystems.DriveBase</a></li>
+<li>getX()&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#ac5c3b2835a3dd3aea88012f21bd18ca3">frc.robot.subsystems.Limelight</a></li>
+<li>getY()&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#a4ad607fdf8e24fa7ab9852ce344d4ac2">frc.robot.subsystems.Limelight</a></li>
 </ul>
 
 
 <h3><a id="index_i" name="index_i"></a>- i -</h3><ul>
+<li>IMU()&#160;:&#160;<a class="el" href="db/d41/classfrc_1_1robot_1_1subsystems_1_1_i_m_u.html#ab8777ee0d211d987d64709de13422465">frc.robot.subsystems.IMU</a></li>
 <li>increaseSpeedBracket()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a97fbe2c1ad11cb61f867f6bc91cbf6e7">frc.robot.subsystems.DriveBase</a></li>
+<li>incrementCurrentTrajectoryTime()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a039ab44851ab0d18d7f5cadac3694fcd">frc.robot.subsystems.DriveBase</a></li>
 <li>incrementPIDConstant()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ab958f1afb28c47e574797f419826c9fb">frc.robot.subsystems.TankDrive</a></li>
 </ul>
 
@@ -154,6 +200,10 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_l" name="index_l"></a>- l -</h3><ul>
 <li>LEFT_VICTOR_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a0832d8035bdbd8e950894da741f045a6">frc.robot.Constants</a></li>
+<li>LEFT_X_EXPONENT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#accddfc754a41197ce7125c9d25640ea5">frc.robot.Constants</a></li>
+<li>LEFT_Y_EXPONENT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a1808cd467ba1cfcdb7d19c92ff5725d2">frc.robot.Constants</a></li>
+<li>leftBumperPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a64847bd47e79e745b4514aed8b81894c">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ab5ca7b209f8e3568da34f39db1f5dcba">frc.robot.subsystems.TankDrive</a></li>
+<li>linearizeVelocity()&#160;:&#160;<a class="el" href="da/dc6/classfrc_1_1robot_1_1subsystems_1_1_autonomous.html#a7b4dc326c230773f4a321f3672b00f8f">frc.robot.subsystems.Autonomous</a></li>
 </ul>
 
 
@@ -162,32 +212,62 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>m_chooser&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#aeba62b63304a71f0d8686fc38bfca704">frc.robot.Robot</a></li>
 <li>main()&#160;:&#160;<a class="el" href="d1/d79/classfrc_1_1robot_1_1_main.html#ae60066a646cefc16d3e7d57b8fa22097">frc.robot.Main</a></li>
 <li>Main()&#160;:&#160;<a class="el" href="d1/d79/classfrc_1_1robot_1_1_main.html#aaaa025997d101f996ad17575cbb72f5e">frc.robot.Main</a></li>
+<li>maxAccelerationMetersPerSecond&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a0afea6b221035930769eb8386261876d">frc.robot.Constants</a></li>
 <li>maxVelocity&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a05129363da05bc040edc3ad3b3b81ae3">frc.robot.Constants</a></li>
-<li>MecaDrive()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#ae119368705c142049296275748376227">frc.robot.subsystems.MecaDrive</a></li>
+<li>maxVelocityMetersPerSecond&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#ae28afcf96d83a798b2f880c04d2a6952">frc.robot.Constants</a></li>
+<li>MecaDrive()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a69459c4480e4a6e9dae3a9595bff7eaa">frc.robot.subsystems.MecaDrive</a></li>
+<li>MECANUM_KINEMATICS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a87e2b98951088151e82ca6b6e35d1569">frc.robot.Constants</a></li>
+<li>MECANUM_WHEEL_DIAMETER&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a6b67955aaadfe7de6738e4573e5745f6">frc.robot.Constants</a></li>
+</ul>
+
+
+<h3><a id="index_n" name="index_n"></a>- n -</h3><ul>
+<li>NAVX_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#afdc48f5c4cc304fa73271973e9a0fedf">frc.robot.Constants</a></li>
 </ul>
 
 
 <h3><a id="index_p" name="index_p"></a>- p -</h3><ul>
+<li>periodic()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#aecd8b41c1e22feba034d71574b031259">frc.robot.subsystems.MecaDrive</a></li>
+<li>printActiveMotorDebugMode()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#aae87331cda9ef4946907e48052762d2e">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af5a339bd97d16aacd81f69e53753f834">frc.robot.subsystems.TankDrive</a></li>
+<li>printControlsOfCurrentMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#ac202422c7cf062d3988248d930ec022f">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a52c1b61486925d571b5cfdb2688e8978">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ab1937ffdedda467202afe25632ecc8b9">frc.robot.subsystems.TankDrive</a></li>
 <li>printPIDConstants()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a132e5a7394b824d265e2653e4b884378">frc.robot.subsystems.TankDrive</a></li>
 <li>printPosition()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ac8f0e7940d6e17253370467f802ff339">frc.robot.subsystems.TankDrive</a></li>
+<li>pushDashboard()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#afc507af82009513f98bdcc37028f7cbc">frc.robot.subsystems.BetterShuffleboard</a></li>
+<li>pushIMU()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#a23948305aba9c409d301611419ec7363">frc.robot.subsystems.BetterShuffleboard</a></li>
+<li>pushLimelight()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#ae135a473713806ed8cc7b8b174bad93a">frc.robot.subsystems.BetterShuffleboard</a></li>
+<li>pushOdom()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#a57818b13c8dbbebca6a7b5b0f85d7186">frc.robot.subsystems.BetterShuffleboard</a></li>
+<li>pushZED()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#a28a70653bbf71258166553bad20acd4a">frc.robot.subsystems.BetterShuffleboard</a></li>
 </ul>
 
 
 <h3><a id="index_r" name="index_r"></a>- r -</h3><ul>
+<li>RAMSETE_B&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#ad98084797abd4568dd06faca039f03b6">frc.robot.Constants</a></li>
+<li>RAMSETE_ZETA&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a7c66cae4cdfe51cc3618b1b54a4e1643">frc.robot.Constants</a></li>
+<li>resetCurrentTrajectoryTime()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a771f806430ae04f640f2e4462cf31b30">frc.robot.subsystems.DriveBase</a></li>
+<li>resetOdometry()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a058e436ff644a3a586b6fc9b7160e644">frc.robot.subsystems.MecaDrive</a></li>
 <li>resetPosition()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a4ae39c2932c554e2af22c6fa8eb28508">frc.robot.subsystems.TankDrive</a></li>
 <li>RIGHT_VICTOR_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#ab6e09f1f27c102e82e6633925b66f9eb">frc.robot.Constants</a></li>
-<li>RL_TALON_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a59761b835fe99c899f20a7856ff2f64b">frc.robot.Constants</a></li>
+<li>RIGHT_X_EXPONENT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#af2d6b796933dad5f5ec05ba26f039c2f">frc.robot.Constants</a></li>
+<li>RIGHT_Y_EXPONENT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a2e97394dc67b01a3ca96e51e8b374808">frc.robot.Constants</a></li>
+<li>rightBumperPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a3794af9328823c2ae7a49dd1423c7a59">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#aa91ad591069b0d9161b9656d595df632">frc.robot.subsystems.TankDrive</a></li>
+<li>RL_TALON_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#ac70c4e93aaa81e07757acb03d9097ec8">frc.robot.Constants</a></li>
+<li>RL_WHEEL_POS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#abf8708b77b584eab5c5f49411aff824f">frc.robot.Constants</a></li>
 <li>ROBOT_WIDTH&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#ad25bf0682129853a7f60811200b7bc4b">frc.robot.Constants</a></li>
 <li>robotInit()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a1d28582cf3dc31568c3581f631c92f13">frc.robot.Robot</a></li>
 <li>robotPeriodic()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a7e63e32ebe8ad3d33bbc3b09092a9f1f">frc.robot.Robot</a></li>
-<li>RR_TALON_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a17cc7ab7721d0945bf359315e5f1a6ec">frc.robot.Constants</a></li>
+<li>RR_TALON_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a7aedac6e93db91227926a719248f5205">frc.robot.Constants</a></li>
+<li>RR_WHEEL_POS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a8480ec998ae06f8bb9f3bfba89424139">frc.robot.Constants</a></li>
 </ul>
 
 
 <h3><a id="index_s" name="index_s"></a>- s -</h3><ul>
+<li>SECONDS_BETWEEN_CODE_PERIODS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a2465a1eb0c494689de9a62a59b8469ed">frc.robot.Constants</a></li>
+<li>setCurrentMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a6def0c0d5e3663fbe44f7d58ebc82312">frc.robot.subsystems.DriveBase</a></li>
+<li>setCurrentTrajectory()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#ab33483d82563be3cd8d6c9cbd1c211f0">frc.robot.subsystems.DriveBase</a></li>
+<li>setDebugEnabledMotor()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a944d7995be82072b6f1d70d78e2e30c6">frc.robot.subsystems.DriveBase</a></li>
 <li>SLOW_DOWN_CUTOFF&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a70b830d44706c08bc0e4c58e2c2c5ac3">frc.robot.Constants</a></li>
 <li>SLOW_DOWN_FACTOR&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#af0d5426b2415f6f21a59557ffa06377f">frc.robot.Constants</a></li>
-<li>slowDown()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a3c1c70c54057eda834ba2f1adc580fe0">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#add169688b9161a4d1e518b26bf4a5131">frc.robot.subsystems.TankDrive</a></li>
+<li>slowDown()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a87212fcba7282a2a1186e8b7093aa078">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#add169688b9161a4d1e518b26bf4a5131">frc.robot.subsystems.TankDrive</a></li>
 <li>SPARK_MAX_CONVERSION_FACTOR&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a9dfdf53bad54804a9b393b0a2bc41227">frc.robot.Constants</a></li>
 <li>SPARK_MAX_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a5aead21bed4cadff90aa9958665e3ae0">frc.robot.Constants</a></li>
 </ul>
@@ -195,6 +275,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_t" name="index_t"></a>- t -</h3><ul>
 <li>TALON_CONVERSION_FACTOR&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a0cb16b98df4832961bff6d677e67947b">frc.robot.Constants</a></li>
+<li>TALON_FX_CPR&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a0405c8fdd2a590d95b5641e5a17c9cc1">frc.robot.Constants</a></li>
 <li>TALON_ID&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a204ca7168b6bd06af3442aee506b165e">frc.robot.Constants</a></li>
 <li>TANK_WHEEL_RADIUS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a622ec78eed37b1e4844b420eff555e44">frc.robot.Constants</a></li>
 <li>TankDrive()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ac7440f52ab2917dc577343e048396223">frc.robot.subsystems.TankDrive</a></li>
@@ -203,28 +284,45 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>testInit()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#acdebc9c7e7e31ffccb3c2496b8d33944">frc.robot.Robot</a></li>
 <li>testPeriodic()&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#abd152f34b9f33d5cdf835aa61331f33e">frc.robot.Robot</a></li>
 <li>toggleDecreasingPIDIncrement()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#af6a1b70da3b261822588ddfb0d1b18ce">frc.robot.subsystems.TankDrive</a></li>
+<li>trajectoryConfig&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#ab2cf2d737759d2cd7580e030a2d184f1">frc.robot.subsystems.DriveBase</a></li>
 <li>turnOnDebugMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#af54ad3d7bec7bfa3dfccf01134f432de">frc.robot.subsystems.DriveBase</a></li>
 <li>turnOnDefaultMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a52ad0ed4423eb1822e8fc0b3ce504886">frc.robot.subsystems.DriveBase</a></li>
 <li>turnONPIDTuningMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a5106f46d8dccf769d2ba4c408a6a3355">frc.robot.subsystems.DriveBase</a></li>
-<li>turnOnStopMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a4cb5f3623af8bb9ad9fc252cd51ea84c">frc.robot.subsystems.DriveBase</a>, <a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#ae0c5f7e7754a51af6f40686d7194fed6">frc.robot.subsystems.MecaDrive</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ad7f6cfb9f2f764610daf7f1d9724ba63">frc.robot.subsystems.TankDrive</a></li>
+<li>turnOnStopMode()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a4cb5f3623af8bb9ad9fc252cd51ea84c">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ad7f6cfb9f2f764610daf7f1d9724ba63">frc.robot.subsystems.TankDrive</a></li>
 </ul>
 
 
 <h3><a id="index_u" name="index_u"></a>- u -</h3><ul>
+<li>updateControllerExponents()&#160;:&#160;<a class="el" href="d0/dd6/classfrc_1_1robot_1_1subsystems_1_1_better_shuffleboard.html#a817a3f5a9fd19071f01339721aced49b">frc.robot.subsystems.BetterShuffleboard</a></li>
+<li>updateOdometry()&#160;:&#160;<a class="el" href="d0/dd1/classfrc_1_1robot_1_1subsystems_1_1_meca_drive.html#a0ffde122c381f4f03a494312810de4fa">frc.robot.subsystems.MecaDrive</a></li>
 <li>updatePosition()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#acad2c3242f8cc6307960d5224d972673">frc.robot.subsystems.TankDrive</a></li>
 <li>updateRobotVelocity()&#160;:&#160;<a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#ac435438b289c67c5e517409bb16f30fe">frc.robot.subsystems.TankDrive</a></li>
+<li>updateTrajectory()&#160;:&#160;<a class="el" href="da/dc6/classfrc_1_1robot_1_1subsystems_1_1_autonomous.html#add00e1143a6342644fdc949e0b0a700e">frc.robot.subsystems.Autonomous</a></li>
+</ul>
+
+
+<h3><a id="index_w" name="index_w"></a>- w -</h3><ul>
+<li>WHEEL_ABSOLUTE_X_METERS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a951bed572456249aba59a4ecb91c7f00">frc.robot.Constants</a></li>
+<li>WHEEL_ABSOLUTE_Y_METERS&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#abac44a7a016027d50511e0be26be611b">frc.robot.Constants</a></li>
 </ul>
 
 
 <h3><a id="index_x" name="index_x"></a>- x -</h3><ul>
+<li>x&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#acf1b94c8d57e01897a38084bb23633e1">frc.robot.subsystems.Limelight</a>, <a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a715e294bd4dcf78d732ed946f7fe1384">frc.robot.subsystems.ZED</a></li>
 <li>XBOX_CONTROLLER_PORT&#160;:&#160;<a class="el" href="d2/da2/classfrc_1_1robot_1_1_constants.html#a206905e4394c98fd731ede373c835475">frc.robot.Constants</a></li>
-<li>xboxController&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#a2bc2fa242adf710a367914fe781c02e7">frc.robot.Robot</a></li>
+<li>xboxController&#160;:&#160;<a class="el" href="dd/d54/classfrc_1_1robot_1_1_robot.html#aa96dc647fac1649fcbaf9db50a47b15c">frc.robot.Robot</a></li>
 <li>XButtonPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#aa693685bed995fad0a4d9758de2cb22c">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#afba85f8615473eae432cec820ca16594">frc.robot.subsystems.TankDrive</a></li>
 </ul>
 
 
 <h3><a id="index_y" name="index_y"></a>- y -</h3><ul>
+<li>y&#160;:&#160;<a class="el" href="d3/d12/classfrc_1_1robot_1_1subsystems_1_1_limelight.html#a5d1263d160be69161d58ccf5534dbb4f">frc.robot.subsystems.Limelight</a>, <a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a25e6ed156c3aa53c74caf4cd30bd5dac">frc.robot.subsystems.ZED</a></li>
 <li>YButtonPressed()&#160;:&#160;<a class="el" href="da/d95/classfrc_1_1robot_1_1subsystems_1_1_drive_base.html#a6fa494359aef97594023369c068463e1">frc.robot.subsystems.DriveBase</a>, <a class="el" href="dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html#a567b4175134130703842f7fd4774f733">frc.robot.subsystems.TankDrive</a></li>
+</ul>
+
+
+<h3><a id="index_z" name="index_z"></a>- z -</h3><ul>
+<li>z&#160;:&#160;<a class="el" href="da/dbb/classfrc_1_1robot_1_1subsystems_1_1_z_e_d.html#a9e4b1a1c53d8dca227901818c9156b62">frc.robot.subsystems.ZED</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

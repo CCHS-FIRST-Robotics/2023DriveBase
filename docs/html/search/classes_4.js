@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tankdrive_0',['TankDrive',['../dd/ded/classfrc_1_1robot_1_1subsystems_1_1_tank_drive.html',1,'frc::robot::subsystems']]]
+  ['imu_0',['IMU',['../db/d41/classfrc_1_1robot_1_1subsystems_1_1_i_m_u.html',1,'frc::robot::subsystems']]]
 ];

@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['right_5fvictor_5fid_0',['RIGHT_VICTOR_ID',['../d2/da2/classfrc_1_1robot_1_1_constants.html#ab6e09f1f27c102e82e6633925b66f9eb',1,'frc::robot::Constants']]],
-  ['rl_5ftalon_5fport_1',['RL_TALON_PORT',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a59761b835fe99c899f20a7856ff2f64b',1,'frc::robot::Constants']]],
-  ['robot_5fwidth_2',['ROBOT_WIDTH',['../d2/da2/classfrc_1_1robot_1_1_constants.html#ad25bf0682129853a7f60811200b7bc4b',1,'frc::robot::Constants']]],
-  ['rr_5ftalon_5fport_3',['RR_TALON_PORT',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a17cc7ab7721d0945bf359315e5f1a6ec',1,'frc::robot::Constants']]]
+  ['m_5fautoselected_0',['m_autoSelected',['../dd/d54/classfrc_1_1robot_1_1_robot.html#a1b21da051611678b4f9af38ce2125dfb',1,'frc::robot::Robot']]],
+  ['m_5fchooser_1',['m_chooser',['../dd/d54/classfrc_1_1robot_1_1_robot.html#aeba62b63304a71f0d8686fc38bfca704',1,'frc::robot::Robot']]],
+  ['maxaccelerationmeterspersecond_2',['maxAccelerationMetersPerSecond',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a0afea6b221035930769eb8386261876d',1,'frc::robot::Constants']]],
+  ['maxvelocity_3',['maxVelocity',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a05129363da05bc040edc3ad3b3b81ae3',1,'frc::robot::Constants']]],
+  ['maxvelocitymeterspersecond_4',['maxVelocityMetersPerSecond',['../d2/da2/classfrc_1_1robot_1_1_constants.html#ae28afcf96d83a798b2f880c04d2a6952',1,'frc::robot::Constants']]],
+  ['mecanum_5fkinematics_5',['MECANUM_KINEMATICS',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a87e2b98951088151e82ca6b6e35d1569',1,'frc::robot::Constants']]],
+  ['mecanum_5fwheel_5fdiameter_6',['MECANUM_WHEEL_DIAMETER',['../d2/da2/classfrc_1_1robot_1_1_constants.html#a6b67955aaadfe7de6738e4573e5745f6',1,'frc::robot::Constants']]]
 ];
