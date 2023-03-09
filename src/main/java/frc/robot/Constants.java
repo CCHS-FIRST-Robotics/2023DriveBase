@@ -64,6 +64,7 @@ public class Constants {
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
 	public static final double TALON_CONVERSION_FACTOR = 10 * 2 * Math.PI / ENCODER_CPR; // base units are clicks per 100ms
+	public static final double METERS_TO_FALCON_CLICKS = TALON_FX_CPR * FALCON_GEARBOX_RATIO / (Math.PI * MECANUM_WHEEL_DIAMETER);
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
 
@@ -225,19 +226,18 @@ public class Constants {
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023
-	// velocity at 0.3 is around 6000
-	// velocity at .25 is around 4850
-	public static final double FALCON_KF = (0.3 * 1023.0) / 6000;
-	// error with just kF is about +500, 0.02 is kinda arbitrary
+	// velocity at 0.4 is around 7600
+	public static final double FALCON_KF = (0.4 * 1023.0) / 7637.625;
+	// error with just kF is about +400, 0.4 is kinda arbitrary
 	// significant oscillation at .1
-	public static final double FALCON_KP = (0.03 * 1023.0) / 500;
+	public static final double FALCON_KP = (0.4 * 1023.0) / 400;
 
-	public static final double FALCON_KD = 28 * FALCON_KP;
+	public static final double FALCON_KD = 15 * FALCON_KP;
 
 	// kinda arbitrary
-	public static final double FALCON_KI = 0.001;
-	// without integral term it was within about 400 of the desired value
-	public static final double FALCON_INTEGRAL_ZONE = 400;
+	public static final double FALCON_KI = 0.006;
+	// without integral term it was within about 50 of the desired value
+	public static final double FALCON_INTEGRAL_ZONE = 50;
 
 	public static final int FALCON_PID_IDX = 0;
 	public static final int FALCON_TIMEOUT_MS = 30;
