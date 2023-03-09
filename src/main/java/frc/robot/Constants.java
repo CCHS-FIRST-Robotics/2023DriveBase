@@ -13,7 +13,8 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 public class Constants {
 
 	// the port for the xbox controller
-	public static final int XBOX_CONTROLLER_PORT 			= 0; 
+	public static final int XBOX_CONTROLLER_PORT 			= 0;
+	public static final int XBOX_CONTROLLER_ALTERNATE_PORT 			= 1; 
 
 	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
 	
@@ -35,14 +36,16 @@ public class Constants {
 	public static final int SPARK_MAX_ID = 12;
 	
 	// for mecanum drive FR = front right, FL = front left, RR = rear right, RL = rear left
-	public static final int FR_TALON_ID = 2; // 1
-	public static final int FL_TALON_ID = 8; // 2
-	public static final int RR_TALON_ID = 10; // 3
+	public static final int FR_TALON_ID = 1; // 2
+	public static final int FL_TALON_ID = 2; // 8
+	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
-	public static final int SHOULDER_TALON_ID = 3;
-	public static final int ELBOW_TALON_ID = 5;
-	public static final int ELBOW_FALCON_ID = 9;
+	public static final int SHOULDER_TALON_ID = 20;
+	public static final int ELBOW_TALON_ID = 10;
+
+	public static final int SHOULDER_FALCON_ID = 5;
+	public static final int ELBOW_FALCON_ID = 6;
 
 
 	public static final int SHOULDER_TALON_ID = 3;
@@ -56,6 +59,7 @@ public class Constants {
 	/*
 	 * Physical Constants
 	 */
+	public static final int LIMIT_SWITCH_ID = 4; // DIO port num
 
 	// for converting motor encoder readings to standard units (rad/s)
 	public static final double SPARK_MAX_CONVERSION_FACTOR = (2 * Math.PI) / 60; // base units are RPM
@@ -107,39 +111,63 @@ public class Constants {
 
 	public static final double SECONDS_BETWEEN_CODE_PERIODS = 0.02;
 	
+	// LIMELIGHT //
+	public static final double SHORT_TARGET_HEIGHT  = .56 + .0508;
+	public static final double TALL_TARGET_HEIGHT  = 1.05 + .0508;
+
+	public static final int SHORT_PIPE_NUM = 0;
+	public static final int TALL_PIPE_NUM = 1;
+
+	public static final double LIME_HEIGHT = .42;
+	public static final double LIME_ANGLE = 0;
+
 	// arm lengths in meters
-	public static final double UPPER_ARM_LENGTH = 1.05; 
-	public static final double LOWER_ARM_LENGTH = 0.72;
-	public static final double WRIST_LENGTH = 0;
+	public static final double UPPER_ARM_LENGTH = .68; 
+	public static final double LOWER_ARM_LENGTH = 0.705;
+	public static final double WRIST_LENGTH = .26;
 
 	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .7; // meters
-	public static final double LOWER_ARM_COM_DIST = .36; // meters
+	public static final double LOWER_ARM_COM_DIST = .2; // meters
+	static double densityOfMetalLower = .347 / .405;
+	static double densityOfMetalUpper = .623 / 1.04;
+	static double massOfMetalLower = densityOfMetalLower * LOWER_ARM_LENGTH;
+	static double massOfMetalUpper = densityOfMetalUpper * UPPER_ARM_LENGTH;
+	static double chainMass = .85 * .53;
+	static double falconMass = 1.33;
+	static double clawMass = 1.86;
+	public static final double UPPER_ARM_MASS = massOfMetalUpper + clawMass;
+	public static final double LOWER_ARM_MASS = massOfMetalLower + chainMass + falconMass;
 
 	// Mass of each arm segment in kg
-	public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
-	public static final double LOWER_ARM_WEIGHT = 4.5; // kg
+	// public static final double UPPER_ARM_WEIGHT = 2.25 + 1.4; // kg
+	// public static final double LOWER_ARM_WEIGHT = 4.5; // kg
 
 	//Height of the shoulder joint from the floor in meters
 	public static final double SHOULDER_JOINT_HEIGHT = .59;
 
+	public static final int CLAW_FORWARD_NUM = 0;
+	public static final int CLAW_BACKWARD_NUM = 1;
+	public static final int WRIST_FORWARD_NUM = 2;
+	public static final int WRIST_BACKWARD_NUM = 3;
+
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = .4;
-	public static final double SHOULDER_KI = 0;
-	public static final double SHOULDER_KD = 0.01;
+	public static final double SHOULDER_KP = 1.4; // 1.4
+	public static final double SHOULDER_KI = 0.00; // .05
+	public static final double SHOULDER_KD = 0.01; //.01
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 1.4;
+	public static final double SHOULDER_KG = .9;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = .2;
+	public static final double ELBOW_KP = 1.4; // 1.4
 	public static final double ELBOW_KI = 0;
-	public static final double ELBOW_KD = 0;
+	public static final double ELBOW_KD = 0.01; //.01
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = 1.5;
+	public static final double ELBOW_KG = 0.7;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 
@@ -160,17 +188,17 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = 1; // meters per second
-	public static final double ARM_MAX_ACCELERATION = 1; // meters per second
+	public static final double ARM_MAX_SPEED = .2; // meters per second
+	public static final double ARM_MAX_ACCELERATION = .1; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
 	public static final double MAX_FORWARD_X = .5; // meters
-	public static final double MAX_FORWARD_Y = .3; // meters
+	public static final double MAX_FORWARD_Y = .2; // meters
 
 	// hard min/max x and y values for the arm
-	public static final double minX = -1.8; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.8; 
+	public static final double minX = -1.45; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.45; 
 	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 
@@ -192,8 +220,8 @@ public class Constants {
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -85;
-	public static final double maxBeta = 240;
+	public static final double minBeta = -88;
+	public static final double maxBeta = 260;
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023

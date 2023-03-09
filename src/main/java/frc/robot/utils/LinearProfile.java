@@ -20,11 +20,11 @@ public class LinearProfile {
      * @param period (double) - the time between each setpoint/controller call 
      *                          (default 20ms for the periodic loops of the RIO)
      */
-    LinearProfile(double period) {
+    public LinearProfile(double period) {
         this.period = period;
     }
 
-    LinearProfile() {
+    public LinearProfile() {
         this(Constants.PERIOD);
     }
 
@@ -41,10 +41,10 @@ public class LinearProfile {
      * @param goal (Vector) - the final (desired) position of the end effector
      * 
      * @return setpoints (double[][]) - 2D array of angular setpoints. 
-     *                                  setpoints[i] gives an array of the angle for each joint
+     *                                  setpoints[i] gives an array of the angle for each joint - RADIANS
      */
-    public double[][] getSetPoints(Vector initialPosition, Vector goal) {
-        Vector displacement = goal.sub(initialPosition);
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double[] initialAngles) {
+        R2Vector displacement = goal.sub(initialPosition);
         
         // ∆t = ∆x/∆v
         double timeToEnd = displacement.mag() / Constants.ARM_MAX_SPEED;
@@ -55,22 +55,25 @@ public class LinearProfile {
         double[][] setpoints = new double[numberOfSteps][2];
 
         // Calculate the new setpoint for each timestep
-        for (int stepsTaken = 0; stepsTaken < numberOfSteps; stepsTaken++) {
-            double proportion = stepsTaken / numberOfSteps;
-            Vector pos = new Vector(
+        for (int i = 0; i < numberOfSteps; i++) {
+            double proportion = (double) i / (double) numberOfSteps;
+            R2Vector pos = new R2Vector(
                 proportion * displacement.x,
                 proportion * displacement.y
             ).add(initialPosition);
-
-            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y);
+            if (i == 0) {
+                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, initialAngles);
+            } else {
+                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, setpoints[i-1]);
+            }
         }
         
         return setpoints;
     }
 
     // same as above but uses desired time rather than a max velocity
-    public double[][] getSetPoints(Vector initialPosition, Vector goal, double timeToEnd) {
-        Vector displacement = goal.sub(initialPosition);
+    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double timeToEnd, double[] initialAngles) {
+        R2Vector displacement = goal.sub(initialPosition);
         
         double velocity = displacement.mag() / timeToEnd;
         double angle = displacement.dir(); // radians
@@ -78,12 +81,17 @@ public class LinearProfile {
         int numberOfSteps = (int) (Math.ceil(timeToEnd / Constants.PERIOD));
         double[][] setpoints = new double[numberOfSteps][2];
 
-        for (int stepsTaken = 0; stepsTaken < numberOfSteps; stepsTaken++) {
-            Vector pos = new Vector(
-                stepsTaken * this.period * velocity * Math.cos(angle),
-                stepsTaken * this.period * velocity * Math.sin(angle)
+        for (int i = 0; i < numberOfSteps; i++) {
+            R2Vector pos = new R2Vector(
+                i * this.period * velocity * Math.cos(angle),
+                i * this.period * velocity * Math.sin(angle)
             ).add(initialPosition);
-            setpoints[stepsTaken] = Kinematics.positionInverseKinematics(pos.x, pos.y);
+
+            if (i == 0) {
+                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, initialAngles);
+            } else {
+                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, setpoints[i-1]);
+            }
         }
         
         return setpoints;

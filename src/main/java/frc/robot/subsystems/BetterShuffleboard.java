@@ -19,6 +19,7 @@ public class BetterShuffleboard {
     GenericEntry shoulderP, shoulderI, shoulderD;
     GenericEntry elbowP, elbowI, elbowD;
 
+
     ShuffleboardTab debugTab; // used for various debug things
     ShuffleboardTab odomTab; // used for odometry data
     GenericEntry odomX, odomY, odomHead; // calculated odometry stuff
@@ -26,6 +27,14 @@ public class BetterShuffleboard {
     // navx data
     GenericEntry NavXVel, NavYVel, NavXAccel, NavYAccel, NavZAccel,
                  NavRoll, NavPitch, NavHeading, NavConnected, NavRotationRateZ;
+
+    ShuffleboardTab limelightTab; // used for limelight data
+    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
+                 highForwardDistance, lowForwardDistance;
+
+    ShuffleboardTab limelightTab; // used for limelight data
+    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
+                 highForwardDistance, lowForwardDistance;
 
     public BetterShuffleboard() {
         /*
@@ -53,6 +62,18 @@ public class BetterShuffleboard {
             .withProperties(Map.of("min", 1, "max", 5))
             .getEntry();
         rightYExp.setDouble(Constants.RIGHT_Y_EXPONENT);
+
+        // LIMELIGHT
+        limelightTab = Shuffleboard.getTab("Limelight");
+        
+        highPostX = limelightTab.add("highPostX", 0).getEntry();
+        lowPostX = limelightTab.add("lowPostX", 0).getEntry();
+        lowPostY = limelightTab.add("lowPostY", 0).getEntry();
+        highPostY = limelightTab.add("highPostY", 0).getEntry();
+        highPostHeading = limelightTab.add("highPostHeading", 0).getEntry();
+        lowPostHeading = limelightTab.add("lowPostHeading", 0).getEntry();
+        highForwardDistance = limelightTab.add("highForwardDist", 0).getEntry();
+        lowForwardDistance = limelightTab.add("lowForwardDist", 0).getEntry();
 
         /*
          * PID tuning
@@ -95,8 +116,8 @@ public class BetterShuffleboard {
         elbowD.setDouble(Constants.ELBOW_KD);
 
         /*
-         * Others
-         */
+        * Others
+        */
 
         debugTab = Shuffleboard.getTab("Debug");
         odomTab = Shuffleboard.getTab("Odometry");
@@ -220,9 +241,15 @@ public class BetterShuffleboard {
     }
 
     public void pushLimelight(Limelight limelight) {
-        SmartDashboard.putNumber("LimelightX", limelight.getX());
-        SmartDashboard.putNumber("LimelightY", limelight.getY());
-        SmartDashboard.putNumber("LimelightArea", limelight.getArea());
+        highPostX.setDouble(limelight.getX(Constants.TALL_PIPE_NUM));
+        highPostY.setDouble(limelight.getY(Constants.TALL_PIPE_NUM));
+        highPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.TALL_PIPE_NUM));
+        highForwardDistance.setDouble(limelight.getForwardDistance(Constants.TALL_PIPE_NUM));
+        
+        lowPostX.setDouble(limelight.getX(Constants.SHORT_PIPE_NUM));
+        lowPostY.setDouble(limelight.getY(Constants.SHORT_PIPE_NUM));
+        lowPostHeading.setDouble(limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM));
+        lowForwardDistance.setDouble(limelight.getForwardDistance(Constants.SHORT_PIPE_NUM));
     }
     
     public void pushIMU(IMU imu) {
