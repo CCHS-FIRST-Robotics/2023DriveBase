@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import frc.robot.subsystems.*;
+import frc.robot.utils.*;
 
 
 /**
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+
+  Arm arm = new Arm(Constants.SHOULDER_TALON_ID, Constants.ELBOW_TALON_ID, Constants.ELBOW_FALCON_ID);
   Limelight limelight = new Limelight();
   IMU imu = new IMU();
   ZED zed = new ZED();
@@ -49,6 +52,14 @@ public class Robot extends TimedRobot {
 
   double test = 0;
   long counter = 0; // for calling functions every n loops
+
+  public Robot() {
+    // addPeriodic(() -> updateArmVelocities(), .001);
+  }
+
+  // public void updateArmVelocities() {
+    
+  // }
   long auton_counter = 0;
 
   /**
@@ -171,12 +182,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     smartdash.updateControllerExponents();
+    smartdash.updatePIDConstants(arm);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
     // switch between driving modes
     checkForModeSwitches();
 
@@ -184,7 +195,62 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
+    // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
+    // System.out.println("Alpha:" + arm.getShoulderAngle());
+    // System.out.println("Beta:" + arm.getElbowAngle());
+    // System.out.println("\n\n");
+
+    if (arm.shouldMotorStop()) {
+      arm.stopMotors();
+      
+    } else {
+      arm.testMoveShoulder(xboxController.getRightX());
+      arm.testMoveElbow(xboxController.getRightY());
+      // arm.stopMotors();
+
+      // if (xboxController.getRightBumperPressed()) {
+      //   // driveBase.increaseSpeedBracket();
+        
+      // } else if (xboxController.getAButtonPressed()) {
+      //   // driveBase.cycleMotor();
+      //   arm.setEndEffector(1.6, 1);
+      // } else {
+      //   arm.setEndEffector(.3, .4);
+      // }
+
+      // arm.setEndEffector(1.55, 1.2);
+      
+      // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
+    }
+
+
+    if (counter % 10 == 0) {
+      // System.out.println(arm.getShoulderRawAngle());
+
+      if (arm.shouldMotorStop()) {
+        System.out.println("HOLY SHIT EVERYTHING IS EXPLODING");
+      }
+
+      smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
+      smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
+
+      // System.out.println(arm.getShoulderFeedforward());
+
+      // System.out.println("SHOULDER ENCODER: " + arm.getShoulderAngle());
+      // System.out.println("ELBOW ENCODER: " + arm.getElbowAngle());
+      // System.out.println("END EFFECTOR X " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      // System.out.println("END EFFECTOR Y " + Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      
+
+      smartdash.putNumber("END EFFECTOR X", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[0]);
+      smartdash.putNumber("END EFFECTOR Y", Kinematics.forwardKinematics(arm.getShoulderAngle(), arm.getElbowAngle())[1]);
+      smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
+      smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
+      // System.out.println(xboxController.getRightY());
+      smartdash.pushDashboard(limelight, imu, zed);
+    }
+    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -222,25 +288,25 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
-    if (xboxController.getAButtonPressed()) {
-      driveBase.cycleMotor();
-    }
     if (xboxController.getBButtonPressed()) {
-      driveBase.printActiveMotorDebugMode();
-      System.out.println("gfhighfdi");
+      // driveBase.printActiveMotorDebugMode();
+      arm.toggleManualMotorStop();
+    }
+    if (xboxController.getXButtonPressed() & xboxController.getYButtonPressed()) {
+      arm.toggleMotorCheck();
+      System.out.println("fhuhdushf");
     }
     if (xboxController.getLeftBumperPressed()) {
-      driveBase.decreaseSpeedBracket();
+      // driveBase.decreaseSpeedBracket();
     }
-    if (xboxController.getRightBumperPressed()) {
-      driveBase.increaseSpeedBracket();
-    }
+    
   }
 
   /** 
    * Powers motors based on the analog inputs
    */
   private void drive() {
+
     // process input (determine wheelspeeds)
     // driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());

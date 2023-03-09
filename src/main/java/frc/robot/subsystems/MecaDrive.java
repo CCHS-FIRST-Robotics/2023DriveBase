@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.Constants;
@@ -43,10 +43,10 @@ public class MecaDrive extends DriveBase {
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
 
-		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
-		frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
-		rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
-		rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+		frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort);
+		frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
+		rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
+		rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 
 		// invert motors to make forward the right direction
 		frontRightMotor.setInverted(true);
