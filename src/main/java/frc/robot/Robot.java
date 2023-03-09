@@ -144,14 +144,14 @@ public class Robot extends TimedRobot {
 		// // Default code
     // }
     // stop the robot after a while
-    // if (auton_counter > 200) autonomousIsMoving = false;
+    // if (auton_counter > 100) autonomousIsMoving = false;
 		// this if statement is kind of irrelevant because we have no way to change this bool
     // because all controller input is ignored during autonomous
 		if (autonomousIsMoving){
 			// increase the current time, because autonomous trajectories need a time (each period takes the same time)
-			driveBase.incrementCurrentTrajectoryTime(); // so add it up
+			// driveBase.incrementCurrentTrajectoryTime(); // so add it up
 			// tell the autonomous system to use it's trajectory from the drivebase to drive the robot
-      Autonomous.applyChassisSpeeds(driveBase);
+      // Autonomous.applyChassisSpeeds(driveBase);
 
       // +x is forward, +y is right, +z is clockwise as viewed from above
       // driveBase.mDrive.driveCartesian(0, 0, -Math.PI/16);
@@ -160,12 +160,12 @@ public class Robot extends TimedRobot {
       // driveBase.drive(new ChassisSpeeds(.25, 0, 0));
 
       // it seems to be driving about 500 click/100ms too fast??
-      // driveBase.frontLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
-      // driveBase.frontRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
-      // driveBase.rearLeftMotor.set(ControlMode.Velocity, 5500); // should be about 25%
-      // driveBase.rearRightMotor.set(ControlMode.Velocity, 5500); // should be about 25%
+      driveBase.frontLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+      driveBase.frontRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+      driveBase.rearLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
+      driveBase.rearRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS); // should be about 25%
       driveBase.printVelocity();
-      System.out.println(driveBase.getOdomHeading());
+      // System.out.println(driveBase.getOdomHeading());
 		}
     else {
       // System.out.println("Not moving");
