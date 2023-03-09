@@ -66,13 +66,15 @@ public abstract class DriveBase extends SubsystemBase {
 	 * 1/2 speed
 	 */
 	public void increaseSpeedBracket() {
-		speedMultiplier = Math.min(1, speedMultiplier + 0.1);
+		speedMultiplier = Math.min(1, speedMultiplier + 0.4);
+		// speedMultiplier = 1;
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
 	public void decreaseSpeedBracket() {
 		// the min is 0.2 because below that the robot is unlikely to move
-		speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
+		speedMultiplier = Math.max(0.2, speedMultiplier - 0.4);
+		// speedMultiplier = .3;
 		System.out.println("Current speed multiplier: " + speedMultiplier);
 	}
 
