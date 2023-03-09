@@ -288,13 +288,14 @@ public class Arm {
 	 */
 	public double getShoulderAngle() {
 		// experimentally found ratio TODO: fix for falcons
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7 + 105.7;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 95.7;
+		// return shoulderEncoder.getSelectedSensorPosition();
 	}
 
 	public double getElbowAngle() {
 		SmartDashboard.putNumber("FALCON ELBOW RAW: ", elbowMotor.getSelectedSensorPosition());
 		SmartDashboard.putNumber("FALCON ELBOW: ", elbowMotor.getIntegralAccumulator() * 360/4096 / 200);
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 161.5);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
 	}
 
 	/**

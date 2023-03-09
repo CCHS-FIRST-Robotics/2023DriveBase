@@ -103,22 +103,22 @@ public class Constants {
 	public static final int WRIST_BACKWARD_NUM = 3;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = 1.4;
-	public static final double SHOULDER_KI = 0.05;
-	public static final double SHOULDER_KD = 0.01;
+	public static final double SHOULDER_KP = 1.4; // 1.4
+	public static final double SHOULDER_KI = 0.00; // .05
+	public static final double SHOULDER_KD = 0.01; //.01
 
 	public static final double SHOULDER_KS = 0;
-	public static final double SHOULDER_KG = 0;
+	public static final double SHOULDER_KG = .9;
 	public static final double SHOULDER_KV = 0;
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = 1.4;
+	public static final double ELBOW_KP = 1.4; // 1.4
 	public static final double ELBOW_KI = 0;
-	public static final double ELBOW_KD = 0;
+	public static final double ELBOW_KD = 0.01; //.01
 
 	public static final double ELBOW_KS = 0;
-	public static final double ELBOW_KG = 0;
+	public static final double ELBOW_KG = 0.7;
 	public static final double ELBOW_KV = 0;
 	public static final double ELBOW_KA = 0;
 

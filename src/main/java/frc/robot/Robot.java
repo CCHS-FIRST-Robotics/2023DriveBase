@@ -160,8 +160,8 @@ public class Robot extends TimedRobot {
 
     // arm.getElbowRawAngle();
 
-    arm.setShoulder(pidTuningAlpha);
-    arm.setElbow(pidTuningBeta);
+    // arm.setShoulder(pidTuningAlpha);
+    // arm.setElbow(pidTuningBeta);
 
     // arm.moveArm(xboxController.getLeftX(), xboxController.getLeftY());
 
