@@ -47,12 +47,6 @@ public class Constants {
 	public static final int SHOULDER_FALCON_ID = 5;
 	public static final int ELBOW_FALCON_ID = 6;
 
-
-	public static final int SHOULDER_TALON_ID = 3;
-	public static final int ELBOW_TALON_ID = 5;
-	public static final int ELBOW_FALCON_ID = 9;
-
-
 	// gear ratio of the motor gearbox
 	public static final double FALCON_GEARBOX_RATIO = 10.71; 
 
@@ -68,7 +62,7 @@ public class Constants {
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
 
-	public static final double DRIVE_STARTING_MULTIPLIER = 0.1;
+	public static final double DRIVE_STARTING_MULTIPLIER = 0.3;
 
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
@@ -221,7 +215,7 @@ public class Constants {
 	public static final double minAlpha = -30;
 	public static final double maxAlpha = 170;
 
-	public static final double minBeta = -88;
+	public static final double minBeta = -175;
 	public static final double maxBeta = 260;
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf

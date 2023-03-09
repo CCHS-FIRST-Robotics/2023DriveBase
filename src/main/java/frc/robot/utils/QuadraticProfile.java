@@ -58,7 +58,7 @@ public class QuadraticProfile {
         System.out.println("#Stop: " + stoppingSetpoints.length);
 
         R2Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
-
+        
         double[][] setpoints = new double[combined.length][2];
         double[] angles;
         for (int i = 0; i < combined.length; i++) {
@@ -71,7 +71,7 @@ public class QuadraticProfile {
             setpoints[i][0] = angles[0];
             setpoints[i][1] = angles[1];
         }
-
+        
         return setpoints;
     }
 
@@ -111,7 +111,7 @@ public class QuadraticProfile {
         System.out.println("#Stop: " + stoppingSetpoints.length);
 
         R2Vector[] combined = combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
-
+        
         ArrayList<double[]> setpoints = new ArrayList<double[]>(combined.length);
         double[] angles;
         for (int i = 0; i < combined.length; i++) {
@@ -119,17 +119,18 @@ public class QuadraticProfile {
                 double x = combined[i].x;
                 double y = combined[i].y;
                 if (i == 0) {
-                    angles = Kinematics.positionInverseKinematics(x, y, initialAngles);
+                    angles = Kinematics.positionInverseKinematics(x, y, true);
+                    // angles = Kinematics.positionInverseKinematics(x, y, initialAngles);
                 } else {
-                    angles = Kinematics.positionInverseKinematics(x, y, setpoints.get(i-1));
+                    angles = Kinematics.positionInverseKinematics(x, y, true);
+                    // angles = Kinematics.positionInverseKinematics(x, y, setpoints.get(i-1));
                 }
-                
 
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("angle is NaN");
                 }
-                if (Kinematics.shouldMotorStop(angles[0], angles[1], theta)) {
-                    throw new Exception("(x, y) = (" + x + ", " + y + ") goes past a motor limit");
+                if (Kinematics.shouldMotorStop(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), theta)) {
+                    throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                 }
             } catch(ArithmeticException e) 
             {
@@ -137,8 +138,7 @@ public class QuadraticProfile {
                 System.out.println("Y: " + combined[i].y);
                 System.out.println(e.getMessage());
                 if (i != 0) {
-                    setpoints.get(i)[0] = setpoints.get(i-1)[0];
-                    setpoints.get(i)[1] = setpoints.get(i-1)[1];
+                    setpoints.add(setpoints.get(i-1));
                 }
                 continue;
             } catch(Exception e) {
@@ -150,10 +150,9 @@ public class QuadraticProfile {
                 break;
             }
             
-            setpoints.get(i)[0] = angles[0];
-            setpoints.get(i)[1] = angles[1];
+            setpoints.add(angles);
         }
-
+        System.out.println("GOT HERE -1");
         return setpoints;
     }
 

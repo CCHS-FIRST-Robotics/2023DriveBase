@@ -151,7 +151,7 @@ public final class Kinematics {
 			(2*Math.atan(sigma2))
 		};
 
-		return new double[][] {alphas, betas};
+		return new double[][] {{alphas[0], betas[0]}, {alphas[1], betas[1]}};
 	}
 
 	/**
@@ -163,8 +163,8 @@ public final class Kinematics {
 	public static double[] positionInverseKinematics(double x, double y, boolean clawDown) {
 		// If none is specified, choose the position that typically works
 		double[][] angles = positionInverseKinematics(x, y);
-		double[] alphas = angles[0];
-		double[] betas = angles[1];
+		double[] alphas = new double[] {angles[0][0], angles[1][0]};
+		double[] betas = new double[] {angles[0][1], angles[1][1]};
 		return evaluateAngles(alphas, betas, clawDown);
 	}
 

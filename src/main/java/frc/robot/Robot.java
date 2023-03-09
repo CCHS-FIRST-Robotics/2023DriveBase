@@ -43,7 +43,6 @@ public class Robot extends TimedRobot {
 
   private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT, 5);
   private Controller xboxControllerAlternate = new Controller(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
-  private MecaDrive driveBase;
 
   DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
 
@@ -58,7 +57,6 @@ public class Robot extends TimedRobot {
   
   BetterShuffleboard smartdash = new BetterShuffleboard();
 
-  private Controller xboxController = new Controller();
   private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
   
   boolean autonomousIsMoving = true;
@@ -205,6 +203,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     smartdash.updateControllerExponents();
     smartdash.updatePIDConstants(arm);
+    // arm.setNeutralPostion();
   }
 
   /** This function is called periodically during operator control. */
@@ -217,7 +216,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    // drive();
+    drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -226,7 +225,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println(arm.getCurrentMode());
 
-    // arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
+    arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.getElbowRawAngle();
 
@@ -254,10 +253,11 @@ public class Robot extends TimedRobot {
     // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
 
-    if (counter % 10 == 0) {
-      System.out.println(pidTuningAlpha);
-      System.out.println(arm.getShoulderAngle());
-      // System.out.println(arm.getShoulderFeedforward());
+    if (counter % 50 == 0) {
+      // System.out.println(pidTuningAlpha);
+      // System.out.println(arm.getShoulderAngle());
+      System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
+      System.out.println("ELBOW FF:" + arm.getElbowFeedforward());
 
       // double angles[] = Kinematics.positionInverseKinematics(1, 1, 0);
       // System.out.println("SATRT OF THIGN");
@@ -300,7 +300,7 @@ public class Robot extends TimedRobot {
       smartdash.putBoolean("MOTOR LIMIS", arm.motorLimits);
       smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
       // System.out.println(xboxController.getRightY());
-      smartdash.pushDashboard(limelight, imu, zed);
+      smartdash.pushDashboard(limelight, imu, driveBase, zed);
     }
     counter++;
   }

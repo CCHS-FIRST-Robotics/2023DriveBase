@@ -32,10 +32,6 @@ public class BetterShuffleboard {
     GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
                  highForwardDistance, lowForwardDistance;
 
-    ShuffleboardTab limelightTab; // used for limelight data
-    GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
-                 highForwardDistance, lowForwardDistance;
-
     public BetterShuffleboard() {
         /*
          * Xbox Controller tuning
@@ -188,13 +184,6 @@ public class BetterShuffleboard {
         // NavConnected = odomTab.add("NavConnected", 0)
         //     .withWidget(BuiltInWidgets.kBooleanBox)
         //     .getEntry();
-    }
-
-    public void putNumber(String key, double x) {
-        SmartDashboard.putNumber(key, x);
-    }
-    public void putBoolean(String key, boolean x) {
-        SmartDashboard.putBoolean(key, x);
     }
 
     public void putNumber(String key, double x) {

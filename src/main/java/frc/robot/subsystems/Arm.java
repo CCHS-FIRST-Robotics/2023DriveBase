@@ -126,8 +126,6 @@ public class Arm {
 
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
 		prevPosition = new R2Vector(pos[0], pos[1]);
-
-		// setNeutralPostion();
 	}
 
 	/**
@@ -180,12 +178,15 @@ public class Arm {
 	public void run(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
 		if (leftAnalogX !=0 || leftAnalogY != 0 || rightAnalogX != 0 || rightAnalogY != 0) {
 			stopTrajectory();
+			currentMode = Mode.MANUAL;
 		}
 
-		double y = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle())[1];
-		if (y < .5 && grabberForward) {
+		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+		double x = pos[0]; double y = pos[1];
+
+		if (y < .5 && grabberForward && !Constants.isInFrameX(x)) {
 			grabber.wristBack();
-		} else if (y > .7 && !grabberForward) {
+		} else if (y > .7 && !grabberForward && !Constants.isInFrameX(x)) {
 			grabber.wristForward();
 		}
 
@@ -193,16 +194,16 @@ public class Arm {
 			case IDLE:
 				break;
 			case MANUAL:
-				if (shouldMotorStop()) {
-					stopMotors();
-					break;
-				}
+				// if (shouldMotorStop()) {
+				// 	stopMotors();
+				// 	break;
+				// }
 				if (leftAnalogX == 0 && leftAnalogY == 0) {
 					moveShoulder(rightAnalogX);
 					moveElbow(rightAnalogY);
 				} else {
 					// TODO: add controls for linear movement
-					moveArm(leftAnalogX, leftAnalogY);
+					// moveArm(leftAnalogX, leftAnalogY);
 				}
 				break;
 
@@ -448,7 +449,7 @@ public class Arm {
 		grabber.clawBack(); // open claw
 		grabber.wristForward(); // wrist in line with upper arm
 
-		setEndEffector(.25, .5, 0);
+		setEndEffector(1, 1, 0);
 	}
 
 	public void setEndEffector(double xPos, double yPos, double theta) {
@@ -464,9 +465,13 @@ public class Arm {
 	 */
 	public void setEndEffector(double xPos, double yPos, double theta, boolean debug) {
 		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
-		double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, getJointAngles());
+		// double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, getJointAngles());
 
 		trajectory = Kinematics.degrees(getTrajectory(xPos, yPos));
+		// when goes past motor limit traj is empty
+		if (trajectory.size() < 1) {
+			return;
+		}
 		currentMode = Mode.RUNNING_TRAJECTORY;
 		trajectoryCounter = 0;
 		executeTrajectory();
@@ -493,13 +498,18 @@ public class Arm {
 	}
 
 	public void printTrajInfo(ArrayList<double[]> trajectory, double x, double y) {
-		System.out.println(trajectory.size());
+		// when goes past motor limit traj is empty
+		if (trajectory.size() < 1) {
+			return;
+		};
+		System.out.println("GOT HERE 1");
 	
 		for (int i=0; i<trajectory.size(); i++) {
 		  double[] angles = trajectory.get(i);
 		  System.out.println("Angles: " + angles[0] + " next " + angles[1]);
 		}
 		double[] angles = trajectory.get(trajectory.size() - 1);
+		System.out.println("GOT HERE 2");
 		System.out.println("LAST: " + angles[0] + " next " + angles[1]);
 	
 		System.out.println("IK SOLUTION X: " + Math.toDegrees(Kinematics.positionInverseKinematics(x, y, getJointAngles()) [0]));
