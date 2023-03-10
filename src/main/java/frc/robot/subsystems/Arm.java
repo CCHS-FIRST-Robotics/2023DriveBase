@@ -178,7 +178,6 @@ public class Arm {
 	public void run(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
 		if (leftAnalogX !=0 || leftAnalogY != 0 || rightAnalogX != 0 || rightAnalogY != 0) {
 			stopTrajectory();
-			currentMode = Mode.MANUAL;
 		}
 
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
@@ -195,7 +194,7 @@ public class Arm {
 				break;
 			case MANUAL:
 				// if (shouldMotorStop()) {
-				// 	stopMotors();
+					// stopMotors();
 				// 	break;
 				// }
 				if (leftAnalogX == 0 && leftAnalogY == 0) {

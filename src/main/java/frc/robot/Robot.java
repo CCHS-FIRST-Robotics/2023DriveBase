@@ -281,7 +281,7 @@ public class Robot extends TimedRobot {
     // arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
 
-    if (counter % 50 == 0) {
+    if (counter % 20 == 0) {
       // System.out.println(pidTuningAlpha);
       // System.out.println(arm.getShoulderAngle());
       System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
