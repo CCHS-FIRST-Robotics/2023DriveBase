@@ -28,8 +28,6 @@ public class Limelight {
 
         double limelightLensHeight       = Constants.LIME_HEIGHT;
         double limelightMountAngle       = Constants.LIME_ANGLE;
-        double limelightLensHeight       = Constants.LIME_HEIGHT;
-        double limelightMountAngle       = Constants.LIME_ANGLE;
         double targetOffsetAngleVertical  = table.getEntry("ty").getDouble(0.0) * ((Math.PI)/(180));
 
         double angleToGoal = limelightMountAngle + targetOffsetAngleVertical;
@@ -83,7 +81,7 @@ public class Limelight {
         
     }
 
-    public int getPipeline(){
+    public double getPipeline(){
         return pipeNum;
     }
 
