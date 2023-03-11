@@ -27,6 +27,7 @@ public class Controller extends XboxController{
             input = 0;
         }
         input = Math.pow(Math.abs(input), exponent) * Math.signum(input);
+        // return input;
         return filter.calculate(input);
     }
     

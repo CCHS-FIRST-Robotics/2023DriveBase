@@ -157,7 +157,7 @@ public class Constants {
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = 1.4; // 1.4
+	public static final double ELBOW_KP = 1.2; // 1.4
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0.00; //.01
 
@@ -188,8 +188,11 @@ public class Constants {
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
-	public static final double MAX_FORWARD_X = .5; // meters
-	public static final double MAX_FORWARD_Y = .2; // meters
+	public static final double MAX_FORWARD_X = .005; // meters
+	public static final double MAX_FORWARD_Y = .005; // meters
+
+	public static final double WRIST_MIN_ACTUATE = .7;
+	public static final double WRIST_MAX_ACTUATE = .8;
 
 	// hard min/max x and y values for the arm
 	public static final double minX = -1.5; // slightly less than the furthest possible distance to make sure we don't lose a DOF
@@ -207,6 +210,10 @@ public class Constants {
 
 	public static boolean isBelowFrame(double y) {
 		return (y < .2);
+	}
+
+	public static boolean isZero(double x) {
+		return Math.abs(x) < 2 * Double.MIN_VALUE;
 	}
 
 	// alpha is the shoulder joint angle in relation to the horizontal

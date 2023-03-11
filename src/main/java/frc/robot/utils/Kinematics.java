@@ -299,10 +299,41 @@ public final class Kinematics {
 		);
 	}
 
+	public static boolean isMovingPastLimit(double alpha, double beta, double theta, double prevPosition, double currentPosition) {
+		if (!shouldMotorStop(alpha, beta, theta)) {
+			return false;
+		}
+
+		double x = pos[0];
+		double y = pos[1];
+
+
+		// check if the arm is fully extended -- dont want it to lock/lose a DOF
+		if (x < Constants.minX && ) {
+
+		}
+		if (x > Constants.maxX) {
+
+		}
+
+		// check if the arm is too close to the ground or above the height limit
+		if (y < Constants.minY) {
+
+		}
+		if (y > Constants.maxY) {
+
+		}
+
+		// check to make sure the arm isn't hitting the frame
+		if (Constants.isInFrameX(x) && Constants.isBelowFrame(y)) {
+
+		}
+	}
+
 	public static double wristDesiredPosition(double x, double y) {
-		if ((y < .7) && !Constants.isInFrameX(x)) {
+		if ((y < Constants.WRIST_MIN_ACTUATE) && !Constants.isInFrameX(x)) {
 			return 90;
-		} if ((y > .8) && !Constants.isInFrameX(x)) {
+		} if ((y > Constants.WRIST_MAX_ACTUATE) && !Constants.isInFrameX(x)) {
 			return 0;
 		}
 

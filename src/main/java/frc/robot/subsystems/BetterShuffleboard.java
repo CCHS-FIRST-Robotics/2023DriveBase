@@ -215,8 +215,6 @@ public class BetterShuffleboard {
         arm.elbowP = elbowP.getDouble(0);
         arm.elbowI = elbowI.getDouble(0);
         arm.elbowD = elbowD.getDouble(0);
-
-        arm.initControllers();
     }
 
     public void pushOdom(MecaDrive drive) {
