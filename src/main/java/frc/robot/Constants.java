@@ -149,7 +149,7 @@ public class Constants {
 	// Shoulder PID and Feedfoward gains for positional control
 	public static final double SHOULDER_KP = 1.4; // 1.4
 	public static final double SHOULDER_KI = 0.00; // .05
-	public static final double SHOULDER_KD = 0.01; //.01
+	public static final double SHOULDER_KD = 0.00; //.01
 
 	public static final double SHOULDER_KS = 0;
 	public static final double SHOULDER_KG = .9;
@@ -159,7 +159,7 @@ public class Constants {
 	// Elbow PID and Feedfoward gains
 	public static final double ELBOW_KP = 1.4; // 1.4
 	public static final double ELBOW_KI = 0;
-	public static final double ELBOW_KD = 0.01; //.01
+	public static final double ELBOW_KD = 0.00; //.01
 
 	public static final double ELBOW_KS = 0;
 	public static final double ELBOW_KG = 0.7;
@@ -183,7 +183,7 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .2; // meters per second
+	public static final double ARM_MAX_SPEED = .5; // meters per second
 	public static final double ARM_MAX_ACCELERATION = .1; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
@@ -192,8 +192,8 @@ public class Constants {
 	public static final double MAX_FORWARD_Y = .2; // meters
 
 	// hard min/max x and y values for the arm
-	public static final double minX = -1.45; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.45; 
+	public static final double minX = -1.5; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.5; 
 	public static final double minY = 0.05;
 	public static final double maxY = 1.95; // 6'6"
 

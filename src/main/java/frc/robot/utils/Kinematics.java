@@ -299,6 +299,16 @@ public final class Kinematics {
 		);
 	}
 
+	public static double wristDesiredPosition(double x, double y) {
+		if ((y < .7) && !Constants.isInFrameX(x)) {
+			return 90;
+		} if ((y > .8) && !Constants.isInFrameX(x)) {
+			return 0;
+		}
+
+		return -1;
+	}
+
 	/**
 	 * Literally just shorthand for Math.pow since I couldn't figure out how to import it directly lol
 	 * 

@@ -244,7 +244,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -284,8 +284,8 @@ public class Robot extends TimedRobot {
     if (counter % 20 == 0) {
       // System.out.println(pidTuningAlpha);
       // System.out.println(arm.getShoulderAngle());
-      System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
-      System.out.println("ELBOW FF:" + arm.getElbowFeedforward());
+      // System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
+      // System.out.println("ELBOW FF:" + arm.getElbowFeedforward());
 
       // double angles[] = Kinematics.positionInverseKinematics(1, 1, 0);
       // System.out.println("SATRT OF THIGN");
@@ -304,7 +304,7 @@ public class Robot extends TimedRobot {
       }
 
       // System.out.println(limitSwitch.get());
-      // System.out.println("test working");
+      System.out.println("test working");
 
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
@@ -330,7 +330,6 @@ public class Robot extends TimedRobot {
       // System.out.println(xboxController.getRightY());
       smartdash.pushDashboard(limelight, imu, driveBase, zed);
     }
-    counter++;
   }
 
   /** This function is called once when the robot is disabled. */
@@ -396,24 +395,24 @@ public class Robot extends TimedRobot {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
-      // arm.setEndEffector(0.76, 0.94, 0);
+      arm.setEndEffector(0.76, 0.94, 0);
       // arm.setEndEffector(x, y, 0);
-      pidTuningBeta = 10;
+      // pidTuningBeta = 10;
     }
 
     if (Y) {
-      // arm.setEndEffector(1.15, 1.29, 0);
-      pidTuningBeta = 0;
+      arm.setEndEffector(1.15, 1.29, 0);
+      // pidTuningBeta = 0;
     }
 
     if (X) {
-      // arm.setEndEffector(1.23, 1.05, 0);
-      pidTuningAlpha = 10;
+      arm.setEndEffector(1.23, 1.05, 0);
+      // pidTuningAlpha = 10;
     }
 
     if (A) {
-      // arm.setEndEffector(0.84, 1.1, 0);
-      pidTuningAlpha = 0;
+      arm.setEndEffector(0.84, 1.1, 0);
+      // pidTuningAlpha = 0;
     }
 
     // MOTOR LIMITS/STOPS:

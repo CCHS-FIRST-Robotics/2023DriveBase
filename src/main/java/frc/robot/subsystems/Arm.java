@@ -180,14 +180,10 @@ public class Arm {
 			stopTrajectory();
 		}
 
-		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
+		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 		double x = pos[0]; double y = pos[1];
 
-		if (y < .5 && grabberForward && !Constants.isInFrameX(x)) {
-			grabber.wristBack();
-		} else if (y > .7 && !grabberForward && !Constants.isInFrameX(x)) {
-			grabber.wristForward();
-		}
+		setWrist(wristDesiredPosition(x, y));
 
 		switch(currentMode) {
 			case IDLE:
@@ -283,19 +279,29 @@ public class Arm {
 		return shoulderMotor.getSelectedSensorPosition();
 	}
 
+	public double wristDesiredPosition(double x, double y) {
+		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward) {
+			return 90;
+		} if (Kinematics.wristDesiredPosition(x, y) == 0 && !grabberForward) {
+			return 0;
+		}
+
+		return getWristAngle();
+	}
+
 	/**
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
 		// experimentally found ratio TODO: fix for falcons
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 95.7;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 5.7;
 		// return shoulderEncoder.getSelectedSensorPosition();
 	}
 
 	public double getElbowAngle() {
 		SmartDashboard.putNumber("FALCON ELBOW RAW: ", elbowMotor.getSelectedSensorPosition());
 		SmartDashboard.putNumber("FALCON ELBOW: ", elbowMotor.getIntegralAccumulator() * 360/4096 / 200);
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 84.5);
 	}
 
 	/**
@@ -425,8 +431,8 @@ public class Arm {
 
 	public void moveShoulder(double analogX) {
 		if (analogX == 0) {
-			// setShoulder(lastShoulderAngle);
-			// return;
+			setShoulder(lastShoulderAngle);
+			return;
 		}
 		lastShoulderAngle = getShoulderAngle();
 		double speedX = 12 * analogX; // 12V conversion
@@ -436,8 +442,8 @@ public class Arm {
 
 	public void moveElbow(double analogY) {
 		if (analogY == 0) {
-			// setElbow(lastElbowAngle);
-			// return;
+			setElbow(lastElbowAngle);
+			return;
 		}
 		lastElbowAngle = getElbowAngle();
 		double speedY = 12 * analogY; // 12V conversion
@@ -555,6 +561,14 @@ public class Arm {
 			getElbowFeedforward() 
 			
 		);
+	}
+
+	public void setWrist(double theta) {
+		if (theta == 90) {
+			grabber.wristBack();
+		} if (theta == 0) {
+			grabber.wristForward();
+		}
 	}
 
 	/**

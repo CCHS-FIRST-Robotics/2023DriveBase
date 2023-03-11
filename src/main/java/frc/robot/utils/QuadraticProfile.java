@@ -126,10 +126,16 @@ public class QuadraticProfile {
                     // angles = Kinematics.positionInverseKinematics(x, y, setpoints.get(i-1));
                 }
 
+                double wristPosition = Kinematics.wristDesiredPosition(x, y);
+                // if its in between the two thresholds, assume it's flush with upper arm
+                if (wristPosition == -1) {
+                    wristPosition = 0;
+                }
+
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("angle is NaN");
                 }
-                if (Kinematics.shouldMotorStop(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), theta)) {
+                if (Kinematics.shouldMotorStop(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition)) {
                     throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                 }
             } catch(ArithmeticException e) 
