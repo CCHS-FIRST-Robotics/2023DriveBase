@@ -157,8 +157,6 @@ public class Arm {
 			}
 		}
 
-		
-
 		setWrist(wristDesiredPosition(x, y));
 
 		switch(currentMode) {
@@ -183,9 +181,6 @@ public class Arm {
 			case HOLDING_POSITION:
 				double alpha = targetAngles[0];
 				double beta = targetAngles[1];
-				System.out.println("HOLDING");
-				System.out.println("ALPHA: " + alpha);
-				System.out.println("BETA: " + beta);
 				setShoulder(alpha);
 				setElbow(beta);
 				break;
@@ -259,7 +254,7 @@ public class Arm {
 		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward) {
 			grabberForward = false;
 			return 90;
-		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward) {
+		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || Constants.isInFrameX(x)) {
 			grabberForward = true;
 			return 0;
 		}

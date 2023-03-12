@@ -275,6 +275,8 @@ public final class Kinematics {
 		double[] pos = Kinematics.forwardKinematics(alpha, beta, theta);
 		double x = pos[0];
 		double y = pos[1];
+		// System.out.println("THING X: " + x);
+		// System.out.println("THING Y: " + x);
 
 		return (
 			// check if the shoulder is too far forward/backward
@@ -293,50 +295,51 @@ public final class Kinematics {
 			y < Constants.minY ||
 			y > Constants.maxY ||
 
-			// check to make sure the arm isn't hitting the frame or the electrical board
-			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
-			(Constants.isInFrameX(x) && Constants.isBelowElectricalBoard(y) && x < 0)
+			// check to make sure the arm isn't hitting the frame
+			(Constants.isInFrameX(x) && Constants.isBelowFrame(y))
 		);
 	}
 
 	public static boolean isMovingPastLimit(double alpha, double beta, double theta, double directionX, double directionY) {
-		double[] posEE = Kinematics.forwardKinematics(alpha, beta, theta);
-		double x = posEE[0];
-		double y = posEE[1];
-
-		double[] posWrist = Kinematics.forwardKinematics(alpha, beta);
-		double wristX = posWrist[0];
-		double wristY = posWrist[1];
-
-		if (
-			!((x > Constants.minX || directionX > 0) &&
-			(x < Constants.maxX || directionX < 0) &&
-			isPositionPossible(wristX, wristY))
-		) return true;
-
-		if (
-			(y > Constants.minY || directionY > 0) &&
-			(y < Constants.maxY || directionY < 0) &&
-			Kinematics.isPositionPossible(wristX, wristY)
-		) return true;
-
-		if (
-			// check if the shoulder is too far forward/backward
-			alpha < Constants.minAlpha ||
-			alpha > Constants.maxAlpha ||
-
-			// check if the elbow is too far forward/backward
-			beta < Constants.minBeta ||
-			beta > Constants.maxBeta
-		) return true;
-
-		// // check to make sure the arm isn't hitting the frame
-		if (
-			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
-			(directionX > 0 && directionY > 0)
-		) return true;
-		
 		return false;
+		// return shouldMotorStop(alpha, beta, theta);
+		// double[] posEE = Kinematics.forwardKinematics(alpha, beta, theta);
+		// double x = posEE[0];
+		// double y = posEE[1];
+
+		// double[] posWrist = Kinematics.forwardKinematics(alpha, beta);
+		// double wristX = posWrist[0];
+		// double wristY = posWrist[1];
+
+		// if (
+		// 	!((x > Constants.minX || directionX > 0) &&
+		// 	(x < Constants.maxX || directionX < 0) &&
+		// 	isPositionPossible(wristX, wristY))
+		// ) return true;
+
+		// if (
+		// 	!((y > Constants.minY || directionY > 0) &&
+		// 	(y < Constants.maxY || directionY < 0) &&
+		// 	Kinematics.isPositionPossible(wristX, wristY))
+		// ) return true;
+
+		// if (
+		// 	// check if the shoulder is too far forward/backward
+		// 	alpha < Constants.minAlpha ||
+		// 	alpha > Constants.maxAlpha ||
+
+		// 	// check if the elbow is too far forward/backward
+		// 	beta < Constants.minBeta ||
+		// 	beta > Constants.maxBeta
+		// ) return true;
+
+		// // // check to make sure the arm isn't hitting the frame
+		// if (
+		// 	(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
+		// 	(directionX > 0 && directionY > 0)
+		// ) return true;
+
+		// return false;
 	}
 
 	public static boolean isPositionPossible(double x, double y) {
