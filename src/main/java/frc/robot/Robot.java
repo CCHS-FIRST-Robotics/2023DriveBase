@@ -395,23 +395,23 @@ public class Robot extends TimedRobot {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
-      arm.setEndEffector(0.76, 0.94, 0);
+      arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
       // arm.setEndEffector(x, y, 0);
       // pidTuningBeta = 10;
     }
 
     if (Y) {
-      arm.setEndEffector(1.15, 1.29, 0);
+      arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
       // pidTuningBeta = 0;
     }
 
     if (X) {
-      arm.setEndEffector(1.23, 1.05, 0);
+      arm.setEndEffector(Constants.ArmFixedPosition.CUBE_HIGHER);
       // pidTuningAlpha = 10;
     }
 
     if (A) {
-      arm.setEndEffector(0.84, 1.1, 0);
+      arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
       // pidTuningAlpha = 0;
     }
 

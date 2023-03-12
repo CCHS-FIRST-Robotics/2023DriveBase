@@ -119,6 +119,7 @@ public class QuadraticProfile {
             try {
                 double x = combined[i].x;
                 double y = combined[i].y;
+                System.out.println("(x, y) = " + x + ", " + y);
                 if (i == 0) {
                     angles = Kinematics.positionInverseKinematics(x, y, true);
                     // angles = Kinematics.positionInverseKinematics(x, y, initialAngles);

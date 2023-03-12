@@ -204,7 +204,7 @@ public class Constants {
 	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {
-		return (Math.abs(x) < .5); // frame is ~1 meter long
+		return (Math.abs(x) < .35); // frame is ~1 meter long
 	}
 
 	public static boolean isBelowElectricalBoard(double y) {
@@ -238,10 +238,10 @@ public class Constants {
 		PICKUP_SUBSTATION_SINGLE,
 		PICKUP_SUBSTATION_DOUBLE
 	} 
-	public static final R2Vector CUBE_LOWER = new R2Vector(0.76, 0.94);
-	public static final R2Vector CUBE_HIGHER = new R2Vector(1.23, 1.05);
-	public static final R2Vector CONE_LOWER = new R2Vector(.84, 1.1);
-	public static final R2Vector CONE_HIGHER = new R2Vector(1.15, 1.29);
+	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.04);
+	public static final R2Vector CUBE_HIGHER = new R2Vector(1.25, 1.35);
+	public static final R2Vector CONE_LOWER = new R2Vector(0.77, 1.3);
+	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.45);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_SINGLE = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_DOUBLE = new R2Vector(1.23, 1.05);
