@@ -100,6 +100,8 @@ public class Arm {
 		elbowMotor.setNeutralMode(NeutralMode.Coast);
 
 		prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
+		currentPositionX = prevControllerPos[0];
+		currentPositionY = prevControllerPos[1];
 
 		lastShoulderAngle = getShoulderAngle(); 
 		lastElbowAngle = getElbowAngle();
@@ -113,8 +115,6 @@ public class Arm {
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle(), getWristAngle());
 		prevPosition = new R2Vector(pos[0], pos[1]);
 
-		currentPositionX = pos[0];
-		currentPositionY = pos[1];
 		// Positional PID Controllers
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
@@ -141,10 +141,19 @@ public class Arm {
 		!Constants.isZero(rightAnalogX) || 
 		!Constants.isZero(rightAnalogY)) {
 			stopTrajectory();
+			prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 		} else {
 			// keep track of position when not moving joystick
 			currentPositionX = x; 
 			currentPositionY = y;
+			
+			if (currentMode == Mode.MANUAL) {
+				currentMode = Mode.HOLDING_POSITION;
+
+				double prevX = prevControllerPos[0];
+				double prevY = prevControllerPos[1];
+				targetAngles = Kinematics.degrees(Kinematics.positionInverseKinematics(prevX, prevY, true));
+			}
 		}
 
 		
@@ -173,7 +182,9 @@ public class Arm {
 			case HOLDING_POSITION:
 				double alpha = targetAngles[0];
 				double beta = targetAngles[1];
-
+				System.out.println("HOLDING");
+				System.out.println("ALPHA: " + alpha);
+				System.out.println("BETA: " + beta);
 				setShoulder(alpha);
 				setElbow(beta);
 				break;
@@ -502,22 +513,37 @@ public class Arm {
 		double newposX = currentPositionX + Constants.MAX_FORWARD_X * x;
 		double newposY = currentPositionY + Constants.MAX_FORWARD_Y * y;
 
-		if (newposX > Constants.minX && newposX < Constants.maxX && Kinematics.isPositionPossible(newPosX, newPosY))
+		double wristAngle = getWristAngle();
+		double wristIncX = Math.cos(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
+		double wristIncY = Math.sin(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
+
+		double directionX = newposX - currentPositionX;
+		double directionY = newposY - currentPositionY;
+
+		System.out.println("DIR: " + directionX);
+
+		if ((newposX + wristIncX > Constants.minX || directionX > 0) &&
+			(newposX + wristIncX < Constants.maxX || directionX < 0) &&
+			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionX = newposX;
 		}
 
-		if (newposY > Constants.minY && newposY < Constants.maxY && Kinematics.isPositionPossible(newPosX, newPosY))
+		if ((newposY + wristIncY > Constants.minY || directionY > 0) &&
+			(newposY + wristIncY < Constants.maxY || directionY < 0) &&
+			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionY = newposY;
 		}
 
 		double[] angles = Kinematics.degrees(Kinematics.positionInverseKinematics(currentPositionX, currentPositionY, true));
+		System.out.println("x: " + currentPositionX);
+		System.out.println("y: " + currentPositionY);
 		System.out.println("ALPHA: " + angles[0]);
 		System.out.println("BETA: " + angles[1]);
 		
-		// setShoulder(angles[0]);
-		// setElbow(angles[1]);
+		setShoulder(angles[0]);
+		setElbow(angles[1]);
 
 	}
 }

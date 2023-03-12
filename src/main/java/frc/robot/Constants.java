@@ -150,7 +150,7 @@ public class Constants {
 	public static final int WRIST_BACKWARD_NUM = 3;
 
 	// Shoulder PID and Feedfoward gains for positional control
-	public static final double SHOULDER_KP = 1.4; // 1.4
+	public static final double SHOULDER_KP = 1.2; // 1.4
 	public static final double SHOULDER_KI = 0.00; // .05
 	public static final double SHOULDER_KD = 0.00; //.01
 
@@ -160,7 +160,7 @@ public class Constants {
 	public static final double SHOULDER_KA = 0;
 
 	// Elbow PID and Feedfoward gains
-	public static final double ELBOW_KP = 1.2; // 1.4
+	public static final double ELBOW_KP = 1.1; // 1.4
 	public static final double ELBOW_KI = 0;
 	public static final double ELBOW_KD = 0.00; //.01
 
@@ -198,10 +198,10 @@ public class Constants {
 	public static final double WRIST_MAX_ACTUATE = .8;
 
 	// hard min/max x and y values for the arm
-	public static final double minX = -1.5; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.5; 
+	public static final double minX = 0.2; // slightly less than the furthest possible distance to make sure we don't lose a DOF
+	public static final double maxX = 1.3; 
 	public static final double minY = 0.05;
-	public static final double maxY = 1.95; // 6'6"
+	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {
 		return (Math.abs(x) < .5); // frame is ~1 meter long
