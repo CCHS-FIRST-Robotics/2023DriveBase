@@ -299,36 +299,44 @@ public final class Kinematics {
 		);
 	}
 
-	public static boolean isMovingPastLimit(double alpha, double beta, double theta, double prevPosition, double currentPosition) {
-		if (!shouldMotorStop(alpha, beta, theta)) {
-			return false;
-		}
-		return true;
+	public static boolean isMovingPastLimit(double alpha, double beta, double theta, double directionX, double directionY) {
+		double[] posEE = Kinematics.forwardKinematics(alpha, beta, theta);
+		double x = posEE[0];
+		double y = posEE[1];
 
-		// double x = pos[0];
-		// double y = pos[1];
+		double[] posWrist = Kinematics.forwardKinematics(alpha, beta);
+		double wristX = posWrist[0];
+		double wristY = posWrist[1];
 
+		if (
+			!((x > Constants.minX || directionX > 0) &&
+			(x < Constants.maxX || directionX < 0) &&
+			isPositionPossible(wristX, wristY))
+		) return true;
 
-		// check if the arm is fully extended -- dont want it to lock/lose a DOF
-		// if (x < Constants.minX && ) {
+		if (
+			(y > Constants.minY || directionY > 0) &&
+			(y < Constants.maxY || directionY < 0) &&
+			Kinematics.isPositionPossible(wristX, wristY)
+		) return true;
 
-		// }
-		// if (x > Constants.maxX) {
+		if (
+			// check if the shoulder is too far forward/backward
+			alpha < Constants.minAlpha ||
+			alpha > Constants.maxAlpha ||
 
-		// }
-
-		// // check if the arm is too close to the ground or above the height limit
-		// if (y < Constants.minY) {
-
-		// }
-		// if (y > Constants.maxY) {
-
-		// }
+			// check if the elbow is too far forward/backward
+			beta < Constants.minBeta ||
+			beta > Constants.maxBeta
+		) return true;
 
 		// // check to make sure the arm isn't hitting the frame
-		// if (Constants.isInFrameX(x) && Constants.isBelowFrame(y)) {
-
-		// }
+		if (
+			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
+			(directionX > 0 && directionY > 0)
+		) return true;
+		
+		return false;
 	}
 
 	public static boolean isPositionPossible(double x, double y) {
