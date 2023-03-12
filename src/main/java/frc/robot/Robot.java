@@ -35,9 +35,7 @@ public class Robot extends TimedRobot {
   double test = 0;
   long counter = 0; // for calling functions every n loops
 
-  public Robot(){
-    addPeriodic(() -> limelight.updatePipeline(), .001);
-  }
+  public Robot() {}
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -130,7 +128,7 @@ public class Robot extends TimedRobot {
 
     // limelightTestDrive();
 
-    if (counter % 10 == 0) {
+    if (counter % 25 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
 
       // TO TEST VALS FIRST
@@ -222,6 +220,12 @@ public class Robot extends TimedRobot {
     if (xboxController.getRightBumperPressed()) {
       driveBase.increaseSpeedBracket();
     }
+
+    // Manually change pipeline
+    if (xboxController.getXButtonPressed())
+      limelight.changePipeline(0);
+    if (xboxController.getYButtonPressed())
+      limelight.changePipeline(1);
   }
 
   /** 

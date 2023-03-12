@@ -10,7 +10,7 @@ import javax.lang.model.util.ElementScanner14;
 public class Limelight {
 
     private double x, y, area, forwardDistance;
-    private int pipeNum;
+    private double pipeNum;
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -62,26 +62,28 @@ public class Limelight {
     }
 
     // double testPipe = 0;
-    public void changePipeline(int newPipeNum) {
+    public void changePipeline(double newPipeNum) {
 
         table.getEntry("pipeline").setNumber(newPipeNum);
         
-        double test = table.getEntry("getpipe").getDouble(0);
+        // double test = table.getEntry("getpipe").getDouble(0);
 
-        if (test != newPipe)
-        {
-            System.out.println("Current pipeline: " + test);
-            System.out.println("Expected pipeline: " + newPipeNum);
-            System.out.println("-----------------");
-        }
-        else
-            pipeNum = newPipeNum;
-            // testPipe = (testPipe + 1) % 2;
-            //colin says: oui oui baguette is yummy
+        // if (test != newPipeNum)
+        // {
+        //     System.out.println("Current pipeline: " + test);
+        //     System.out.println("Expected pipeline: " + newPipeNum);
+        //     System.out.println("-----------------");
+        // }
+        // else
+        //     pipeNum = newPipeNum;
+        //     // testPipe = (testPipe + 1) % 2;
+        //     //colin says: oui oui baguette is yummy
+
+        pipeNum = newPipeNum;
         
     }
 
-    public int getPipeline(){
+    public double getPipeline(){
         return pipeNum;
     }
 

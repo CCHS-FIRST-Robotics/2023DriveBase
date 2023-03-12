@@ -54,7 +54,7 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	//height from floor to center of limelight lense in meters
-	public static final double LIME_HEIGHT    = .42;
+	public static final double LIME_HEIGHT    = .758;
 	//number of degrees from perfectly vertical
 	public static final double LIME_ANGLE     = 0; 
 
