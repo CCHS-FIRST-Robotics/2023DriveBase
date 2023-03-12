@@ -248,7 +248,7 @@ public class Constants {
 	public static final R2Vector PICKUP_GROUND = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_SINGLE = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_DOUBLE = new R2Vector(1.23, 1.05);
-	public static final R2Vector NEUTRAL = new R2Vector(.3, .6);
+	public static final R2Vector NEUTRAL = new R2Vector(.3, .7);
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023

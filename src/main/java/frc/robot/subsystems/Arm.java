@@ -97,8 +97,8 @@ public class Arm {
 		shoulderMotor.configFactoryDefault();
 		elbowMotor.configFactoryDefault();
 		
-		shoulderMotor.setNeutralMode(NeutralMode.Coast);
-		elbowMotor.setNeutralMode(NeutralMode.Coast);
+		// shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		// elbowMotor.setNeutralMode(NeutralMode.Coast);
 
 		prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 		currentPositionX = prevControllerPos[0];
@@ -120,8 +120,8 @@ public class Arm {
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
 
-		// shoulderMotor.setNeutralMode(NeutralMode.Brake);
-		// elbowMotor.setNeutralMode(NeutralMode.Brake);
+		shoulderMotor.setNeutralMode(NeutralMode.Brake);
+		elbowMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 	///////////////
@@ -189,6 +189,10 @@ public class Arm {
 				executeTrajectory();
 				break;
 		}
+	}
+
+	public void run() {
+		run(0, 0, 0, 0);
 	}
 
 	//////////////////////
@@ -361,8 +365,8 @@ public class Arm {
 		setShoulder(beforeStopShoulderAngle);
 		setElbow(beforeStopElbowAngle);
 
-		shoulderMotor.setNeutralMode(NeutralMode.Coast);
-		elbowMotor.setNeutralMode(NeutralMode.Coast);
+		// shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		// elbowMotor.setNeutralMode(NeutralMode.Coast);
 	}
 
 	public void moveShoulder(double analogX) {
@@ -373,7 +377,7 @@ public class Arm {
 		lastShoulderAngle = getShoulderAngle();
 		double speedX = 12 * analogX; // 12V conversion
 		// System.out.println(-0.3 * speedX + getShoulderFeedforward());
-		shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
+		// shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
 	}
 
 	public void moveElbow(double analogY) {
@@ -383,7 +387,7 @@ public class Arm {
 		}
 		lastElbowAngle = getElbowAngle();
 		double speedY = 12 * analogY; // 12V conversion
-		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
+		// elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}
 
 	public void setNeutralPostion() {
@@ -427,6 +431,10 @@ public class Arm {
 			case PICKUP_SUBSTATION_DOUBLE:
 				x = Constants.PICKUP_SUBSTATION_DOUBLE.x;
 				y = Constants.PICKUP_SUBSTATION_DOUBLE.y;
+				break;
+			case NEUTRAL:
+				x = Constants.NEUTRAL.x;
+				y = Constants.NEUTRAL.y;
 				break;
 			default:
 				return;
@@ -507,10 +515,10 @@ public class Arm {
 		SmartDashboard.putNumber("DESIRED ALPHA", alpha);
 
 		// neg sign because shoulder moves in the opposite direction
-		shoulderMotor.setVoltage(
-			-shoulderPID.calculate(getShoulderAngle(), alpha) + 
-			getShoulderFeedforward()
-		);
+		// shoulderMotor.setVoltage(
+		// 	-shoulderPID.calculate(getShoulderAngle(), alpha) + 
+		// 	getShoulderFeedforward()
+		// );
 	}
 
 	/**
@@ -521,9 +529,9 @@ public class Arm {
 	public void setElbow(double beta) {
 		SmartDashboard.putNumber("DESIRED BETA", beta);
 
-		elbowMotor.setVoltage(
-			-elbowPID.calculate(getElbowAngle(), beta) + getElbowFeedforward()
-		);
+		// elbowMotor.setVoltage(
+		// 	-elbowPID.calculate(getElbowAngle(), beta) + getElbowFeedforward()
+		// );
 	}
 
 	public void setWrist(double theta) {

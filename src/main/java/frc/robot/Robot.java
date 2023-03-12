@@ -162,6 +162,7 @@ public class Robot extends TimedRobot {
     
     // System.out.println("zeroing counter");
     autonCounter = 0;
+    autonState = AutonStates.Drive;
 
     // set up timer for autonomous
     // driveBase.autonTimer = new Timer();
@@ -210,10 +211,12 @@ public class Robot extends TimedRobot {
     // }
 		// auton_counter++;
 
+    // arm.run();
+
     switch (autonState) {
       case MoveArmToScore:
-        // TODO: use actual values
-        arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+        System.out.println("Moving Arm");
+        arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
         autonState = AutonStates.WaitForArm;
         break;
       case WaitForArm:
@@ -231,6 +234,7 @@ public class Robot extends TimedRobot {
           autonState = AutonStates.FoldArm;
         break;
       case FoldArm:
+        System.out.println("FOLDING ARM");
         arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
         autonState = AutonStates.WaitForFoldedArm;
         break;
@@ -242,14 +246,14 @@ public class Robot extends TimedRobot {
         break;
       case Drive:
         // zero all the encoders so it goes straight
-        driveBase.clearOdom();
+        // driveBase.clearOdom();
         if (Constants.ROBOT_START_CENTER_FIELD) {
           // drives backwards to the ramp 
-          driveBase.setPosition(-3);
+          // driveBase.setPosition(-3);
           autonState = AutonStates.Balance;
         } else {
-          // drive backwards outside the community
-          driveBase.setPosition(-0.5);
+          // drive backwards outside the community (-4 works)
+          driveBase.setPosition(-1.6);
         }
         break;
       case Balance:
@@ -275,7 +279,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    // drive();
+    drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -284,7 +288,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println(arm.getCurrentMode());
 
-    arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
+    // arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.getElbowRawAngle();
 

@@ -202,7 +202,7 @@ public class MecaDrive extends DriveBase {
 		talon.config_kI(Constants.FALCON_PID_IDX, Constants.FALCON_KI);
 		talon.config_IntegralZone(Constants.FALCON_PID_IDX, Constants.FALCON_INTEGRAL_ZONE);
 
-		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.4);
+		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.5);
 	}
 
 	public void printControlsOfCurrentMode() {
