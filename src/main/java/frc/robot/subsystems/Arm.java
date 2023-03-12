@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.*;
+import frc.robot.Constants.ArmFixedPosition;
 import frc.robot.utils.*;
 
 import java.io.*;
@@ -394,11 +395,48 @@ public class Arm {
 		grabber.clawBack(); // open claw
 		grabber.wristForward(); // wrist in line with upper arm
 
-		setEndEffector(1, 1, 0);
+		setEndEffector(1, 1);
 	}
 
-	public void setEndEffector(double xPos, double yPos, double theta) {
-		setEndEffector(xPos, yPos, theta, true);
+	public void setEndEffector(double xPos, double yPos) {
+		setEndEffector(xPos, yPos, true);
+	}
+
+	public void setEndEffector(ArmFixedPosition position) {
+		double x, y;
+		switch (position) {
+			case CUBE_LOWER:
+				x = Constants.CUBE_LOWER.x;
+				y = Constants.CUBE_LOWER.y;
+				break;
+			case CUBE_HIGHER:
+				x = Constants.CUBE_HIGHER.x;
+				y = Constants.CUBE_HIGHER.y;
+				break;
+			case CONE_LOWER:
+				x = Constants.CONE_LOWER.x;
+				y = Constants.CONE_LOWER.y;
+				break;
+			case CONE_HIGHER:
+				x = Constants.CONE_HIGHER.x;
+				y = Constants.CONE_HIGHER.y;
+				break;
+			case PICKUP_GROUND:
+				x = Constants.PICKUP_GROUND.x;
+				y = Constants.PICKUP_GROUND.y;
+				break;
+			case PICKUP_SUBSTATION_SINGLE:
+				x = Constants.PICKUP_SUBSTATION_SINGLE.x;
+				y = Constants.PICKUP_SUBSTATION_SINGLE.y;
+				break;
+			case PICKUP_SUBSTATION_DOUBLE:
+				x = Constants.PICKUP_SUBSTATION_DOUBLE.x;
+				y = Constants.PICKUP_SUBSTATION_DOUBLE.y;
+				break;
+			default:
+				return;
+		}
+		setEndEffector(x, y);
 	}
 
 	/**
@@ -408,7 +446,7 @@ public class Arm {
 	 * @param yPos (double) y position of the end effector - METERS
 	 * @param theta (double) angle of the claw from the horizontal - DEGREES
 	 */
-	public void setEndEffector(double xPos, double yPos, double theta, boolean debug) {
+	public void setEndEffector(double xPos, double yPos, boolean debug) {
 		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
 		// double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, getJointAngles());
 

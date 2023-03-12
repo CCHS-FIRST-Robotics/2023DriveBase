@@ -1,7 +1,7 @@
 package frc.robot.utils;
 
 public class R2Vector {
-    double x, y;
+    public double x, y;
 
     public R2Vector(double x, double y) {
         this.x = x;

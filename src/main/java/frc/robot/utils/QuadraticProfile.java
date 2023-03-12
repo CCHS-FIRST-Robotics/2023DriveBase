@@ -77,6 +77,7 @@ public class QuadraticProfile {
 
     public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed, double acceleration) {
         R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
+        double directionX, directionY;
         
         // displacement from the initial (x, y) to goal 
         R2Vector displacement = goal.sub(initialPosition);
@@ -131,11 +132,23 @@ public class QuadraticProfile {
                 if (wristPosition == -1) {
                     wristPosition = 0;
                 }
+                
+                if (i == 0) {
+                    directionX = 0;
+                    directionY = 0;
+                } else {
+                    double prevX = combined[i-1].x;
+                    double prevY = combined[i-1].y;
+
+                    directionX = x - prevX;
+                    directionY = y - prevY;
+                }
+                 
 
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("angle is NaN");
                 }
-                if (Kinematics.shouldMotorStop(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition)) {
+                if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
                     throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                 }
             } catch(ArithmeticException e) 
