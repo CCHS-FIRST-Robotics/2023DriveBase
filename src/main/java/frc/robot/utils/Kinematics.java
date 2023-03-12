@@ -303,31 +303,32 @@ public final class Kinematics {
 		if (!shouldMotorStop(alpha, beta, theta)) {
 			return false;
 		}
+		return true;
 
-		double x = pos[0];
-		double y = pos[1];
+		// double x = pos[0];
+		// double y = pos[1];
 
 
 		// check if the arm is fully extended -- dont want it to lock/lose a DOF
-		if (x < Constants.minX && ) {
+		// if (x < Constants.minX && ) {
 
-		}
-		if (x > Constants.maxX) {
+		// }
+		// if (x > Constants.maxX) {
 
-		}
+		// }
 
-		// check if the arm is too close to the ground or above the height limit
-		if (y < Constants.minY) {
+		// // check if the arm is too close to the ground or above the height limit
+		// if (y < Constants.minY) {
 
-		}
-		if (y > Constants.maxY) {
+		// }
+		// if (y > Constants.maxY) {
 
-		}
+		// }
 
-		// check to make sure the arm isn't hitting the frame
-		if (Constants.isInFrameX(x) && Constants.isBelowFrame(y)) {
+		// // check to make sure the arm isn't hitting the frame
+		// if (Constants.isInFrameX(x) && Constants.isBelowFrame(y)) {
 
-		}
+		// }
 	}
 
 	public static double wristDesiredPosition(double x, double y) {
