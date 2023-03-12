@@ -41,11 +41,12 @@ public class Robot extends TimedRobot {
     OpenGrabber,
     WaitForGrabber,
     FoldArm,
+    WaitForFoldedArm,
     DriveInit,
     Drive
   };
   
-  AutonStates AutonState = AutonStates.MoveArmToScore;
+  AutonStates autonState = AutonStates.MoveArmToScore;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -85,7 +86,7 @@ public class Robot extends TimedRobot {
   // public void updateArmVelocities() {
     
   // }
-  long auton_counter = 0;
+  long autonCounter = 0;
 
 
   /**
@@ -159,7 +160,7 @@ public class Robot extends TimedRobot {
     // driveBase.resetCurrentTrajectoryTime();
     
     // System.out.println("zeroing counter");
-    auton_counter = 0;
+    autonCounter = 0;
 
     // set up timer for autonomous
     // driveBase.autonTimer = new Timer();
@@ -208,16 +209,33 @@ public class Robot extends TimedRobot {
     // }
 		// auton_counter++;
 
-    switch (AutonState) {
+    switch (autonState) {
       case MoveArmToScore:
+        // TODO: use actual values
+        arm.moveArm(0, 0);
+        autonState = AutonStates.WaitForArm;
         break;
       case WaitForArm:
+        if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
+          autonState = AutonStates.OpenGrabber;
         break;
       case OpenGrabber:
+        claw.clawBack();
+        autonCounter = 50;
+        autonState = AutonStates.WaitForGrabber;
         break;
       case WaitForGrabber:
+        autonCounter--;
+        if (autonCounter == 0)
+          autonState = AutonStates.FoldArm;
         break;
       case FoldArm:
+        arm.moveArm(0, 0);
+        autonState = AutonStates.WaitForFoldedArm;
+        break;
+      case WaitForFoldedArm:
+        if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
+          autonState = AutonStates.DriveInit;
         break;
       case DriveInit:
         break;

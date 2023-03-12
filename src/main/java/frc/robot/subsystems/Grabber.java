@@ -72,11 +72,13 @@ boolean clawForward, wristForward;
         solenoidPCMClaw.toggle();
     }
 
+    // closes the claw
     public void clawForward(){
         clawForward = true;
         solenoidPCMClaw.set(kForward);
     }
 
+    // opens the claw
     public void clawBack(){
         clawForward = false;
         solenoidPCMClaw.set(kReverse);

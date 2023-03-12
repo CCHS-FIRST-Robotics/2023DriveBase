@@ -63,14 +63,14 @@ public class Arm {
 
 	double[] targetAngles = new double[2];
 
-	enum Mode {
+	public enum Mode {
 		MANUAL, 
 		HOLDING_POSITION, 
 		RUNNING_TRAJECTORY,
 		IDLE
 	}
 	
-	Mode currentMode = Mode.IDLE;
+	public Mode currentMode = Mode.IDLE;
 
 	/**
 	 * Constructor for Arm Class
