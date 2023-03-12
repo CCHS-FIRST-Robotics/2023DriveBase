@@ -376,7 +376,7 @@ public class MecaDrive extends DriveBase {
 	 * tells all motors to go to a certain position, in meters
 	 * will move straight to given position if motor encoders are zeroed first
 	 */
-	public void setPosition(int pos) {
+	public void setPosition(double pos) {
 		frontLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
 		frontRightMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);
 		rearLeftMotor.set(ControlMode.Position, Constants.METERS_TO_FALCON_CLICKS * pos);

@@ -43,7 +43,8 @@ public class Robot extends TimedRobot {
     FoldArm,
     WaitForFoldedArm,
     DriveInit,
-    Drive
+    Drive,
+    Balance
   };
   
   AutonStates autonState = AutonStates.MoveArmToScore;
@@ -212,7 +213,7 @@ public class Robot extends TimedRobot {
     switch (autonState) {
       case MoveArmToScore:
         // TODO: use actual values
-        arm.moveArm(0, 0);
+        arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
         autonState = AutonStates.WaitForArm;
         break;
       case WaitForArm:
@@ -230,16 +231,28 @@ public class Robot extends TimedRobot {
           autonState = AutonStates.FoldArm;
         break;
       case FoldArm:
-        arm.moveArm(0, 0);
+        arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
         autonState = AutonStates.WaitForFoldedArm;
         break;
       case WaitForFoldedArm:
         if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
-          autonState = AutonStates.DriveInit;
+          autonState = AutonStates.Drive;
         break;
       case DriveInit:
         break;
       case Drive:
+        // zero all the encoders so it goes straight
+        driveBase.clearOdom();
+        if (Constants.ROBOT_START_CENTER_FIELD) {
+          // drives backwards to the ramp 
+          driveBase.setPosition(-3);
+          autonState = AutonStates.Balance;
+        } else {
+          // drive backwards outside the community
+          driveBase.setPosition(-0.5);
+        }
+        break;
+      case Balance:
         break;
     }
   }
@@ -413,23 +426,23 @@ public class Robot extends TimedRobot {
       // // driveBase.printActiveMotorDebugMode();
       // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
-      arm.setEndEffector(0.76, 0.94, 0);
+      arm.setEndEffector(0.76, 0.94);
       // arm.setEndEffector(x, y, 0);
       // pidTuningBeta = 10;
     }
 
     if (Y) {
-      arm.setEndEffector(1.15, 1.29, 0);
+      arm.setEndEffector(1.15, 1.29);
       // pidTuningBeta = 0;
     }
 
     if (X) {
-      arm.setEndEffector(1.23, 1.05, 0);
+      arm.setEndEffector(1.23, 1.05);
       // pidTuningAlpha = 10;
     }
 
     if (A) {
-      arm.setEndEffector(0.84, 1.1, 0);
+      arm.setEndEffector(0.84, 1.1);
       // pidTuningAlpha = 0;
     }
 

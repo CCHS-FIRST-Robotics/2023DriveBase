@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
  */
 public class Constants {
 
+	public static final boolean ROBOT_START_CENTER_FIELD = false;
+
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
 	public static final int XBOX_CONTROLLER_ALTERNATE_PORT 			= 1; 
@@ -236,7 +238,8 @@ public class Constants {
 		CONE_HIGHER,
 		PICKUP_GROUND,
 		PICKUP_SUBSTATION_SINGLE,
-		PICKUP_SUBSTATION_DOUBLE
+		PICKUP_SUBSTATION_DOUBLE,
+		NEUTRAL
 	} 
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.76, 0.94);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1.23, 1.05);
@@ -245,6 +248,7 @@ public class Constants {
 	public static final R2Vector PICKUP_GROUND = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_SINGLE = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_DOUBLE = new R2Vector(1.23, 1.05);
+	public static final R2Vector NEUTRAL = new R2Vector(.3, .6);
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023
