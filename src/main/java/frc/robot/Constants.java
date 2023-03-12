@@ -121,6 +121,9 @@ public class Constants {
 	public static final double LOWER_ARM_LENGTH = 0.705;
 	public static final double WRIST_LENGTH = .26;
 
+	public static final double MIN_ARM_EXTENSION = UPPER_ARM_LENGTH - LOWER_ARM_LENGTH;
+	public static final double MAX_ARM_EXTENSION = UPPER_ARM_LENGTH + LOWER_ARM_LENGTH;
+
 	// Distance from each arm joint to the linkage's center of mass
 	public static final double UPPER_ARM_COM_DIST = .7; // meters
 	public static final double LOWER_ARM_COM_DIST = .2; // meters

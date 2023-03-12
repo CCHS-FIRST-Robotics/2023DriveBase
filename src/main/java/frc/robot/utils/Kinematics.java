@@ -331,6 +331,18 @@ public final class Kinematics {
 		// }
 	}
 
+	public static boolean isPositionPossible(double x, double y) {
+		// First check that the arm can extend far enough
+		if (pow(x, 2) + pow(y - Constants.SHOULDER_JOINT_HEIGHT, 2) > pow(Constants.MAX_ARM_EXTENSION, 2)) {
+      		return false;
+		}
+		// Then check that it isn't too close to itself
+		if (pow(x, 2) + pow(y - Constants.SHOULDER_JOINT_HEIGHT, 2) < pow(Constants.MIN_ARM_EXTENSION, 2)) {
+			return false;
+		}
+		return true;
+	}
+
 	public static double wristDesiredPosition(double x, double y) {
 		if ((y < Constants.WRIST_MIN_ACTUATE) && !Constants.isInFrameX(x)) {
 			return 90;
