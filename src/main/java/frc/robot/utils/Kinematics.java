@@ -362,9 +362,9 @@ public final class Kinematics {
 	}
 
 	public static double wristDesiredPosition(double x, double y) {
-		if ((y < Constants.WRIST_MIN_ACTUATE) && !Constants.isInFrameX(x)) {
+		if ((y < Constants.WRIST_MIN_ACTUATE)) {
 			return 90;
-		} if ((y > Constants.WRIST_MAX_ACTUATE) && !Constants.isInFrameX(x)) {
+		} if ((y > Constants.WRIST_MAX_ACTUATE)) {
 			return 0;
 		}
 

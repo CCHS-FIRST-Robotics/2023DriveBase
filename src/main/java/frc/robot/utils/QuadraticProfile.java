@@ -83,15 +83,16 @@ public class QuadraticProfile {
                     wristPosition = 0;
                 }
                 
-                if (i == 0) {
-                    directionX = 0;
-                    directionY = 0;
-                } else {
+                if (i != 0) {
                     double prevX = combined[i-1].x;
                     double prevY = combined[i-1].y;
 
                     directionX = x - prevX;
                     directionY = y - prevY;
+
+                    if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
+                        throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+                    }
                 }
                     
                 if (!Kinematics.isPositionPossible(x, y)) {
@@ -99,9 +100,6 @@ public class QuadraticProfile {
                 }
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("SOMETHING MESSED UP - angle is NaN");
-                }
-                if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
-                    throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                 }
             } catch(ArithmeticException e) 
             {

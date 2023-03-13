@@ -188,8 +188,8 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .5; // meters per second
-	public static final double ARM_MAX_ACCELERATION = .1; // meters per second per second
+	public static final double ARM_MAX_SPEED = .7; // meters per second
+	public static final double ARM_MAX_ACCELERATION = .5; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
@@ -247,10 +247,10 @@ public class Constants {
 	public static final R2Vector CONE_LOWER = new R2Vector(0.74, 1.3);
 	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.4, 1.55);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.55);
-	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .33);
+	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
 	public static final R2Vector PICKUP_SUBSTATION_SINGLE = new R2Vector(1.23, 1.05);
 	public static final R2Vector PICKUP_SUBSTATION_DOUBLE = new R2Vector(1.23, 1.05);
-	public static final R2Vector NEUTRAL = new R2Vector(.3, .7);
+	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023

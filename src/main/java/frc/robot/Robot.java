@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -100,9 +101,10 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    // CameraServer.startAutomaticCapture(0);
-    // CameraServer.startAutomaticCapture(1);
-
+    UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
+    camera0.setResolution(640, 480);
+    camera1.setResolution(640, 480);
     //limelight.printVal();
     //limelight.smartDash();
 

@@ -50,7 +50,7 @@ public class LinearProfile {
      *                                  setpoints[i] gives an array of the angle for each joint - RADIANS
      */
     public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed) {
-        double directionX, directionY;
+        R2Vector deltaPos;
         R2Vector displacement = goal.sub(initialPosition);
         
         // ∆t = ∆x/∆v
@@ -83,27 +83,29 @@ public class LinearProfile {
             if (wristPosition == -1) {
                 wristPosition = 0;
             }
-            
-            if (i == 0) {
-                directionX = 0;
-                directionY = 0;
-            } else {
-                double prevX = setpoints.get(i-1)[0];
-                double prevY = setpoints.get(i-1)[1];
-
-                directionX = pos.x - prevX;
-                directionY = pos.y - prevY;
-            }
 
             double angles[] = Kinematics.positionInverseKinematics(pos.x, pos.y, true);
+            
+            if (i != 0) {
+                proportion = (double) (i-1) / (double) numberOfSteps;
+                R2Vector prevPos = new R2Vector(
+                    proportion * displacement.x,
+                    proportion * displacement.y
+                ).add(initialPosition);
+
+                deltaPos = pos.sub(prevPos); 
+                System.out.println("dletapos: " + deltaPos.x + " next " + deltaPos.y);
+            
+                if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, deltaPos.x, deltaPos.y)) {
+                    System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+                    break;
+                }
+            }
+
             if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                 System.out.println("angle is nan");
                 break;
             }
-            // if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
-            //     System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
-            //     break;
-            // }
             setpoints.add(angles);
         }
         

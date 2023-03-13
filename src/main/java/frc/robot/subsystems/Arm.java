@@ -59,6 +59,8 @@ public class Arm {
 	// Toggles whether the motors should stop - controlled manually
 	public boolean manualMotorStop = false;
 
+	boolean isNeutral = true;
+
 	int trajectoryCounter = 0;
 	ArrayList<double[]> trajectory;
 
@@ -142,6 +144,7 @@ public class Arm {
 		!Constants.isZero(rightAnalogX) || 
 		!Constants.isZero(rightAnalogY)) {
 			stopTrajectory();
+			isNeutral = false;
 			prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 		} else {
 			// keep track of position when not moving joystick
@@ -255,10 +258,10 @@ public class Arm {
 	}
 
 	public double wristDesiredPosition(double x, double y) {
-		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward) {
+		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward && !isNeutral) {
 			grabberForward = false;
 			return 90;
-		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || Constants.isInFrameX(x)) {
+		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || isNeutral) {
 			grabberForward = true;
 			return 0;
 		}
@@ -270,11 +273,11 @@ public class Arm {
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 16;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 13;
 	}
 
 	public double getElbowAngle() {
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 117.5);
 	}
 
 	public double[] getJointAngles() {
@@ -331,13 +334,13 @@ public class Arm {
 		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
 		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
-		ArrayList<double[]> trajectory = new LinearProfile().getSetPoints(
+		ArrayList<double[]> trajectory = new QuadraticProfile().getSetPoints(
 			new R2Vector(current_pos[0], current_pos[1]),  // initial pos
 			getJointAngles(), // initial angles
 			new R2Vector(x, y), // goal pos
 			getWristAngle(), // wrist angle
-			Constants.ARM_MAX_SPEED
-			// Constants.ARM_MAX_ACCELERATION
+			Constants.ARM_MAX_SPEED,
+			Constants.ARM_MAX_ACCELERATION
 		);
 
 		return trajectory;
@@ -391,7 +394,7 @@ public class Arm {
 	}
 
 	public void setNeutralPostion() {
-		grabber.clawBack(); // open claw
+		grabber.clawForward(); // close claw
 		grabber.wristForward(); // wrist in line with upper arm
 
 		setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
@@ -403,6 +406,7 @@ public class Arm {
 
 	public void setEndEffector(ArmFixedPosition position) {
 		double x, y;
+		isNeutral = false;
 		switch (position) {
 			case CUBE_LOWER:
 				x = Constants.CUBE_LOWER.x;
@@ -426,6 +430,8 @@ public class Arm {
 				y = Constants.CONE_HIGHER.y;
 				break;
 			case PICKUP_GROUND:
+				grabber.wristBack();
+				grabberForward = false;
 				x = Constants.PICKUP_GROUND.x;
 				y = Constants.PICKUP_GROUND.y;
 				break;
@@ -438,6 +444,9 @@ public class Arm {
 				y = Constants.PICKUP_SUBSTATION_DOUBLE.y;
 				break;
 			case NEUTRAL:
+				grabber.wristForward();
+				grabberForward = true;
+				isNeutral = true;
 				x = Constants.NEUTRAL.x;
 				y = Constants.NEUTRAL.y;
 				break;
