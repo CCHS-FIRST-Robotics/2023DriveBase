@@ -266,7 +266,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     smartdash.updateControllerExponents();
     smartdash.updatePIDConstants(arm);
-    // arm.setNeutralPostion();
+    arm.setNeutralPostion();
   }
 
   /** This function is called periodically during operator control. */
@@ -279,7 +279,7 @@ public class Robot extends TimedRobot {
     checkForButtonPresses();
 
     // powers motors based on the analog inputs
-    drive();
+    // drive();
     // arm.setEndEffector(1, 1, 0);
     
     // System.out.println("Alpha:" + arm.getShoulderAngle());
@@ -288,7 +288,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println(arm.getCurrentMode());
 
-    // arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
+    arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
 
     // arm.getElbowRawAngle();
 
