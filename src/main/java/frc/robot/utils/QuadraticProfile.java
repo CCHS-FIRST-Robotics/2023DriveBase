@@ -94,9 +94,11 @@ public class QuadraticProfile {
                     directionY = y - prevY;
                 }
                     
-
+                if (!Kinematics.isPositionPossible(x, y)) {
+                    throw new ArithmeticException("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "is not physically possible");
+                }
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
-                    throw new ArithmeticException("angle is NaN");
+                    throw new ArithmeticException("SOMETHING MESSED UP - angle is NaN");
                 }
                 if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
                     throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
