@@ -1,10 +1,16 @@
+package frc.robot.utils;
+
+import java.util.ArrayList;
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utils;
 
 import frc.robot.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Generates a motion profile/trajectory that constrains speed
@@ -43,16 +49,17 @@ public class LinearProfile {
      * @return setpoints (double[][]) - 2D array of angular setpoints. 
      *                                  setpoints[i] gives an array of the angle for each joint - RADIANS
      */
-    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double[] initialAngles) {
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed) {
+        double directionX, directionY;
         R2Vector displacement = goal.sub(initialPosition);
         
         // ∆t = ∆x/∆v
-        double timeToEnd = displacement.mag() / Constants.ARM_MAX_SPEED;
+        double timeToEnd = displacement.mag() / speed;
 
         /* The number of setpoints we need - one setpoint every timestep (default 20ms)
                                              for however long the movement takes */
         int numberOfSteps = (int) (Math.ceil(timeToEnd / this.period));
-        double[][] setpoints = new double[numberOfSteps][2];
+        ArrayList<double[]> setpoints = new ArrayList<double[]>(numberOfSteps);
 
         // Calculate the new setpoint for each timestep
         for (int i = 0; i < numberOfSteps; i++) {
@@ -61,41 +68,71 @@ public class LinearProfile {
                 proportion * displacement.x,
                 proportion * displacement.y
             ).add(initialPosition);
-            if (i == 0) {
-                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, initialAngles);
-            } else {
-                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, setpoints[i-1]);
+            // if (!Kinematics.isPositionPossible(i, proportion)) {
+            //     System.out.println("")
+            //     System.out.println("not possible");
+            //     break;
+            // }
+            // double[] temp = {pos.x, pos.y};
+            // setpoints.add(temp);
+            
+            double wristPosition = Kinematics.wristDesiredPosition(pos.x, pos.y);
+                // if its in between the two thresholds, assume it's flush with upper arm
+            if (wristPosition == -1) {
+                wristPosition = 0;
             }
+            
+            if (i == 0) {
+                directionX = 0;
+                directionY = 0;
+            } else {
+                double prevX = setpoints.get(i-1)[0];
+                double prevY = setpoints.get(i-1)[1];
+
+                directionX = pos.x - prevX;
+                directionY = pos.y - prevY;
+            }
+
+            double angles[] = Kinematics.positionInverseKinematics(pos.x, pos.y, true);
+            if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
+                System.out.println("angle is nan");
+                break;
+            }
+            if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
+                System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+                break;
+            }
+            setpoints.add(Kinematics.degrees(angles));
         }
         
         return setpoints;
     }
 
     // same as above but uses desired time rather than a max velocity
-    public double[][] getSetPoints(R2Vector initialPosition, R2Vector goal, double timeToEnd, double[] initialAngles) {
-        R2Vector displacement = goal.sub(initialPosition);
+    // public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed) {
+    //     R2Vector displacement = goal.sub(initialPosition);
         
-        double velocity = displacement.mag() / timeToEnd;
-        double angle = displacement.dir(); // radians
+    //     double velocity = displacement.mag() / timeToEnd;
+    //     double angle = displacement.dir(); // radians
 
-        int numberOfSteps = (int) (Math.ceil(timeToEnd / Constants.PERIOD));
-        double[][] setpoints = new double[numberOfSteps][2];
+    //     int numberOfSteps = (int) (Math.ceil(timeToEnd / Constants.PERIOD));
+    //     double[][] setpoints = new double[numberOfSteps][2];
 
-        for (int i = 0; i < numberOfSteps; i++) {
-            R2Vector pos = new R2Vector(
-                i * this.period * velocity * Math.cos(angle),
-                i * this.period * velocity * Math.sin(angle)
-            ).add(initialPosition);
+    //     for (int i = 0; i < numberOfSteps; i++) {
+    //         R2Vector pos = new R2Vector(
+    //             i * this.period * velocity * Math.cos(angle),
+    //             i * this.period * velocity * Math.sin(angle)
+    //         ).add(initialPosition);
 
-            if (i == 0) {
-                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, initialAngles);
-            } else {
-                setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, setpoints[i-1]);
-            }
-        }
+    //         if (i == 0) {
+    //             setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, initialAngles);
+    //         } else {
+    //             setpoints[i] = Kinematics.positionInverseKinematics(pos.x, pos.y, setpoints[i-1]);
+    //         }
+    //     }
         
-        return setpoints;
-    }
+    //     return setpoints;
+    // }
 
     // private static double[] getAcceleratingSetPoints(double timeInterval) {
 

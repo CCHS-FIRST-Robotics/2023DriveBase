@@ -331,13 +331,13 @@ public class Arm {
 		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
 		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
-		ArrayList<double[]> trajectory = new QuadraticProfile().getSetPoints(
+		ArrayList<double[]> trajectory = new LinearProfile().getSetPoints(
 			new R2Vector(current_pos[0], current_pos[1]),  // initial pos
 			getJointAngles(), // initial angles
 			new R2Vector(x, y), // goal pos
 			getWristAngle(), // wrist angle
-			Constants.ARM_MAX_SPEED,
-			Constants.ARM_MAX_ACCELERATION
+			Constants.ARM_MAX_SPEED
+			// Constants.ARM_MAX_ACCELERATION
 		);
 
 		return trajectory;
@@ -458,9 +458,9 @@ public class Arm {
 		if (trajectory.size() < 1) {
 			return;
 		}
-		currentMode = Mode.RUNNING_TRAJECTORY;
+		// currentMode = Mode.RUNNING_TRAJECTORY;
 		trajectoryCounter = 0;
-		executeTrajectory();
+		// executeTrajectory();
 
 		if (debug) printTrajInfo(trajectory, xPos, yPos);
 	}
