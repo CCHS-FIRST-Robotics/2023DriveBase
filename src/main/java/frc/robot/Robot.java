@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
 
   enum AutonStates {
     MoveArmToScore,
+    WaitForArmPre,
     WaitForArm,
     OpenGrabber,
     WaitForGrabber,
@@ -216,8 +217,13 @@ public class Robot extends TimedRobot {
     switch (autonState) {
       case MoveArmToScore:
         System.out.println("Moving Arm");
-        arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
-        autonState = AutonStates.WaitForArm;
+        arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER_PRE_POS);
+        autonState = AutonStates.WaitForArmPre;
+        break;
+      case WaitForArmPre:
+        if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
+          arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+          autonState = AutonStates.WaitForArm;
         break;
       case WaitForArm:
         if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
@@ -436,12 +442,12 @@ public class Robot extends TimedRobot {
     }
 
     if (Y) {
-      arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
       // pidTuningBeta = 0;
     }
 
     if (X) {
-      arm.setEndEffector(Constants.ArmFixedPosition.CUBE_HIGHER);
+      arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
       // pidTuningAlpha = 10;
     }
 

@@ -68,6 +68,8 @@ public class LinearProfile {
                 proportion * displacement.x,
                 proportion * displacement.y
             ).add(initialPosition);
+
+            System.out.println("POS: " + pos.x + " next " + pos.y);
             // if (!Kinematics.isPositionPossible(i, proportion)) {
             //     System.out.println("")
             //     System.out.println("not possible");
@@ -98,11 +100,11 @@ public class LinearProfile {
                 System.out.println("angle is nan");
                 break;
             }
-            if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
-                System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
-                break;
-            }
-            setpoints.add(Kinematics.degrees(angles));
+            // if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
+            //     System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+            //     break;
+            // }
+            setpoints.add(angles);
         }
         
         return setpoints;

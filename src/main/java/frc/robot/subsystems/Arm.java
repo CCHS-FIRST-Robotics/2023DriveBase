@@ -270,7 +270,7 @@ public class Arm {
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 21;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 16;
 	}
 
 	public double getElbowAngle() {
@@ -416,6 +416,11 @@ public class Arm {
 				x = Constants.CONE_LOWER.x;
 				y = Constants.CONE_LOWER.y;
 				break;
+			case CONE_HIGHER_PRE_POS:
+				x = Constants.CONE_HIGHER_PRE_POS.x;
+				y = Constants.CONE_HIGHER_PRE_POS.y;
+				System.out.println("POS: "+ x +" next " + y);
+				break;
 			case CONE_HIGHER:
 				x = Constants.CONE_HIGHER.x;
 				y = Constants.CONE_HIGHER.y;
@@ -458,9 +463,9 @@ public class Arm {
 		if (trajectory.size() < 1) {
 			return;
 		}
-		// currentMode = Mode.RUNNING_TRAJECTORY;
+		currentMode = Mode.RUNNING_TRAJECTORY;
 		trajectoryCounter = 0;
-		// executeTrajectory();
+		executeTrajectory();
 
 		if (debug) printTrajInfo(trajectory, xPos, yPos);
 	}

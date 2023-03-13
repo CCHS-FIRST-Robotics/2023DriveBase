@@ -309,18 +309,25 @@ public final class Kinematics {
 		double wristX = posWrist[0];
 		double wristY = posWrist[1];
 
+		boolean isPossible = isPositionPossible(wristX, wristY);
+		System.out.println("X: " + x);
+		System.out.println("IS POSSIBLE: " + isPossible);
+		System.out.println("MinX: " + (x < Constants.minX || directionX > 0));
+		System.out.println("MaxX: " + (x < Constants.maxX || directionX < 0));
 		if (
 			!((x > Constants.minX || directionX > 0) &&
 			(x < Constants.maxX || directionX < 0) &&
-			isPositionPossible(wristX, wristY))
-		) return true;
-
+			isPossible)
+		) { System.out.println("ONE");
+			return true;
+		}
 		if (
 			!((y > Constants.minY || directionY > 0) &&
 			(y < Constants.maxY || directionY < 0) &&
-			Kinematics.isPositionPossible(wristX, wristY))
-		) return true;
-
+			isPossible)
+		) {System.out.println("TWO");
+			return true;
+		}
 		if (
 			// check if the shoulder is too far forward/backward
 			alpha < Constants.minAlpha ||
@@ -329,14 +336,16 @@ public final class Kinematics {
 			// check if the elbow is too far forward/backward
 			beta < Constants.minBeta ||
 			beta > Constants.maxBeta
-		) return true;
-
+		) {System.out.println("THREE");
+			return true;
+		}
 		// // check to make sure the arm isn't hitting the frame
 		if (
-			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) ||
-			(directionX > 0 && directionY > 0)
-		) return true;
-
+			(Constants.isInFrameX(x) && Constants.isBelowFrame(y)) &&
+			!(directionX > 0 && directionY > 0)
+		) { System.out.println("FOUR");
+			return true;
+		}
 		return false;
 	}
 
