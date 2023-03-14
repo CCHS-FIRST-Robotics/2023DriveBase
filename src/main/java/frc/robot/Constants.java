@@ -237,6 +237,7 @@ public class Constants {
 		CONE_LOWER,
 		CONE_HIGHER_PRE_POS,
 		CONE_HIGHER,
+		DROPOFF_LOW,
 		PICKUP_GROUND,
 		PICKUP_GROUND_LAYING_DOWN,
 		PICKUP_SUBSTATION,
@@ -247,6 +248,7 @@ public class Constants {
 	public static final R2Vector CONE_LOWER = new R2Vector(0.74, 1.3);
 	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.4, 1.55);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.55);
+	public static final R2Vector DROPOFF_LOW = new R2Vector(.6, .5);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);

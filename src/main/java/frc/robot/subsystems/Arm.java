@@ -48,6 +48,7 @@ public class Arm {
 	double currentPositionX;
 	double currentPositionY;
 
+	double speedMultipler = 1;
 
 	// PID constants when tuning - TESTING ONLY
 	public double shoulderP, shoulderI, shoulderD;
@@ -239,6 +240,14 @@ public class Arm {
 		return linearVelocity;
 	}
 
+	public double getSpeedMultipler() {
+		return speedMultipler;
+	}
+
+	public void setSpeedMultipler(double speedMultipler) {
+		this.speedMultipler = speedMultipler;
+	}
+
 	/////////////
 	// GETTERS //
 	/////////////
@@ -259,10 +268,8 @@ public class Arm {
 
 	public double wristDesiredPosition(double x, double y) {
 		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward && !wristForced) {
-			grabberForward = false;
 			return 90;
 		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || wristForced) {
-			grabberForward = true;
 			return 0;
 		}
 
@@ -395,7 +402,7 @@ public class Arm {
 
 	public void setNeutralPostion() {
 		grabber.clawForward(); // close claw
-		grabber.wristForward(); // wrist in line with upper arm
+		setWrist(0); // wrist in line with upper arm
 
 		setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
 	}
@@ -429,17 +436,20 @@ public class Arm {
 				x = Constants.CONE_HIGHER.x;
 				y = Constants.CONE_HIGHER.y;
 				break;
+			case DROPOFF_LOW:
+				x = Constants.DROPOFF_LOW.x;
+				y = Constants.DROPOFF_LOW.y;
+				break;
 			case PICKUP_GROUND:
-				grabber.wristBack();
+				setWrist(90);
 				grabber.clawBack();
-				grabberForward = false;
+				wristForced = true;
 				x = Constants.PICKUP_GROUND.x;
 				y = Constants.PICKUP_GROUND.y;
 				break;
 			case PICKUP_GROUND_LAYING_DOWN:
-				grabber.wristForward();
+				setWrist(0);
 				grabber.clawBack();
-				grabberForward = true;
 				wristForced = true;
 				x = Constants.PICKUP_GROUND_LAYING_DOWN.x;
 				y = Constants.PICKUP_GROUND_LAYING_DOWN.y;
@@ -450,8 +460,7 @@ public class Arm {
 				y = Constants.PICKUP_SUBSTATION.y;
 				break;
 			case NEUTRAL:
-				grabber.wristForward();
-				grabberForward = true;
+				setWrist(0);
 				wristForced = true;
 				x = Constants.NEUTRAL.x;
 				y = Constants.NEUTRAL.y;
@@ -557,8 +566,10 @@ public class Arm {
 	public void setWrist(double theta) {
 		if (theta == 90) {
 			grabber.wristBack();
+			grabberForward = false;
 		} if (Constants.isZero(theta)) {
 			grabber.wristForward();
+			grabberForward = true;
 		}
 	}
 
@@ -571,8 +582,8 @@ public class Arm {
 	public void moveArm(double x, double y) 
 	{
 		// MAX_FORWARD_X, MAX_FORWARD_Y distance to be traveled in 20ms
-		double newposX = currentPositionX + Constants.MAX_FORWARD_X * x;
-		double newposY = currentPositionY + Constants.MAX_FORWARD_Y * y;
+		double newposX = currentPositionX + Constants.MAX_FORWARD_X * speedMultipler * x;
+		double newposY = currentPositionY + Constants.MAX_FORWARD_Y * speedMultipler * y;
 
 		double wristAngle = getWristAngle();
 		double wristIncX = Math.cos(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;

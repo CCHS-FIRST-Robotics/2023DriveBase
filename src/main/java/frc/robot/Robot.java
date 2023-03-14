@@ -299,7 +299,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println(arm.getCurrentMode());
 
-    arm.run(xboxControllerAlternate.getLeftX(), xboxControllerAlternate.getLeftY(), xboxControllerAlternate.getRightX(), xboxControllerAlternate.getRightY());
+    arm.run(monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
 
     // arm.getElbowRawAngle();
 
@@ -414,6 +414,9 @@ public class Robot extends TimedRobot {
    * Checks for button presses and activates their functions
    */
   private void checkForButtonPresses() {
+    /*
+     * PRIMARY DRIVE CONTROLLER
+     */
     boolean A = xboxController.getAButtonPressed();
     boolean B = xboxController.getBButtonPressed();
     boolean X = xboxController.getXButtonPressed();
@@ -421,38 +424,154 @@ public class Robot extends TimedRobot {
     boolean RB = xboxController.getRightBumperPressed();
     boolean LB = xboxController.getLeftBumperPressed();
 
-
-
     if (B) {
       // // driveBase.printActiveMotorDebugMode();
       System.out.println("B PRESSED");
     }
-
     if (Y) {
 
     }
-
     if (X) {
 
     }
-
     if (A) {
 
     }
-
     if (RB) {
       // driveBase.increaseSpeedBracket();
     }
-
-   
+    if (LB) {
+      // driveBase.decreaseSpeedBracket();
     }
+
+    /*
+     * MONKEY CONTROLLER
+     */
+
+    boolean groundLayingDown = monkeyController.getRawButtonPressed(1);
+    boolean ground = monkeyController.getRawButtonPressed(2);
+    boolean substationPickup = monkeyController.getRawButtonPressed(3);
+    boolean lowHeight = monkeyController.getRawButtonPressed(6);
+    boolean midHeight = monkeyController.getRawButtonPressed(7);
+    boolean topHeight = monkeyController.getRawButtonPressed(8);
+
+    boolean closeClaw = monkeyController.getRawButtonPressed(4);
+    boolean wristUp = monkeyController.getRawButtonPressed(5);
+    boolean openClaw = monkeyController.getRawButtonPressed(9);
+    boolean wristDown = monkeyController.getRawButtonPressed(10);
+
+    boolean neutral = monkeyController.getRawButtonPressed(11);
+
+    boolean conePressed = monkeyController.getRawButtonPressed(17);
+    boolean cubePressed = monkeyController.getRawButtonPressed(18);
+    if (conePressed) {
+      cone = true; 
+      cube = false;
+    }
+    if (cubePressed) {
+      cone = false;
+      cube = true;
+    }
+
+    boolean stop = monkeyController.getRawButtonPressed(21);
+
+    boolean speedLow = monkeyController.getRawButtonPressed(22);
+    boolean speedMid = monkeyController.getRawButtonPressed(23);
+    boolean speedHigh = monkeyController.getRawButtonPressed(24);
+
+    boolean scrollUp = monkeyController.getRawButtonPressed(26);
+    boolean scrollDown = monkeyController.getRawButtonPressed(27);
+
+    /* 
+     * ARM SET POSITIONS
+     */
+
+    if (groundLayingDown) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
+      System.out.println("PICKUP_GROUND_LAYING_DOWN");
+    }
+    if (ground) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+      System.out.println("PICKUP_GROUND");
+    }
+    if (substationPickup) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
+      System.out.println("PICKUP_SUBSTATION");
+    }
+    if (lowHeight) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.DROPOFF_LOW);
+      System.out.println("DROPOFF_LOW");
+    }
+    if (midHeight && cone) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
+      System.out.println("CONE_LOWER");
+    }
+    if (topHeight && cone) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+      System.out.println("CONE_HIGHER");
+    }
+    if (midHeight && cube) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
+      System.out.println("CUBE_LOWER");
+    }
+    if (topHeight && cube) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.CUBE_HIGHER);
+      System.out.println("CUBE_HIGHER");
+    }
+    if (neutral) {
+      // arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
+      System.out.println("NEUTRAL");
+    }
+
+    if (stop) {
+      arm.stopTrajectory();
+      System.out.println("stopTrajectory");
+    }
+
+    /*
+     * PNEUMATICS
+     */
+    
+    if (closeClaw) {
+      claw.clawForward();
+      System.out.println("closeClaw");
+    }
+    if (openClaw) {
+      claw.clawBack();
+      System.out.println("openClaw");
+    }
+    if (wristUp) {
+      arm.setWrist(90);
+      System.out.println("wristUp");
+    }
+    if (wristDown) {
+      arm.setWrist(0);
+      System.out.println("wristDown");
+    }
+
+    /*
+     * CONTROLS
+     */
+    if (speedLow) {
+      arm.setSpeedMultipler(0.5);
+      System.out.println("speedLow");
+    }
+    if (speedMid) {
+      arm.setSpeedMultipler(1);
+      System.out.println("speedMid");
+    }
+    if (speedHigh) {
+      arm.setSpeedMultipler(2);
+      System.out.println("speedHigh");
+    }
+
+
   }
 
   /** 
    * Powers motors based on the analog inputs
    */
   private void drive() {
-
     // process input (determine wheelspeeds)
     // driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
     driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());
