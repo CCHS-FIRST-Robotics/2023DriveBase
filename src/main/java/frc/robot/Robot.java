@@ -444,12 +444,12 @@ public class Robot extends TimedRobot {
     }
 
     if (Y) {
-      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
       // pidTuningBeta = 0;
     }
 
     if (X) {
-      arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
       // pidTuningAlpha = 10;
     }
 

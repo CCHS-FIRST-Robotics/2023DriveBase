@@ -59,7 +59,7 @@ public class Arm {
 	// Toggles whether the motors should stop - controlled manually
 	public boolean manualMotorStop = false;
 
-	boolean isNeutral = true;
+	boolean wristForced = true;
 
 	int trajectoryCounter = 0;
 	ArrayList<double[]> trajectory;
@@ -144,7 +144,7 @@ public class Arm {
 		!Constants.isZero(rightAnalogX) || 
 		!Constants.isZero(rightAnalogY)) {
 			stopTrajectory();
-			isNeutral = false;
+			wristForced = false;
 			prevControllerPos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 		} else {
 			// keep track of position when not moving joystick
@@ -258,10 +258,10 @@ public class Arm {
 	}
 
 	public double wristDesiredPosition(double x, double y) {
-		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward && !isNeutral) {
+		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward && !wristForced) {
 			grabberForward = false;
 			return 90;
-		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || isNeutral) {
+		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || wristForced) {
 			grabberForward = true;
 			return 0;
 		}
@@ -273,11 +273,11 @@ public class Arm {
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 13;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 100;
 	}
 
 	public double getElbowAngle() {
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 117.5);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 160.5);
 	}
 
 	public double[] getJointAngles() {
@@ -406,7 +406,7 @@ public class Arm {
 
 	public void setEndEffector(ArmFixedPosition position) {
 		double x, y;
-		isNeutral = false;
+		wristForced = false;
 		switch (position) {
 			case CUBE_LOWER:
 				x = Constants.CUBE_LOWER.x;
@@ -431,22 +431,28 @@ public class Arm {
 				break;
 			case PICKUP_GROUND:
 				grabber.wristBack();
+				grabber.clawBack();
 				grabberForward = false;
 				x = Constants.PICKUP_GROUND.x;
 				y = Constants.PICKUP_GROUND.y;
 				break;
-			case PICKUP_SUBSTATION_SINGLE:
-				x = Constants.PICKUP_SUBSTATION_SINGLE.x;
-				y = Constants.PICKUP_SUBSTATION_SINGLE.y;
+			case PICKUP_GROUND_LAYING_DOWN:
+				grabber.wristForward();
+				grabber.clawBack();
+				grabberForward = true;
+				wristForced = true;
+				x = Constants.PICKUP_GROUND_LAYING_DOWN.x;
+				y = Constants.PICKUP_GROUND_LAYING_DOWN.y;
 				break;
-			case PICKUP_SUBSTATION_DOUBLE:
-				x = Constants.PICKUP_SUBSTATION_DOUBLE.x;
-				y = Constants.PICKUP_SUBSTATION_DOUBLE.y;
+			case PICKUP_SUBSTATION:
+				grabber.clawBack();
+				x = Constants.PICKUP_SUBSTATION.x;
+				y = Constants.PICKUP_SUBSTATION.y;
 				break;
 			case NEUTRAL:
 				grabber.wristForward();
 				grabberForward = true;
-				isNeutral = true;
+				wristForced = true;
 				x = Constants.NEUTRAL.x;
 				y = Constants.NEUTRAL.y;
 				break;

@@ -188,7 +188,7 @@ public class Constants {
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .7; // meters per second
+	public static final double ARM_MAX_SPEED = .5; // meters per second
 	public static final double ARM_MAX_ACCELERATION = .5; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
@@ -238,8 +238,8 @@ public class Constants {
 		CONE_HIGHER_PRE_POS,
 		CONE_HIGHER,
 		PICKUP_GROUND,
-		PICKUP_SUBSTATION_SINGLE,
-		PICKUP_SUBSTATION_DOUBLE,
+		PICKUP_GROUND_LAYING_DOWN,
+		PICKUP_SUBSTATION,
 		NEUTRAL
 	} 
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.04);
@@ -248,8 +248,8 @@ public class Constants {
 	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.4, 1.55);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.55);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
-	public static final R2Vector PICKUP_SUBSTATION_SINGLE = new R2Vector(1.23, 1.05);
-	public static final R2Vector PICKUP_SUBSTATION_DOUBLE = new R2Vector(1.23, 1.05);
+	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
+	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
