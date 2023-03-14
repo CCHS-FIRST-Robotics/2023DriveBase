@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,13 +50,17 @@ public class Robot extends TimedRobot {
   
   AutonStates autonState = AutonStates.MoveArmToScore;
 
+  // state of whether we're picking up cone or cube
+  boolean cone = true;
+  boolean cube = false;
+  
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT, 5);
-  private Controller xboxControllerAlternate = new Controller(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
+  private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
 
   DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
 
@@ -347,7 +350,7 @@ public class Robot extends TimedRobot {
       }
 
       // System.out.println(limitSwitch.get());
-      System.out.println("test working");
+      // System.out.println("test working");
 
       smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());
       smartdash.putNumber("ELBOW ENCODER", arm.getElbowAngle());
@@ -418,71 +421,30 @@ public class Robot extends TimedRobot {
     boolean RB = xboxController.getRightBumperPressed();
     boolean LB = xboxController.getLeftBumperPressed();
 
-    boolean A2 = xboxControllerAlternate.getAButtonPressed();
-    boolean B2 = xboxControllerAlternate.getBButtonPressed();
-    boolean X2 = xboxControllerAlternate.getXButtonPressed();
-    boolean Y2 = xboxControllerAlternate.getYButtonPressed();
-    boolean RB2 = xboxControllerAlternate.getRightBumperPressed();
-    boolean LB2 = xboxControllerAlternate.getLeftBumperPressed();
 
-    // Angles: 154.66621451346478 next -134.35782879153317
-    // Angles: 25.400948812501113 next 134.36037392220788  
 
-    // FK TEST X: -0.03642498519719317
-    // FK TEST Y: 1.127034971613889
-
-    // ARM SETPOINTS:
     if (B) {
-      double x = (Math.random() * (Constants.maxX - .2)) + .2;
-      double y = (Math.random() * (Constants.maxY - .2)) + .2;
       // // driveBase.printActiveMotorDebugMode();
-      // arm.toggleManualMotorStop();
       System.out.println("B PRESSED");
-      arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
-      // arm.setEndEffector(x, y, 0);
-      // pidTuningBeta = 10;
     }
 
     if (Y) {
-      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
-      // pidTuningBeta = 0;
+
     }
 
     if (X) {
-      arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
-      // pidTuningAlpha = 10;
+
     }
 
     if (A) {
-      arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
-      // pidTuningAlpha = 0;
-    }
 
-    // MOTOR LIMITS/STOPS:
-
-    // Good thing about using this config is RB also resets any trajectory running
-    if (RB && LB) {
-      arm.toggleMotorCheck();
-      System.out.println("fhuhdushf");
     }
 
     if (RB) {
       // driveBase.increaseSpeedBracket();
-      arm.stopTrajectory();
     }
 
-    // CLAW/WRIST CONTROLS:
-    if (A2) {
-      claw.clawBack();
-    }
-    if (Y2) {
-      claw.clawForward();
-    }
-    if (B2) {
-      claw.wristBack();
-    }
-    if (X2) {
-      claw.wristForward();
+   
     }
   }
 
