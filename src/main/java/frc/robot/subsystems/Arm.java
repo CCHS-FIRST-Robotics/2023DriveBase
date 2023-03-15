@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -133,6 +134,7 @@ public class Arm {
 		talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
 										   Constants.FALCON_PID_IDX, 
 										   Constants.FALCON_TIMEOUT_MS);
+		talon.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		talon.getSensorCollection().setIntegratedSensorPositionToAbsolute(Constants.FALCON_TIMEOUT_MS);
 		
 		talon.configNominalOutputForward(0, Constants.FALCON_TIMEOUT_MS);
