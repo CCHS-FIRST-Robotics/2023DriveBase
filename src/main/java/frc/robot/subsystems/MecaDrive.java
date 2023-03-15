@@ -1,12 +1,13 @@
 package frc.robot.subsystems;
+import frc.robot.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,9 +17,9 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
+import edu.wpi.first.math.controller.PIDController;
 
 import java.lang.Math;
-
 
 public class MecaDrive extends DriveBase {
 
@@ -44,6 +45,9 @@ public class MecaDrive extends DriveBase {
 	// timer for autonomous
 	public Timer autonTimer;
 
+	PIDController rampPID = new PIDController(Constants.RAMP_P, Constants.RAMP_I, Constants.RAMP_D);
+
+	
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
 
@@ -183,6 +187,30 @@ public class MecaDrive extends DriveBase {
 		}
 	
 		return newVelocity;
+	}
+
+	public void rampControlLoop() {
+		// frontRightMotor.setNeutralMode(NeutralMode.Brake);
+		// frontLeftMotor.setNeutralMode(NeutralMode.Brake);
+		// rearRightMotor.setNeutralMode(NeutralMode.Brake);
+		// rearLeftMotor.setNeutralMode(NeutralMode.Brake);
+
+		// System.out.println(getRampFeedforward());
+		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
+
+		drive(0, 
+			rampPID.calculate(imu.getPitch(), 0) + 
+			getRampFeedforward(),
+			0);
+	}
+
+	/**
+	 * Calculates the voltage required to keep the robot from sliding on the ramp
+	 * 
+	 * @return controlInput (double) voltage to send to the motors
+	 */
+	public double getRampFeedforward() {
+		return Constants.RAMP_G * Math.sin(Math.toRadians(imu.getPitch()));
 	}
 
 	public void configTalonFX(WPI_TalonFX talon) {
