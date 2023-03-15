@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class ZED {
     
-    private double x, y, z;
+    private double x, y, z, dist;
     private long id;
     NetworkTable tags = NetworkTableInstance.getDefault().getTable("tags");
 
@@ -48,5 +48,10 @@ public class ZED {
     public double getAprilTagZ() {
         z = tags.getEntry("z").getDouble(0);
         return z;
+    }
+
+    public double getAprilTagDist() {
+        dist = tags.getEntry("dist").getDouble(0);
+        return dist;
     }
 }
