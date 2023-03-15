@@ -97,7 +97,7 @@ public class LinearProfile {
                 System.out.println("dletapos: " + deltaPos.x + " next " + deltaPos.y);
             
                 if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, deltaPos.x, deltaPos.y)) {
-                    System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+                    // System.out.println("(x, y) = (" + pos.x + ", " + pos.y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                     break;
                 }
             }

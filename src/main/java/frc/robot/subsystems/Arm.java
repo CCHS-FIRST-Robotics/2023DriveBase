@@ -7,12 +7,14 @@ import java.io.*;
 import java.util.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -29,7 +31,7 @@ public class Arm {
 
     // define motor and encoder objects
 	WPI_TalonSRX shoulderMotorEncoder, elbowMotorEncoder;
-	WPI_TalonFX elbowMotor, shoulderMotor;;
+	WPI_TalonFX elbowMotor, shoulderMotor;
 
 	// ProfiledPIDController shoulderPID, elbowPID;
 	PIDController shoulderPID, elbowPID;
@@ -61,7 +63,7 @@ public class Arm {
 	// Toggles whether the motors should stop - controlled manually
 	public boolean manualMotorStop = false;
 
-	boolean wristForced = true;
+	boolean wristForced = false;
 
 	int trajectoryCounter = 0;
 	ArrayList<double[]> trajectory;
@@ -87,8 +89,8 @@ public class Arm {
 		// motor docs lol: https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
 		
 		// initialize motors
-        // shoulderMotorEncoder = new WPI_TalonSRX(shoulderTalonPort);
-        // elbowMotorEncoder = new WPI_TalonSRX(elbowTalonPort);
+        shoulderMotorEncoder = new WPI_TalonSRX(shoulderTalonPort);
+        elbowMotorEncoder = new WPI_TalonSRX(elbowTalonPort);
 
 		// initialize Falcon motors (USE LATER)
         shoulderMotor = new WPI_TalonFX(shoulderFalconPort);
@@ -133,7 +135,8 @@ public class Arm {
 		talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
 										   Constants.FALCON_PID_IDX, 
 										   Constants.FALCON_TIMEOUT_MS);
-		talon.getSensorCollection().setIntegratedSensorPositionToAbsolute(Constants.FALCON_TIMEOUT_MS);
+		// talon.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+		// talon.getSensorCollection().setIntegratedSensorPositionToAbsolute(Constants.FALCON_TIMEOUT_MS);
 		
 		talon.configNominalOutputForward(0, Constants.FALCON_TIMEOUT_MS);
 		talon.configNominalOutputReverse(0, Constants.FALCON_TIMEOUT_MS);
@@ -177,7 +180,8 @@ public class Arm {
 			}
 		}
 
-		setWrist(wristDesiredPosition(x, y));
+		// System.out.println(wristDesiredPosition(x, y));
+		// setWrist(wristDesiredPosition(x, y));
 
 		switch(currentMode) {
 			case IDLE: break;
@@ -283,25 +287,37 @@ public class Arm {
 	}
 
 	public double wristDesiredPosition(double x, double y) {
-		if (Kinematics.wristDesiredPosition(x, y) == 90 && grabberForward && !wristForced) {
-			return 90;
-		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward || wristForced) {
+		System.out.println(Kinematics.wristDesiredPosition(x, y)); 
+		System.out.println(grabberForward);
+		System.out.println(!wristForced);
+		if (Kinematics.wristDesiredPosition(x, y) == 1 && grabberForward && !wristForced) {
+			return 1;
+		} if (Constants.isZero(Kinematics.wristDesiredPosition(x, y)) && !grabberForward && !wristForced) {
 			return 0;
 		}
 
-		return getWristAngle();
+		return -1;
 	}
 
 	/**
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
 	public double getShoulderAngle() {
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 100;
+		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 95.5;
 	}
 
 	public double getElbowAngle() {
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 160.5);
+		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
 	}
+
+	// public double getShoulderAngle() {
+	// 	// return shoulderMotorEncoder.getSelectedSensorPosition();
+	// 	return -shoulderMotorEncoder.getSelectedSensorPosition() * 360 / 4096 + 75;
+	// }
+
+	// public double getElbowAngle() {
+	// 	return -(elbowMotorEncoder.getSelectedSensorPosition() * 360 / 4096 + 165.5);
+	// }
 
 	public double[] getJointAngles() {
 		return new double[] {getShoulderAngle(), getElbowAngle()};
@@ -424,7 +440,7 @@ public class Arm {
 	}
 
 	public void setEndEffector(double xPos, double yPos) {
-		setEndEffector(xPos, yPos, true);
+		setEndEffector(xPos, yPos, false);
 	}
 
 	public void setEndEffector(ArmFixedPosition position) {
@@ -580,7 +596,7 @@ public class Arm {
 	}
 
 	public void setWrist(double theta) {
-		if (theta == 90) {
+		if (theta == 1) {
 			grabber.wristBack();
 			grabberForward = false;
 		} if (Constants.isZero(theta)) {
@@ -608,7 +624,7 @@ public class Arm {
 		double directionX = newposX - currentPositionX;
 		double directionY = newposY - currentPositionY;
 
-		System.out.println("DIR: " + directionX);
+		// System.out.println("DIR: " + directionX);
 
 		if ((newposX + wristIncX > Constants.minX || directionX > 0) &&
 			(newposX + wristIncX < Constants.maxX || directionX < 0) &&
@@ -625,10 +641,10 @@ public class Arm {
 		}
 
 		double[] angles = Kinematics.degrees(Kinematics.positionInverseKinematics(currentPositionX, currentPositionY, true));
-		System.out.println("x: " + currentPositionX);
-		System.out.println("y: " + currentPositionY);
-		System.out.println("ALPHA: " + angles[0]);
-		System.out.println("BETA: " + angles[1]);
+		// System.out.println("x: " + currentPositionX);
+		// System.out.println("y: " + currentPositionY);
+		// System.out.println("ALPHA: " + angles[0]);
+		// System.out.println("BETA: " + angles[1]);
 		
 		setShoulder(angles[0]);
 		setElbow(angles[1]);

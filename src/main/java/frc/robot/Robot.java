@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
@@ -77,6 +78,7 @@ public class Robot extends TimedRobot {
 	private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
 
 	DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
+	DigitalOutput ledOutput = new DigitalOutput(5);
 
 	Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
 								Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
@@ -86,8 +88,8 @@ public class Robot extends TimedRobot {
 	ZED zed = new ZED();
 	IMU imu = new IMU();
 
-  VideoSink server;
-  UsbCamera camera0, camera1;
+//   VideoSink server;
+//   UsbCamera camera0, camera1;
 	
 	BetterShuffleboard smartdash = new BetterShuffleboard();
 
@@ -120,15 +122,15 @@ public class Robot extends TimedRobot {
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 
-    // CAMERAS + CONFIG
-		camera0 = CameraServer.startAutomaticCapture(0);
-		camera1 = CameraServer.startAutomaticCapture(1);
-    server = CameraServer.getServer();
+    	// CAMERAS + CONFIG
+		// camera0 = CameraServer.startAutomaticCapture(0);
+		// camera1 = CameraServer.startAutomaticCapture(1);
+    	// server = CameraServer.getServer();
 
-		camera0.setResolution(640, 480);
-		camera1.setResolution(640, 480);
-    // camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+		// camera0.setResolution(640, 480);
+		// camera1.setResolution(640, 480);
+		// camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+		// camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
 		//limelight.printVal();
 		//limelight.smartDash();
@@ -147,7 +149,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 
+		
 		driveBase.updateOdometry();
+
+		ledOutput.set(cone);
 
 		// SmartDashboard.putNumber("test", test);
 		// limelight.test();
@@ -325,15 +330,16 @@ public class Robot extends TimedRobot {
 				break;
 			case rampHold:
 				driveBase.rampHold();
+				// driveBase.holdPosition();
 				break;
 			case assistedAlign:
 				ZED.Position zedPos = ZED.Position.CONE;
 				if (cube) zedPos = ZED.Position.CUBE;
 
-        // handle the case where no tags are found
-        if (zed.getAprilTagId() == -1) {
-          break;
-        }
+				// handle the case where no tags are found
+				if (zed.getAprilTagId() == -1) {
+				break;
+				}
 
 				double[] pos = zed.getAprilTagPos(zedPos);
 				double dx = pos[0];
@@ -341,7 +347,7 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				// driveBase.drive(leftX, leftY, rightX);
+				driveBase.drive(leftX, leftY, rightX * 0.5);
 				break;
 		}
 
@@ -356,7 +362,8 @@ public class Robot extends TimedRobot {
 		// System.out.println(arm.getCurrentMode());
 
 		// Arm code is self-contained, only need to call run() and the state machine inside Arm will handle the rest
-		// arm.run(monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
+    	// System.out.println(monkeyController.getPrimaryX());
+		arm.run(-monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
 
 		// arm.getElbowRawAngle();
 
@@ -481,7 +488,7 @@ public class Robot extends TimedRobot {
 		boolean LB = xboxController.getLeftBumperPressed();
 
 		if (A) {
-			teleopState = TeleopStates.rampHold;
+			teleopState = TeleopStates.rampAssistedBalance;
 			System.out.println("A PRESSED");
 		}
 		if (B) {
@@ -523,8 +530,7 @@ public class Robot extends TimedRobot {
 
     boolean camera0Button = monkeyController.getRawButtonPressed(13);
     boolean camera1Button = monkeyController.getRawButtonPressed(14);
-    if (camera0Button) server.setSource(camera0);
-    if (camera1Button) server.setSource(camera1);
+    // if (camera0Button) server.setSource(camera1);
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
 		boolean cubePressed = monkeyController.getRawButtonPressed(18);
@@ -539,9 +545,9 @@ public class Robot extends TimedRobot {
 
 		boolean stop = monkeyController.getRawButtonPressed(21);
 
-		boolean speedLow = monkeyController.getRawButtonPressed(22);
+		boolean speedHigh= monkeyController.getRawButtonPressed(22);
 		boolean speedMid = monkeyController.getRawButtonPressed(23);
-		boolean speedHigh = monkeyController.getRawButtonPressed(24);
+		boolean speedLow = monkeyController.getRawButtonPressed(24);
 
 		boolean scrollUp = monkeyController.getRawButtonPressed(26);
 		boolean scrollDown = monkeyController.getRawButtonPressed(27);
@@ -551,39 +557,39 @@ public class Robot extends TimedRobot {
 		*/
 
 		if (groundLayingDown) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
+			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
 			System.out.println("PICKUP_GROUND_LAYING_DOWN");
 		}
 		if (ground) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
 			System.out.println("PICKUP_GROUND");
 		}
 		if (substationPickup) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
+			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
 			System.out.println("PICKUP_SUBSTATION");
 		}
 		if (lowHeight) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.DROPOFF_LOW);
+			arm.setEndEffector(Constants.ArmFixedPosition.DROPOFF_LOW);
 			System.out.println("DROPOFF_LOW");
 		}
 		if (midHeight && cone) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
+			arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
 			System.out.println("CONE_LOWER");
 		}
 		if (topHeight && cone) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+			arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
 			System.out.println("CONE_HIGHER");
 		}
 		if (midHeight && cube) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
+			arm.setEndEffector(Constants.ArmFixedPosition.CUBE_LOWER);
 			System.out.println("CUBE_LOWER");
 		}
 		if (topHeight && cube) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.CUBE_HIGHER);
+			arm.setEndEffector(Constants.ArmFixedPosition.CUBE_HIGHER);
 			System.out.println("CUBE_HIGHER");
 		}
 		if (neutral) {
-			// arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
+			arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
 			System.out.println("NEUTRAL");
 		}
 
@@ -605,7 +611,7 @@ public class Robot extends TimedRobot {
 			System.out.println("openClaw");
 		}
 		if (wristUp) {
-			arm.setWrist(90);
+			arm.setWrist(1);
 			System.out.println("wristUp");
 		}
 		if (wristDown) {

@@ -310,10 +310,10 @@ public final class Kinematics {
 		double wristY = posWrist[1];
 
 		boolean isPossible = isPositionPossible(wristX, wristY);
-		System.out.println("X: " + x);
-		System.out.println("IS POSSIBLE: " + isPossible);
-		System.out.println("MinX: " + (x < Constants.minX || directionX > 0));
-		System.out.println("MaxX: " + (x < Constants.maxX || directionX < 0));
+		// System.out.println("X: " + x);
+		// System.out.println("IS POSSIBLE: " + isPossible);
+		// System.out.println("MinX: " + (x < Constants.minX || directionX > 0));
+		// System.out.println("MaxX: " + (x < Constants.maxX || directionX < 0));
 		if (
 			!((x > Constants.minX || directionX > 0) &&
 			(x < Constants.maxX || directionX < 0) &&
@@ -363,7 +363,7 @@ public final class Kinematics {
 
 	public static double wristDesiredPosition(double x, double y) {
 		if ((y < Constants.WRIST_MIN_ACTUATE)) {
-			return 90;
+			return 1;
 		} if ((y > Constants.WRIST_MAX_ACTUATE)) {
 			return 0;
 		}

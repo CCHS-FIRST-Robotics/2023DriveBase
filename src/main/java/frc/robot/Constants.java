@@ -43,8 +43,8 @@ public class Constants {
 	public static final int RR_TALON_ID = 3; // 10
 	public static final int RL_TALON_ID = 4; // 4 
 
-	public static final int SHOULDER_TALON_ID = 20;
-	public static final int ELBOW_TALON_ID = 10;
+	public static final int SHOULDER_TALON_ID = 10;
+	public static final int ELBOW_TALON_ID = 11;
 
 	public static final int SHOULDER_FALCON_ID = 5;
 	public static final int ELBOW_FALCON_ID = 6;
@@ -64,12 +64,12 @@ public class Constants {
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
 
-	public static final double DRIVE_STARTING_MULTIPLIER = 0.3;
+	public static final double DRIVE_STARTING_MULTIPLIER = .6;
 
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
-	public static double RIGHT_X_EXPONENT = 1.5;
+	public static double RIGHT_X_EXPONENT = 2;
 	public static double RIGHT_Y_EXPONENT = 2;
 
 	public static final double ANALOG_CROSS_DEADZONE = 0.2;
@@ -97,11 +97,11 @@ public class Constants {
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
 	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
-	public static final double RAMP_P = .05;
+	public static final double RAMP_P = .03;
 	public static final double RAMP_I = 0;
 	public static final double RAMP_D = 0; // .001
 	
-	public static final double RAMP_G = .3;
+	public static final double RAMP_G = 1.3;
 
 	// ALIGN CONTROL CONSTANTS
 	public static final double ALIGN_P = .5;
@@ -205,16 +205,16 @@ public class Constants {
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
-	public static final double MAX_FORWARD_X = .005; // meters
-	public static final double MAX_FORWARD_Y = .005; // meters
+	public static final double MAX_FORWARD_X = .01; // meters
+	public static final double MAX_FORWARD_Y = .008; // meters
 
 	public static final double WRIST_MIN_ACTUATE = .7;
 	public static final double WRIST_MAX_ACTUATE = .8;
 
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.2; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.3; 
-	public static final double minY = 0.4;
+	public static final double maxX = 1.4; 
+	public static final double minY = 0.35;
 	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {
@@ -257,10 +257,10 @@ public class Constants {
 	} 
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.04);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1.25, 1.35);
-	public static final R2Vector CONE_LOWER = new R2Vector(0.74, 1.3);
+	public static final R2Vector CONE_LOWER = new R2Vector(0.72, 1.34);
 	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.4, 1.55);
-	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.55);
-	public static final R2Vector DROPOFF_LOW = new R2Vector(.6, .5);
+	public static final R2Vector CONE_HIGHER = new R2Vector(1.13, 1.55);
+	public static final R2Vector DROPOFF_LOW = new R2Vector(.5, .4);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);

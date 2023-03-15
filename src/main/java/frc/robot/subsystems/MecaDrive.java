@@ -199,12 +199,13 @@ public class MecaDrive extends DriveBase {
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
 
 		drive(0, 
-			rampPID.calculate(imu.getPitch(), 0) + 
+			-rampPID.calculate(imu.getPitch(), 0) + 
 			getRampFeedforward(),
 			0);
 	}
 
 	public void rampHold() {
+		System.out.println("G: " + getRampFeedforward());
 		drive(0, getRampFeedforward(), 0);
 	}
 
