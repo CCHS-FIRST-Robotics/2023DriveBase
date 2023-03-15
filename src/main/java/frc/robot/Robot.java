@@ -315,6 +315,11 @@ public class Robot extends TimedRobot {
 				ZED.Position zedPos = ZED.Position.CONE;
 				if (cube) zedPos = ZED.Position.CUBE;
 
+        // handle the case where no tags are found
+        if (zed.getAprilTagId() == -1) {
+          break;
+        }
+
 				double[] pos = zed.getAprilTagPos(zedPos);
 				double dx = pos[0];
 				double dy = pos[1];
