@@ -96,6 +96,14 @@ public class Constants {
 
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
+	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
+	public static final double RAMP_P = .05;
+	public static final double RAMP_I = 0;
+	public static final double RAMP_D = 0; // .001
+	
+	public static final double RAMP_G = .3;
+
+
 	//  Directly from: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/ramsete.html
 	public static final double RAMSETE_B = 2.0;
 	public static final double RAMSETE_ZETA = 0.7;
