@@ -10,13 +10,18 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.UsbCamera;
+// import edu.wpi.first.cameraserver.ConnectionStrategy;
 
 import java.util.ArrayList;
 
@@ -80,6 +85,9 @@ public class Robot extends TimedRobot {
 	Limelight limelight = new Limelight();
 	ZED zed = new ZED();
 	IMU imu = new IMU();
+
+  VideoSink server;
+  UsbCamera camera0, camera1;
 	
 	BetterShuffleboard smartdash = new BetterShuffleboard();
 
@@ -111,10 +119,17 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
-		UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
-		UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
+
+    // CAMERAS + CONFIG
+		camera0 = CameraServer.startAutomaticCapture(0);
+		camera1 = CameraServer.startAutomaticCapture(1);
+    server = CameraServer.getServer();
+
 		camera0.setResolution(640, 480);
 		camera1.setResolution(640, 480);
+    // camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+
 		//limelight.printVal();
 		//limelight.smartDash();
 
@@ -284,7 +299,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
-		arm.setNeutralPostion();
+		// arm.setNeutralPostion();
 	}
 
 	/** This function is called periodically during operator control. */
@@ -326,7 +341,7 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX);
+				// driveBase.drive(leftX, leftY, rightX);
 				break;
 		}
 
@@ -341,7 +356,7 @@ public class Robot extends TimedRobot {
 		// System.out.println(arm.getCurrentMode());
 
 		// Arm code is self-contained, only need to call run() and the state machine inside Arm will handle the rest
-		arm.run(monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
+		// arm.run(monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
 
 		// arm.getElbowRawAngle();
 
@@ -505,6 +520,11 @@ public class Robot extends TimedRobot {
 		boolean wristDown = monkeyController.getRawButtonPressed(10);
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
+
+    boolean camera0Button = monkeyController.getRawButtonPressed(13);
+    boolean camera1Button = monkeyController.getRawButtonPressed(14);
+    if (camera0Button) server.setSource(camera0);
+    if (camera1Button) server.setSource(camera1);
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
 		boolean cubePressed = monkeyController.getRawButtonPressed(18);

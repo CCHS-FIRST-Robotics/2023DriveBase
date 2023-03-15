@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -96,9 +97,10 @@ public class Arm {
 		this.limitSwitch = limitSwitch;
 		this.grabber = grabber;
 
-		// set the config to default in case there's something else I'm missing
-		shoulderMotor.configFactoryDefault();
-		elbowMotor.configFactoryDefault();
+		
+		// set motor configs
+		configTalonFX(shoulderMotor);
+		configTalonFX(elbowMotor);
 		
 		// shoulderMotor.setNeutralMode(NeutralMode.Coast);
 		// elbowMotor.setNeutralMode(NeutralMode.Coast);
@@ -126,6 +128,20 @@ public class Arm {
 		shoulderMotor.setNeutralMode(NeutralMode.Coast);
 		elbowMotor.setNeutralMode(NeutralMode.Coast);
     }
+
+	public void configTalonFX(WPI_TalonFX talon) {
+		talon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+										   Constants.FALCON_PID_IDX, 
+										   Constants.FALCON_TIMEOUT_MS);
+		talon.getSensorCollection().setIntegratedSensorPositionToAbsolute(Constants.FALCON_TIMEOUT_MS);
+		
+		talon.configNominalOutputForward(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configNominalOutputReverse(0, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputForward(1, Constants.FALCON_TIMEOUT_MS);
+		talon.configPeakOutputReverse(-1, Constants.FALCON_TIMEOUT_MS);
+
+		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.5);
+	}
 
 	///////////////
 	// MAIN LOOP //
