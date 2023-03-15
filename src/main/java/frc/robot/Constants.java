@@ -254,6 +254,8 @@ public class Constants {
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
+	public static final double DISTANCE_FROM_APRILTAG_TO_CONE = .5; // meters
+
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023
 	// velocity at 0.4 is around 7600
