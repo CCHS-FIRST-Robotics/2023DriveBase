@@ -195,7 +195,7 @@ public class Robot extends TimedRobot {
 		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
-		autonState = AutonStates.Drive;
+		autonState = AutonStates.MoveArmToScore;
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
@@ -244,7 +244,7 @@ public class Robot extends TimedRobot {
 		// }
 			// auton_counter++;
 
-		// arm.run();
+		arm.run();
 
 		switch (autonState) {
 			case MoveArmToScore:
@@ -253,9 +253,10 @@ public class Robot extends TimedRobot {
 				autonState = AutonStates.WaitForArmPre;
 				break;
 			case WaitForArmPre:
-				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
+				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
 					arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
-				autonState = AutonStates.WaitForArm;
+					autonState = AutonStates.WaitForArm;
+				}
 				break;
 			case WaitForArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
@@ -274,7 +275,7 @@ public class Robot extends TimedRobot {
 			case FoldArm:
 				System.out.println("FOLDING ARM");
 				arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
-				autonState = AutonStates.WaitForFoldedArm;
+				autonState = AutonStates.Drive;
 				break;
 			case WaitForFoldedArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
@@ -291,7 +292,8 @@ public class Robot extends TimedRobot {
 					autonState = AutonStates.Balance;
 				} else {
 					// drive backwards outside the community (-4 works)
-					driveBase.setPosition(-1.6);
+					// -1.6 is good for ramp
+					driveBase.setPosition(-4);
 				}
 				break;
 			case Balance:
