@@ -189,7 +189,7 @@ public class MecaDrive extends DriveBase {
 		return newVelocity;
 	}
 
-	public void rampControlLoop() {
+	public void rampAutoBalance() {
 		// frontRightMotor.setNeutralMode(NeutralMode.Brake);
 		// frontLeftMotor.setNeutralMode(NeutralMode.Brake);
 		// rearRightMotor.setNeutralMode(NeutralMode.Brake);
@@ -202,6 +202,10 @@ public class MecaDrive extends DriveBase {
 			rampPID.calculate(imu.getPitch(), 0) + 
 			getRampFeedforward(),
 			0);
+	}
+
+	public void rampHold() {
+		drive(0, getRampFeedforward(), 0);
 	}
 
 	/**
@@ -231,6 +235,10 @@ public class MecaDrive extends DriveBase {
 		talon.config_IntegralZone(Constants.FALCON_PID_IDX, Constants.FALCON_INTEGRAL_ZONE);
 
 		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.5);
+	}
+
+	public void assistedAlign(double dx, double dy) {
+		drive(-dx * Constants.ALIGN_P, -dy * Constants.ALIGN_P, 0);
 	}
 
 	public void printControlsOfCurrentMode() {

@@ -306,10 +306,19 @@ public class Robot extends TimedRobot {
 		*/
 		switch(teleopState) {
 			case rampAssistedBalance:
+				driveBase.rampAutoBalance();
 				break;
 			case rampHold:
+				driveBase.rampHold();
 				break;
 			case assistedAlign:
+				ZED.Position zedPos = ZED.Position.CONE;
+				if (cube) zedPos = ZED.Position.CUBE;
+
+				double[] pos = zed.getAprilTagPos(zedPos);
+				double dx = pos[0];
+				double dy = pos[1];
+				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
 				driveBase.drive(leftX, leftY, rightX);
@@ -451,17 +460,20 @@ public class Robot extends TimedRobot {
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
 
+		if (A) {
+			teleopState = TeleopStates.rampHold;
+			System.out.println("A PRESSED");
+		}
 		if (B) {
 			// // driveBase.printActiveMotorDebugMode();
+			teleopState = TeleopStates.rampHold;
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
+			teleopState = TeleopStates.assistedAlign;
 
 		}
 		if (X) {
-
-		}
-		if (A) {
 
 		}
 		if (RB) {

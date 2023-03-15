@@ -103,6 +103,10 @@ public class Constants {
 	
 	public static final double RAMP_G = .3;
 
+	// ALIGN CONTROL CONSTANTS
+	public static final double ALIGN_P = .5;
+	public static final double DISTANCE_FROM_APRILTAG_TO_CONE = .5; // meters
+
 
 	//  Directly from: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/ramsete.html
 	public static final double RAMSETE_B = 2.0;
@@ -261,8 +265,6 @@ public class Constants {
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
-
-	public static final double DISTANCE_FROM_APRILTAG_TO_CONE = .5; // meters
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023

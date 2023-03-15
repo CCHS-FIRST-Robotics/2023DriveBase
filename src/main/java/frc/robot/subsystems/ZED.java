@@ -16,7 +16,8 @@ public class ZED {
         CUBE, CONE, SUBSTATION
     }
 
-    public double[] getAprilTagPos(Position desiredPos, double[] pos) {
+    public double[] getAprilTagPos(Position desiredPos) {
+        double[] pos = {getAprilTagX(), getAprilTagY(), getAprilTagZ()};
         switch (desiredPos) {
             case CUBE:
                 return pos;
