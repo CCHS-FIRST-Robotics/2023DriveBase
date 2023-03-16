@@ -47,6 +47,7 @@ public class MecaDrive extends DriveBase {
 
 	PIDController rampPID = new PIDController(Constants.RAMP_P, Constants.RAMP_I, Constants.RAMP_D);
 
+	boolean brakeMode = false;
 	
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
@@ -205,8 +206,24 @@ public class MecaDrive extends DriveBase {
 	}
 
 	public void rampHold() {
-		System.out.println("G: " + getRampFeedforward());
+		// System.out.println("G: " + getRampFeedforward());
 		drive(0, getRampFeedforward(), 0);
+	}
+
+	public void setMotorsNeutralMode() {
+		brakeMode = !brakeMode;
+		if (brakeMode) {
+			frontLeftMotor.setNeutralMode(NeutralMode.Brake);
+			frontRightMotor.setNeutralMode(NeutralMode.Brake);
+			rearLeftMotor.setNeutralMode(NeutralMode.Brake);
+			rearRightMotor.setNeutralMode(NeutralMode.Brake);
+		}
+		else {
+			frontLeftMotor.setNeutralMode(NeutralMode.Coast);
+			frontRightMotor.setNeutralMode(NeutralMode.Coast);
+			rearLeftMotor.setNeutralMode(NeutralMode.Coast);
+			rearRightMotor.setNeutralMode(NeutralMode.Coast);
+		}
 	}
 
 	/**

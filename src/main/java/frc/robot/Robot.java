@@ -27,7 +27,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import java.util.ArrayList;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import frc.robot.subsystems.*;
 import frc.robot.utils.*;
@@ -51,7 +51,9 @@ public class Robot extends TimedRobot {
 		WaitForFoldedArm,
 		DriveInit,
 		Drive,
-		Balance
+		Balance,
+		FlipWrist,
+		WaitForWrist
 	};
 	
 	AutonStates autonState = AutonStates.MoveArmToScore;
@@ -195,7 +197,7 @@ public class Robot extends TimedRobot {
 		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
-		autonState = AutonStates.MoveArmToScore;
+		autonState = AutonStates.FlipWrist;
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
@@ -260,6 +262,16 @@ public class Robot extends TimedRobot {
 				break;
 			case WaitForArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
+					autonState = AutonStates.OpenGrabber;
+				break;
+			case FlipWrist:
+				claw.wristBack();
+				autonState = AutonStates.WaitForWrist;
+				autonCounter = 150;
+				break;
+			case WaitForWrist:
+				autonCounter--;
+				if (autonCounter == 0)
 					autonState = AutonStates.OpenGrabber;
 				break;
 			case OpenGrabber:
@@ -333,6 +345,8 @@ public class Robot extends TimedRobot {
 			case rampHold:
 				driveBase.rampHold();
 				// driveBase.holdPosition();
+				
+				// driveBase.setMotorsNeutralMode();
 				break;
 			case assistedAlign:
 				ZED.Position zedPos = ZED.Position.CONE;

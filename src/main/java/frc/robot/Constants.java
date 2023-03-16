@@ -214,7 +214,7 @@ public class Constants {
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.2; // slightly less than the furthest possible distance to make sure we don't lose a DOF
 	public static final double maxX = 1.4; 
-	public static final double minY = 0.35;
+	public static final double minY = 0.1;
 	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {

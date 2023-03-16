@@ -103,8 +103,8 @@ public class QuadraticProfile {
                 }
             } catch(ArithmeticException e) 
             {
-                System.out.println("X: " + combined[i].x);
-                System.out.println("Y: " + combined[i].y);
+                // System.out.println("X: " + combined[i].x);
+                // System.out.println("Y: " + combined[i].y);
                 System.out.println(e.getMessage());
                 if (i != 0) {
                     setpoints.add(setpoints.get(i-1));
@@ -112,8 +112,8 @@ public class QuadraticProfile {
                 continue;
             } catch(Exception e) {
                 // If the motor is past a limit, stop the sequence
-                System.out.println("X: " + combined[i].x);
-                System.out.println("Y: " + combined[i].y);
+                // System.out.println("X: " + combined[i].x);
+                // System.out.println("Y: " + combined[i].y);
                 System.out.println(e.getMessage());
                 
                 break;
