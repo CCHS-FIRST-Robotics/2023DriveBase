@@ -68,7 +68,7 @@ public class QuadraticProfile {
             try {
                 double x = combined[i].x;
                 double y = combined[i].y;
-                System.out.println("(x, y) = " + x + ", " + y);
+                // System.out.println("(x, y) = " + x + ", " + y);
                 if (i == 0) {
                     angles = Kinematics.positionInverseKinematics(x, y, true);
                     // angles = Kinematics.positionInverseKinematics(x, y, initialAngles);
@@ -91,12 +91,12 @@ public class QuadraticProfile {
                     directionY = y - prevY;
 
                     if (Kinematics.isMovingPastLimit(Math.toDegrees(angles[0]), Math.toDegrees(angles[1]), wristPosition, directionX, directionY)) {
-                        throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
+                        // throw new Exception("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "goes past a motor limit");
                     }
                 }
                     
                 if (!Kinematics.isPositionPossible(x, y)) {
-                    throw new ArithmeticException("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "is not physically possible");
+                    // throw new ArithmeticException("(x, y) = (" + x + ", " + y + "), (a, b) = (" + angles[0] + ", " + angles[1] + ") " + "is not physically possible");
                 }
                 if (Double.isNaN(angles[0]) || Double.isNaN(angles[1])) {
                     throw new ArithmeticException("SOMETHING MESSED UP - angle is NaN");

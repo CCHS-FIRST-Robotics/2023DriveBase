@@ -349,7 +349,7 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX * 0.5);
+				driveBase.drive(leftX, leftY, rightX * 0.7);
 				break;
 		}
 
@@ -506,10 +506,10 @@ public class Robot extends TimedRobot {
 
 		}
 		if (RB) {
-			// driveBase.increaseSpeedBracket();
+			driveBase.increaseSpeedBracket();
 		}
 		if (LB) {
-			// driveBase.decreaseSpeedBracket();
+			driveBase.decreaseSpeedBracket();
 		}
 
 		/*
