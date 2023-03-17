@@ -59,8 +59,8 @@ public class Constants {
 	public static final double LIME_ANGLE     = 0; 
 
 	//height from floor to target in meters (added 2 inches)
-	public static final double SHORT_TARGET_HEIGHT = .56 + 0.0508;
-	public static final double TALL_TARGET_HEIGHT = 1.05  + 0.0508;
+	public static final double SHORT_TARGET_HEIGHT = 0.508 + 0.0508;
+	public static final double TALL_TARGET_HEIGHT = 1.06  + 0.0508;
 
 	public static final int SHORT_PIPE_NUM = 0;
 	public static final int TALL_PIPE_NUM  = 1;
