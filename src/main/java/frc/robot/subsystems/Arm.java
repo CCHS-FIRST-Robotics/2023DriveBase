@@ -66,6 +66,8 @@ public class Arm {
 
 	boolean wristForced = false;
 
+	double shoulderOffset, elbowOffset;
+
 	int trajectoryCounter = 0;
 	ArrayList<double[]> trajectory;
 
@@ -114,6 +116,9 @@ public class Arm {
 
 		lastShoulderAngle = getShoulderAngle(); 
 		lastElbowAngle = getElbowAngle();
+
+		shoulderOffset = Constants.SHOULDER_STARTING_ANGLE - lastShoulderAngle;
+		elbowOffset = Constants.ELBOW_STARTING_ANGLE - lastElbowAngle;
 
 		beforeStopShoulderAngle = lastShoulderAngle; 
 		beforeStopElbowAngle = lastElbowAngle;
@@ -300,16 +305,27 @@ public class Arm {
 		return -1;
 	}
 
-	/**
+	// /**
+	//  * @return angle (double) degrees of the first linkage from the horizontal
+	//  */
+	// public double getShoulderAngle() {
+	// 	return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 95.5;
+	// }
+
+	// public double getElbowAngle() {
+	// 	return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
+	// }
+
+	/*
 	 * @return angle (double) degrees of the first linkage from the horizontal
 	 */
-	public double getShoulderAngle() {
-		return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + 95.5;
-	}
+   public double getShoulderAngle() {
+	   return -shoulderMotor.getSelectedSensorPosition() / 1137.7  + shoulderOffset;
+   }
 
-	public double getElbowAngle() {
-		return -(elbowMotor.getSelectedSensorPosition() / 1137.7 + 164.5);
-	}
+   public double getElbowAngle() {
+	   return -(elbowMotor.getSelectedSensorPosition() / 1137.7 - elbowOffset);
+   }
 
 	// public double getShoulderAngle() {
 	// 	// return shoulderMotorEncoder.getSelectedSensorPosition();
@@ -470,11 +486,12 @@ public class Arm {
 				y = Constants.CONE_HIGHER.y;
 				break;
 			case DROPOFF_LOW:
+				setWrist(1);
 				x = Constants.DROPOFF_LOW.x;
 				y = Constants.DROPOFF_LOW.y;
 				break;
 			case PICKUP_GROUND:
-				setWrist(90);
+				setWrist(1);
 				grabber.clawBack();
 				wristForced = true;
 				x = Constants.PICKUP_GROUND.x;
@@ -618,24 +635,24 @@ public class Arm {
 		double newposX = currentPositionX + Constants.MAX_FORWARD_X * speedMultipler * x;
 		double newposY = currentPositionY + Constants.MAX_FORWARD_Y * speedMultipler * y;
 
-		double wristAngle = getWristAngle();
-		double wristIncX = Math.cos(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
-		double wristIncY = Math.sin(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
+		// double wristAngle = getWristAngle();
+		// double wristIncX = Math.cos(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
+		// double wristIncY = Math.sin(Math.toRadians(wristAngle)) * Constants.WRIST_LENGTH;
 
 		double directionX = newposX - currentPositionX;
 		double directionY = newposY - currentPositionY;
 
 		// System.out.println("DIR: " + directionX);
 
-		if ((newposX + wristIncX > Constants.minX || directionX > 0) &&
-			(newposX + wristIncX < Constants.maxX || directionX < 0) &&
+		if ((newposX > Constants.minX || directionX > 0) &&
+			(newposX < Constants.maxX || directionX < 0) &&
 			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionX = newposX;
 		}
 
-		if ((newposY + wristIncY > Constants.minY || directionY > 0) &&
-			(newposY + wristIncY < Constants.maxY || directionY < 0) &&
+		if ((newposY > Constants.minY || directionY > 0) &&
+			(newposY < Constants.maxY || directionY < 0) &&
 			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionY = newposY;

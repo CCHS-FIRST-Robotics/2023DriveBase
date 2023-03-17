@@ -197,7 +197,7 @@ public class Robot extends TimedRobot {
 		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
-		autonState = AutonStates.FlipWrist;
+		autonState = AutonStates.MoveArmToScore;
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();

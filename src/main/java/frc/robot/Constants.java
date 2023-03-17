@@ -135,6 +135,9 @@ public class Constants {
 	public static final double LOWER_ARM_LENGTH = 0.705;
 	public static final double WRIST_LENGTH = .26;
 
+	public static final double SHOULDER_STARTING_ANGLE = 105;
+	public static final double ELBOW_STARTING_ANGLE = -167;
+
 	public static final double MIN_ARM_EXTENSION = UPPER_ARM_LENGTH - LOWER_ARM_LENGTH;
 	public static final double MAX_ARM_EXTENSION = UPPER_ARM_LENGTH + LOWER_ARM_LENGTH;
 
@@ -213,7 +216,7 @@ public class Constants {
 
 	// hard min/max x and y values for the arm
 	public static final double minX = 0.2; // slightly less than the furthest possible distance to make sure we don't lose a DOF
-	public static final double maxX = 1.4; 
+	public static final double maxX = 1.08; 
 	public static final double minY = 0.1;
 	public static final double maxY = 1.9; // 6'6"
 
@@ -255,11 +258,11 @@ public class Constants {
 		PICKUP_SUBSTATION,
 		NEUTRAL
 	} 
-	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.04);
-	public static final R2Vector CUBE_HIGHER = new R2Vector(1.25, 1.35);
+	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.15);
+	public static final R2Vector CUBE_HIGHER = new R2Vector(1, 1.35);
 	public static final R2Vector CONE_LOWER = new R2Vector(0.72, 1.34);
-	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.5, 1.28);
-	public static final R2Vector CONE_HIGHER = new R2Vector(1.3, 1.28);
+	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.5, 1.5);
+	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.45);
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.5, .4);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
