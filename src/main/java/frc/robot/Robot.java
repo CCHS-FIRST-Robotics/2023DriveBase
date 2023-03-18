@@ -363,7 +363,7 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX * 0.7);
+				driveBase.drive(leftX, leftY, rightX * 0.5);
 				break;
 		}
 
