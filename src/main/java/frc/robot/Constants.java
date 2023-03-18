@@ -266,7 +266,7 @@ public class Constants {
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.5, .4);
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
-	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.15);
+	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.23);
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
