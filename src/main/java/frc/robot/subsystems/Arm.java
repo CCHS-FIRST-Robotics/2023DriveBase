@@ -340,6 +340,10 @@ public class Arm {
 		return new double[] {getShoulderAngle(), getElbowAngle()};
 	}
 
+	public ArmState getState() {
+		return new ArmState(getShoulderAngle(), getElbowAngle());
+	}
+
 	/**
 	 * @return angle (double) degrees of the third linkage (claw) from the horizontal
 	 */
@@ -392,7 +396,6 @@ public class Arm {
 
 		ArrayList<double[]> trajectory = new QuadraticProfile().getSetPoints(
 			new R2Vector(current_pos[0], current_pos[1]),  // initial pos
-			getJointAngles(), // initial angles
 			new R2Vector(x, y), // goal pos
 			getWristAngle(), // wrist angle
 			Constants.ARM_MAX_SPEED,

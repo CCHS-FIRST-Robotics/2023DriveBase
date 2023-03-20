@@ -160,12 +160,12 @@ public final class Kinematics {
 	 * @param clawDown (boolean) - whether or not to choose the angle pair that reults in the claw pointing down
 	 * @return
 	 */
-	public static double[] positionInverseKinematics(double x, double y, boolean clawDown) {
+	public static double[] positionInverseKinematics(double x, double y, boolean inverted) {
 		// If none is specified, choose the position that typically works
 		double[][] angles = positionInverseKinematics(x, y);
 		double[] alphas = new double[] {angles[0][0], angles[1][0]};
 		double[] betas = new double[] {angles[0][1], angles[1][1]};
-		return evaluateAngles(alphas, betas, clawDown);
+		return evaluateAngles(alphas, betas, inverted);
 	}
 
 	public static double[] positionInverseKinematics(double x, double y, double[] initialAngles) {
@@ -173,7 +173,7 @@ public final class Kinematics {
 		return evaluateAngles(angles, initialAngles);
 	}
 
-	public static double[] evaluateAngles(double[] alphas, double[] betas, boolean clawDown) {
+	public static double[] evaluateAngles(double[] alphas, double[] betas, boolean inverted) {
 		int i; // TODO:
 		// check if either pair violates a motor limit
 		// for (i=0; i<2; i++) {
@@ -189,7 +189,7 @@ public final class Kinematics {
 		// System.out.println("Angles2: " + degrees(alphas[1]) + "\n" + degrees(betas[1]));
 
 		// if both pairs are left, prioritize based on (clawDown) param
-		if ((Math.sin(alphas[0]) < Math.sin(alphas[1])) == (clawDown)) {
+		if ((Math.sin(alphas[0]) < Math.sin(alphas[1])) == (inverted)) {
 			double[] pair = {alphas[1], betas[1]};
 			// System.out.println(0);
 			return pair;

@@ -19,7 +19,21 @@ public class QuadraticProfile {
         this(.02);
     }
 
-    public R2Vector[] getCombinedSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed, double acceleration) {
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration, R2Vector[] guides) {        
+        ArrayList<double[]> setpoints = new ArrayList<double[]> ();
+        for (int i=0; i < guides.length; i++) {
+            R2Vector guide = guides[i];
+            if (i == 0) {
+                setpoints.addAll(getSetPoints(initialPosition, guide, theta, speed, acceleration));
+            } else {
+                setpoints.addAll(getSetPoints(guides[i-1], guide, theta, speed, acceleration));
+            }
+        }
+        setpoints.addAll(getSetPoints(guides[guides.length-1], goal, theta, speed, acceleration));
+        return setpoints;
+    }
+
+    public R2Vector[] getCombinedSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration) {
         R2Vector[] accelSetpoints, stoppingSetpoints, constantSpeedSetpoints;
         
         // displacement from the initial (x, y) to goal 
@@ -57,10 +71,10 @@ public class QuadraticProfile {
         return combineSetPoints(accelSetpoints, constantSpeedSetpoints, stoppingSetpoints, initialPosition);
     }
 
-    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, double[] initialAngles, R2Vector goal, double theta, double speed, double acceleration) {
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration) {
         double directionX, directionY;
         
-        R2Vector[] combined = getCombinedSetPoints(initialPosition, initialAngles, goal, theta, speed, acceleration);
+        R2Vector[] combined = getCombinedSetPoints(initialPosition, goal, theta, speed, acceleration);
         
         ArrayList<double[]> setpoints = new ArrayList<double[]>(combined.length);
         double[] angles;
