@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
 		DriveInit,
 		Drive,
 		Balance,
+		BalanceAlternate,
 		FlipWrist,
 		WaitForWrist
 	};
@@ -123,6 +124,8 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+
+		// driveBase.mDrive.setSafetyEnabled(false);
 
     	// CAMERAS + CONFIG
 		// camera0 = CameraServer.startAutomaticCapture(0);
@@ -202,6 +205,7 @@ public class Robot extends TimedRobot {
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
 		// driveBase.autonTimer.start();
+		driveBase.setMotorsNeutralMode(NeutralMode.Brake);
 	}
 
 	/** This function is called periodically during autonomous. */
@@ -276,7 +280,7 @@ public class Robot extends TimedRobot {
 				break;
 			case OpenGrabber:
 				claw.clawBack();
-				autonCounter = 50;
+				autonCounter = 30;
 				autonState = AutonStates.WaitForGrabber;
 				break;
 			case WaitForGrabber:
@@ -301,7 +305,11 @@ public class Robot extends TimedRobot {
 				if (Constants.ROBOT_START_CENTER_FIELD) {
 					// drives backwards to the ramp 
 					// driveBase.setPosition(-3);
-					autonState = AutonStates.Balance;
+					if (Math.abs(imu.getPitch()) > 5) {
+						autonState = AutonStates.Balance;
+						break;
+					}
+					driveBase.drive(0, -.3, 0);
 				} else {
 					// drive backwards outside the community (-4 works)
 					// -1.6 is good for ramp
@@ -309,6 +317,18 @@ public class Robot extends TimedRobot {
 				}
 				break;
 			case Balance:
+				driveBase.rampAutoBalance();
+				break;
+			case BalanceAlternate:
+				double pitch = Math.abs(imu.getPitch());
+				double sgn = pitch / imu.getPitch();
+				if (pitch < 3) {
+					driveBase.rampAutoBalance();
+				} else if (pitch < 5) {
+					driveBase.drive(0, -sgn * -.17,  0);
+				} else {
+					driveBase.drive(0, -sgn * -0.25, 0);
+				}
 				break;
 		}
 	}
@@ -318,6 +338,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
+		driveBase.setMotorsNeutralMode(NeutralMode.Coast);
 		// arm.setNeutralPostion();
 	}
 
@@ -364,6 +385,10 @@ public class Robot extends TimedRobot {
 				break;
 			case manual:
 				driveBase.drive(leftX, leftY, rightX * 0.5);
+				// the following doesn't work (there seems to be issues with the velocity control mode)
+				// driveBase.drive(new ChassisSpeeds(leftY * Constants.DRIVE_MAX_X_VELOCITY,
+				// 								  leftX * Constants.DRIVE_MAX_Y_VELOCITY,
+				// 								  rightX * Constants.DRIVE_MAX_ANGULAR_VELOCITY));
 				break;
 		}
 

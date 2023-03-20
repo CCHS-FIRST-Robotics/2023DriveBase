@@ -210,20 +210,24 @@ public class MecaDrive extends DriveBase {
 		drive(0, getRampFeedforward(), 0);
 	}
 
-	public void setMotorsNeutralMode() {
-		brakeMode = !brakeMode;
-		if (brakeMode) {
-			frontLeftMotor.setNeutralMode(NeutralMode.Brake);
-			frontRightMotor.setNeutralMode(NeutralMode.Brake);
-			rearLeftMotor.setNeutralMode(NeutralMode.Brake);
-			rearRightMotor.setNeutralMode(NeutralMode.Brake);
-		}
-		else {
-			frontLeftMotor.setNeutralMode(NeutralMode.Coast);
-			frontRightMotor.setNeutralMode(NeutralMode.Coast);
-			rearLeftMotor.setNeutralMode(NeutralMode.Coast);
-			rearRightMotor.setNeutralMode(NeutralMode.Coast);
-		}
+	public void setMotorsNeutralMode(NeutralMode mode) {
+		// brakeMode = !brakeMode;
+		// if (brakeMode) {
+		// 	frontLeftMotor.setNeutralMode(NeutralMode.Brake);
+		// 	frontRightMotor.setNeutralMode(NeutralMode.Brake);
+		// 	rearLeftMotor.setNeutralMode(NeutralMode.Brake);
+		// 	rearRightMotor.setNeutralMode(NeutralMode.Brake);
+		// }
+		// else {
+		// 	frontLeftMotor.setNeutralMode(NeutralMode.Coast);
+		// 	frontRightMotor.setNeutralMode(NeutralMode.Coast);
+		// 	rearLeftMotor.setNeutralMode(NeutralMode.Coast);
+		// 	rearRightMotor.setNeutralMode(NeutralMode.Coast);
+		// }
+		frontLeftMotor.setNeutralMode(mode);
+		frontRightMotor.setNeutralMode(mode);
+		rearLeftMotor.setNeutralMode(mode);
+		rearRightMotor.setNeutralMode(mode);
 	}
 
 	/**

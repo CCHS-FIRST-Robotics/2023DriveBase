@@ -17,8 +17,6 @@ public class Constants {
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
 	public static final int XBOX_CONTROLLER_ALTERNATE_PORT 			= 1; 
-
-	public static final double DRIVE_MAX_ANGULAR_VELOCITY 	= 2 * Math.PI;
 	
 	public static final double TANK_WHEEL_RADIUS 			= 0.075; // meters
 	public static final double MECANUM_WHEEL_DIAMETER 		= 0.1524; // meters
@@ -66,6 +64,10 @@ public class Constants {
 
 	public static final double DRIVE_STARTING_MULTIPLIER = .6;
 
+	public static double DRIVE_MAX_ANGULAR_VELOCITY = 2 * Math.PI;
+	public static double DRIVE_MAX_X_VELOCITY = (10000 / METERS_TO_FALCON_CLICKS) * 10;
+	public static double DRIVE_MAX_Y_VELOCITY = DRIVE_MAX_X_VELOCITY;
+
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
@@ -97,11 +99,11 @@ public class Constants {
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
 	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
-	public static final double RAMP_P = .03;
+	public static final double RAMP_P = .002;
 	public static final double RAMP_I = 0;
 	public static final double RAMP_D = 0; // .001
 	
-	public static final double RAMP_G = 1.3;
+	public static final double RAMP_G = 1.1;
 
 	// ALIGN CONTROL CONSTANTS
 	public static final double ALIGN_P = .5;
@@ -200,11 +202,14 @@ public class Constants {
 	public static final double SHOULDER_MAX_VELOCITY = 45; // deg per second
 	public static final double SHOULDER_MAX_ACCELERATION = 90; // deg per second^2
 
+
 	public static final double ELBOW_MAX_VELOCITY = 45; // deg per second
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
-	public static final double ARM_MAX_SPEED = .5; // meters per second
-	public static final double ARM_MAX_ACCELERATION = .5; // meters per second per second
+	// public static final double ARM_MAX_SPEED = .5; // meters per second
+	public static final double ARM_MAX_SPEED = 1.2; // meters per second
+	// public static final double ARM_MAX_ACCELERATION = .5; // meters per second per second
+	public static final double ARM_MAX_ACCELERATION = 1.2; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
