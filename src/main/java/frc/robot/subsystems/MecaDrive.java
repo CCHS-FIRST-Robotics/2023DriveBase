@@ -267,7 +267,7 @@ public class MecaDrive extends DriveBase {
 	}
 
 	public void assistedAlign(double dx, double dy) {
-		drive(-dx * Constants.ALIGN_P, -dy * Constants.ALIGN_P, 0);
+		drive(-dx * Constants.ALIGN_P, -dy * Constants.ALIGN_P, 0, false);
 	}
 
 	public void printControlsOfCurrentMode() {

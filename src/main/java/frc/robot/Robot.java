@@ -62,7 +62,8 @@ public class Robot extends TimedRobot {
 	enum TeleopStates {
 		rampAssistedBalance,
 		rampHold,
-		assistedAlign,
+		assistedAlignLime,
+        assistedAlignZED,
 		manual
 	}
 
@@ -372,7 +373,14 @@ public class Robot extends TimedRobot {
 				
 				// driveBase.setMotorsNeutralMode();
 				break;
-			case assistedAlign:
+
+            case assistedAlignLime:
+                double offset = limelight.getX(0);
+                double heading = imu.getHeading();
+                driveBase.drive(.1*offset, 0, .1*(180 - heading), false);
+                break;
+
+			case assistedAlignZED:
 				ZED.Position zedPos = ZED.Position.CONE;
 				if (cube) zedPos = ZED.Position.CUBE;
 
@@ -541,8 +549,7 @@ public class Robot extends TimedRobot {
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
-			teleopState = TeleopStates.assistedAlign;
-
+			teleopState = TeleopStates.assistedAlignLime;
 		}
 		if (X) {
 			fieldOriented = !fieldOriented;
@@ -678,8 +685,6 @@ public class Robot extends TimedRobot {
 			arm.setSpeedMultipler(2);
 			System.out.println("speedHigh");
 		}
-
-
 	}
 
 	/** 
@@ -688,7 +693,7 @@ public class Robot extends TimedRobot {
 	private void drive() {
 		// process input (determine wheelspeeds)
 		// driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), xboxController.getRightY());
-		driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX());
+		driveBase.drive(xboxController.getLeftX(), xboxController.getLeftY(), xboxController.getRightX(), false);
 	}
 
 	// private TankDrive createTankDrive() {
