@@ -88,9 +88,8 @@ public class MecaDrive extends DriveBase {
 		trajectoryConfig.addConstraint( // this may be unnessesary, hmm unsure
 			new MecanumDriveKinematicsConstraint(Constants.MECANUM_KINEMATICS, Constants.maxVelocityMetersPerSecond));
 	}
-	
-	@Override
-	public void drive(double speedX, double speedY, double rotateSpeed) {
+
+	public void drive(double speedX, double speedY, double rotateSpeed, boolean fieldOriented) {
 		speedX *= speedMultiplier;
 		speedY *= speedMultiplier;
 		rotateSpeed *= speedMultiplier;
@@ -134,7 +133,12 @@ public class MecaDrive extends DriveBase {
 		
 		// method defines Y as left/right and X as forward/backward - contrary to docs, right and forward are positive
 		// https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-drive-subsystem.html
-		mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+		if (fieldOriented) {
+			mDrive.driveCartesian(speedY, speedX, rotateSpeed, new Rotation2d(Math.toRadians(imu.getHeading())));
+		} else {
+			mDrive.driveCartesian(speedY, speedX, rotateSpeed);
+		}
+		
 	}
 
 	/**
@@ -198,16 +202,19 @@ public class MecaDrive extends DriveBase {
 
 		// System.out.println(getRampFeedforward());
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
-
-		drive(0, 
-			-rampPID.calculate(imu.getPitch(), 0) + 
-			getRampFeedforward(),
-			0);
+		if (Math.abs(imu.getPitch()) < 3) {
+			drive(0, 0, 0, false);
+		} else {
+			drive(0, 
+				-rampPID.calculate(imu.getPitch(), 0) + 
+				getRampFeedforward(),
+				0, false);
+		}
 	}
 
 	public void rampHold() {
 		// System.out.println("G: " + getRampFeedforward());
-		drive(0, getRampFeedforward(), 0);
+		drive(0, getRampFeedforward(), 0, false);
 	}
 
 	public void setMotorsNeutralMode(NeutralMode mode) {

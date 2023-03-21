@@ -103,6 +103,8 @@ public class Robot extends TimedRobot {
 	double pidTuningAlpha;
 	double pidTuningBeta;
 
+	boolean fieldOriented = true;
+
 	double test = 0;
 	long counter = 0; // for calling functions every n loops
 
@@ -305,11 +307,12 @@ public class Robot extends TimedRobot {
 				if (Constants.ROBOT_START_CENTER_FIELD) {
 					// drives backwards to the ramp 
 					// driveBase.setPosition(-3);
-					if (Math.abs(imu.getPitch()) > 5) {
+					if (Math.abs(imu.getPitch()) > 7) {
+						System.out.println("test");
 						autonState = AutonStates.Balance;
 						break;
 					}
-					driveBase.drive(0, -.3, 0);
+					driveBase.drive(0, -.4, 0, false);
 				} else {
 					// drive backwards outside the community (-4 works)
 					// -1.6 is good for ramp
@@ -322,12 +325,12 @@ public class Robot extends TimedRobot {
 			case BalanceAlternate:
 				double pitch = Math.abs(imu.getPitch());
 				double sgn = pitch / imu.getPitch();
-				if (pitch < 3) {
-					driveBase.rampAutoBalance();
-				} else if (pitch < 5) {
-					driveBase.drive(0, -sgn * -.17,  0);
+				if (pitch < 2) {
+					driveBase.drive(0, 0,  0, false);
+				} else if (pitch < 7) {
+					driveBase.drive(0, -sgn * -.17,  0, false);
 				} else {
-					driveBase.drive(0, -sgn * -0.25, 0);
+					driveBase.drive(0, -sgn * -0.25, 0, false);
 				}
 				break;
 		}
@@ -384,7 +387,7 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX * 0.5);
+				driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
 				// the following doesn't work (there seems to be issues with the velocity control mode)
 				// driveBase.drive(new ChassisSpeeds(leftY * Constants.DRIVE_MAX_X_VELOCITY,
 				// 								  leftX * Constants.DRIVE_MAX_Y_VELOCITY,
@@ -542,7 +545,7 @@ public class Robot extends TimedRobot {
 
 		}
 		if (X) {
-
+			fieldOriented = !fieldOriented;
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();

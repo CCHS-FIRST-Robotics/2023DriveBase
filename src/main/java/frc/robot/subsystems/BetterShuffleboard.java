@@ -26,7 +26,7 @@ public class BetterShuffleboard {
     GenericEntry FLVel, FRVel, RLVel, RRVel; // encoder velocities
     // navx data
     GenericEntry NavXVel, NavYVel, NavXAccel, NavYAccel, NavZAccel,
-                 NavRoll, NavPitch, NavHeading, NavConnected, NavRotationRateZ;
+                 NavRoll, NavPitch, NavHeading, NavMagnet, NavConnected, NavRotationRateZ;
 
     ShuffleboardTab limelightTab; // used for limelight data
     GenericEntry highPostX, lowPostX, highPostY, lowPostY, highPostHeading, lowPostHeading, 
@@ -181,6 +181,10 @@ public class BetterShuffleboard {
             .withWidget(BuiltInWidgets.kDial)
             .withProperties(Map.of("min", -180, "max", 180))
             .getEntry();
+        NavMagnet = odomTab.add("NavMagnet", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -180, "max", 180))
+            .getEntry();
         // NavConnected = odomTab.add("NavConnected", 0)
         //     .withWidget(BuiltInWidgets.kBooleanBox)
         //     .getEntry();
@@ -254,6 +258,7 @@ public class BetterShuffleboard {
         NavRoll.setDouble(imu.getRoll());
         NavPitch.setDouble(imu.getPitch());
         NavHeading.setDouble(imu.getHeading());
+        NavMagnet.setDouble(imu.getFusedHeading());
 
         NavRotationRateZ.setDouble(imu.getRate());
         // NavConnected.setBoolean(imu.isConnected());

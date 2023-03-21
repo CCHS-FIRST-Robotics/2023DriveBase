@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
  */
 public class Constants {
 
-	public static final boolean ROBOT_START_CENTER_FIELD = false;
+	public static final boolean ROBOT_START_CENTER_FIELD = true;
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
@@ -99,11 +99,11 @@ public class Constants {
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
 	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
-	public static final double RAMP_P = .002;
+	public static final double RAMP_P = .005;
 	public static final double RAMP_I = 0;
-	public static final double RAMP_D = 0; // .001
+	public static final double RAMP_D = 0.001; // .001
 	
-	public static final double RAMP_G = 1.1;
+	public static final double RAMP_G = 1.2;
 
 	// ALIGN CONTROL CONSTANTS
 	public static final double ALIGN_P = .5;
@@ -207,9 +207,9 @@ public class Constants {
 	public static final double ELBOW_MAX_ACCELERATION = 90; // deg per second^2
 
 	// public static final double ARM_MAX_SPEED = .5; // meters per second
-	public static final double ARM_MAX_SPEED = 1.2; // meters per second
+	public static final double ARM_MAX_SPEED = 2; // meters per second
 	// public static final double ARM_MAX_ACCELERATION = .5; // meters per second per second
-	public static final double ARM_MAX_ACCELERATION = 1.2; // meters per second per second
+	public static final double ARM_MAX_ACCELERATION = 3; // meters per second per second
 
 	// When you push the controller all the way in one direction, the max forward is what we set to PID loop to
 	// TODO: name for that probably isnt intuitive so anyone got suggestions?
@@ -265,12 +265,12 @@ public class Constants {
 	} 
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.15);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1, 1.35);
-	public static final R2Vector CONE_LOWER = new R2Vector(0.72, 1.34);
+	public static final R2Vector CONE_LOWER = new R2Vector(0.75, 1.25);
 	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.5, 1.5);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.45);
-	public static final R2Vector DROPOFF_LOW = new R2Vector(.5, .4);
-	public static final R2Vector PICKUP_GROUND = new R2Vector(.7, .3);
-	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.75, .45);
+	public static final R2Vector DROPOFF_LOW = new R2Vector(.4, .45);
+	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .3);
+	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.56, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.23);
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
