@@ -16,11 +16,11 @@ public class IMU extends AHRS{
 	}
 
 	public double getHeading() {
-		double heading = getFusedHeading();
-		if (isMagneticDisturbance() || !isMagnetometerCalibrated()) {
-			heading = getYaw();
-		}
-		return heading;
+		// double heading = getFusedHeading();
+		// if (isMagneticDisturbance() || !isMagnetometerCalibrated()) {
+		// 	heading = getYaw();
+		// }
+		return getYaw();
 	}
 
 	// public void updateValues() {

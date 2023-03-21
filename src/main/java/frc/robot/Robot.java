@@ -343,6 +343,7 @@ public class Robot extends TimedRobot {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
 		driveBase.setMotorsNeutralMode(NeutralMode.Coast);
+
 		// arm.setNeutralPostion();
 	}
 
@@ -357,7 +358,8 @@ public class Robot extends TimedRobot {
 		double rightX = xboxController.getRightX();
 
 		if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
-			teleopState = TeleopStates.manual;
+			if (teleopState != TeleopStates.assistedAlignLime || !Constants.isZero(leftX))
+				teleopState = TeleopStates.manual;
 		}
 
 		/*
@@ -375,9 +377,14 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double offset = limelight.getX(0);
+                double xOffset = limelight.getX(0) - 11.1;
                 double heading = imu.getHeading();
-                driveBase.drive(.1*offset, 0, .1*(180 - heading), false);
+				if (Constants.isZero(xOffset)) {
+					break;
+				}
+				// -10*(heading / 180)
+				// System.out.println(xOffset/180);
+                driveBase.drive(xOffset/180 * 10, leftY, -5*(heading / 180), false);
                 break;
 
 			case assistedAlignZED:
@@ -442,7 +449,7 @@ public class Robot extends TimedRobot {
 		// arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
 
-		if (counter % 20 == 0) {
+		if (counter % 5 == 0) {
 			// System.out.println(pidTuningAlpha);
 			// System.out.println(arm.getShoulderAngle());
 			// System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
