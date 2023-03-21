@@ -540,12 +540,12 @@ public class Robot extends TimedRobot {
 		boolean LB = xboxController.getLeftBumperPressed();
 
 		if (A) {
-			teleopState = TeleopStates.rampAssistedBalance;
+			driveBase.clearOdom();
 			System.out.println("A PRESSED");
 		}
 		if (B) {
 			// // driveBase.printActiveMotorDebugMode();
-			teleopState = TeleopStates.rampHold;
+			teleopState = TeleopStates.rampAssistedBalance;
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
