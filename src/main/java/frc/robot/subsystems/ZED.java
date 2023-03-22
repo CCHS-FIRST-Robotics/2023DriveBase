@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class ZED {
     
     private double x, y, z, dist;
-    private long id;
+    private int id;
     NetworkTable tags = NetworkTableInstance.getDefault().getTable("tags");
 
     public enum Position {
@@ -31,7 +31,7 @@ public class ZED {
         }
     }
 
-    public double getAprilTagId() {
+    public int getAprilTagId() {
         id = (int) tags.getEntry("id").getDouble(0);
         return id;
     }
