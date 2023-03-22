@@ -291,6 +291,11 @@ public class Constants {
 
 	public static final int FALCON_PID_IDX = 0;
 	public static final int FALCON_TIMEOUT_MS = 30;
+	
+	// will output on a range of [-1, 1]
+	// we will always be within 180 degrees (pi radians) of setpoint
+	// make max output (1.0) at error of pi radians (KP = 1/pi)
+	public static final double[] ROTATION_PID = {0.01, 0, 0};
 
 	/*
 	 * SENSORS 

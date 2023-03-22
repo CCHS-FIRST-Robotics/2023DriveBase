@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 
 import java.lang.Math;
@@ -48,6 +49,13 @@ public class MecaDrive extends DriveBase {
 	PIDController rampPID = new PIDController(Constants.RAMP_P, Constants.RAMP_I, Constants.RAMP_D);
 
 	boolean brakeMode = false;
+
+	public double headingSetPoint = 0; // in radians
+
+	// consider trying a profiled PID controller because that is what the Holonomic Controller expects
+	PIDController rotationPID = new PIDController(Constants.ROTATION_PID[0], 
+												  Constants.ROTATION_PID[1], 
+												  Constants.ROTATION_PID[2]);
 	
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
 					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
@@ -139,6 +147,31 @@ public class MecaDrive extends DriveBase {
 			mDrive.driveCartesian(speedY, speedX, rotateSpeed);
 		}
 		
+	}
+
+	/**
+	 * instead of directly using the right joystick input as rotational velocity, use it to adjust the heading setpoint
+	 * this means that when the robot is not told to rotate, the heading setpoint will stay the same and the robot should
+	 * keep driving straight
+	 */
+	public void driveStraight(double speedX, double speedY, double rotInput, boolean fieldOriented) {
+		speedX *= speedMultiplier;
+		speedY *= speedMultiplier;
+		rotInput *= speedMultiplier;
+
+		headingSetPoint += rotInput;
+		double currentHeading = Math.toRadians(imu.getHeading());
+
+		// get PID output and clamp to a range of [-1.0, 1.0]
+		double rotVel = MathUtil.clamp(rotationPID.calculate(currentHeading, headingSetPoint), -1.0, 1.0);
+
+		System.out.println("Setpoint: " + headingSetPoint + ", current: " + currentHeading + " PID output: " + rotVel);
+
+		if (fieldOriented) {
+			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(currentHeading));
+		} else {
+			mDrive.driveCartesian(speedY, speedX, rotVel);
+		}
 	}
 
 	/**
