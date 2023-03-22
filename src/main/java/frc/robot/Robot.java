@@ -118,38 +118,42 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     // switch between driving modes
-    checkForModeSwitches();
+    //checkForModeSwitches();
 
     // check for button/bumper presses
-    checkForButtonPresses();
+    //checkForButtonPresses();
 
     // powers motors based on the analog inputs
     // drive();
 
     // limelightTestDrive();
 
+	double xOffset = limelight.getYaw(Constants.SHORT_PIPE_NUM);
+	double angleOffset = imu.getHeading();
+	driveBase.drive(0, 0, -0.1 * angleOffset, 0);
+
     if (counter % 50 == 0) {
       smartdash.pushDashboard(limelight, imu); //for now just picked one of two pipes
 
-      // TO TEST VALS FIRST
-      double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
-      double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
-      double h  = Constants.TARGETS_DISTANCE;
-      System.out.println(d1);
-      System.out.println(d2);
-      System.out.println(h);
+    //   // TO TEST VALS FIRST
+    //   double d1 = limelight.getForwardDistance(Constants.SHORT_PIPE_NUM);
+    //   double d2 = limelight.getForwardDistance(Constants.TALL_PIPE_NUM);
+    //   double h  = Constants.TARGETS_DISTANCE;
+    //   System.out.println(d1);
+    //   System.out.println(d2);
+    //   System.out.println(h);
 
-      double l2 = (d2 * d2 - d1 * d1 - h * h) / (2 * h);
-      double l1 = Math.sqrt(Math.abs(d1 * d1 - l2 * l2));
+    //   double l2 = (d2 * d2 - d1 * d1 - h * h) / (2 * h);
+    //   double l1 = Math.sqrt(Math.abs(d1 * d1 - l2 * l2));
 
-      System.out.println(l2);
-      System.out.println(l1);
+    //   System.out.println(l2);
+    //   System.out.println(l1);
 
-      System.out.println(Math.toDegrees(
-        limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
-         Math.atan(l2 / l1)
-      ));
-      smartdash.pushDashboard(limelight, imu);
+    //   System.out.println(Math.toDegrees(
+    //     limelight.getHeadingDisplacement(Constants.SHORT_PIPE_NUM) +
+    //      Math.atan(l2 / l1)
+    //   ));
+    //   smartdash.pushDashboard(limelight, imu);
 
     }
     counter++;

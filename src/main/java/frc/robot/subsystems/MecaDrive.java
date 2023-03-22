@@ -35,10 +35,10 @@ public class MecaDrive extends DriveBase {
      */
     public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
                      int rearLeftMotorPort, int rearRightMotorPort) {
-        frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
-        frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
-        rearLeftMotor = new WPI_TalonFX(rearLeftMotorPort);
-        rearRightMotor = new WPI_TalonFX(rearRightMotorPort);
+        frontLeftMotor = new WPI_TalonSRX(frontLeftMotorPort);
+        frontRightMotor = new WPI_TalonSRX(frontRightMotorPort);
+        rearLeftMotor = new WPI_TalonSRX(rearLeftMotorPort);
+        rearRightMotor = new WPI_TalonSRX(rearRightMotorPort);
 		
 		// invert motors to make forward the right direction
 		frontRightMotor.setInverted(true);

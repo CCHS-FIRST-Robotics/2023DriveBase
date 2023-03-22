@@ -54,9 +54,12 @@ public class Constants {
 	//previous speed is divided by this factor (higher = slow down faster)
 
 	//height from floor to center of limelight lense in meters
-	public static final double LIME_HEIGHT    = .758;
-	//number of degrees from perfectly vertical
-	public static final double LIME_ANGLE     = 0; 
+	// changed to match limelight test base
+	public static final double LIME_HEIGHT    = .78;
+	// limelight mount angle degrees from perfectly vertical
+	public static final double LIME_ANGLE_Y = 0; 
+	// limelight mount angle degrees from perfectly horizontal
+	public static final double LIME_ANGLE_X = 0;
 
 	//height from floor to target in meters (added 2 inches)
 	public static final double SHORT_TARGET_HEIGHT = 0.508 + 0.0508;
