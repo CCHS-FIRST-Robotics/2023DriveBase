@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class ZED {
     
     private double x, y, z, dist;
-    private long id;
+    private int id;
     NetworkTable tags = NetworkTableInstance.getDefault().getTable("tags");
 
     public enum Position {
@@ -17,21 +17,22 @@ public class ZED {
     }
 
     public double[] getAprilTagPos(Position desiredPos) {
-        double[] pos = {getAprilTagX(), getAprilTagY(), getAprilTagZ()};
+        double[] pos = getAprilTagPos();
         switch (desiredPos) {
             case CUBE:
+                pos[0] = pos[0] - Constants.ZED_OFFSET;
                 return pos;
             case CONE:
-                pos[0] = pos[0] + Constants.DISTANCE_FROM_APRILTAG_TO_CONE;
+                pos[0] = pos[0] - (Constants.ZED_OFFSET + Constants.CONE_FROM_TAG_OFFSET);
                 return pos;
             case SUBSTATION:
-                return pos;
+                return getAprilTagPos(Constants.SUBSTATION_TAG_ID);
             default:
                 return new double[] {0, 0, 0};
         }
     }
 
-    public double getAprilTagId() {
+    public int getAprilTagId() {
         id = (int) tags.getEntry("id").getDouble(0);
         return id;
     }
@@ -49,6 +50,14 @@ public class ZED {
     public double getAprilTagZ() {
         z = tags.getEntry("z").getDouble(0);
         return z;
+    }
+
+    public double[] getAprilTagPos() {
+        return new double[] {getAprilTagX(), getAprilTagY(), getAprilTagZ()};
+    }
+
+    public double[] getAprilTagPos(String id) {
+        return tags.getEntry(id).getDoubleArray(new double[] {0, 0, 0});
     }
 
     public double getAprilTagDist() {

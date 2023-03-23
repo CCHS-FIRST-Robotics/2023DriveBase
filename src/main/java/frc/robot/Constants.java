@@ -61,6 +61,8 @@ public class Constants {
 	public static final double METERS_TO_FALCON_CLICKS = TALON_FX_CPR * FALCON_GEARBOX_RATIO / (Math.PI * MECANUM_WHEEL_DIAMETER);
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
+	public static final SPI.Port ANALOG_GYRO_PORT = SPI.Port.kOnboardCS0;
+	// public static final int ANALOG_GYRO_PORT = 0;
 
 	public static final double DRIVE_STARTING_MULTIPLIER = .6;
 
@@ -265,14 +267,23 @@ public class Constants {
 	} 
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.15);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1, 1.35);
-	public static final R2Vector CONE_LOWER = new R2Vector(0.75, 1.25);
-	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.5, 1.5);
+
+	public static final R2Vector CONE_LOWER = new R2Vector(0.75, 1.27);
+	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.6, 1.5);
+	public static final R2Vector CONE_GUIDE_POINT = new R2Vector(.6, 1.5);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.45);
+
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.4, .45);
+
 	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .3);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.56, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.23);
+
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
+
+	public static final String SUBSTATION_TAG_ID = "7";
+	public static final double ZED_OFFSET = 0.3; // meters
+	public static final double CONE_FROM_TAG_OFFSET = -0.525; // meters
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023
