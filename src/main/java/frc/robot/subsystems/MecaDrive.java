@@ -173,14 +173,14 @@ public class MecaDrive extends DriveBase {
 		speedY *= speedMultiplier;
 		rotInput *= speedMultiplier;
 
-		// divide by 10 to make the speed more reasonable (TUNE THIS)
-		headingSetPoint += rotInput / 10;
-		double currentHeading = Math.toRadians(imu.getHeading());
+		// divide by 5 to make the speed more reasonable (TUNE THIS)
+		headingSetPoint += rotInput / 5;
+		double currentHeading = Math.toRadians(imu.getAngle());
 
 		// get PID output and clamp to a range of [-1.0, 1.0]
 		double rotVel = MathUtil.clamp(rotationPID.calculate(currentHeading, headingSetPoint), -1.0, 1.0);
 
-		System.out.println("Setpoint: " + headingSetPoint + ", current: " + currentHeading + " PID output: " + rotVel);
+		// System.out.println("Setpoint: " + headingSetPoint + ", current: " + currentHeading + " PID output: " + rotVel);
 
 		if (fieldOriented) {
 			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(currentHeading));
@@ -298,7 +298,7 @@ public class MecaDrive extends DriveBase {
 		Rotation2d currentHeading = new Rotation2d(Math.toRadians(imu.getHeading()));
 		poseEstimator.update(currentHeading, getWheelPositions());
 		if (zedPos[0] != -1) {
-			Pose2D zedPose = new Pose2d(zedPos[0], zedPos[2], Math.atan2(zedPos[2], zedPos[0]));
+			Pose2d zedPose = new Pose2d(zedPos[0], zedPos[2], new Rotation2d(Math.atan2(zedPos[2], zedPos[0])));
 			poseEstimator.addVisionMeasurement(zedPose, Timer.getFPGATimestamp());
 		}
 	}
@@ -492,6 +492,7 @@ public class MecaDrive extends DriveBase {
 		imu.reset();
 		imu.resetDisplacement();
 		mOdom.resetPosition(new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions(), getPose());
+		headingSetPoint = 0;
 	}
 
 	/**

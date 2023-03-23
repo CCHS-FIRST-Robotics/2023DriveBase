@@ -133,8 +133,8 @@ public class Arm {
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
 
-		shoulderMotor.setNeutralMode(NeutralMode.Coast);
-		elbowMotor.setNeutralMode(NeutralMode.Coast);
+		shoulderMotor.setNeutralMode(NeutralMode.Brake);
+		elbowMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 	public void configTalonFX(WPI_TalonFX talon) {

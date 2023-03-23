@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
 	double pidTuningBeta;
 
 	boolean fieldOriented = true;
+	boolean headingPid = true;
 
 	double test = 0;
 	long counter = 0; // for calling functions every n loops
@@ -343,6 +344,7 @@ public class Robot extends TimedRobot {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
 		driveBase.setMotorsNeutralMode(NeutralMode.Coast);
+		driveBase.clearOdom();
 
 		// arm.setNeutralPostion();
 	}
@@ -393,7 +395,7 @@ public class Robot extends TimedRobot {
 
 				// handle the case where no tags are found
 				if (zed.getAprilTagId() == -1) {
-				break;
+					break;
 				}
 
 				double[] pos = zed.getAprilTagPos(zedPos);
@@ -402,7 +404,10 @@ public class Robot extends TimedRobot {
 				driveBase.assistedAlign(dx, dy);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
+				if (headingPid)
+					driveBase.driveStraight(leftX, leftY, rightX * 0.5, fieldOriented);
+				else
+					driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
 				// the following doesn't work (there seems to be issues with the velocity control mode)
 				// driveBase.drive(new ChassisSpeeds(leftY * Constants.DRIVE_MAX_X_VELOCITY,
 				// 								  leftX * Constants.DRIVE_MAX_Y_VELOCITY,
@@ -497,6 +502,8 @@ public class Robot extends TimedRobot {
 			smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
 			// System.out.println(xboxController.getRightY());
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
+
+			System.out.println("heading setpoint: " + driveBase.headingSetPoint + " actual angle: " + Math.toRadians(imu.getAngle()));
 		}
 	}
 
@@ -545,6 +552,7 @@ public class Robot extends TimedRobot {
 		boolean Y = xboxController.getYButtonPressed();
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
+		boolean RS = xboxController.getRightStickButtonPressed();
 
 		if (A) {
 			driveBase.clearOdom();
@@ -560,6 +568,13 @@ public class Robot extends TimedRobot {
 		}
 		if (X) {
 			fieldOriented = !fieldOriented;
+		}
+		if (RS) {
+			// toggle heading pid control
+			headingPid = !headingPid;
+			// if we just turned it on, we should set the set point to current heading
+			if (headingPid)
+				driveBase.headingSetPoint = Math.toRadians(imu.getAngle());
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();
