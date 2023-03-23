@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
 import edu.wpi.first.math.MathUtil;
@@ -42,6 +43,9 @@ public class MecaDrive extends DriveBase {
 
 	// Motor positions Object
 	MecanumDriveWheelPositions wheelPositions;
+
+	// UKF pose estimator w/ vslam data
+	MecanumDrivePoseEstimator poseEstimator;
 	
 	// timer for autonomous
 	public Timer autonTimer;
@@ -84,8 +88,18 @@ public class MecaDrive extends DriveBase {
 
 		this.imu = imu;
 
+
+		Rotation2d initialHeading = new Rotation2d(Math.toRadians(imu.getHeading()));
 		// Odometry: !!secondary constructor takes initialPose argument
-		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, new Rotation2d(Math.toRadians(imu.getAngle())), getWheelPositions());
+		mOdom = new MecanumDriveOdometry(Constants.MECANUM_KINEMATICS, initialHeading, getWheelPositions());
+
+		// Pose estimator - TODO: specify covariance matrices in secondary constructor
+		poseEstimator = new MecanumDrivePoseEstimator(
+			Constants.MECANUM_KINEMATICS, 
+			new Rotation2d(Math.toRadians(imu.getHeading())), 
+			getWheelPositions(),
+			new Pose2d(0, 0, initialHeading)
+		);
 	
 		// see declaration in DriveBase
 		// set up the config for autonomous trajectories
@@ -278,6 +292,15 @@ public class MecaDrive extends DriveBase {
 	 */
 	public double getRampFeedforward() {
 		return Constants.RAMP_G * Math.sin(Math.toRadians(imu.getPitch()));
+	}
+
+	public void updatePose(double[] zedPos) {
+		Rotation2d currentHeading = new Rotation2d(Math.toRadians(imu.getHeading()));
+		poseEstimator.update(currentHeading, getWheelPositions());
+		if (zedPos[0] != -1) {
+			Pose2D zedPose = new Pose2d(zedPos[0], zedPos[2], Math.atan2(zedPos[2], zedPos[0]));
+			poseEstimator.addVisionMeasurement(zedPose, Timer.getFPGATimestamp());
+		}
 	}
 
 	public void configTalonFX(WPI_TalonFX talon) {
