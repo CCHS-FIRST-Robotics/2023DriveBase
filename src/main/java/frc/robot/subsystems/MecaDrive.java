@@ -159,7 +159,8 @@ public class MecaDrive extends DriveBase {
 		speedY *= speedMultiplier;
 		rotInput *= speedMultiplier;
 
-		headingSetPoint += rotInput;
+		// divide by 10 to make the speed more reasonable (TUNE THIS)
+		headingSetPoint += rotInput / 10;
 		double currentHeading = Math.toRadians(imu.getHeading());
 
 		// get PID output and clamp to a range of [-1.0, 1.0]
