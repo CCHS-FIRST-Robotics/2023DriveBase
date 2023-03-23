@@ -133,8 +133,8 @@ public class Arm {
         shoulderPID = new PIDController(Constants.SHOULDER_KP, Constants.SHOULDER_KI, Constants.SHOULDER_KD);
         elbowPID = new PIDController(Constants.ELBOW_KP, Constants.ELBOW_KI, Constants.ELBOW_KD);
 
-		shoulderMotor.setNeutralMode(NeutralMode.Brake);
-		elbowMotor.setNeutralMode(NeutralMode.Brake);
+		shoulderMotor.setNeutralMode(NeutralMode.Coast);
+		elbowMotor.setNeutralMode(NeutralMode.Coast);
     }
 
 	public void configTalonFX(WPI_TalonFX talon) {
@@ -390,7 +390,7 @@ public class Arm {
 		return currentMode;
 	}
 
-	public ArrayList<double[]> getTrajectory(double x, double y) {
+	public ArrayList<double[]> getTrajectory(double x, double y, ArrayList<R2Vector> guides) {
 		// USE WRIST JOINT POS SINCE IK CAN'T HANDLE WRIST YET
 		double[] current_pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
 
@@ -399,7 +399,8 @@ public class Arm {
 			new R2Vector(x, y), // goal pos
 			getWristAngle(), // wrist angle
 			Constants.ARM_MAX_SPEED,
-			Constants.ARM_MAX_ACCELERATION
+			Constants.ARM_MAX_ACCELERATION,
+			guides
 		);
 
 		return trajectory;
@@ -459,12 +460,14 @@ public class Arm {
 		setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
 	}
 
-	public void setEndEffector(double xPos, double yPos) {
-		setEndEffector(xPos, yPos, false);
+	public void setEndEffector(double xPos, double yPos, ArrayList<R2Vector> guides) {
+		setEndEffector(xPos, yPos, guides, true);
 	}
 
 	public void setEndEffector(ArmFixedPosition position) {
 		double x, y;
+		ArrayList<R2Vector> guides = new ArrayList<R2Vector>();
+
 		wristForced = false;
 		switch (position) {
 			case CUBE_LOWER:
@@ -487,6 +490,7 @@ public class Arm {
 			case CONE_HIGHER:
 				x = Constants.CONE_HIGHER.x;
 				y = Constants.CONE_HIGHER.y;
+				guides.add(Constants.CONE_GUIDE_POINT);
 				break;
 			case DROPOFF_LOW:
 				setWrist(1);
@@ -521,7 +525,7 @@ public class Arm {
 			default:
 				return;
 		}
-		setEndEffector(x, y);
+		setEndEffector(x, y, guides);
 	}
 
 	/**
@@ -531,11 +535,11 @@ public class Arm {
 	 * @param yPos (double) y position of the end effector - METERS
 	 * @param theta (double) angle of the claw from the horizontal - DEGREES
 	 */
-	public void setEndEffector(double xPos, double yPos, boolean debug) {
+	public void setEndEffector(double xPos, double yPos, ArrayList<R2Vector> guides, boolean debug) {
 		// TODO: maybe add something that sets the claw position to the param rather than handling it separately
 		// double[] angles = Kinematics.positionInverseKinematics(xPos, yPos, getJointAngles());
 
-		trajectory = Kinematics.degrees(getTrajectory(xPos, yPos));
+		trajectory = Kinematics.degrees(getTrajectory(xPos, yPos, guides));
 		// when goes past motor limit traj is empty
 		if (trajectory.size() < 1) {
 			return;

@@ -19,17 +19,19 @@ public class QuadraticProfile {
         this(.02);
     }
 
-    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration, R2Vector[] guides) {        
+    public ArrayList<double[]> getSetPoints(R2Vector initialPosition, R2Vector goal, double theta, double speed, double acceleration, ArrayList<R2Vector> guides) {        
+        if (guides.size() == 0) return getSetPoints(initialPosition, goal, theta, speed, acceleration);
+        
         ArrayList<double[]> setpoints = new ArrayList<double[]> ();
-        for (int i=0; i < guides.length; i++) {
-            R2Vector guide = guides[i];
+        for (int i=0; i < guides.size(); i++) {
+            R2Vector guide = guides.get(i);
             if (i == 0) {
                 setpoints.addAll(getSetPoints(initialPosition, guide, theta, speed, acceleration));
             } else {
-                setpoints.addAll(getSetPoints(guides[i-1], guide, theta, speed, acceleration));
+                setpoints.addAll(getSetPoints(guides.get(i-1), guide, theta, speed, acceleration));
             }
         }
-        setpoints.addAll(getSetPoints(guides[guides.length-1], goal, theta, speed, acceleration));
+        setpoints.addAll(getSetPoints(guides.get(guides.size()-1), goal, theta, speed, acceleration));
         return setpoints;
     }
 

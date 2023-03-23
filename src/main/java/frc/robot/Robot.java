@@ -379,6 +379,7 @@ public class Robot extends TimedRobot {
                 double xOffset = limelight.getX(0) - 11.1;
                 heading = imu.getHeading();
 				if (Constants.isZero(xOffset)) {
+					driveBase.drive(0, 0, 0, false);
 					break;
 				}
 				// -10*(heading / 180)
