@@ -61,6 +61,8 @@ public class Constants {
 	public static final double METERS_TO_FALCON_CLICKS = TALON_FX_CPR * FALCON_GEARBOX_RATIO / (Math.PI * MECANUM_WHEEL_DIAMETER);
 	
 	public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
+	public static final SPI.Port ANALOG_GYRO_PORT = SPI.Port.kOnboardCS0;
+	// public static final int ANALOG_GYRO_PORT = 0;
 
 	public static final double DRIVE_STARTING_MULTIPLIER = .6;
 
@@ -275,6 +277,8 @@ public class Constants {
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
 	public static final String SUBSTATION_TAG_ID = "7";
+	public static final double ZED_OFFSET = 0.3; // meters
+	public static final double CONE_FROM_TAG_OFFSET = -0.525; // meters
 
 	// https://v5.docs.ctr-electronics.com/en/stable/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
 	// max value for the falcon is 1023

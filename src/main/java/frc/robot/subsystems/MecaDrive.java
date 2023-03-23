@@ -266,10 +266,6 @@ public class MecaDrive extends DriveBase {
 		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.5);
 	}
 
-	public void assistedAlign(double dx, double dy) {
-		drive(-dx * Constants.ALIGN_P, -dy * Constants.ALIGN_P, 0, false);
-	}
-
 	public void printControlsOfCurrentMode() {
 		System.out.println("Controls:");
 		switch(currentMode) {

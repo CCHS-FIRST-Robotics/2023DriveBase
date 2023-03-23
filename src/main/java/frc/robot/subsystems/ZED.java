@@ -20,9 +20,10 @@ public class ZED {
         double[] pos = getAprilTagPos();
         switch (desiredPos) {
             case CUBE:
+                pos[0] = pos[0] - Constants.ZED_OFFSET;
                 return pos;
             case CONE:
-                pos[0] = pos[0] + Constants.DISTANCE_FROM_APRILTAG_TO_CONE;
+                pos[0] = pos[0] - (Constants.ZED_OFFSET + Constants.CONE_FROM_TAG_OFFSET);
                 return pos;
             case SUBSTATION:
                 return getAprilTagPos(Constants.SUBSTATION_TAG_ID);

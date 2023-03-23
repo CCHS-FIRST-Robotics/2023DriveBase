@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
 
 /* 
@@ -11,8 +14,14 @@ public class IMU extends AHRS{
 	// private double x, y, z, heading, pitch, roll, zRotationalVelocity, xVelocity, yVelocity, xAccel, yAccel, zAccel; // define navx outputs
 	// private boolean isConnected;
 
-	public IMU() {
+	private double heading;
+	ADXRS450_Gyro aGyro;
+
+	public IMU(SPI.Port analogPort) {
 		super(Constants.NAVX_PORT);
+		aGyro = new ADXRS450_Gyro(analogPort);
+		aGyro.reset();
+
 	}
 
 	public double getHeading() {
@@ -20,7 +29,13 @@ public class IMU extends AHRS{
 		// if (isMagneticDisturbance() || !isMagnetometerCalibrated()) {
 		// 	heading = getYaw();
 		// }
-		return getYaw();
+
+		// return getYaw();
+		return heading;
+	}
+
+	public void updateGyro() {
+		heading = getYaw();
 	}
 
 	// public void updateValues() {

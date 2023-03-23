@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 	private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT, 5);
 	private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
 
-	DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_ID);
+	DigitalInput limitSwitch = new DigitalInput(0);
 	DigitalOutput ledOutput = new DigitalOutput(5);
 
 	Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
 
 	Limelight limelight = new Limelight();
 	ZED zed = new ZED();
-	IMU imu = new IMU();
+	IMU imu = new IMU(Constants.ANALOG_GYRO_PORT);
 
 //   VideoSink server;
 //   UsbCamera camera0, camera1;
@@ -105,17 +105,15 @@ public class Robot extends TimedRobot {
 	double pidTuningBeta;
 
 	boolean fieldOriented = true;
+	boolean autoClaw = false;
 
 	double test = 0;
 	long counter = 0; // for calling functions every n loops
 
 	public Robot() {
-		// addPeriodic(() -> updateArmVelocities(), .001);
+		addPeriodic(() -> imu.updateGyro(), .001);
 	}
 
-	// public void updateArmVelocities() {
-		
-	// }
 	long autonCounter = 0;
 
 	/**
@@ -365,6 +363,7 @@ public class Robot extends TimedRobot {
 		/*
 		* DRIVE CODE
 		*/
+		double heading;
 		switch(teleopState) {
 			case rampAssistedBalance:
 				driveBase.rampAutoBalance();
@@ -378,13 +377,13 @@ public class Robot extends TimedRobot {
 
             case assistedAlignLime:
                 double xOffset = limelight.getX(0) - 11.1;
-                double heading = imu.getHeading();
+                heading = imu.getHeading();
 				if (Constants.isZero(xOffset)) {
 					break;
 				}
 				// -10*(heading / 180)
 				// System.out.println(xOffset/180);
-                driveBase.drive(xOffset/180 * 10, leftY, -5*(heading / 180), false);
+                driveBase.drive(xOffset/180 * 15, leftY, -10*(heading / 180), false);
                 break;
 
 			case assistedAlignZED:
@@ -393,13 +392,18 @@ public class Robot extends TimedRobot {
 
 				// handle the case where no tags are found
 				if (zed.getAprilTagId() == -1) {
-				break;
+					break;
 				}
 
 				double[] pos = zed.getAprilTagPos(zedPos);
 				double dx = pos[0];
 				double dy = pos[1];
-				driveBase.assistedAlign(dx, dy);
+				heading = imu.getHeading();
+				// if (counter % 10 == 0)
+				// 	System.out.println(dx * .5);
+				double sign = Math.abs(dx) / dx;
+				double controlInput = sign * Math.max(.2, Math.abs(dx * 4));
+				driveBase.drive(controlInput, 0, 0, false);
 				break;
 			case manual:
 				driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
@@ -449,7 +453,7 @@ public class Robot extends TimedRobot {
 		// arm.moveArm(.3 * xboxController.getLeftX(), .3 * xboxController.getLeftY());
 
 
-		if (counter % 5 == 0) {
+		if (counter % 20 == 0) {
 			// System.out.println(pidTuningAlpha);
 			// System.out.println(arm.getShoulderAngle());
 			// System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
@@ -556,7 +560,7 @@ public class Robot extends TimedRobot {
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
-			teleopState = TeleopStates.assistedAlignLime;
+			teleopState = TeleopStates.assistedAlignZED;
 		}
 		if (X) {
 			fieldOriented = !fieldOriented;
@@ -585,10 +589,16 @@ public class Robot extends TimedRobot {
 		boolean wristDown = monkeyController.getRawButtonPressed(10);
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
+		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
+		if (autoClawToggle) autoClaw = !autoClaw;
+		if (autoClaw && !limitSwitch.get()){
+			autoClaw = false;
+			claw.clawForward();
+		}
 
-    boolean camera0Button = monkeyController.getRawButtonPressed(13);
-    boolean camera1Button = monkeyController.getRawButtonPressed(14);
-    // if (camera0Button) server.setSource(camera1);
+		boolean camera0Button = monkeyController.getRawButtonPressed(13);
+		boolean camera1Button = monkeyController.getRawButtonPressed(14);
+		// if (camera0Button) server.setSource(camera1);
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
 		boolean cubePressed = monkeyController.getRawButtonPressed(18);
