@@ -508,7 +508,7 @@ public class Robot extends TimedRobot {
 			// System.out.println(xboxController.getRightY());
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
 
-			System.out.println("heading setpoint: " + driveBase.headingSetPoint + " actual angle: " + Math.toRadians(imu.getAngle()));
+			// System.out.println("heading setpoint: " + driveBase.headingSetPoint + " actual angle: " + Math.toRadians(imu.getAngle()));
 		}
 	}
 
@@ -578,8 +578,11 @@ public class Robot extends TimedRobot {
 			// toggle heading pid control
 			headingPid = !headingPid;
 			// if we just turned it on, we should set the set point to current heading
-			if (headingPid)
+			if (headingPid) {
 				driveBase.headingSetPoint = Math.toRadians(imu.getAngle());
+				System.out.println("Heading PID ON");
+			}
+			else System.out.println("Heading PID OFF");
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();
