@@ -557,7 +557,7 @@ public class Robot extends TimedRobot {
 		boolean Y = xboxController.getYButtonPressed();
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
-		boolean RS = xboxController.getRightStickButtonPressed();
+		boolean start = xboxController.getStartButtonPressed();
 
 		if (A) {
 			driveBase.clearOdom();
@@ -574,7 +574,7 @@ public class Robot extends TimedRobot {
 		if (X) {
 			fieldOriented = !fieldOriented;
 		}
-		if (RS) {
+		if (start) {
 			// toggle heading pid control
 			headingPid = !headingPid;
 			// if we just turned it on, we should set the set point to current heading
