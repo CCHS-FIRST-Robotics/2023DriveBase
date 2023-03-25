@@ -61,7 +61,7 @@ public class MecaDrive extends DriveBase {
 
 	boolean brakeMode = false;
 
-	public double headingSetPoint = 0; // in radians
+	public double headingSetPoint = 0; // in degrees
 
 	// consider trying a profiled PID controller because that is what the Holonomic Controller expects
 	PIDController rotationPID = new PIDController(Constants.ROTATION_PID[0], 
@@ -109,6 +109,8 @@ public class MecaDrive extends DriveBase {
 			covarOdom,
 			covarZed
 		);
+
+		rotationPID.setTolerance(0.5);
 	
 		// see declaration in DriveBase
 		// set up the config for autonomous trajectories
@@ -183,16 +185,19 @@ public class MecaDrive extends DriveBase {
 		rotInput *= speedMultiplier;
 
 		// divide by 5 to make the speed more reasonable (TUNE THIS)
-		headingSetPoint += rotInput / 5;
-		double currentHeading = Math.toRadians(imu.getAngle());
+		headingSetPoint += rotInput / 0.087;
+		double currentHeading = imu.getAngle();
 
 		// get PID output and clamp to a range of [-1.0, 1.0]
 		double rotVel = MathUtil.clamp(rotationPID.calculate(currentHeading, headingSetPoint), -1.0, 1.0);
-
+		
+		// increase pid output so that it rotates for small error (only if we aren't translating significantly)
+		if (Math.abs(speedX) < Math.abs(rotVel) && Math.abs(speedY) < Math.abs(rotVel))
+			rotVel += 0.05 * Math.signum(rotVel);
 		// System.out.println("Setpoint: " + headingSetPoint + ", current: " + currentHeading + " PID output: " + rotVel);
 
 		if (fieldOriented) {
-			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(currentHeading));
+			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(Math.toRadians(currentHeading)));
 		} else {
 			mDrive.driveCartesian(speedY, speedX, rotVel);
 		}

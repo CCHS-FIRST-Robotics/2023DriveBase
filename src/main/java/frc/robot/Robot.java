@@ -389,9 +389,9 @@ public class Robot extends TimedRobot {
 
 				controlInput = xOffset/180 * 30;
 				controlInput = MathUtil.clamp(controlInput, -.3, .3);
-				driveBase.headingSetPoint = Math.toRadians(Math.toDegrees(driveBase.headingSetPoint) - (Math.toDegrees(driveBase.headingSetPoint) % 360));
+				driveBase.headingSetPoint = driveBase.headingSetPoint - (driveBase.headingSetPoint % 360);
 
-				if (Math.abs(driveBase.headingSetPoint - Math.toRadians(heading)) > Math.PI / 90) {
+				if (Math.abs(driveBase.headingSetPoint - heading) > 2) {
 					driveBase.driveStraight(0, leftY, 0, true);
 				} else {
 					driveBase.driveStraight(controlInput, leftY, 0, true);
@@ -414,7 +414,7 @@ public class Robot extends TimedRobot {
 				double dy = pos[2];
 				heading = imu.getHeading();
 
-				driveBase.headingSetPoint = Math.toRadians(Math.toDegrees(driveBase.headingSetPoint) - (Math.toDegrees(driveBase.headingSetPoint) % 360));
+				driveBase.headingSetPoint = driveBase.headingSetPoint - (driveBase.headingSetPoint % 360);
 
 				double controlInputX = dx * 3;
 				controlInputX = MathUtil.clamp(controlInputX, -.5, .5);
@@ -577,7 +577,8 @@ public class Robot extends TimedRobot {
 		boolean back = xboxController.getBackButtonPressed();
 
 		if (A) {
-			driveBase.clearOdom();
+			// driveBase.clearOdom();
+			driveBase.headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0;
 			System.out.println("A PRESSED");
 		}
 		if (B) {
@@ -592,14 +593,14 @@ public class Robot extends TimedRobot {
 			fieldOriented = !fieldOriented;
 		}
 		if (X) {
-			driveBase.headingSetPoint += Math.PI;
+			driveBase.headingSetPoint += 180;
 		}
 		if (start) {
 			// toggle heading pid control
 			headingPid = !headingPid;
 			// if we just turned it on, we should set the set point to current heading
 			if (headingPid) {
-				driveBase.headingSetPoint = Math.toRadians(imu.getAngle());
+				driveBase.headingSetPoint = imu.getAngle();
 				System.out.println("Heading PID ON");
 			}
 			else System.out.println("Heading PID OFF");
@@ -626,6 +627,9 @@ public class Robot extends TimedRobot {
 		boolean wristUp = monkeyController.getRawButtonPressed(5);
 		boolean openClaw = monkeyController.getRawButtonPressed(9);
 		boolean wristDown = monkeyController.getRawButtonPressed(10);
+		boolean incHeading = monkeyController.getRawButtonPressed(14);
+		boolean decHeading = monkeyController.getRawButtonPressed(16);
+
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
 		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
@@ -635,8 +639,8 @@ public class Robot extends TimedRobot {
 			claw.clawForward();
 		}
 
-		boolean camera0Button = monkeyController.getRawButtonPressed(13);
-		boolean camera1Button = monkeyController.getRawButtonPressed(14);
+		// boolean camera0Button = monkeyController.getRawButtonPressed(13);
+		// boolean camera1Button = monkeyController.getRawButtonPressed(14);
 		// if (camera0Button) server.setSource(camera1);
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
@@ -705,6 +709,15 @@ public class Robot extends TimedRobot {
 			System.out.println("stopTrajectory");
 		}
 
+		if (incHeading) {
+			driveBase.headingSetPoint += 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
+
+		if (decHeading) {
+			driveBase.headingSetPoint -= 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
 		/*
 		* PNEUMATICS
 		*/
