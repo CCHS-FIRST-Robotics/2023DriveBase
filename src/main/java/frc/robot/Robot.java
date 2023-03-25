@@ -387,7 +387,7 @@ public class Robot extends TimedRobot {
 					break;
 				}
 
-				controlInput = xOffset/180 * 30;
+				controlInput = -xOffset/180 * 30;
 				controlInput = MathUtil.clamp(controlInput, -.3, .3);
 				driveBase.headingSetPoint = driveBase.headingSetPoint - (driveBase.headingSetPoint % 360);
 
@@ -587,7 +587,7 @@ public class Robot extends TimedRobot {
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
-			teleopState = TeleopStates.assistedAlignZED;
+			teleopState = TeleopStates.assistedAlignLime;
 		}
 		if (back) {
 			fieldOriented = !fieldOriented;

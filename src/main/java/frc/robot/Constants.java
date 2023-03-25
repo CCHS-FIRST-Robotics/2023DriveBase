@@ -308,6 +308,8 @@ public class Constants {
 	// we will always be within 180 degrees (pi radians) of setpoint
 	public static final double[] ROTATION_PID = {0.017, 0, 0.001}; // 0.017, 0, 0.001
 
+	public static final double ROTATION_ADJUSTMENT = 0.05;
+
 	/*
 	 * SENSORS 
 	 */

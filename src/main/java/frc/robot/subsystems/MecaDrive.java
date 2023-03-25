@@ -193,11 +193,11 @@ public class MecaDrive extends DriveBase {
 		
 		// increase pid output so that it rotates for small error (only if we aren't translating significantly)
 		if (Math.abs(speedX) < Math.abs(rotVel) && Math.abs(speedY) < Math.abs(rotVel))
-			rotVel += 0.05 * Math.signum(rotVel);
+			rotVel += Constants.ROTATION_ADJUSTMENT * Math.signum(rotVel);
 		// System.out.println("Setpoint: " + headingSetPoint + ", current: " + currentHeading + " PID output: " + rotVel);
 
 		if (fieldOriented) {
-			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(Math.toRadians(currentHeading)));
+			mDrive.driveCartesian(speedY, speedX, rotVel, new Rotation2d(Math.toRadians(currentHeading + 180)));
 		} else {
 			mDrive.driveCartesian(speedY, speedX, rotVel);
 		}
