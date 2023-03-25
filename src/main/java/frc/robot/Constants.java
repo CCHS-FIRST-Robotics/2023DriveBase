@@ -73,10 +73,11 @@ public class Constants {
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
-	public static double RIGHT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 2.5;
 	public static double RIGHT_Y_EXPONENT = 2;
 
-	public static final double ANALOG_CROSS_DEADZONE = 0.2;
+	public static final double ANALOG_CROSS_DEADZONE = 0.1;
+	public static final double ROTATION_DEADZONE = 0.05;
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)
@@ -306,7 +307,7 @@ public class Constants {
 	// will output on a range of [-1, 1]
 	// we will always be within 180 degrees (pi radians) of setpoint
 	// make max output (1.0) at error of pi radians (KP = 1/pi)
-	public static final double[] ROTATION_PID = {2.5/Math.PI, 0, 0.025};
+	public static final double[] ROTATION_PID = {1, 0, 0};
 
 	/*
 	 * SENSORS 

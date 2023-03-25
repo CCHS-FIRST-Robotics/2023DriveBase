@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -166,6 +166,8 @@ public class Robot extends TimedRobot {
 		// System.out.println("hello wo5rld");
 
 		// test += 1;
+
+		driveBase.updatePose(zed.getAprilTagPose(), zed.getPoseEstimate(), counter);
 
 		if (counter % 10 == 0) {
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
@@ -365,7 +367,7 @@ public class Robot extends TimedRobot {
 		/*
 		* DRIVE CODE
 		*/
-		double heading;
+		double heading, controlInput;
 		switch(teleopState) {
 			case rampAssistedBalance:
 				driveBase.rampAutoBalance();
@@ -378,15 +380,23 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double xOffset = limelight.getX(0) - 11.1;
+                double xOffset = limelight.getX(0) - 12.8;
                 heading = imu.getHeading();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);
 					break;
 				}
-				// -10*(heading / 180)
-				// System.out.println(xOffset/180);
-                driveBase.drive(xOffset/180 * 15, leftY, -10*(heading / 180), false);
+
+				controlInput = xOffset/180 * 30;
+				controlInput = MathUtil.clamp(controlInput, -.3, .3);
+				driveBase.headingSetPoint = Math.toRadians(Math.toDegrees(driveBase.headingSetPoint) - (Math.toDegrees(driveBase.headingSetPoint) % 360));
+
+				if (Math.abs(driveBase.headingSetPoint - Math.toRadians(heading)) > Math.PI / 90) {
+					driveBase.driveStraight(0, leftY, 0, true);
+				} else {
+					driveBase.driveStraight(controlInput, leftY, 0, true);
+				}
+                
                 break;
 
 			case assistedAlignZED:
@@ -395,24 +405,29 @@ public class Robot extends TimedRobot {
 
 				// handle the case where no tags are found
 				if (zed.getAprilTagId() == -1) {
+					driveBase.drive(0, 0, 0, false);
 					break;
 				}
 
 				double[] pos = zed.getAprilTagPos(zedPos);
 				double dx = pos[0];
-				double dy = pos[1];
+				double dy = pos[2];
 				heading = imu.getHeading();
-				// if (counter % 10 == 0)
-				// 	System.out.println(dx * .5);
-				double sign = Math.abs(dx) / dx;
-				double controlInput = sign * Math.max(.2, Math.abs(dx * 4));
-				driveBase.drive(controlInput, 0, 0, false);
+
+				driveBase.headingSetPoint = Math.toRadians(Math.toDegrees(driveBase.headingSetPoint) - (Math.toDegrees(driveBase.headingSetPoint) % 360));
+
+				double controlInputX = dx * 3;
+				controlInputX = MathUtil.clamp(controlInputX, -.5, .5);
+				double controlInputY = (dy - .75) * 2;
+				controlInputY = MathUtil.clamp(controlInputY, -.3, .3);
+				// if (counter % 10 == 0) System.out.println(controlInputY + " next " + dy);
+				driveBase.driveStraight(controlInputX, controlInputY, 0, true);
 				break;
 			case manual:
 				if (headingPid)
-					driveBase.driveStraight(leftX, leftY, rightX * 0.5, fieldOriented);
+					driveBase.driveStraight(leftX, leftY, rightX * 0.2, fieldOriented);
 				else
-					driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
+					driveBase.drive(leftX, leftY, rightX * 0.2, fieldOriented);
 				// the following doesn't work (there seems to be issues with the velocity control mode)
 				// driveBase.drive(new ChassisSpeeds(leftY * Constants.DRIVE_MAX_X_VELOCITY,
 				// 								  leftX * Constants.DRIVE_MAX_Y_VELOCITY,
@@ -460,6 +475,7 @@ public class Robot extends TimedRobot {
 
 
 		if (counter % 20 == 0) {
+			// System.out.println(zed.getAprilTagYaw());
 			// System.out.println(pidTuningAlpha);
 			// System.out.println(arm.getShoulderAngle());
 			// System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
@@ -558,6 +574,7 @@ public class Robot extends TimedRobot {
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
 		boolean start = xboxController.getStartButtonPressed();
+		boolean back = xboxController.getBackButtonPressed();
 
 		if (A) {
 			driveBase.clearOdom();
@@ -571,8 +588,11 @@ public class Robot extends TimedRobot {
 		if (Y) {
 			teleopState = TeleopStates.assistedAlignZED;
 		}
-		if (X) {
+		if (back) {
 			fieldOriented = !fieldOriented;
+		}
+		if (X) {
+			driveBase.headingSetPoint += Math.PI;
 		}
 		if (start) {
 			// toggle heading pid control

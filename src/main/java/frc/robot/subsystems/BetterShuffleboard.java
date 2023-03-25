@@ -226,9 +226,9 @@ public class BetterShuffleboard {
     }
 
     public void pushOdom(MecaDrive drive) {
-        odomX.setDouble(drive.getOdomX());
-        odomY.setDouble(drive.getOdomY());
-        odomHead.setDouble(drive.getOdomHeading());
+        odomX.setDouble(drive.getPoseX());
+        odomY.setDouble(drive.getPoseY());
+        odomHead.setDouble(drive.getPoseHeading());
         FLVel.setDouble(drive.getWheelSpeeds().frontLeftMetersPerSecond);
         FRVel.setDouble(drive.getWheelSpeeds().frontRightMetersPerSecond);
         RLVel.setDouble(drive.getWheelSpeeds().rearLeftMetersPerSecond);

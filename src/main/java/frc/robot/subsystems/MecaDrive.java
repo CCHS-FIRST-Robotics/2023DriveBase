@@ -16,6 +16,11 @@ import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Num;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.MecanumDriveKinematicsConstraint;
 import edu.wpi.first.math.MathUtil;
@@ -46,6 +51,8 @@ public class MecaDrive extends DriveBase {
 
 	// UKF pose estimator w/ vslam data
 	MecanumDrivePoseEstimator poseEstimator;
+	Matrix<N3, N1> covarZed = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(1, 1, 1);
+	Matrix<N3, N1> covarOdom = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(3, 3, 3);
 	
 	// timer for autonomous
 	public Timer autonTimer;
@@ -98,7 +105,9 @@ public class MecaDrive extends DriveBase {
 			Constants.MECANUM_KINEMATICS, 
 			new Rotation2d(Math.toRadians(imu.getHeading())), 
 			getWheelPositions(),
-			new Pose2d(0, 0, initialHeading)
+			new Pose2d(0, 0, initialHeading),
+			covarOdom,
+			covarZed
 		);
 	
 		// see declaration in DriveBase
@@ -294,12 +303,21 @@ public class MecaDrive extends DriveBase {
 		return Constants.RAMP_G * Math.sin(Math.toRadians(imu.getPitch()));
 	}
 
-	public void updatePose(double[] zedPos) {
+	public void updatePose(double[] zedTagPose, double[] zedPoseEstimate, long counter) {
 		Rotation2d currentHeading = new Rotation2d(Math.toRadians(imu.getHeading()));
-		poseEstimator.update(currentHeading, getWheelPositions());
-		if (zedPos[0] != -1) {
-			Pose2d zedPose = new Pose2d(zedPos[0], zedPos[2], new Rotation2d(Math.atan2(zedPos[2], zedPos[0])));
-			poseEstimator.addVisionMeasurement(zedPose, Timer.getFPGATimestamp());
+		poseEstimator.updateWithTime(counter/Constants.PERIOD, currentHeading, getWheelPositions());
+
+		if (zedPoseEstimate[0] != -1) {
+			Pose2d zedPose = new Pose2d(zedPoseEstimate[0], zedPoseEstimate[1], new Rotation2d(Math.toRadians(zedPoseEstimate[2])));
+			poseEstimator.addVisionMeasurement(zedPose, counter/Constants.PERIOD, covarZed);
+		}
+
+		if (zedTagPose[0] != -1) {
+			// yaw estimate is currently not working so using a covar of inf
+			Pose2d tagPose = new Pose2d(zedTagPose[0], zedTagPose[1], new Rotation2d(Math.toRadians(zedTagPose[2])));
+			double covar = .01 * zedTagPose[0]*zedTagPose[0] + zedTagPose[1]*zedTagPose[1];
+			Matrix<N3, N1> covarTag = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(covar, covar, Integer.MAX_VALUE);
+			poseEstimator.addVisionMeasurement(tagPose, counter/Constants.PERIOD, covarTag);
 		}
 	}
 
@@ -440,19 +458,19 @@ public class MecaDrive extends DriveBase {
 	 * @return The pose.
 	 */
 	public Pose2d getPose() {
-		return mOdom.getPoseMeters();
+		return poseEstimator.getEstimatedPosition();
 	}
 
-	public double getOdomX() {
-		return mOdom.getPoseMeters().getTranslation().getX();
+	public double getPoseX() {
+		return poseEstimator.getEstimatedPosition().getTranslation().getX();
 	}
 
-	public double getOdomY() {
-		return mOdom.getPoseMeters().getTranslation().getY();
+	public double getPoseY() {
+		return poseEstimator.getEstimatedPosition().getTranslation().getY();
 	}
 
-	public double getOdomHeading() {
-		return mOdom.getPoseMeters().getRotation().getDegrees();
+	public double getPoseHeading() {
+		return poseEstimator.getEstimatedPosition().getRotation().getDegrees();
 	}
 
 	// TODO: create method that returns wheel speeds of the robot
