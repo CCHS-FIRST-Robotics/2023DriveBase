@@ -535,5 +535,9 @@ public class MecaDrive extends DriveBase {
 		rearLeftMotor.set(ControlMode.Position, rearLeftMotor.getSelectedSensorPosition());
 		rearRightMotor.set(ControlMode.Position, rearRightMotor.getSelectedSensorPosition());
 	}
+
+	public void rotateToGrid() {
+		headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0;
+	}
 }
 

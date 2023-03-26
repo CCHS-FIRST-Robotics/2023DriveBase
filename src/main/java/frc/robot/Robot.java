@@ -360,7 +360,7 @@ public class Robot extends TimedRobot {
 		double rightX = xboxController.getRightX();
 
 		if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
-			if (teleopState != TeleopStates.assistedAlignLime || !Constants.isZero(leftX))
+			if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.5)
 				teleopState = TeleopStates.manual;
 		}
 
@@ -389,7 +389,6 @@ public class Robot extends TimedRobot {
 
 				controlInput = -xOffset/180 * 30;
 				controlInput = MathUtil.clamp(controlInput, -.3, .3);
-				driveBase.headingSetPoint = driveBase.headingSetPoint - (driveBase.headingSetPoint % 360);
 
 				if (Math.abs(driveBase.headingSetPoint - heading) > 2) {
 					driveBase.driveStraight(0, leftY, 0, true);
@@ -413,8 +412,6 @@ public class Robot extends TimedRobot {
 				double dx = pos[0];
 				double dy = pos[2];
 				heading = imu.getHeading();
-
-				driveBase.headingSetPoint = driveBase.headingSetPoint - (driveBase.headingSetPoint % 360);
 
 				double controlInputX = dx * 3;
 				controlInputX = MathUtil.clamp(controlInputX, -.5, .5);
@@ -578,7 +575,7 @@ public class Robot extends TimedRobot {
 
 		if (A) {
 			// driveBase.clearOdom();
-			driveBase.headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0;
+			driveBase.rotateToGrid();
 			System.out.println("A PRESSED");
 		}
 		if (B) {
@@ -587,6 +584,7 @@ public class Robot extends TimedRobot {
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
+			driveBase.rotateToGrid();
 			teleopState = TeleopStates.assistedAlignLime;
 		}
 		if (back) {
