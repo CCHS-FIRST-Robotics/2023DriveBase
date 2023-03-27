@@ -360,7 +360,7 @@ public class Robot extends TimedRobot {
 		double rightX = xboxController.getRightX();
 
 		if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
-			if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.5)
+			if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.3)
 				teleopState = TeleopStates.manual;
 		}
 
@@ -381,7 +381,7 @@ public class Robot extends TimedRobot {
 
             case assistedAlignLime:
                 double xOffset = limelight.getX(0) - 12.8;
-                heading = imu.getHeading();
+                heading = imu.getAngle();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);
 					break;
@@ -390,7 +390,7 @@ public class Robot extends TimedRobot {
 				controlInput = -xOffset/180 * 30;
 				controlInput = MathUtil.clamp(controlInput, -.3, .3);
 
-				if (Math.abs(driveBase.headingSetPoint - heading) > 2) {
+				if (Math.abs(driveBase.headingSetPoint - heading) > 3) {
 					driveBase.driveStraight(0, leftY, 0, true);
 				} else {
 					driveBase.driveStraight(controlInput, leftY, 0, true);
@@ -584,6 +584,7 @@ public class Robot extends TimedRobot {
 			System.out.println("B PRESSED");
 		}
 		if (Y) {
+			System.out.println("AUTO ALIGNING");
 			driveBase.rotateToGrid();
 			teleopState = TeleopStates.assistedAlignLime;
 		}
@@ -631,7 +632,12 @@ public class Robot extends TimedRobot {
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
 		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
-		if (autoClawToggle) autoClaw = !autoClaw;
+		if (autoClawToggle) {
+			autoClaw = !autoClaw;
+			if (autoClaw)
+				System.out.println("AUTO CLAW ARMED");
+			else System.out.println("AUTO CLAW OFF");
+		}
 		if (autoClaw && !limitSwitch.get()){
 			autoClaw = false;
 			claw.clawForward();

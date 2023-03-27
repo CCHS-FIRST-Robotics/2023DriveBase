@@ -276,7 +276,7 @@ public class Constants {
 
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.4, .45);
 
-	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .3);
+	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .25);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.56, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.23);
 
