@@ -1,0 +1,10 @@
+# Install gstreamer libraries & video for linux drivers
+sudo apt install libgstrtspserver-1.0 libgstreamer1.0-dev
+sudo apt install v4l-utils
+
+# Edit  root/usr/local/bin/stream.sh
+# set target ip, width, height, etc.
+
+# Install 
+sudo make install
+

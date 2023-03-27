@@ -1,0 +1,7 @@
+# Bus 001 Device 008: ID 045e:0779 Microsoft Corp. LifeCam HD-3000 
+# Bus 001 Device 003: ID 045e:0772 Microsoft Corp. LifeCam Studio
+# Bus 001 Device 002: ID 045e:0810 Microsoft Corp
+
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0779" SYMLINK+="videolifecam0"
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0772" SYMLINK+="videolifecam1"
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0810" SYMLINK+="videolifecam0"
