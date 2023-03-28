@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 	
 	BetterShuffleboard smartdash = new BetterShuffleboard();
 
-	private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
+	private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu, arm);
 	
 	boolean autonomousIsMoving = true;
 

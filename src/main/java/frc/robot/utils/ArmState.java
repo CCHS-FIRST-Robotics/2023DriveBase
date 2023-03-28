@@ -55,4 +55,16 @@ public class ArmState {
     public boolean isInverted() {
         return inverted;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public R2Vector getPosition() {
+        return position;
+    }
 }

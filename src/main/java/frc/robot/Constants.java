@@ -229,7 +229,7 @@ public class Constants {
 	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {
-		return (Math.abs(x) < .35); // frame is ~1 meter long
+		return (Math.abs(x) < .35); // frame is ~.7 meters long
 	}
 
 	public static boolean isBelowElectricalBoard(double y) {

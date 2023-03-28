@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import frc.robot.*;
+import frc.robot.utils.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -33,6 +34,7 @@ public class MecaDrive extends DriveBase {
 	// TODO: create better modules for teleop and autonomous driving / odometry
 
 	IMU imu;
+	Arm arm;
 
 	// the motor to be activated during debug mode
 	int debugEnabledMotor = 0;
@@ -69,7 +71,7 @@ public class MecaDrive extends DriveBase {
 												  Constants.ROTATION_PID[2]);
 	
 	public MecaDrive(int frontLeftMotorPort, int frontRightMotorPort,
-					int rearLeftMotorPort, int rearRightMotorPort, IMU imu) {
+					int rearLeftMotorPort, int rearRightMotorPort, IMU imu, Arm arm) {
 
 		frontLeftMotor = new WPI_TalonFX(frontLeftMotorPort);
 		frontRightMotor = new WPI_TalonFX(frontRightMotorPort);
@@ -94,7 +96,7 @@ public class MecaDrive extends DriveBase {
 		mDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 
 		this.imu = imu;
-
+		this.arm = arm;
 
 		Rotation2d initialHeading = new Rotation2d(Math.toRadians(imu.getHeading()));
 		// Odometry: !!secondary constructor takes initialPose argument
@@ -190,7 +192,12 @@ public class MecaDrive extends DriveBase {
 
 		// get PID output and clamp to a range of [-1.0, 1.0]
 		double rotVel = MathUtil.clamp(rotationPID.calculate(currentHeading, headingSetPoint), -1.0, 1.0);
-		
+		double armExtension = arm.getState().getX();
+		// LIMIT CENTRIPETAL ACCLERATION - ac = w^2 * r (max at w = 1, r = .35 - inside frame at max speed)
+		//								   				imples ac = w^2r <= .35, w <= sqrt(.35/r)
+		double maxW = Math.sqrt(.35 / armExtension);
+		rotVel = MathUtil.clamp(rotVel, -maxW, maxW);
+
 		// increase pid output so that it rotates for small error (only if we aren't translating significantly)
 		if (Math.abs(speedX) < Math.abs(rotVel) && Math.abs(speedY) < Math.abs(rotVel))
 			rotVel += Constants.ROTATION_ADJUSTMENT * Math.signum(rotVel);
