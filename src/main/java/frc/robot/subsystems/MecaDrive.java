@@ -557,7 +557,7 @@ public class MecaDrive extends DriveBase {
 	}
 
 	public void rotateFixed(double dir) {
-		headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0 + dir;
+		headingSetPoint = Math.round((imu.getAngle() - dir) / 360.0) * 360.0 + dir;
 	}
 }
 
