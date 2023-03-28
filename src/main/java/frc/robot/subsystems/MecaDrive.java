@@ -271,11 +271,12 @@ public class MecaDrive extends DriveBase {
 
 		// System.out.println(getRampFeedforward());
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
-		if (Math.abs(imu.getPitch()) < 3) {
+		double tilt = imu.getPitch();
+		if (Math.abs(tilt) < 3) {
 			drive(0, 0, 0, false);
 		} else {
 			drive(0, 
-				-rampPID.calculate(imu.getPitch(), 0) + 
+				-rampPID.calculate(tilt, 0) + 
 				getRampFeedforward(),
 				0, false);
 		}
@@ -544,7 +545,19 @@ public class MecaDrive extends DriveBase {
 	}
 
 	public void rotateToGrid() {
+		// if (arm.getState().getX() > .4)
+		// 	return;
 		headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0;
+	}
+
+	public void rotateToSubstation() {
+		// if (arm.getState().getX() > .4)
+		// 	return;
+		headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0 + 180;
+	}
+
+	public void rotateFixed(double dir) {
+		headingSetPoint = Math.round(imu.getAngle() / 360.0) * 360.0 + dir;
 	}
 }
 

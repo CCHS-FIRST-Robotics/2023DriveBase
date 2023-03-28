@@ -551,10 +551,10 @@ public class Robot extends TimedRobot {
 		boolean down = xboxController.getPOV() == 180;
 		boolean left = xboxController.getPOV() == 270;
 
-		if (up) driveBase.turnOnDefaultMode();
-		if (down) driveBase.turnONPIDTuningMode();
-		if (left) driveBase.turnOnDebugMode();
-		if (right) driveBase.turnOnStopMode();
+		if (up) driveBase.rotateFixed(180);
+		if (down) driveBase.rotateFixed(0);
+		if (left) driveBase.rotateFixed(90);
+		if (right) driveBase.rotateFixed(-90);
 	}
 
 	/**
@@ -592,7 +592,7 @@ public class Robot extends TimedRobot {
 			fieldOriented = !fieldOriented;
 		}
 		if (X) {
-			driveBase.headingSetPoint += 180;
+			driveBase.rotateToSubstation();
 		}
 		if (start) {
 			// toggle heading pid control
@@ -626,9 +626,6 @@ public class Robot extends TimedRobot {
 		boolean wristUp = monkeyController.getRawButtonPressed(5);
 		boolean openClaw = monkeyController.getRawButtonPressed(9);
 		boolean wristDown = monkeyController.getRawButtonPressed(10);
-		boolean incHeading = monkeyController.getRawButtonPressed(14);
-		boolean decHeading = monkeyController.getRawButtonPressed(16);
-
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
 		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
@@ -642,10 +639,23 @@ public class Robot extends TimedRobot {
 			autoClaw = false;
 			claw.clawForward();
 		}
-
+		
 		// boolean camera0Button = monkeyController.getRawButtonPressed(13);
 		// boolean camera1Button = monkeyController.getRawButtonPressed(14);
 		// if (camera0Button) server.setSource(camera1);
+
+		boolean incHeading = monkeyController.getRawButtonPressed(14);
+		boolean decHeading = monkeyController.getRawButtonPressed(16);
+
+		if (incHeading) {
+			driveBase.headingSetPoint += 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
+
+		if (decHeading) {
+			driveBase.headingSetPoint -= 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
 		boolean cubePressed = monkeyController.getRawButtonPressed(18);
@@ -658,7 +668,8 @@ public class Robot extends TimedRobot {
 			cube = true;
 		}
 
-		boolean stop = monkeyController.getRawButtonPressed(21);
+		boolean toggleMotorLimits = monkeyController.getRawButtonPressed(21);
+		if (toggleMotorLimits) arm.toggleMotorCheck();
 
 		boolean speedHigh= monkeyController.getRawButtonPressed(22);
 		boolean speedMid = monkeyController.getRawButtonPressed(23);
@@ -708,20 +719,6 @@ public class Robot extends TimedRobot {
 			System.out.println("NEUTRAL");
 		}
 
-		if (stop) {
-			arm.stopTrajectory();
-			System.out.println("stopTrajectory");
-		}
-
-		if (incHeading) {
-			driveBase.headingSetPoint += 1.0;
-			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
-		}
-
-		if (decHeading) {
-			driveBase.headingSetPoint -= 1.0;
-			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
-		}
 		/*
 		* PNEUMATICS
 		*/
