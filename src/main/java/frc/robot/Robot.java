@@ -256,6 +256,7 @@ public class Robot extends TimedRobot {
 
 		arm.run();
 
+		
 		switch (autonState) {
 			case MoveArmToScore:
 				System.out.println("Moving Arm");
@@ -352,17 +353,19 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		// check for button/bumper presses
-		checkForButtonPresses();
-
 		double leftX = xboxController.getLeftX();
 		double leftY = xboxController.getLeftY();
 		double rightX = xboxController.getRightX();
 
-		if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
-			if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.3)
-				teleopState = TeleopStates.manual;
-		}
+		// if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
+		// 	if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.3)
+		// 		teleopState = TeleopStates.manual;
+		// }
+
+		teleopState = TeleopStates.manual;
+
+		// check for button/bumper presses
+		checkForButtonPresses();
 
 		/*
 		* DRIVE CODE
@@ -388,7 +391,7 @@ public class Robot extends TimedRobot {
 				}
 
 				controlInput = -xOffset/180 * 30;
-				controlInput = MathUtil.clamp(controlInput, -.3, .3);
+				controlInput = MathUtil.clamp(controlInput, -.4, .4);
 
 				if (Math.abs(driveBase.headingSetPoint - heading) > 3) {
 					driveBase.driveStraight(0, leftY, 0, true);
@@ -551,10 +554,17 @@ public class Robot extends TimedRobot {
 		boolean down = xboxController.getPOV() == 180;
 		boolean left = xboxController.getPOV() == 270;
 
-		if (up) driveBase.rotateFixed(180);
-		if (down) driveBase.rotateFixed(0);
-		if (left) driveBase.rotateFixed(90);
-		if (right) driveBase.rotateFixed(-90);
+		if (right) headingPid = true;
+		if (left) headingPid = !true;
+		if (down) fieldOriented = !true;
+		if (up) fieldOriented = true;
+		
+		// if we just turned it on, we should set the set point to current heading
+		if (headingPid) {
+			driveBase.headingSetPoint = imu.getAngle();
+			System.out.println("Heading PID ON");
+		}
+		else System.out.println("Heading PID OFF");
 	}
 
 	/**
@@ -564,45 +574,37 @@ public class Robot extends TimedRobot {
 		/*
 		* PRIMARY DRIVE CONTROLLER
 		*/
-		boolean A = xboxController.getAButtonPressed();
-		boolean B = xboxController.getBButtonPressed();
-		boolean X = xboxController.getXButtonPressed();
-		boolean Y = xboxController.getYButtonPressed();
+		boolean down = xboxController.getAButtonPressed();
+		boolean right = xboxController.getBButtonPressed();
+		boolean left = xboxController.getXButtonPressed();
+		boolean up = xboxController.getYButtonPressed();
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
 		boolean start = xboxController.getStartButtonPressed();
 		boolean back = xboxController.getBackButtonPressed();
 
-		if (A) {
-			// driveBase.clearOdom();
-			driveBase.rotateToGrid();
-			System.out.println("A PRESSED");
-		}
-		if (B) {
-			// // driveBase.printActiveMotorDebugMode();
+		boolean rTrigger = xboxController.getRightTriggerAxis() > .15;
+		boolean lTrigger = xboxController.getLeftTriggerAxis() > .15;
+
+		if (rTrigger || lTrigger) teleopState = TeleopStates.assistedAlignLime;
+
+		if (right && up) driveBase.rotateFixed(-135);
+		if (right) driveBase.rotateFixed(-90);
+		if (down && right) driveBase.rotateFixed(-45);
+		if (down) driveBase.rotateFixed(0);
+		if (down && left) driveBase.rotateFixed(45);
+		if (left) driveBase.rotateFixed(90);
+		if (left && up) driveBase.rotateFixed(135);
+		if (up) driveBase.rotateFixed(180);
+		
+
+		if (back) {
 			teleopState = TeleopStates.rampAssistedBalance;
-			System.out.println("B PRESSED");
 		}
-		if (Y) {
+		if (start) {
 			System.out.println("AUTO ALIGNING");
 			driveBase.rotateToGrid();
 			teleopState = TeleopStates.assistedAlignLime;
-		}
-		if (back) {
-			fieldOriented = !fieldOriented;
-		}
-		if (X) {
-			driveBase.rotateToSubstation();
-		}
-		if (start) {
-			// toggle heading pid control
-			headingPid = !headingPid;
-			// if we just turned it on, we should set the set point to current heading
-			if (headingPid) {
-				driveBase.headingSetPoint = imu.getAngle();
-				System.out.println("Heading PID ON");
-			}
-			else System.out.println("Heading PID OFF");
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();

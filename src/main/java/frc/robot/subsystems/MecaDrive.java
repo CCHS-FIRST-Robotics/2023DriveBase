@@ -276,7 +276,7 @@ public class MecaDrive extends DriveBase {
 			driveStraight(0, 0, 0, true);
 		} else {
 			driveStraight(0, 
-				-rampPID.calculate(tilt, 0) + 
+				rampPID.calculate(tilt, 0) - 
 				getRampFeedforward(),
 				0, true);
 		}
