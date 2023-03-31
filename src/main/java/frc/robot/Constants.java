@@ -226,7 +226,7 @@ public class Constants {
 	public static final double minX = 0.2; // slightly less than the furthest possible distance to make sure we don't lose a DOF
 	public static final double maxX = 1.08; 
 	public static final double minY = 0.1;
-	public static final double maxY = 1.9; // 6'6"
+	public static final double maxY = 1.6; // 6'6"
 
 	public static boolean isInFrameX(double x) {
 		return (Math.abs(x) < .35); // frame is ~.7 meters long
