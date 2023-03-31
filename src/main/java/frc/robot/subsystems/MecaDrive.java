@@ -187,6 +187,7 @@ public class MecaDrive extends DriveBase {
 		rotInput *= speedMultiplier;
 
 		// divide by 5 to make the speed more reasonable (TUNE THIS)
+		// System.out.println(rotInput);
 		headingSetPoint += rotInput / 0.087;
 		double currentHeading = imu.getAngle();
 
@@ -208,6 +209,10 @@ public class MecaDrive extends DriveBase {
 		} else {
 			mDrive.driveCartesian(speedY, speedX, rotVel);
 		}
+	}
+
+	public void limeAlign(double controlInput, double leftY) {
+		driveStraight(controlInput / speedMultiplier, leftY, 0, true);
 	}
 
 	/**

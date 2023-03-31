@@ -383,20 +383,20 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double xOffset = limelight.getX(0) - 12.8;
+                double xOffset = limelight.getX(0) - 13.2;
                 heading = imu.getAngle();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);
 					break;
 				}
 
-				controlInput = -xOffset/180 * 30;
+				controlInput = -xOffset/180 * 10;
 				controlInput = MathUtil.clamp(controlInput, -.4, .4);
 
 				if (Math.abs(driveBase.headingSetPoint - heading) > 3) {
 					driveBase.driveStraight(0, leftY, 0, true);
 				} else {
-					driveBase.driveStraight(controlInput, leftY, 0, true);
+					driveBase.limeAlign(controlInput + Math.signum(controlInput) * Constants.ROTATION_ADJUSTMENT, leftY);
 				}
                 
                 break;
@@ -475,6 +475,7 @@ public class Robot extends TimedRobot {
 
 
 		if (counter % 20 == 0) {
+			
 			// System.out.println(zed.getAprilTagYaw());
 			// System.out.println(pidTuningAlpha);
 			// System.out.println(arm.getShoulderAngle());
@@ -588,14 +589,16 @@ public class Robot extends TimedRobot {
 
 		if (rTrigger || lTrigger) teleopState = TeleopStates.assistedAlignLime;
 
-		if (right && up) driveBase.rotateFixed(-135);
+		
 		if (right) driveBase.rotateFixed(-90);
-		if (down && right) driveBase.rotateFixed(-45);
 		if (down) driveBase.rotateFixed(0);
-		if (down && left) driveBase.rotateFixed(45);
 		if (left) driveBase.rotateFixed(90);
-		if (left && up) driveBase.rotateFixed(135);
 		if (up) driveBase.rotateFixed(180);
+
+		if (right && up) driveBase.rotateFixed(-135);
+		if (down && left) driveBase.rotateFixed(45);
+		if (down && right) driveBase.rotateFixed(-45);
+		if (left && up) driveBase.rotateFixed(135);
 		
 
 		if (back) {
