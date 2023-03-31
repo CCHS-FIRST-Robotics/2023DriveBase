@@ -196,7 +196,7 @@ public class MecaDrive extends DriveBase {
 		double armExtension = arm.getState().getX();
 		// LIMIT CENTRIPETAL ACCLERATION - ac = w^2 * r (max at w = 1, r = .35 - inside frame at max speed)
 		//								   				imples ac = w^2r <= .35, w <= sqrt(.35/r)
-		double maxW = Math.sqrt(.35 / armExtension);
+		double maxW = Math.sqrt(.25 / armExtension);
 		rotVel = MathUtil.clamp(rotVel, -maxW, maxW);
 
 		// increase pid output so that it rotates for small error (only if we aren't translating significantly)
