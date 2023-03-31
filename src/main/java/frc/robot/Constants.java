@@ -73,10 +73,11 @@ public class Constants {
 	public static final double ANALOG_DEAD_ZONE = 0.1;
 	public static double LEFT_X_EXPONENT = 2;
 	public static double LEFT_Y_EXPONENT = 2;
-	public static double RIGHT_X_EXPONENT = 2;
+	public static double RIGHT_X_EXPONENT = 2.5;
 	public static double RIGHT_Y_EXPONENT = 2;
 
-	public static final double ANALOG_CROSS_DEADZONE = 0.2;
+	public static final double ANALOG_CROSS_DEADZONE = 0.1;
+	public static final double ROTATION_DEADZONE = 0.05;
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)
@@ -228,7 +229,7 @@ public class Constants {
 	public static final double maxY = 1.9; // 6'6"
 
 	public static boolean isInFrameX(double x) {
-		return (Math.abs(x) < .35); // frame is ~1 meter long
+		return (Math.abs(x) < .35); // frame is ~.7 meters long
 	}
 
 	public static boolean isBelowElectricalBoard(double y) {
@@ -268,16 +269,17 @@ public class Constants {
 	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.15);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1, 1.35);
 
-	public static final R2Vector CONE_LOWER = new R2Vector(0.75, 1.27);
-	public static final R2Vector CONE_HIGHER_PRE_POS = new R2Vector(.6, 1.5);
-	public static final R2Vector CONE_GUIDE_POINT = new R2Vector(.6, 1.5);
+	public static final R2Vector CONE_LOWER = new R2Vector(0.73, 1.27);
+	public static final R2Vector CONE_GUIDE_POINT_LOW = new R2Vector(.5, 1.3);
+
+	public static final R2Vector CONE_GUIDE_POINT_HIGH = new R2Vector(.6, 1.5);
 	public static final R2Vector CONE_HIGHER = new R2Vector(1.05, 1.45);
 
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.4, .45);
 
-	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .3);
+	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .25);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.56, .45);
-	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.23);
+	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.18);
 
 	public static final R2Vector NEUTRAL = new R2Vector(.25, .7);
 
@@ -302,10 +304,15 @@ public class Constants {
 
 	public static final int FALCON_PID_IDX = 0;
 	public static final int FALCON_TIMEOUT_MS = 30;
+	
+	// will output on a range of [-1, 1]
+	// we will always be within 180 degrees (pi radians) of setpoint
+	public static final double[] ROTATION_PID = {0.017, 0, 0.001}; // 0.017, 0, 0.001
+
+	public static final double ROTATION_ADJUSTMENT = 0.05;
 
 	/*
 	 * SENSORS 
 	 */
-
 
 }

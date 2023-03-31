@@ -38,6 +38,10 @@ public class IMU extends AHRS{
 		heading = getYaw();
 	}
 
+	public double getTilt() {
+		return Math.cos(getHeading()) * getPitch() + Math.sin(getHeading()) * getRoll();
+	}
+
 	// public void updateValues() {
 	// 	x = navx.getDisplacementX();
 	// 	y = navx.getDisplacementY();

@@ -161,7 +161,7 @@ public class Arm {
 	 */
 	public void run(double leftAnalogX, double leftAnalogY, double rightAnalogX, double rightAnalogY) {
 		double[] pos = Kinematics.forwardKinematics(getShoulderAngle(), getElbowAngle());
-		double x = pos[0]; 
+		double x = pos[0];
 		double y = pos[1];
 		
 		// when a joystick is moved stop movement and switch to manual mode
@@ -440,7 +440,7 @@ public class Arm {
 		lastShoulderAngle = getShoulderAngle();
 		double speedX = 12 * analogX; // 12V conversion
 		// System.out.println(-0.3 * speedX + getShoulderFeedforward());
-		shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
+		// shoulderMotor.setVoltage(-0.3 * speedX + getShoulderFeedforward());
 	}
 
 	public void moveElbow(double analogY) {
@@ -450,7 +450,7 @@ public class Arm {
 		}
 		lastElbowAngle = getElbowAngle();
 		double speedY = 12 * analogY; // 12V conversion
-		elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
+		// elbowMotor.setVoltage(-0.3 * speedY + getElbowFeedforward());
 	}
 
 	public void setNeutralPostion() {
@@ -481,16 +481,17 @@ public class Arm {
 			case CONE_LOWER:
 				x = Constants.CONE_LOWER.x;
 				y = Constants.CONE_LOWER.y;
+				guides.add(Constants.CONE_GUIDE_POINT_LOW);
 				break;
 			case CONE_HIGHER_PRE_POS:
-				x = Constants.CONE_HIGHER_PRE_POS.x;
-				y = Constants.CONE_HIGHER_PRE_POS.y;
+				x = Constants.CONE_GUIDE_POINT_HIGH.x;
+				y = Constants.CONE_GUIDE_POINT_HIGH.y;
 				System.out.println("POS: "+ x +" next " + y);
 				break;
 			case CONE_HIGHER:
 				x = Constants.CONE_HIGHER.x;
 				y = Constants.CONE_HIGHER.y;
-				guides.add(Constants.CONE_GUIDE_POINT);
+				guides.add(Constants.CONE_GUIDE_POINT_HIGH);
 				break;
 			case DROPOFF_LOW:
 				setWrist(1);
@@ -651,15 +652,15 @@ public class Arm {
 
 		// System.out.println("DIR: " + directionX);
 
-		if ((newposX > Constants.minX || directionX > 0) &&
-			(newposX < Constants.maxX || directionX < 0) &&
+		if ((((newposX > Constants.minX || directionX > 0) &&
+			(newposX < Constants.maxX || directionX < 0)) || !motorLimits) &&
 			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionX = newposX;
 		}
 
-		if ((newposY > Constants.minY || directionY > 0) &&
-			(newposY < Constants.maxY || directionY < 0) &&
+		if ((((newposY > Constants.minY || directionY > 0) &&
+			(newposY < Constants.maxY || directionY < 0)) || !motorLimits) &&
 			Kinematics.isPositionPossible(newposX, newposY))
 		{
 			currentPositionY = newposY;

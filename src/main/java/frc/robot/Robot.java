@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 	
 	BetterShuffleboard smartdash = new BetterShuffleboard();
 
-	private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu);
+	private MecaDrive driveBase = new MecaDrive(Constants.FL_TALON_ID, Constants.FR_TALON_ID, Constants.RL_TALON_ID, Constants.RR_TALON_ID, imu, arm);
 	
 	boolean autonomousIsMoving = true;
 
@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
 	double pidTuningBeta;
 
 	boolean fieldOriented = true;
+	boolean headingPid = true;
 	boolean autoClaw = false;
 
 	double test = 0;
@@ -165,6 +166,8 @@ public class Robot extends TimedRobot {
 		// System.out.println("hello wo5rld");
 
 		// test += 1;
+
+		driveBase.updatePose(zed.getAprilTagPose(), zed.getPoseEstimate(), counter);
 
 		if (counter % 10 == 0) {
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
@@ -253,6 +256,7 @@ public class Robot extends TimedRobot {
 
 		arm.run();
 
+		
 		switch (autonState) {
 			case MoveArmToScore:
 				System.out.println("Moving Arm");
@@ -341,6 +345,7 @@ public class Robot extends TimedRobot {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
 		driveBase.setMotorsNeutralMode(NeutralMode.Coast);
+		driveBase.clearOdom();
 
 		// arm.setNeutralPostion();
 	}
@@ -348,22 +353,24 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		// check for button/bumper presses
-		checkForButtonPresses();
-
 		double leftX = xboxController.getLeftX();
 		double leftY = xboxController.getLeftY();
 		double rightX = xboxController.getRightX();
 
-		if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
-			if (teleopState != TeleopStates.assistedAlignLime || !Constants.isZero(leftX))
-				teleopState = TeleopStates.manual;
-		}
+		// if (!Constants.isZero(leftX) || !Constants.isZero(leftY) || !Constants.isZero(rightX)) {
+		// 	if (teleopState != TeleopStates.assistedAlignLime || Math.abs(leftX) > 0.3)
+		// 		teleopState = TeleopStates.manual;
+		// }
+
+		teleopState = TeleopStates.manual;
+
+		// check for button/bumper presses
+		checkForButtonPresses();
 
 		/*
 		* DRIVE CODE
 		*/
-		double heading;
+		double heading, controlInput;
 		switch(teleopState) {
 			case rampAssistedBalance:
 				driveBase.rampAutoBalance();
@@ -376,15 +383,22 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double xOffset = limelight.getX(0) - 11.1;
-                heading = imu.getHeading();
+                double xOffset = limelight.getX(0) - 13.2;
+                heading = imu.getAngle();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);
 					break;
 				}
-				// -10*(heading / 180)
-				// System.out.println(xOffset/180);
-                driveBase.drive(xOffset/180 * 15, leftY, -10*(heading / 180), false);
+
+				controlInput = -xOffset/180 * 10;
+				controlInput = MathUtil.clamp(controlInput, -.4, .4);
+
+				if (Math.abs(driveBase.headingSetPoint - heading) > 3) {
+					driveBase.driveStraight(0, leftY, 0, true);
+				} else {
+					driveBase.limeAlign(controlInput + Math.signum(controlInput) * Constants.ROTATION_ADJUSTMENT, leftY);
+				}
+                
                 break;
 
 			case assistedAlignZED:
@@ -393,21 +407,27 @@ public class Robot extends TimedRobot {
 
 				// handle the case where no tags are found
 				if (zed.getAprilTagId() == -1) {
+					driveBase.drive(0, 0, 0, false);
 					break;
 				}
 
 				double[] pos = zed.getAprilTagPos(zedPos);
 				double dx = pos[0];
-				double dy = pos[1];
+				double dy = pos[2];
 				heading = imu.getHeading();
-				// if (counter % 10 == 0)
-				// 	System.out.println(dx * .5);
-				double sign = Math.abs(dx) / dx;
-				double controlInput = sign * Math.max(.2, Math.abs(dx * 4));
-				driveBase.drive(controlInput, 0, 0, false);
+
+				double controlInputX = dx * 3;
+				controlInputX = MathUtil.clamp(controlInputX, -.5, .5);
+				double controlInputY = (dy - .75) * 2;
+				controlInputY = MathUtil.clamp(controlInputY, -.3, .3);
+				// if (counter % 10 == 0) System.out.println(controlInputY + " next " + dy);
+				driveBase.driveStraight(controlInputX, controlInputY, 0, true);
 				break;
 			case manual:
-				driveBase.drive(leftX, leftY, rightX * 0.5, fieldOriented);
+				if (headingPid)
+					driveBase.driveStraight(leftX, leftY, rightX * 0.2, fieldOriented);
+				else
+					driveBase.drive(leftX, leftY, rightX * 0.2, fieldOriented);
 				// the following doesn't work (there seems to be issues with the velocity control mode)
 				// driveBase.drive(new ChassisSpeeds(leftY * Constants.DRIVE_MAX_X_VELOCITY,
 				// 								  leftX * Constants.DRIVE_MAX_Y_VELOCITY,
@@ -455,6 +475,8 @@ public class Robot extends TimedRobot {
 
 
 		if (counter % 20 == 0) {
+			
+			// System.out.println(zed.getAprilTagYaw());
 			// System.out.println(pidTuningAlpha);
 			// System.out.println(arm.getShoulderAngle());
 			// System.out.println("SHOULDER FF" + arm.getShoulderFeedforward());
@@ -502,6 +524,8 @@ public class Robot extends TimedRobot {
 			smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
 			// System.out.println(xboxController.getRightY());
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
+
+			// System.out.println("heading setpoint: " + driveBase.headingSetPoint + " actual angle: " + Math.toRadians(imu.getAngle()));
 		}
 	}
 
@@ -531,10 +555,17 @@ public class Robot extends TimedRobot {
 		boolean down = xboxController.getPOV() == 180;
 		boolean left = xboxController.getPOV() == 270;
 
-		if (up) driveBase.turnOnDefaultMode();
-		if (down) driveBase.turnONPIDTuningMode();
-		if (left) driveBase.turnOnDebugMode();
-		if (right) driveBase.turnOnStopMode();
+		if (right) headingPid = true;
+		if (left) headingPid = !true;
+		if (down) fieldOriented = !true;
+		if (up) fieldOriented = true;
+		
+		// if we just turned it on, we should set the set point to current heading
+		if (headingPid) {
+			driveBase.headingSetPoint = imu.getAngle();
+			System.out.println("Heading PID ON");
+		}
+		else System.out.println("Heading PID OFF");
 	}
 
 	/**
@@ -544,27 +575,39 @@ public class Robot extends TimedRobot {
 		/*
 		* PRIMARY DRIVE CONTROLLER
 		*/
-		boolean A = xboxController.getAButtonPressed();
-		boolean B = xboxController.getBButtonPressed();
-		boolean X = xboxController.getXButtonPressed();
-		boolean Y = xboxController.getYButtonPressed();
+		boolean down = xboxController.getAButtonPressed();
+		boolean right = xboxController.getBButtonPressed();
+		boolean left = xboxController.getXButtonPressed();
+		boolean up = xboxController.getYButtonPressed();
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
+		boolean start = xboxController.getStartButtonPressed();
+		boolean back = xboxController.getBackButtonPressed();
 
-		if (A) {
-			driveBase.clearOdom();
-			System.out.println("A PRESSED");
-		}
-		if (B) {
-			// // driveBase.printActiveMotorDebugMode();
+		boolean rTrigger = xboxController.getRightTriggerAxis() > .15;
+		boolean lTrigger = xboxController.getLeftTriggerAxis() > .15;
+
+		if (rTrigger || lTrigger) teleopState = TeleopStates.assistedAlignLime;
+
+		
+		if (right) driveBase.rotateFixed(-90);
+		if (down) driveBase.rotateFixed(0);
+		if (left) driveBase.rotateFixed(90);
+		if (up) driveBase.rotateFixed(180);
+
+		if (right && up) driveBase.rotateFixed(-135);
+		if (down && left) driveBase.rotateFixed(45);
+		if (down && right) driveBase.rotateFixed(-45);
+		if (left && up) driveBase.rotateFixed(135);
+		
+
+		if (back) {
 			teleopState = TeleopStates.rampAssistedBalance;
-			System.out.println("B PRESSED");
 		}
-		if (Y) {
-			teleopState = TeleopStates.assistedAlignZED;
-		}
-		if (X) {
-			fieldOriented = !fieldOriented;
+		if (start) {
+			System.out.println("AUTO ALIGNING");
+			driveBase.rotateToGrid();
+			teleopState = TeleopStates.assistedAlignLime;
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();
@@ -591,15 +634,33 @@ public class Robot extends TimedRobot {
 
 		boolean neutral = monkeyController.getRawButtonPressed(11);
 		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
-		if (autoClawToggle) autoClaw = !autoClaw;
+		if (autoClawToggle) {
+			autoClaw = !autoClaw;
+			if (autoClaw)
+				System.out.println("AUTO CLAW ARMED");
+			else System.out.println("AUTO CLAW OFF");
+		}
 		if (autoClaw && !limitSwitch.get()){
 			autoClaw = false;
 			claw.clawForward();
 		}
-
-		boolean camera0Button = monkeyController.getRawButtonPressed(13);
-		boolean camera1Button = monkeyController.getRawButtonPressed(14);
+		
+		// boolean camera0Button = monkeyController.getRawButtonPressed(13);
+		// boolean camera1Button = monkeyController.getRawButtonPressed(14);
 		// if (camera0Button) server.setSource(camera1);
+
+		boolean incHeading = monkeyController.getRawButtonPressed(14);
+		boolean decHeading = monkeyController.getRawButtonPressed(16);
+
+		if (incHeading) {
+			driveBase.headingSetPoint += 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
+
+		if (decHeading) {
+			driveBase.headingSetPoint -= 1.0;
+			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		}
 
 		boolean conePressed = monkeyController.getRawButtonPressed(17);
 		boolean cubePressed = monkeyController.getRawButtonPressed(18);
@@ -612,7 +673,8 @@ public class Robot extends TimedRobot {
 			cube = true;
 		}
 
-		boolean stop = monkeyController.getRawButtonPressed(21);
+		boolean toggleMotorLimits = monkeyController.getRawButtonPressed(21);
+		if (toggleMotorLimits) arm.toggleMotorCheck();
 
 		boolean speedHigh= monkeyController.getRawButtonPressed(22);
 		boolean speedMid = monkeyController.getRawButtonPressed(23);
@@ -660,11 +722,6 @@ public class Robot extends TimedRobot {
 		if (neutral) {
 			arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
 			System.out.println("NEUTRAL");
-		}
-
-		if (stop) {
-			arm.stopTrajectory();
-			System.out.println("stopTrajectory");
 		}
 
 		/*
