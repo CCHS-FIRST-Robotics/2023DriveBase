@@ -296,7 +296,7 @@ public class Robot extends TimedRobot {
 			case FoldArm:
 				System.out.println("FOLDING ARM");
 				arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
-				autonState = AutonStates.Drive;
+				autonState = AutonStates.WaitForFoldedArm;
 				break;
 			case WaitForFoldedArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
@@ -315,7 +315,7 @@ public class Robot extends TimedRobot {
 						autonState = AutonStates.Balance;
 						break;
 					}
-					driveBase.drive(0, -.7, 0, false);
+					driveBase.drive(0, -.9, 0, false);
 				} else {
 					// drive backwards outside the community (-4 works)
 					// -1.6 is good for ramp
@@ -326,15 +326,13 @@ public class Robot extends TimedRobot {
 				driveBase.rampAutoBalance();
 				break;
 			case BalanceAlternate:
-				double pitch = Math.abs(imu.getPitch());
-				double sgn = pitch / imu.getPitch();
-				if (pitch < 2) {
-					driveBase.drive(0, 0,  0, false);
-				} else if (pitch < 7) {
-					driveBase.drive(0, -sgn * -.17,  0, false);
+				double velocity = imu.getTiltVelocity();
+				if (Math.abs(velocity) < .1) {
+					driveBase.driveStraight(0, 0, 0, false);
 				} else {
-					driveBase.drive(0, -sgn * -0.25, 0, false);
+					driveBase.rampAutoBalance();
 				}
+
 				break;
 		}
 	}
@@ -383,7 +381,7 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double xOffset = limelight.getX(0) - 14.5;
+                double xOffset = limelight.getX(0) - 13.5;
                 heading = imu.getAngle();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);

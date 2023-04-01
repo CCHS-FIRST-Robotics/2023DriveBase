@@ -126,12 +126,12 @@ public class BetterShuffleboard {
             .withSize(5, 1)
             .getEntry();
         limitsActive = matchTab.add("ARE MOTOR LIMITS ON?", true)
-            .withPosition(5, 0)
-            .withSize(5, 3)
+            .withPosition(5, 2)
+            .withSize(5, 1)
             .getEntry();
         clawArmed = matchTab.add("IS THE CLAW ARMED?", false)
-            .withPosition(0, 0)
-            .withSize(5, 4)
+            .withPosition(5, 0)
+            .withSize(5, 2)
             .getEntry();
 
         /*

@@ -104,9 +104,9 @@ public class Constants {
 	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
 	public static final double RAMP_P = .005;
 	public static final double RAMP_I = 0;
-	public static final double RAMP_D = 0.001; // .001
+	public static final double RAMP_D = 0.000; // .001
 	
-	public static final double RAMP_G = 1.2;
+	public static final double RAMP_G = 1.1;
 
 	// ALIGN CONTROL CONSTANTS
 	public static final double ALIGN_P = .5;
@@ -266,10 +266,10 @@ public class Constants {
 		PICKUP_SUBSTATION,
 		NEUTRAL
 	} 
-	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.15);
+	public static final R2Vector CUBE_LOWER = new R2Vector(0.72, 1.1);
 	public static final R2Vector CUBE_HIGHER = new R2Vector(1, 1.35);
 
-	public static final R2Vector CONE_LOWER = new R2Vector(0.73, 1.27);
+	public static final R2Vector CONE_LOWER = new R2Vector(0.78, 1.2);
 	public static final R2Vector CONE_GUIDE_POINT_LOW = new R2Vector(.5, 1.3);
 
 	public static final R2Vector CONE_GUIDE_POINT_HIGH = new R2Vector(.6, 1.5);

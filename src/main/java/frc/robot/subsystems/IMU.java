@@ -42,6 +42,10 @@ public class IMU extends AHRS{
 		return Math.cos(getHeading()) * getPitch() + Math.sin(getHeading()) * getRoll();
 	}
 
+	public double getTiltVelocity() {
+		return Math.cos(getHeading()) * getRawGyroX() + Math.sin(getHeading()) * getRawGyroY();
+	}
+
 	// public void updateValues() {
 	// 	x = navx.getDisplacementX();
 	// 	y = navx.getDisplacementY();

@@ -277,7 +277,7 @@ public class MecaDrive extends DriveBase {
 		// System.out.println(getRampFeedforward());
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
 		double tilt = imu.getTilt();
-		if (Math.abs(tilt) < 3) {
+		if (Math.abs(tilt) < 5) {
 			driveStraight(0, 0, 0, true);
 		} else {
 			driveStraight(0, 
