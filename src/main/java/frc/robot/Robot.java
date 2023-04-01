@@ -310,12 +310,12 @@ public class Robot extends TimedRobot {
 				if (Constants.ROBOT_START_CENTER_FIELD) {
 					// drives backwards to the ramp 
 					// driveBase.setPosition(-3);
-					if (Math.abs(imu.getPitch()) > 7) {
+					if (Math.abs(imu.getPitch()) > 10) {
 						System.out.println("test");
 						autonState = AutonStates.Balance;
 						break;
 					}
-					driveBase.drive(0, -.4, 0, false);
+					driveBase.drive(0, -.7, 0, false);
 				} else {
 					// drive backwards outside the community (-4 works)
 					// -1.6 is good for ramp
@@ -524,6 +524,7 @@ public class Robot extends TimedRobot {
 			smartdash.putBoolean("isMOTOR STOPPED", arm.shouldMotorStop());
 			// System.out.println(xboxController.getRightY());
 			smartdash.pushDashboard(limelight, imu, driveBase, zed);
+			smartdash.pushMatchData(arm.motorLimits, arm.shouldMotorStop(), autoClaw);
 
 			// System.out.println("heading setpoint: " + driveBase.headingSetPoint + " actual angle: " + Math.toRadians(imu.getAngle()));
 		}

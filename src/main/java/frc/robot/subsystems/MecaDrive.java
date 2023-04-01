@@ -318,7 +318,7 @@ public class MecaDrive extends DriveBase {
 	 * @return controlInput (double) voltage to send to the motors
 	 */
 	public double getRampFeedforward() {
-		return Constants.RAMP_G * Math.sin(Math.toRadians(imu.getPitch()));
+		return Constants.RAMP_G * Math.sin(Math.toRadians(imu.getTilt()));
 	}
 
 	public void updatePose(double[] zedTagPose, double[] zedPoseEstimate, long counter) {

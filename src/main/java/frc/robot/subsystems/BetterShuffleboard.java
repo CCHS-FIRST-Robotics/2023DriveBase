@@ -21,9 +21,14 @@ public class BetterShuffleboard {
 
 
     ShuffleboardTab debugTab; // used for various debug things
+
     ShuffleboardTab odomTab; // used for odometry data
     GenericEntry odomX, odomY, odomHead; // calculated odometry stuff
     GenericEntry FLVel, FRVel, RLVel, RRVel; // encoder velocities
+
+    ShuffleboardTab matchTab; // used for in-match data
+    GenericEntry motorLimited, limitsActive, clawArmed;
+    
     // navx data
     GenericEntry NavXVel, NavYVel, NavXAccel, NavYAccel, NavZAccel,
                  NavRoll, NavPitch, NavHeading, NavFused, NavCompass, NavConnected, NavRotationRateZ;
@@ -110,6 +115,24 @@ public class BetterShuffleboard {
             .withProperties(Map.of("min", 0, "max", 3))
             .getEntry();
         elbowD.setDouble(Constants.ELBOW_KD);
+
+        /*
+         * IN-MATCH DATA
+         */ 
+
+        matchTab = Shuffleboard.getTab("Match Data");
+        motorLimited = matchTab.add("IS THE ARM PAST A LIMIT?", false)
+            .withPosition(5, 3)
+            .withSize(5, 1)
+            .getEntry();
+        limitsActive = matchTab.add("ARE MOTOR LIMITS ON?", true)
+            .withPosition(5, 0)
+            .withSize(5, 3)
+            .getEntry();
+        clawArmed = matchTab.add("IS THE CLAW ARMED?", false)
+            .withPosition(0, 0)
+            .withSize(5, 4)
+            .getEntry();
 
         /*
         * Others
@@ -223,6 +246,12 @@ public class BetterShuffleboard {
         arm.elbowP = elbowP.getDouble(0);
         arm.elbowI = elbowI.getDouble(0);
         arm.elbowD = elbowD.getDouble(0);
+    }
+
+    public void pushMatchData(boolean areLimitsActive, boolean motorsStopped, boolean isClawArmed) {
+        motorLimited.setBoolean(motorsStopped);
+        limitsActive.setBoolean(areLimitsActive);
+        clawArmed.setBoolean(isClawArmed);
     }
 
     public void pushOdom(MecaDrive drive) {

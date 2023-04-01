@@ -201,6 +201,7 @@ public class Arm {
 				// ) {
 				// 	// moveShoulder(rightAnalogX);
 				// 	// moveElbow(rightAnalogY);
+				
 				// } else {
 				// 	// TODO: add controls for linear movement
 				// 	moveArm(leftAnalogX, leftAnalogY);
