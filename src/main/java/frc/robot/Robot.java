@@ -383,7 +383,7 @@ public class Robot extends TimedRobot {
 				break;
 
             case assistedAlignLime:
-                double xOffset = limelight.getX(0) - 13.2;
+                double xOffset = limelight.getX(0) - 14.5;
                 heading = imu.getAngle();
 				if (Constants.isZero(xOffset)) {
 					driveBase.drive(0, 0, 0, false);
