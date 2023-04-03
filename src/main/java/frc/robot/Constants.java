@@ -311,6 +311,9 @@ public class Constants {
 
 	public static final double ROTATION_ADJUSTMENT = 0.05;
 
+	public static final double[] X_PID = {0, 0, 0};
+	public static final double[] Y_PID = {0, 0, 0};
+
 	/*
 	 * SENSORS 
 	 */
