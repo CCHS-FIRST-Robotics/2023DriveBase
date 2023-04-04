@@ -102,7 +102,7 @@ public class Constants {
 	public static final MecanumDriveKinematics MECANUM_KINEMATICS = new MecanumDriveKinematics(FL_WHEEL_POS, FR_WHEEL_POS, RL_WHEEL_POS, RR_WHEEL_POS);
 
 	// RAMP CONTROL CONSTANTS TODO: NEEDS TO BE TUNED
-	public static final double RAMP_P = .005;
+	public static final double RAMP_P = .005; // .005 (changed after we accounter for speed multipler)
 	public static final double RAMP_I = 0;
 	public static final double RAMP_D = 0.000; // .001
 	

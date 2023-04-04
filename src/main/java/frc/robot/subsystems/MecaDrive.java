@@ -55,6 +55,8 @@ public class MecaDrive extends DriveBase {
 	MecanumDrivePoseEstimator poseEstimator;
 	Matrix<N3, N1> covarZed = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(1, 1, 1);
 	Matrix<N3, N1> covarOdom = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(3, 3, .1);
+
+	int wheelStuckCounter;
 	
 	// timer for autonomous
 	public Timer autonTimer;
@@ -277,14 +279,18 @@ public class MecaDrive extends DriveBase {
 		// System.out.println(getRampFeedforward());
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
 		double tilt = imu.getTilt();
-		if (Math.abs(tilt) < 5) {
-			driveStraight(0, 0, 0, true);
+		double controlInput = rampPID.calculate(tilt, 0) - getRampFeedforward();
+		double backVel = convertVelocity(rearRightMotor.getSelectedSensorVelocity()) + convertVelocity(rearLeftMotor.getSelectedSensorVelocity());
+		if (backVel < .01) {
+			controlInput = controlInput + .1 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter++;
 		} else {
-			driveStraight(0, 
-				rampPID.calculate(tilt, 0) - 
-				getRampFeedforward(),
-				0, true);
+			wheelStuckCounter = 0;
 		}
+		if (Math.abs(tilt) < 4.5) {
+			controlInput = 0;
+		}
+		driveStraight(0, controlInput / speedMultiplier, 0, true);
 	}
 
 	public void rampHold() {
