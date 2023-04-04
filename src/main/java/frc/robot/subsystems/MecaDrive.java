@@ -54,7 +54,7 @@ public class MecaDrive extends DriveBase {
 	// UKF pose estimator w/ vslam data
 	MecanumDrivePoseEstimator poseEstimator;
 	Matrix<N3, N1> covarZed = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(1, 1, 1);
-	Matrix<N3, N1> covarOdom = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(3, 3, 3);
+	Matrix<N3, N1> covarOdom = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(3, 3, .1);
 	
 	// timer for autonomous
 	public Timer autonTimer;
