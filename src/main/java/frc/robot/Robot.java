@@ -54,7 +54,13 @@ public class Robot extends TimedRobot {
 		Balance,
 		BalanceAlternate,
 		FlipWrist,
-		WaitForWrist
+		WaitForWrist,
+		DriveSlow,
+		DriveFast,
+		PickUpCube,
+		Idle,
+		ArmToGround,
+		WaitForArmToGround
 	};
 	
 	AutonStates autonState = AutonStates.MoveArmToScore;
@@ -110,6 +116,8 @@ public class Robot extends TimedRobot {
 
 	double test = 0;
 	long counter = 0; // for calling functions every n loops
+
+	Autonomous auto = new Autonomous(driveBase);
 
 	public Robot() {
 		addPeriodic(() -> imu.updateGyro(), .001);
@@ -195,20 +203,10 @@ public class Robot extends TimedRobot {
 
 		driveBase.clearOdom();
 
-		// create an example trajectory		
-		// Pose2d current = driveBase.getPose();
-		// start with a small displacement ( + 1)
-		// Pose2d target = new Pose2d(current.getX(), current.getY() + 1, current.getRotation().plus(new Rotation2d(0)));
-		// Autonomous.updateTrajectory(driveBase, target, new ArrayList<Translation2d>());
-		// driveBase.resetCurrentTrajectoryTime();
-		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
 		autonState = AutonStates.MoveArmToScore;
 
-		// set up timer for autonomous
-		// driveBase.autonTimer = new Timer();
-		// driveBase.autonTimer.start();
 		driveBase.setMotorsNeutralMode(NeutralMode.Brake);
 	}
 
@@ -296,13 +294,60 @@ public class Robot extends TimedRobot {
 			case FoldArm:
 				System.out.println("FOLDING ARM");
 				arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
-				autonState = AutonStates.WaitForFoldedArm;
+				autonState = AutonStates.DriveInit;
 				break;
 			case WaitForFoldedArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
 					autonState = AutonStates.Drive;
 				break;
 			case DriveInit:
+				// limit speed to 30% so that we don't do a wheelie
+				auto.limitOutput(0.3);
+				// set destination to 1 meter forward in the y direction and rotated 180 degrees
+				auto.setDestination(new Pose2d(driveBase.getPoseX(), 
+											   driveBase.getPoseY() + 1, 
+											   new Rotation2d(Math.toRadians(180))));
+				autonState = AutonStates.DriveSlow;
+				break;
+			case DriveSlow: // useful for when the arm is still folding
+				// arm is done
+				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
+					auto.limitOutput(0.5);
+					autonState = AutonStates.DriveFast;
+				}
+				auto.drive();
+				break;
+			case DriveFast:
+				auto.drive();
+				if (auto.atDestination())
+					autonState = AutonStates.ArmToGround;
+				break;
+			case ArmToGround:
+				arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+				autonState = AutonStates.WaitForArmToGround;
+				break;
+			case WaitForArmToGround:
+				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
+					autonState = AutonStates.PickUpCube;
+				}
+				break;
+			case PickUpCube:
+				// claw should already be open, so just worry about closing it
+				if (!limitSwitch.get()) { // cube detected
+					claw.clawForward();
+					autonState = AutonStates.Idle;
+					break;
+				}
+
+				// drive back slowly until we get to the cube
+				driveBase.driveStraight(0, 0.1, 0, true);
+
+				if (Math.abs(driveBase.getPoseY()) > 2) // we've gone too far
+					autonState = AutonStates.Idle;
+
+				break;
+			case Idle: // do nothing
+				driveBase.driveStraight(0, 0, 0, true);
 				break;
 			case Drive:
 				// zero all the encoders so it goes straight

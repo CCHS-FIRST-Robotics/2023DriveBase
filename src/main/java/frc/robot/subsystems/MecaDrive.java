@@ -186,7 +186,7 @@ public class MecaDrive extends DriveBase {
 		speedY *= speedMultiplier;
 		rotInput *= speedMultiplier;
 
-		// divide by 5 to make the speed more reasonable (TUNE THIS)
+		// divide by this magic number to make the speed more reasonable (TUNE THIS)
 		// System.out.println(rotInput);
 		headingSetPoint += rotInput / 0.087;
 		double currentHeading = imu.getAngle();

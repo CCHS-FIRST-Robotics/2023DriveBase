@@ -18,7 +18,7 @@ public class Autonomous {
 	static final double X_TOLERANCE = 0.02;
 	static final double Y_TOLERANCE = 0.02;
 
-	Autonomous(MecaDrive mDrive) {
+	public Autonomous(MecaDrive mDrive) {
 		this.mDrive = mDrive;
 
 		xPID = new PIDController(Constants.X_PID[0], Constants.X_PID[1], Constants.X_PID[2]);
@@ -47,7 +47,10 @@ public class Autonomous {
 	 * drive the robot toward the setpoint
 	 */
 	public void drive() {
-		if (atDestination()) mDrive.driveStraight(0, 0, 0, true);
+		if (atDestination()) {
+			mDrive.driveStraight(0, 0, 0, true);
+			return;
+		}
 
 		double currentX = mDrive.getPoseX();
 		double currentY = mDrive.getPoseY();
