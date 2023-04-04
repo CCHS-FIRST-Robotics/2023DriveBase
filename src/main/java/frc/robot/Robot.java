@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,6 +52,9 @@ public class Robot extends TimedRobot {
 		WaitForFoldedArm,
 		DriveInit,
 		Drive,
+		DriveTaxi,
+		LeaveCommunity,
+		DriveBack,
 		Balance,
 		BalanceAlternate,
 		FlipWrist,
@@ -82,6 +86,7 @@ public class Robot extends TimedRobot {
 	private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
 
 	DigitalInput limitSwitch = new DigitalInput(0);
+	// AnalogInput autoClawInput = new AnalogInput(0);
 	DigitalOutput ledOutput = new DigitalOutput(5);
 
 	Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
@@ -126,6 +131,7 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		driveBase.clearOdom();
 
 		// driveBase.mDrive.setSafetyEnabled(false);
 
@@ -310,16 +316,42 @@ public class Robot extends TimedRobot {
 				if (Constants.ROBOT_START_CENTER_FIELD) {
 					// drives backwards to the ramp 
 					// driveBase.setPosition(-3);
-					if (Math.abs(imu.getPitch()) > 10) {
+					if (Math.abs(imu.getPitch()) > 12) {
 						System.out.println("test");
-						autonState = AutonStates.Balance;
+						autonState = AutonStates.BalanceAlternate;
 						break;
 					}
-					driveBase.drive(0, -.9, 0, false);
+					driveBase.drive(0, -1, 0, false);
 				} else {
 					// drive backwards outside the community (-4 works)
-					// -1.6 is good for ramp
 					driveBase.setPosition(-4);
+				}
+				break;
+			case DriveTaxi:
+				if (Constants.ROBOT_START_CENTER_FIELD) {
+					if (imu.getTilt() > 1) {
+						autonCounter = 50;
+						autonState = AutonStates.LeaveCommunity;
+					}
+					driveBase.drive(0, -.7, 0, false);
+				} else {
+					driveBase.setPosition(-4);
+				}
+				break;
+			case LeaveCommunity:
+				autonCounter--;
+				if (autonCounter == 0) {
+					autonState = AutonStates.DriveBack;
+				}
+				driveBase.drive(0, -.3, 0, false);
+				break;
+			case DriveBack:
+				if (Math.abs(imu.getPitch()) > 10) {
+					System.out.println("test");
+					autonState = AutonStates.Balance;
+					break;
+				} else {
+					driveBase.drive(0, .9, 0, false);
 				}
 				break;
 			case Balance:
@@ -328,6 +360,7 @@ public class Robot extends TimedRobot {
 			case BalanceAlternate:
 				double velocity = imu.getTiltVelocity();
 				if (Math.abs(velocity) < .1) {
+					// System.out.println("VEL STOP");
 					driveBase.driveStraight(0, 0, 0, false);
 				} else {
 					driveBase.rampAutoBalance();
@@ -343,7 +376,7 @@ public class Robot extends TimedRobot {
 		smartdash.updateControllerExponents();
 		smartdash.updatePIDConstants(arm);
 		driveBase.setMotorsNeutralMode(NeutralMode.Coast);
-		driveBase.clearOdom();
+		// driveBase.clearOdom();
 
 		// arm.setNeutralPostion();
 	}
@@ -497,6 +530,7 @@ public class Robot extends TimedRobot {
 			}
 
 			// System.out.println(limitSwitch.get());
+			// System.out.println(autoClawInput.getValue());
 			// System.out.println("test working");
 
 			smartdash.putNumber("SHOULDER ENCODER", arm.getShoulderAngle());

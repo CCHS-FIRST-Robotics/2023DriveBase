@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
  */
 public class Constants {
 
-	public static final boolean ROBOT_START_CENTER_FIELD = true;
+	public static final boolean ROBOT_START_CENTER_FIELD = false;
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;

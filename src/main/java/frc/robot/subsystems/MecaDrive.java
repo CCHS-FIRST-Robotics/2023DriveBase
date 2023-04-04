@@ -362,7 +362,7 @@ public class MecaDrive extends DriveBase {
 		talon.config_kI(Constants.FALCON_PID_IDX, Constants.FALCON_KI);
 		talon.config_IntegralZone(Constants.FALCON_PID_IDX, Constants.FALCON_INTEGRAL_ZONE);
 
-		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.5);
+		talon.configClosedLoopPeakOutput(Constants.FALCON_PID_IDX, 0.3);
 	}
 
 	public void printControlsOfCurrentMode() {
@@ -496,6 +496,15 @@ public class MecaDrive extends DriveBase {
 	public double getPoseHeading() {
 		return poseEstimator.getEstimatedPosition().getRotation().getDegrees();
 	}
+
+	//TOOD: BROKEN METHODS
+	// public double getOdomY() {
+	// 	return mOdom.getY();
+	// }
+
+	// public double getOdomX() {
+	// 	return mOdom.getX();
+	// }
 
 	// TODO: create method that returns wheel speeds of the robot
 	// TODO: create mthod that allows control of wheels with voltages
