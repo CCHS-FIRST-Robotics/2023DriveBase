@@ -332,11 +332,13 @@ public class MecaDrive extends DriveBase {
 		poseEstimator.updateWithTime(counter/Constants.PERIOD, currentHeading, getWheelPositions());
 
 		if (zedPoseEstimate[0] != -1) {
+			System.out.println("AH THING BAD");
 			Pose2d zedPose = new Pose2d(zedPoseEstimate[0], zedPoseEstimate[1], new Rotation2d(Math.toRadians(zedPoseEstimate[2])));
 			poseEstimator.addVisionMeasurement(zedPose, counter/Constants.PERIOD, covarZed);
 		}
 
 		if (zedTagPose[0] != -1) {
+			System.out.println("AH THING BAD 2");
 			// yaw estimate is currently not working so using a covar of inf
 			Pose2d tagPose = new Pose2d(zedTagPose[0], zedTagPose[1], new Rotation2d(Math.toRadians(zedTagPose[2])));
 			double covar = .01 * zedTagPose[0]*zedTagPose[0] + zedTagPose[1]*zedTagPose[1];

@@ -61,6 +61,9 @@ public class ZED {
     }
 
     public double[] getAprilTagPose() {
+        if (getAprilTagX() == -1) {
+            return new double[] {-1, -1, -1};
+        }
         return new double[] {getAprilTagX() - Constants.ZED_OFFSET, getAprilTagZ() - .75, getAprilTagYaw()};
     }
 

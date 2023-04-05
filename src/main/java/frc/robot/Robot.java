@@ -397,6 +397,7 @@ public class Robot extends TimedRobot {
 
 		// check for button/bumper presses
 		checkForButtonPresses();
+		checkForModeSwitches();
 
 		/*
 		* DRIVE CODE
@@ -594,11 +595,12 @@ public class Robot extends TimedRobot {
 		if (up) fieldOriented = true;
 		
 		// if we just turned it on, we should set the set point to current heading
-		if (headingPid) {
+		if (headingPid && right) {
 			driveBase.headingSetPoint = imu.getAngle();
 			System.out.println("Heading PID ON");
+		} if (!headingPid && left) {
+			System.out.println("Heading PID OFF");
 		}
-		else System.out.println("Heading PID OFF");
 	}
 
 	/**
@@ -635,12 +637,9 @@ public class Robot extends TimedRobot {
 		
 
 		if (back) {
-			teleopState = TeleopStates.rampAssistedBalance;
 		}
 		if (start) {
-			System.out.println("AUTO ALIGNING");
-			driveBase.rotateToGrid();
-			teleopState = TeleopStates.assistedAlignLime;
+			driveBase.clearOdom();
 		}
 		if (RB) {
 			driveBase.increaseSpeedBracket();
