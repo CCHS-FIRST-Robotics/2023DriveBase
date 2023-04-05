@@ -178,6 +178,17 @@ public class MecaDrive extends DriveBase {
 		
 	}
 
+	public void driveStraight(double speedX, double speedY, double rotInput, boolean fieldOriented, boolean autonomous) {
+		if (autonomous) {
+			driveStraight(
+				speedX / speedMultiplier, 
+				speedY / speedMultiplier, 
+				rotInput / speedMultiplier, 
+				fieldOriented
+			);
+		}
+	}
+
 	/**
 	 * instead of directly using the right joystick input as rotational velocity, use it to adjust the heading setpoint
 	 * this means that when the robot is not told to rotate, the heading setpoint will stay the same and the robot should

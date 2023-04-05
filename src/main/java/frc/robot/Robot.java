@@ -210,7 +210,7 @@ public class Robot extends TimedRobot {
 		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
-		autonState = AutonStates.MoveArmToScore;
+		autonState = AutonStates.Drive;
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
@@ -321,10 +321,15 @@ public class Robot extends TimedRobot {
 						autonState = AutonStates.BalanceAlternate;
 						break;
 					}
-					driveBase.drive(0, -1, 0, false);
+					driveBase.drive(0, -.7, 0, false, true);
 				} else {
 					// drive backwards outside the community (-4 works)
-					driveBase.setPosition(-4);
+					// driveBase.setPosition(-4);
+					if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
+						driveBase.driveStraight(0, .4, 0, true, true);
+					} else {
+						driveBase.driveStraight(0, 0, 0, true);
+					}
 				}
 				break;
 			case DriveTaxi:
