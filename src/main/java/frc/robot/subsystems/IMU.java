@@ -39,11 +39,11 @@ public class IMU extends AHRS{
 	}
 
 	public double getTilt() {
-		return Math.cos(getHeading()) * getPitch() + Math.sin(getHeading()) * getRoll();
+		return Math.cos(Math.toRadians(getHeading())) * getPitch() + Math.sin(Math.toRadians(getHeading())) * getRoll();
 	}
 
 	public double getTiltVelocity() {
-		return Math.cos(getHeading()) * getRawGyroX() + Math.sin(getHeading()) * getRawGyroY();
+		return Math.cos(Math.toRadians(getHeading())) * getRawGyroX() + Math.sin(Math.toRadians(getHeading())) * getRawGyroY();
 	}
 
 	// public void updateValues() {

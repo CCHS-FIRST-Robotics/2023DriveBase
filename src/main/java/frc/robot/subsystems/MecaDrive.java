@@ -289,19 +289,27 @@ public class MecaDrive extends DriveBase {
 
 		// System.out.println(getRampFeedforward());
 		// System.out.println(rampPID.calculate(imu.getPitch(), 0));
-		double tilt = imu.getTilt();
+		double tilt = imu.getPitch();
+		double angVel = imu.getRawGyroX();
 		double controlInput = rampPID.calculate(tilt, 0) - getRampFeedforward();
-		double backVel = convertVelocity(rearRightMotor.getSelectedSensorVelocity()) + convertVelocity(rearLeftMotor.getSelectedSensorVelocity());
+		double backVel = convertVelocity(frontRightMotor.getSelectedSensorVelocity()) + convertVelocity(frontLeftMotor.getSelectedSensorVelocity());
+		if (Math.abs(tilt) < 4.5) {
+			controlInput = 0;
+		}
+		controlInput = MathUtil.clamp(controlInput, -.9, .9);
+		driveStraight(0, controlInput, 0, true, true);
+	}
+
+	public void getOnRamp() {
+		double controlInput = .1;
+		double backVel = convertVelocity(frontRightMotor.getSelectedSensorVelocity()) + convertVelocity(frontLeftMotor.getSelectedSensorVelocity());
 		if (backVel < .01) {
-			controlInput = controlInput + .1 * Math.signum(controlInput) * wheelStuckCounter;
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
 			wheelStuckCounter++;
 		} else {
 			wheelStuckCounter = 0;
 		}
-		if (Math.abs(tilt) < 4.5) {
-			controlInput = 0;
-		}
-		driveStraight(0, controlInput / speedMultiplier, 0, true);
+		driveStraight(0, controlInput, 0, true, true);
 	}
 
 	public void rampHold() {
