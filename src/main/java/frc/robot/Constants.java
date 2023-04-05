@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
  */
 public class Constants {
 
-	public static final boolean ROBOT_START_CENTER_FIELD = true;
+	public static final boolean ROBOT_START_CENTER_FIELD = false;
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
@@ -277,7 +277,7 @@ public class Constants {
 
 	public static final R2Vector DROPOFF_LOW = new R2Vector(.4, .45);
 
-	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .25);
+	public static final R2Vector PICKUP_GROUND = new R2Vector(.6, .2);
 	public static final R2Vector PICKUP_GROUND_LAYING_DOWN = new R2Vector(.56, .45);
 	public static final R2Vector PICKUP_SUBSTATION = new R2Vector(.35, 1.18);
 

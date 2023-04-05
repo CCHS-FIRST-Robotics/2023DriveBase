@@ -53,8 +53,16 @@ public class Robot extends TimedRobot {
 		DriveInit,
 		Drive,
 		DriveTaxi,
+		Rotate180,
+		DriveToCone,
+		Idle,
+		Rotate0,
+		DriveToGrid,
+		limeAutoAlign,
 		LeaveCommunity,
 		DriveBack,
+		PlaceMid,
+		WaitForPlaceMid,
 		Balance,
 		BalanceAlternate,
 		FlipWrist,
@@ -199,8 +207,6 @@ public class Robot extends TimedRobot {
 		// disable safety because we are not driving with this in autonomous
 		driveBase.mDrive.setSafetyEnabled(false);
 
-		driveBase.clearOdom();
-
 		// create an example trajectory		
 		// Pose2d current = driveBase.getPose();
 		// start with a small displacement ( + 1)
@@ -210,7 +216,7 @@ public class Robot extends TimedRobot {
 		
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
-		autonState = AutonStates.Drive;
+		autonState = AutonStates.MoveArmToScore;
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
@@ -323,13 +329,16 @@ public class Robot extends TimedRobot {
 					}
 					driveBase.getOnRamp();
 				} else {
+					autonCounter = 20;
+					autonState = AutonStates.Rotate180;
+
 					// drive backwards outside the community (-4 works)
 					// driveBase.setPosition(-4);
-					if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
-						driveBase.driveStraight(0, .3, 0, true, true);
-					} else {
-						driveBase.driveStraight(0, 0, 0, true);
-					}
+					// if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
+					// 	driveBase.driveStraight(0, .3, 0, true, true);
+					// } else {
+					// 	driveBase.driveStraight(0, 0, 0, true);
+					// }
 				}
 				break;
 			case DriveTaxi:
@@ -341,6 +350,86 @@ public class Robot extends TimedRobot {
 					driveBase.drive(0, -.7, 0, false);
 				} else {
 					driveBase.setPosition(-4);
+				}
+				break;
+			case Rotate180:
+				autonCounter--;
+				if (autonCounter == 0) {
+					driveBase.rotateFixed(180);
+				}
+
+				if ((autonCounter > 0) && (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4)) {
+					driveBase.driveStraight(0, .4, 0, true, true);
+				} else {
+					driveBase.driveStraight(0, 0, 0, true);
+				}
+				
+				if (Math.abs(driveBase.headingSetPoint - imu.getAngle()) < 1 && autonCounter <= 0) {
+					arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+					autonState = AutonStates.DriveToCone;
+				}
+				break;
+			case DriveToCone:
+				// drive if we havent gone too far
+				if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
+					driveBase.driveStraight(-2 * driveBase.getPoseY(), .25, 0, true, true);
+				} else {
+					driveBase.driveStraight(0, 0, 0, true);
+				}
+
+				// senses a piece
+				if (!limitSwitch.get()) {
+					claw.clawForward();
+					arm.setEndEffector(Constants.ArmFixedPosition.NEUTRAL);
+					autonState = AutonStates.Rotate0;
+				}
+				break;
+			case Idle:
+				driveBase.driveStraight(0, 0, 0, false);
+				break;
+			case Rotate0:
+				driveBase.rotateFixed(0);
+				driveBase.driveStraight(0, 0, 0, true);
+				
+				if (Math.abs(driveBase.headingSetPoint - imu.getAngle()) < 1) {
+					autonState = AutonStates.DriveToGrid;
+				}
+				break;
+			case DriveToGrid:
+				// drive if we havent gone too far
+				driveBase.driveStraight(-2 * driveBase.getPoseY(), -.25, 0, true, true);
+				if (driveBase.getPoseX() > 0) {
+					autonState = AutonStates.limeAutoAlign;
+				}
+				break;
+			case limeAutoAlign:
+                double xOffset = limelight.getX(0) - 13.5;
+				if (Math.abs(xOffset) < .5 && driveBase.getPoseX() > .5) {
+					autonState = AutonStates.PlaceMid;
+				}
+                double heading = imu.getAngle();
+				if (Constants.isZero(xOffset)) {
+					driveBase.drive(0, 0, 0, false);
+					break;
+				}
+
+				double controlInput = -xOffset/180 * 10;
+				controlInput = MathUtil.clamp(controlInput, -.4, .4);
+
+				if (Math.abs(driveBase.headingSetPoint - heading) > 3) {
+					driveBase.driveStraight(0, -.1, 0, true, true);
+				} else {
+					driveBase.limeAlign(controlInput + Math.signum(controlInput) * Constants.ROTATION_ADJUSTMENT, -.2);
+				}
+                break;
+			case PlaceMid:
+				arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
+				autonState = AutonStates.WaitForPlaceMid;
+				break;
+			case WaitForPlaceMid:
+				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
+					claw.clawBack();
+					autonState = AutonStates.Idle;
 				}
 				break;
 			case LeaveCommunity:
