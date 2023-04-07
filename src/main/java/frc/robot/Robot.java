@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import frc.robot.Constants.ArmFixedPosition;
 import frc.robot.subsystems.*;
 import frc.robot.utils.*;
 
@@ -43,6 +44,7 @@ import frc.robot.utils.*;
 public class Robot extends TimedRobot {
 
 	enum AutonStates {
+		Testing,
 		MoveArmToScore,
 		WaitForArmPre,
 		WaitForArm,
@@ -95,7 +97,10 @@ public class Robot extends TimedRobot {
 
 	DigitalInput limitSwitch = new DigitalInput(0);
 	// AnalogInput autoClawInput = new AnalogInput(0);
-	DigitalOutput ledOutput = new DigitalOutput(5);
+	DigitalOutput ledOutput1 = new DigitalOutput(4);
+	DigitalOutput ledOutput2 = new DigitalOutput(5);
+	DigitalOutput ledOutput3 = new DigitalOutput(6);
+	DigitalOutput ledOutput4 = new DigitalOutput(7);
 
 	Grabber claw = new Grabber(Constants.CLAW_FORWARD_NUM, Constants.CLAW_BACKWARD_NUM, 
 								Constants.WRIST_FORWARD_NUM, Constants.WRIST_BACKWARD_NUM);
@@ -104,6 +109,8 @@ public class Robot extends TimedRobot {
 	Limelight limelight = new Limelight();
 	ZED zed = new ZED();
 	IMU imu = new IMU(Constants.ANALOG_GYRO_PORT);
+
+	boolean isDone = false;
 
 //   VideoSink server;
 //   UsbCamera camera0, camera1;
@@ -173,8 +180,39 @@ public class Robot extends TimedRobot {
 		
 		driveBase.updateOdometry();
 
-		ledOutput.set(cone);
+		double mult = driveBase.getSpeedMultiplier();
+		int output = 0;
+		if (mult < .25) {
+			output = 0;
+		} else if (mult < .45) {
+			output = 1;
+		} else if (mult < .65) {
+			output = 2;
+		} else if (mult < .85) {
+			output = 3;
+		} else {
+			output = 4;
+		}
 
+		if (limitSwitch.get() && autoClaw) {
+			output += 5;
+		}
+
+		if (counter % 50 == 0) {
+			// System.out.println("start");
+			// System.out.println(output);
+			// System.out.println((output & 0b0001) > 0);
+			// System.out.println((output & 0b0010) > 0);
+			// System.out.println((output & 0b0100) > 0);
+			// System.out.println((output & 0b1000) > 0);
+			// System.out.println("end");
+		}
+
+		// output will be something like 0b1011
+		ledOutput1.set((output & 0b0001) > 0);
+		ledOutput2.set((output & 0b0010) > 0);
+		ledOutput3.set((output & 0b0100) > 0);
+		ledOutput4.set((output & 0b1000) > 0);
 		// SmartDashboard.putNumber("test", test);
 		// limelight.test();
 		// System.out.println("hello wo5rld");
@@ -217,6 +255,9 @@ public class Robot extends TimedRobot {
 		// System.out.println("zeroing counter");
 		autonCounter = 0;
 		autonState = AutonStates.MoveArmToScore;
+		if (Constants.MODE_TESTING) {
+			autonState = AutonStates.Testing;
+		}
 
 		// set up timer for autonomous
 		// driveBase.autonTimer = new Timer();
@@ -270,14 +311,19 @@ public class Robot extends TimedRobot {
 
 		
 		switch (autonState) {
+			case Testing:
+				// System.out.println("test");
+				driveBase.rampTesting();
+				break;
 			case MoveArmToScore:
 				System.out.println("Moving Arm");
 				arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER_PRE_POS);
 				autonState = AutonStates.WaitForArmPre;
 				break;
 			case WaitForArmPre:
+				ArmFixedPosition armPos = Constants.GET_SECOND_PIECE ? Constants.ArmFixedPosition.CUBE_HIGHER : Constants.ArmFixedPosition.CONE_HIGHER;
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
-					arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
+					arm.setEndEffector(armPos);
 					autonState = AutonStates.WaitForArm;
 				}
 				break;
@@ -312,7 +358,12 @@ public class Robot extends TimedRobot {
 				break;
 			case WaitForFoldedArm:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION)
-					autonState = AutonStates.Drive;
+					if (!isDone) {
+						autonState = AutonStates.Drive;
+					} else {
+						autonState = AutonStates.Idle;
+					}
+					
 				break;
 			case DriveInit:
 				break;
@@ -329,16 +380,19 @@ public class Robot extends TimedRobot {
 					}
 					driveBase.getOnRamp();
 				} else {
-					autonCounter = 20;
-					autonState = AutonStates.Rotate180;
-
-					// drive backwards outside the community (-4 works)
-					// driveBase.setPosition(-4);
-					// if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
-					// 	driveBase.driveStraight(0, .3, 0, true, true);
-					// } else {
-					// 	driveBase.driveStraight(0, 0, 0, true);
-					// }
+					if (Constants.GET_SECOND_PIECE) {
+						autonCounter = 20;
+						autonState = AutonStates.Rotate180;
+					} else {
+						driveBase.driveStraight(0, 0, 0, true, true);
+						// drive backwards outside the community (-4 works)
+						// driveBase.setPosition(-4);
+						if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
+							driveBase.driveStraight(0, .3, 0, true, true);
+						} else {
+							driveBase.driveStraight(0, 0, 0, true);
+						}
+					}
 				}
 				break;
 			case DriveTaxi:
@@ -353,26 +407,24 @@ public class Robot extends TimedRobot {
 				}
 				break;
 			case Rotate180:
-				autonCounter--;
-				if (autonCounter == 0) {
+				if (driveBase.getPoseX() < -.5) {
+					driveBase.driveStraight(0, 0, 0, true);
 					driveBase.rotateFixed(180);
-				}
-
-				if ((autonCounter > 0) && (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4)) {
-					driveBase.driveStraight(0, .4, 0, true, true);
+				} else if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
+					driveBase.driveStraight(0, .7, 0, true, true);
 				} else {
 					driveBase.driveStraight(0, 0, 0, true);
 				}
 				
-				if (Math.abs(driveBase.headingSetPoint - imu.getAngle()) < 1 && autonCounter <= 0) {
+				if (Math.abs(driveBase.headingSetPoint - imu.getAngle()) < 1 && driveBase.getPoseX() < -.5) {
 					arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
 					autonState = AutonStates.DriveToCone;
 				}
 				break;
 			case DriveToCone:
 				// drive if we havent gone too far
-				if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {
-					driveBase.driveStraight(-2 * driveBase.getPoseY(), .25, 0, true, true);
+				if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4.5) {
+					driveBase.driveStraight(-2 * (driveBase.getPoseY()), .6, 0, true, true);
 				} else {
 					driveBase.driveStraight(0, 0, 0, true);
 				}
@@ -396,19 +448,24 @@ public class Robot extends TimedRobot {
 				}
 				break;
 			case DriveToGrid:
+				double sideOffset = 0;
+				int direction = Constants.BLUE_TEAM ? -1 : 1;
+				if (driveBase.getPoseX() > -1.5) {
+					sideOffset = 0 * direction;
+				}
 				// drive if we havent gone too far
-				driveBase.driveStraight(-2 * driveBase.getPoseY(), -.25, 0, true, true);
+				driveBase.driveStraight(-.5 * (driveBase.getPoseY() - sideOffset), -.5, 0, true, true);
 				if (driveBase.getPoseX() > 0) {
-					autonState = AutonStates.limeAutoAlign;
+					autonState = AutonStates.Idle;
 				}
 				break;
 			case limeAutoAlign:
                 double xOffset = limelight.getX(0) - 13.5;
-				if (Math.abs(xOffset) < .5 && driveBase.getPoseX() > .5) {
+				if (Math.abs(xOffset) < 1 && driveBase.getPoseX() > 2) {
 					autonState = AutonStates.PlaceMid;
 				}
                 double heading = imu.getAngle();
-				if (Constants.isZero(xOffset)) {
+				if (Constants.isZero(limelight.getX(0))) {
 					driveBase.drive(0, 0, 0, false);
 					break;
 				}
@@ -423,13 +480,15 @@ public class Robot extends TimedRobot {
 				}
                 break;
 			case PlaceMid:
-				arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
+				driveBase.drive(0, 0, 0, false);
+				arm.setEndEffector(Constants.ArmFixedPosition.CONE_HIGHER);
 				autonState = AutonStates.WaitForPlaceMid;
 				break;
 			case WaitForPlaceMid:
 				if (arm.currentMode == Arm.Mode.HOLDING_POSITION) {
 					claw.clawBack();
-					autonState = AutonStates.Idle;
+					isDone = true;
+					autonState = AutonStates.FoldArm;
 				}
 				break;
 			case LeaveCommunity:

@@ -292,20 +292,54 @@ public class MecaDrive extends DriveBase {
 		double tilt = imu.getPitch();
 		double angVel = imu.getRawGyroX();
 		double controlInput = rampPID.calculate(tilt, 0) - getRampFeedforward();
+
 		double backVel = convertVelocity(frontRightMotor.getSelectedSensorVelocity()) + convertVelocity(frontLeftMotor.getSelectedSensorVelocity());
+		if (Math.abs(backVel) < 1) {
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter++;
+		} else if (wheelStuckCounter > 0) {
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter--;
+			wheelStuckCounter--;
+		} else {
+			wheelStuckCounter = 0;
+		}
+
 		if (Math.abs(tilt) < 4.5) {
 			controlInput = 0;
 		}
-		controlInput = MathUtil.clamp(controlInput, -.9, .9);
+		controlInput = MathUtil.clamp(controlInput, -.5, .5);
+		driveStraight(0, controlInput, 0, true, true);
+	}
+
+	public void rampTesting() {
+		double controlInput = .000000001;
+		double backVel = convertVelocity(frontRightMotor.getSelectedSensorVelocity()) + convertVelocity(frontLeftMotor.getSelectedSensorVelocity());
+		if (Math.abs(backVel) < 1) {
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter++;
+		} else if (wheelStuckCounter > 0) {
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter--;
+			wheelStuckCounter--;
+		} else {
+			wheelStuckCounter = 0;
+		}
+		
+		controlInput = MathUtil.clamp(controlInput, -.5, .5);
 		driveStraight(0, controlInput, 0, true, true);
 	}
 
 	public void getOnRamp() {
-		double controlInput = .1;
+		double controlInput = .8;
 		double backVel = convertVelocity(frontRightMotor.getSelectedSensorVelocity()) + convertVelocity(frontLeftMotor.getSelectedSensorVelocity());
-		if (backVel < .01) {
+		if (Math.abs(backVel) < 1) {
 			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
 			wheelStuckCounter++;
+		} else if (wheelStuckCounter > 0) {
+			controlInput = controlInput + .001 * Math.signum(controlInput) * wheelStuckCounter;
+			wheelStuckCounter--;
+			wheelStuckCounter--;
 		} else {
 			wheelStuckCounter = 0;
 		}
@@ -583,6 +617,10 @@ public class MecaDrive extends DriveBase {
 		frontRightMotor.set(ControlMode.Position, frontRightMotor.getSelectedSensorPosition());
 		rearLeftMotor.set(ControlMode.Position, rearLeftMotor.getSelectedSensorPosition());
 		rearRightMotor.set(ControlMode.Position, rearRightMotor.getSelectedSensorPosition());
+	}
+
+	public double getSpeedMultiplier() {
+		return speedMultiplier;
 	}
 
 	public void rotateToGrid() {
