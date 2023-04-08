@@ -764,9 +764,13 @@ public class Robot extends TimedRobot {
 		* PRIMARY DRIVE CONTROLLER
 		*/
 		boolean down = xboxController.getAButtonPressed();
+		boolean downHeld = xboxController.getAButton();
 		boolean right = xboxController.getBButtonPressed();
+		boolean rightHeld = xboxController.getBButton();
 		boolean left = xboxController.getXButtonPressed();
+		boolean leftHeld = xboxController.getXButton();
 		boolean up = xboxController.getYButtonPressed();
+		boolean upHeld = xboxController.getYButton();
 		boolean RB = xboxController.getRightBumperPressed();
 		boolean LB = xboxController.getLeftBumperPressed();
 		boolean start = xboxController.getStartButtonPressed();
@@ -783,10 +787,10 @@ public class Robot extends TimedRobot {
 		if (left) driveBase.rotateFixed(90);
 		if (up) driveBase.rotateFixed(180);
 
-		if (right && up) driveBase.rotateFixed(-135);
-		if (down && left) driveBase.rotateFixed(45);
-		if (down && right) driveBase.rotateFixed(-45);
-		if (left && up) driveBase.rotateFixed(135);
+		if (rightHeld && upHeld) driveBase.rotateFixed(-135);
+		if (downHeld && leftHeld) driveBase.rotateFixed(45);
+		if (downHeld && rightHeld) driveBase.rotateFixed(-45);
+		if (leftHeld && upHeld) driveBase.rotateFixed(135);
 		
 
 		if (back) {
