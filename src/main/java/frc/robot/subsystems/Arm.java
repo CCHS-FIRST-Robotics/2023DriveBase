@@ -70,6 +70,7 @@ public class Arm {
 
 	int trajectoryCounter = 0;
 	ArrayList<double[]> trajectory;
+	int stepsToInitialTrebuchetPos;
 
 	double[] targetAngles = new double[2];
 
@@ -77,6 +78,7 @@ public class Arm {
 		MANUAL, 
 		HOLDING_POSITION, 
 		RUNNING_TRAJECTORY,
+		RUNNING_TREBUCHET,
 		IDLE
 	}
 	
@@ -218,6 +220,10 @@ public class Arm {
 
 			case RUNNING_TRAJECTORY:
 				executeTrajectory();
+				break;
+
+			case RUNNING_TREBUCHET:
+				executeTrebuchet();
 				break;
 		}
 	}
@@ -566,6 +572,50 @@ public class Arm {
 		} 
 	}
 
+	public void trebuchet(ArmState initialState, ArmState finalState, double maxAcceleration, boolean debug) {
+		ArrayList<ArmState> guides = new ArrayList<ArmState>();
+		guides.add(initialState);
+		trajectory = new AngularBangBang().getSetPoints(getState(), finalState, maxAcceleration, guides);
+
+		if (trajectory.size() < 1) {
+			return;
+		}
+
+		// steps until arm reaches the initial state - used to time when to open the claw
+        double alphaDisplacement = initialState.getAlpha() - getState().getAlpha();
+        double betaDisplacement = initialState.getBeta() - getState().getBeta();
+        double maxDisplacement = Math.max(Math.abs(alphaDisplacement), Math.abs(betaDisplacement));
+        double timeToEnd = 2 * Math.sqrt(maxDisplacement / maxAcceleration);
+		stepsToInitialTrebuchetPos = (int) Math.round(timeToEnd / .02);
+
+		currentMode = Mode.RUNNING_TREBUCHET;
+		trajectoryCounter = 0;
+		executeTrebuchet();
+
+		if (debug) printTrajInfo(trajectory, finalState.getX(), finalState.getY());
+	}
+
+	public void executeTrebuchet() {
+		targetAngles = trajectory.get(trajectoryCounter);
+		trajectoryCounter++;
+		
+		setShoulder(targetAngles[0]);
+		setElbow(targetAngles[1]);
+
+		// halfway through the trajectory, open the claw
+		double trajHalfway = (trajectory.size() + stepsToInitialTrebuchetPos) * 0.5;
+		if (trajectoryCounter == (int) Math.round(trajHalfway)) {
+			System.out.println("RELEASE");
+			System.out.println("Release Angles: " + targetAngles[0] + " next " + targetAngles[1]);
+			grabber.clawBack();
+		}
+
+		if (trajectoryCounter >= trajectory.size()) {
+			trajectoryCounter = 0;
+			currentMode = Mode.HOLDING_POSITION;
+		} 
+	}
+
 	public void stopTrajectory() {
 		trajectoryCounter = 0;
 		currentMode = Mode.MANUAL;
@@ -591,6 +641,8 @@ public class Arm {
 	
 		System.out.println("FK TEST X: " + Kinematics.forwardKinematics(angles[0], angles[1]) [0]);
 		System.out.println("FK TEST Y: " + Kinematics.forwardKinematics(angles[0], angles[1]) [1]);
+
+		System.out.println("TOTAL TIME: " + trajectory.size() * 0.02);
 	  }
 
 	/**

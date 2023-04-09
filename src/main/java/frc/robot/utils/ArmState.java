@@ -44,6 +44,14 @@ public class ArmState {
         this.inverted = (Kinematics.positionInverseKinematics(x, y, true)[0] == alpha);
     }
 
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
     public double[] degrees() {
         return new double[] {alpha, beta};
     }

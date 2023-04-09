@@ -176,6 +176,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotPeriodic() {
+		if (counter == 1000) System.out.println("TEST START");
 
 		
 		driveBase.updateOdometry();
@@ -832,6 +833,12 @@ public class Robot extends TimedRobot {
 		if (autoClaw && !limitSwitch.get()){
 			autoClaw = false;
 			claw.clawForward();
+		}
+
+		boolean runTrebuchet = monkeyController.getRawButtonPressed(15);
+		if (counter == 1000) runTrebuchet = true; // TODO: remove - just for simulation
+		if (runTrebuchet) {
+			arm.trebuchet(new ArmState(120, 60), new ArmState(60, -60), 10, true);
 		}
 		
 		// boolean camera0Button = monkeyController.getRawButtonPressed(13);
