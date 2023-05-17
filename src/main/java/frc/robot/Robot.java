@@ -385,7 +385,7 @@ public class Robot extends TimedRobot {
 						autonCounter = 20;
 						autonState = AutonStates.Rotate180;
 					} else {
-						driveBase.driveStraight(0, 0, 0, true, true);
+						// driveBase.driveStraight(0, 0, 0, true, true);
 						// drive backwards outside the community (-4 works)
 						// driveBase.setPosition(-4);
 						if (Math.abs(driveBase.getPoseX()) + Math.abs(driveBase.getPoseY()) < 4) {

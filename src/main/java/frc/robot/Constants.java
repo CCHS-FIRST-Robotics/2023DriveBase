@@ -15,7 +15,7 @@ public class Constants {
 	public static final boolean ROBOT_START_CENTER_FIELD = false;
 	public static final boolean GET_SECOND_PIECE = true;
 	public static final boolean MODE_TESTING = false;
-	public static final boolean BLUE_TEAM = true;
+	public static final boolean BLUE_TEAM = false;
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
@@ -80,7 +80,7 @@ public class Constants {
 	public static double RIGHT_Y_EXPONENT = 2;
 
 	public static final double ANALOG_CROSS_DEADZONE = 0.1;
-	public static final double ROTATION_DEADZONE = 0.05;
+	public static final double ROTATION_DEADZONE = 0.1;
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)
