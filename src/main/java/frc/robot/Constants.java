@@ -80,7 +80,7 @@ public class Constants {
 	public static double RIGHT_Y_EXPONENT = 2;
 
 	public static final double ANALOG_CROSS_DEADZONE = 0.1;
-	public static final double ROTATION_DEADZONE = 0.05;
+	public static final double ROTATION_DEADZONE = 0.1;
 
 	public static final double ROBOT_WIDTH = 0.40;
 	// for slowing down (stop mode)
