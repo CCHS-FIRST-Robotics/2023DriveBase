@@ -838,7 +838,7 @@ public class Robot extends TimedRobot {
 		boolean runTrebuchet = monkeyController.getRawButtonPressed(15);
 		if (counter == 1000) runTrebuchet = true; // TODO: remove - just for simulation
 		if (runTrebuchet) {
-			arm.trebuchet(new ArmState(120, 60), new ArmState(60, -60), 10, true);
+			arm.trebuchet(new ArmState(120, 60), new ArmState(60, -60), 90, true);
 		}
 		
 		// boolean camera0Button = monkeyController.getRawButtonPressed(13);
