@@ -15,7 +15,7 @@ public class Constants {
 	public static final boolean ROBOT_START_CENTER_FIELD = false;
 	public static final boolean GET_SECOND_PIECE = true;
 	public static final boolean MODE_TESTING = false;
-	public static final boolean BLUE_TEAM = true;
+	public static final boolean BLUE_TEAM = false;
 
 	// the port for the xbox controller
 	public static final int XBOX_CONTROLLER_PORT 			= 0;
