@@ -93,7 +93,8 @@ public class Robot extends TimedRobot {
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	private Controller xboxController = new Controller(Constants.XBOX_CONTROLLER_PORT, 5);
-	private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
+	// private MonkeyController monkeyController = new MonkeyController(Constants.XBOX_CONTROLLER_ALTERNATE_PORT, 5);
+	private Controller xboxController2 = new Controller(1, 5);
 
 	DigitalInput limitSwitch = new DigitalInput(0);
 	// AnalogInput autoClawInput = new AnalogInput(0);
@@ -632,7 +633,7 @@ public class Robot extends TimedRobot {
 
 		// Arm code is self-contained, only need to call run() and the state machine inside Arm will handle the rest
     	// System.out.println(monkeyController.getPrimaryX());
-		arm.run(-monkeyController.getPrimaryX(), monkeyController.getPrimaryY(), monkeyController.getSecondaryX(), monkeyController.getSecondaryY());
+		arm.run(-xboxController2.getLeftX(), xboxController2.getLeftY(), 0, 0);
 
 		// arm.getElbowRawAngle();
 
@@ -809,20 +810,22 @@ public class Robot extends TimedRobot {
 		* MONKEY CONTROLLER
 		*/
 
-		boolean groundLayingDown = monkeyController.getRawButtonPressed(1);
-		boolean ground = monkeyController.getRawButtonPressed(2);
-		boolean substationPickup = monkeyController.getRawButtonPressed(3);
-		boolean lowHeight = monkeyController.getRawButtonPressed(6);
-		boolean midHeight = monkeyController.getRawButtonPressed(7);
-		boolean topHeight = monkeyController.getRawButtonPressed(8);
+		int pov = xboxController2.getPOV();
 
-		boolean closeClaw = monkeyController.getRawButtonPressed(4);
-		boolean wristUp = monkeyController.getRawButtonPressed(5);
-		boolean openClaw = monkeyController.getRawButtonPressed(9);
-		boolean wristDown = monkeyController.getRawButtonPressed(10);
+		boolean groundLayingDown = pov == 180;
+		// boolean ground = monkeyController.getRawButtonPressed(2);
+		boolean substationPickup = pov == 270;
+		// boolean lowHeight = monkeyController.getRawButtonPressed(6);
+		boolean midHeight = pov == 90;
+		boolean topHeight = pov == 0;
 
-		boolean neutral = monkeyController.getRawButtonPressed(11);
-		boolean autoClawToggle = monkeyController.getRawButtonPressed(12);
+		boolean closeClaw = xboxController2.getXButton();
+		boolean wristUp = xboxController2.getYButtonPressed();
+		boolean openClaw = xboxController2.getBButtonPressed();
+		boolean wristDown = xboxController2.getAButtonPressed();
+
+		boolean neutral = xboxController2.getRightBumperPressed();
+		boolean autoClawToggle = xboxController2.getBackButtonPressed();
 		if (autoClawToggle) {
 			autoClaw = !autoClaw;
 			if (autoClaw)
@@ -838,39 +841,39 @@ public class Robot extends TimedRobot {
 		// boolean camera1Button = monkeyController.getRawButtonPressed(14);
 		// if (camera0Button) server.setSource(camera1);
 
-		boolean incHeading = monkeyController.getRawButtonPressed(14);
-		boolean decHeading = monkeyController.getRawButtonPressed(16);
+		// boolean incHeading = monkeyController.getRawButtonPressed(14);
+		// boolean decHeading = monkeyController.getRawButtonPressed(16);
 
-		if (incHeading) {
-			driveBase.headingSetPoint += 1.0;
-			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
-		}
+		// if (incHeading) {
+		// 	driveBase.headingSetPoint += 1.0;
+		// 	System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		// }
 
-		if (decHeading) {
-			driveBase.headingSetPoint -= 1.0;
-			System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
-		}
+		// if (decHeading) {
+		// 	driveBase.headingSetPoint -= 1.0;
+		// 	System.out.println("Setpoint: " + driveBase.headingSetPoint + " Angle: " + imu.getAngle());
+		// }
 
-		boolean conePressed = monkeyController.getRawButtonPressed(17);
-		boolean cubePressed = monkeyController.getRawButtonPressed(18);
-		if (conePressed) {
-			cone = true; 
-			cube = false;
-		}
-		if (cubePressed) {
-			cone = false;
-			cube = true;
-		}
+		// boolean conePressed = monkeyController.getRawButtonPressed(17);
+		// boolean cubePressed = monkeyController.getRawButtonPressed(18);
+		// if (conePressed) {
+		// 	cone = true; 
+		// 	cube = false;
+		// }
+		// if (cubePressed) {
+		// 	cone = false;
+		// 	cube = true;
+		// }
 
-		boolean toggleMotorLimits = monkeyController.getRawButtonPressed(21);
-		if (toggleMotorLimits) arm.toggleMotorCheck();
+		// boolean toggleMotorLimits = monkeyController.getRawButtonPressed(21);
+		// if (toggleMotorLimits) arm.toggleMotorCheck();
 
-		boolean speedHigh= monkeyController.getRawButtonPressed(22);
-		boolean speedMid = monkeyController.getRawButtonPressed(23);
-		boolean speedLow = monkeyController.getRawButtonPressed(24);
+		// boolean speedHigh= monkeyController.getRawButtonPressed(22);
+		// boolean speedMid = monkeyController.getRawButtonPressed(23);
+		// boolean speedLow = monkeyController.getRawButtonPressed(24);
 
-		boolean scrollUp = monkeyController.getRawButtonPressed(26);
-		boolean scrollDown = monkeyController.getRawButtonPressed(27);
+		// boolean scrollUp = monkeyController.getRawButtonPressed(26);
+		// boolean scrollDown = monkeyController.getRawButtonPressed(27);
 
 		/* 
 		* ARM SET POSITIONS
@@ -880,18 +883,18 @@ public class Robot extends TimedRobot {
 			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND_LAYING_DOWN);
 			System.out.println("PICKUP_GROUND_LAYING_DOWN");
 		}
-		if (ground) {
-			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
-			System.out.println("PICKUP_GROUND");
-		}
+		// if (ground) {
+		// 	arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_GROUND);
+		// 	System.out.println("PICKUP_GROUND");
+		// }
 		if (substationPickup) {
 			arm.setEndEffector(Constants.ArmFixedPosition.PICKUP_SUBSTATION);
 			System.out.println("PICKUP_SUBSTATION");
 		}
-		if (lowHeight) {
-			arm.setEndEffector(Constants.ArmFixedPosition.DROPOFF_LOW);
-			System.out.println("DROPOFF_LOW");
-		}
+		// if (lowHeight) {
+		// 	arm.setEndEffector(Constants.ArmFixedPosition.DROPOFF_LOW);
+		// 	System.out.println("DROPOFF_LOW");
+		// }
 		if (midHeight && cone) {
 			arm.setEndEffector(Constants.ArmFixedPosition.CONE_LOWER);
 			System.out.println("CONE_LOWER");
@@ -937,18 +940,18 @@ public class Robot extends TimedRobot {
 		/*
 		* CONTROLS
 		*/
-		if (speedLow) {
-			arm.setSpeedMultipler(0.5);
-			System.out.println("speedLow");
-		}
-		if (speedMid) {
-			arm.setSpeedMultipler(1);
-			System.out.println("speedMid");
-		}
-		if (speedHigh) {
-			arm.setSpeedMultipler(2);
-			System.out.println("speedHigh");
-		}
+		// if (speedLow) {
+		// 	arm.setSpeedMultipler(0.5);
+		// 	System.out.println("speedLow");
+		// }
+		// if (speedMid) {
+		// 	arm.setSpeedMultipler(1);
+		// 	System.out.println("speedMid");
+		// }
+		// if (speedHigh) {
+		// 	arm.setSpeedMultipler(2);
+		// 	System.out.println("speedHigh");
+		// }
 	}
 
 	/** 
