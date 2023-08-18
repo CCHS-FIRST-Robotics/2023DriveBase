@@ -51,7 +51,7 @@ public class Constants {
 	public static final int ELBOW_FALCON_ID = 6;
 
 	// gear ratio of the motor gearbox
-	public static final double FALCON_GEARBOX_RATIO = 10.71; 
+	public static final double FALCON_GEARBOX_RATIO = 10.71;
 
 	/*
 	 * Physical Constants
